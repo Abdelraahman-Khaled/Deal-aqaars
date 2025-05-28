@@ -1,0 +1,69 @@
+.btn-scroll {
+    position: fixed;
+    bottom: 30px;
+    right: -60px;
+    transition: all 0.5s;
+    z-index: 0;
+    width: 45px;
+    height: 45px;
+    background: var(--green-01-color);
+    font-size: 20px;
+    color: var(--white-01-color);
+    border: var(--border-02);
+    border-color: var(--green-01-color);
+    border-radius: 50px;
+    z-index: 90;
+}
+
+.btn-scroll.active {
+    right: 30px;
+}
+
+
+
+.btn-scroll .progress-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.btn-scroll .progress-circle {
+    width: 55px;
+    height: 55px;
+}
+
+.btn-scroll .progress-circle-track {
+    fill: none;
+    stroke: #f0f0f0;
+    stroke-width: 8;
+}
+
+.btn-scroll .progress-circle-bar {
+    fill: none;
+    stroke: var(--warning-01-color);
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 0 251.2;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+}
+
+
+html[dir="ltr"] .btn-scroll {
+    right: initial;
+    left: -60px;
+}
+
+html[dir="ltr"] .btn-scroll.active {
+    left: 24px;
+    right: initial;
+}
+
+
+/* SCREEN 991PX */
+@media screen and (max-width: 991px) {
+    .btn-scroll {
+        bottom: 82px !important;
+    }
+}

@@ -1,0 +1,29 @@
+.related-slider .compound-card{
+    flex-direction: column;
+    width: 100% !important;
+}
+.related-slider .compound-card a{
+   width: 100% !important;
+}
+
+.related-slider .slick-next {
+    top: -5%;
+    padding-left: 5px;
+    transform: translate(0,-50%);
+
+}
+.related-slider .slick-prev {
+    top: -5%;
+    left: 20px;
+    padding-left: 15px;
+    transform: translate(0,-50%);
+}
+
+.related-slider .slick-next:before, .related-slider .slick-prev:before{
+    background-color: unset !important;
+    border: none;
+}
+
+.slick-slider .slick-initialized{
+    direction: ltr !important;
+}

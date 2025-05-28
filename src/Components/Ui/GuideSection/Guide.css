@@ -1,0 +1,9 @@
+.guide .select-type button{
+    padding: 12px 16px;
+}
+.guide button.active svg path{
+ fill: var(--primary);
+}
+.custom-dropdown{
+    height: fit-content;
+}

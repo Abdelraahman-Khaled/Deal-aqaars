@@ -1,0 +1,15 @@
+.companies-box{
+    border-radius: var(--border-radius-4);
+    border: 1px solid var(--netural-200);
+    padding: 24px;
+    display: flex; 
+    flex-direction: column;
+}
+.companies-box > div{
+    border-bottom: 1px solid var(--netural-200);
+    padding-bottom: 16px;
+}
+
+.companies-box > div:last-of-type {
+    border-bottom: none;
+  }

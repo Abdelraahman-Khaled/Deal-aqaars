@@ -1,0 +1,25 @@
+.setting-tab .info-one-setting {
+    border-bottom: var(--border-02);
+    padding: 15px 0;
+}
+
+.setting-tab .info-one-setting .title {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--dark-01-color);
+}
+
+.setting-tab .info-one-setting .text {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--gray-01-color);
+    padding-top: 4px;
+}
+
+
+.setting-tab .remove-account-user {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--danger-01-color);
+    padding-top: 15px;
+}

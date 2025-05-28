@@ -1,0 +1,7 @@
+.offer-card{
+    background-color: rgba(223, 160, 39, 0.1);
+    border-radius: var(--border-radius-2);
+    padding: 16px;
+    width: 140px;
+    height: 116px;
+}

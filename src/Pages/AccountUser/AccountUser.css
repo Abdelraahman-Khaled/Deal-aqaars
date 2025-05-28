@@ -1,0 +1,250 @@
+/* =======================================
+START USER INFO HEADER
+======================================*/
+.header-user-info-profile {
+  text-align: center;
+  padding-bottom: 15px;
+}
+
+.header-user-info-profile .name-user-info {
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--dark-01-color);
+  padding-top: 12px;
+}
+
+/* =======================================
+END USER INFO HEADER
+======================================*/
+
+/* ====================================
+START TABS CONTENT ACCOUNT
+======================================*/
+
+.border-account-user {
+  border: var(--border-02);
+  border-radius: 12px;
+  background: var(--white-01-color);
+}
+
+.account-user-content .nav {
+  text-align: center;
+  align-items: center;
+  padding: 15px;
+}
+
+.account-user-content :is(.nav-item, .nav-link) {
+  width: 100%;
+  text-align: start;
+}
+
+.account-user-content .nav-item .nav-link {
+  padding: 12px 15px;
+  font-size: 15px;
+  color: var(--dark-01-color);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 8px;
+  position: relative;
+}
+
+.account-user-content .nav-item .nav-link.active {
+  color: var(--primary);
+  background: rgba(23, 55, 148, 0.1);
+}
+
+
+
+.account-user-content .nav-item .nav-link svg {
+  width: 20px;
+  height: 20px;
+}
+
+.account-user-content .logout-button {
+  color: var(--danger-01-color);
+  padding: 18px 15px 15px 15px;
+  cursor: pointer;
+}
+
+/* ====================================
+END TABS CONTENT ACCOUNT
+======================================*/
+/* =====================
+START CLASSESS HELPER
+======================*/
+.title-info-top-account {
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--dark-01-color);
+}
+
+/* =====================
+END CLASSESS HELPER
+======================*/
+
+/* ====================================
+START TAB PERSONAL INFORMATION
+========================================*/
+.intersted-content {
+  padding: 25px 0;
+}
+
+.intersted-content .title {
+  padding-bottom: 18px;
+}
+
+.edit-information-btn {
+  background: var(--green-02-color);
+  color: var(--green-01-color);
+  box-shadow: none;
+  transition: all 0.5s;
+}
+
+.edit-information-btn:hover {
+  background: var(--green-01-color);
+  color: var(--white-01-color);
+}
+
+@media screen and (max-width: 767px) {
+  .intersted-content .buttons-inter {
+    overflow: auto hidden;
+    padding-bottom: 15px;
+    flex-wrap: nowrap !important;
+  }
+
+  .intersted-content .buttons-inter::-webkit-scrollbar {
+    height: 5px;
+  }
+
+  .intersted-content .buttons-inter::-webkit-scrollbar-track {
+    background: var(--green-02-color);
+    border-radius: 5px;
+  }
+
+  .intersted-content .buttons-inter::-webkit-scrollbar-thumb {
+    background: var(--green-01-color);
+    border-radius: 5px;
+  }
+}
+
+/* START MODAL EDIT */
+.modal-edit-information {
+  --bs-modal-width: 760px !important;
+}
+
+.modal-edit-information .all-content-edit-info {
+  padding: 0 15px;
+}
+
+.image-user-edit {
+  width: fit-content;
+}
+
+.image-user-edit::after {
+  border-radius: 50%;
+}
+
+.image-user-edit .image-edit {
+  width: 82px;
+  height: 82px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.image-user-edit .edit-btn--1 {
+  background: transparent;
+  border: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.form-edit-content--2 {
+  margin-top: 15px;
+}
+
+.form-edit-content--2 .input-field-info {
+  margin: 0 !important;
+}
+
+@media screen and (max-width: 767px) {
+  .modal-edit-information .all-content-edit-info {
+    padding: 0 0px;
+  }
+  .user-taps{
+    height: 100% !important;
+  }
+}
+.user-taps{
+  height: 70vh ;
+}
+/* END MODAL EDIT */
+
+/* ====================================
+END TAB PERSONAL INFORMATION
+========================================*/
+
+/* LTR DIRECTION */
+html[dir="ltr"] .account-information-content .input-control .icon-edit-input {
+  left: initial;
+  right: 3%;
+}
+
+html[dir="ltr"] .input-number-tel .intl-tel-input input {
+  padding-left: 110px !important;
+  padding-right: 0 !important;
+}
+
+html[dir="ltr"] .info-one-setting .arrow-left {
+  transform: rotate(-180deg);
+}
+
+/* START DATE PICKER */
+.main-date-picker--1 .input-date-content .DatePicker input {
+  padding-right: 10px !important;
+}
+html[dir="ltr"] .main-date-picker--1 .input-date-content input {
+  padding-right: 0 !important;
+  padding-left: 10px !important;
+}
+.main-date-picker--1 {
+  border: var(--border-02);
+  border-radius: 8px;
+}
+
+.main-date-picker--1 .input-date-content::after {
+  display: none !important;
+}
+
+.main-date-picker--1 .input-date-content .icon-date-add {
+  right: initial;
+  left: 3%;
+}
+html[dir="ltr"] .main-date-picker--1 .input-date-content .icon-date-add {
+  right: 3%;
+  left: initial;
+}
+.main-date-picker--1 .input-date-content .DatePicker__calendarContainer.-top {
+  top: 130% !important;
+  right: -50% !important;
+  transform: translateX(-50%) !important;
+}
+.main-date-picker--1 .input-date-content {
+  border-top: none !important;
+}
+
+
+/* profile picture */
+.profile-pic{
+  width: 120px;
+  height: 120px;
+  border-radius: var(--border-radius-full);
+  overflow: hidden;
+}
+.account-user-content .tab-content{
+  padding: 0px ;
+  margin: 0px ;
+}

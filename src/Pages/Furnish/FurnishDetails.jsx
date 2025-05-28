@@ -1,0 +1,158 @@
+import React from 'react'
+import SliderDetailsContent from '../../Components/Ui/SliderDetailsContent/SliderDetailsContent'
+import HelmetInfo from '../../Components/Helmetinfo/HelmetInfo'
+import ContainerMedia from '../../Components/ContainerMedia/ContainerMedia'
+import { useLanguage } from '../../Components/Languages/LanguageContext'
+import BreadcrumbsPage from '../../Components/Ui/BreadcrumbsPage/BreadcrumbsPage'
+import DescriptionGuide from '../../Components/Ui/DescriptionGuide/DescriptionGuide'
+import Offers from '../../Components/Ui/Offers/Offers'
+import BasicImageSlider from '../../Components/Ui/BasicImageSlider/BasicImageSlider'
+import CompanyCard from '../../Components/Ui/CompanyCard/CompanyCard'
+import AdsDescription from '../../Components/Ui/AdsDescription/AdsDescription'
+import Map from '../../Components/Ui/Map/Map'
+import RealatedSlider from '../../Components/Ui/RealatedSlider/RealatedSlider'
+import FininshCard from '../../Components/Ui/FinishCard/FinishCard'
+import TwoAds from '../../Components/Ui/TwoAds/TwoAds'
+
+const images = [
+    {
+        id: 1,
+        img: "./home.jpg",
+        descroption: "اوضه نوم"
+    },
+    {
+        id: 2,
+        img: "./home1.jpg",
+        descroption: "اوضه معيشة"
+
+    },
+    {
+        id: 3,
+        img: "./hom2.jpg",
+        descroption: "المطبخ"
+    },
+];
+
+const cardData = [
+    {
+        img: "./home.jpg",
+        title: "المدينة للأثاث",
+        subtitles: ["مكاتب", "اكسسوارات", " مكتبات", "+15"],
+        exprince: "خبرة 15 سنة",
+        since: "2007"
+    },
+    {
+        img: "./hom2.jpg",
+        title: "أثاث العصري",
+        subtitles: ["كراسي", "مكاتب", "دواليب", "+10"],
+        exprince: "خبرة 10 سنوات",
+        since: "2012"
+    },
+    {
+        img: "./home1.jpg",
+        title: "البيت الحديث",
+        subtitles: ["غرف نوم", "أنتريهات", "مكتبات", "+20"],
+        exprince: "خبرة 20 سنة",
+        since: "2000"
+    },
+    {
+        img: "./home1.jpg",
+        title: "البيت الحديث",
+        subtitles: ["غرف نوم", "أنتريهات", "مكتبات", "+20"],
+        exprince: "خبرة 20 سنة",
+        since: "2000"
+    },
+    {
+        img: "./home.jpg",
+        title: "المدينة للأثاث",
+        subtitles: ["مكاتب", "اكسسوارات", " مكتبات", "+15"],
+        exprince: "خبرة 15 سنة",
+        since: "2007"
+    },
+];
+const oneCard = [
+    {
+        title: "المدينة للأثاث",
+        exprince: "خبرة 15 سنة",
+        since: "2007"
+    },
+];
+
+
+const FurnishDetails = () => {
+    const { currentLanguage } = useLanguage();
+    const offers = ["حديقة", "اكسسورارات حمام", "مطبخ", "اوض معيشة", "اوض نوم", "اوض ملابس", "اوض ضيوف", "اوض ألعاب", "شرفة"]
+
+    return (
+        <>
+            <HelmetInfo titlePage={currentLanguage === "ar" ? "تفاصيل افرش بيتك" : "Furnish  home details"} />
+            <ContainerMedia >
+
+                <div className="py-4">
+                    <header >
+                        <BreadcrumbsPage
+                            newClassBreadHeader={"biography-bread breadcrumb-page-2"}
+                            mainTitle={"تشطيبات"}
+                            routeTitleTwoBread={false}
+                            titleTwoBread={"افرش بيتك"}
+                            textBreadActive={"عالم الأثاث"}
+                        />
+                    </header>
+                    <main>
+
+
+                        <SliderDetailsContent />
+                        <div className="row gy-4">
+                            <div className="col-12 col-xl-9 d-flex flex-column space-8">
+                                <DescriptionGuide
+                                    title={"عالم الأثاث"}
+                                    location={"الجيزة - 6 اكتوبر - المحور المركزي"}
+                                />
+                                <Offers title={"ايه اللي بيبيعه قباني"} offers={offers} />
+
+                                <BasicImageSlider title={"صور من قباني"} images={images} />
+
+
+                                <AdsDescription title={"مين هو قباني؟"} />
+                                <Map />
+
+
+                                <RealatedSlider title={"المشاريع المتشابهة"}>
+                                    {cardData.map((item, index) => (
+                                        <div key={index} className="slider-card-wrapper w-100">
+                                            <FininshCard
+                                                img={item.img}
+                                                subtitles={item.subtitles}
+                                                exprince={item.exprince}
+                                                since={item.since}
+                                                title={item.title}
+                                            />
+                                        </div>
+                                    ))}
+                                </RealatedSlider>
+
+                            </div>
+                            <div className="col-12 col-xl-3 d-flex flex-column space-6">
+                                {oneCard.map((item, index) => (
+                                    <div key={index} className="slider-card-wrapper w-100">
+                                        <FininshCard
+                                            img={item.img}
+                                            subtitles={item.subtitles}
+                                            exprince={item.exprince}
+                                            since={item.since}
+                                            title={item.title}
+                                        />
+                                    </div>
+                                ))}
+                                <TwoAds />
+                            </div>
+                        </div>
+                    </main>
+
+                </div>
+            </ContainerMedia>
+        </>
+    )
+}
+
+export default FurnishDetails

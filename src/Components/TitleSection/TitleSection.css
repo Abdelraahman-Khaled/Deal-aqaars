@@ -1,0 +1,56 @@
+.title-section {
+    padding-bottom: 40px;
+}
+
+.title-section :is(.title, .text) {
+    font-weight: 500;
+    color: var( --netural-1000);
+    text-align: center;
+}
+
+.title-section .title {
+    font-size: 28px;
+    padding-bottom: 13px;
+}
+
+.title-section .text {
+    font-size: 15px;
+    line-height: 2;
+    max-width: 800px;
+    width: 100%;
+    margin: auto !important;
+}
+
+/* SCREEN 767PX */
+@media screen and (max-width:767px) {
+    .title-section .text {
+
+        max-width: 100%;
+
+    }
+}
+
+/* SCREEN 550PX */
+@media screen and (max-width:550px) {
+    .title-section .title {
+        font-size: 19px;
+        font-weight: 600;
+    }
+
+    .title-section .text {
+        font-size: 13px;
+
+    }
+}
+
+/* SCREEN 400PX */
+@media screen and (max-width:400px) {
+    .title-section .title {
+        font-size: 17px;
+    }
+
+    .title-section .text {
+        font-size: 12px;
+
+    }
+}

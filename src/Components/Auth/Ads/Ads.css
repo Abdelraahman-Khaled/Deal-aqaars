@@ -1,0 +1,23 @@
+.ads .like {
+    background: #2222221A;
+    padding: 12px 8px;
+    border-radius: var(--border-radius-4);
+}
+.ads a{
+    color: var(--netural-600);
+transition: 0.3s ease-in-out;
+}
+.ads a:hover{
+    color: var(--primary);
+}
+
+@media screen and (max-width: 992px) {
+    .ads{
+        width: 50% !important;
+    }
+}
+@media screen and (max-width: 600px) {
+    .ads{
+        width: 100% !important;
+    }
+}

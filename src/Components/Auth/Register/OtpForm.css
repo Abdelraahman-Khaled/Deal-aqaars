@@ -1,0 +1,68 @@
+/* Force LTR direction for OTP input fields */
+.otp-form .all-input-otp input {
+  direction: ltr;
+  text-align: left; /* Ensure text aligns to the left */
+}
+
+.all-input-otp  {
+  direction: ltr !important;
+  text-align: center;
+}
+
+.otp-form-modal .icon-email {
+  width: 55px;
+  height: 55px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--green-02-color);
+  border-radius: 50%;
+  margin: 0 auto 15px auto;
+}
+
+.otp-form-modal .info-header-otp :is(.title, .text, .timer-down-otp) {
+  font-weight: 500;
+  color: var(--dark-01-color);
+  text-align: center;
+}
+
+.otp-form-modal .info-header-otp :is(.title, .timer-down-otp) {
+  font-size: 17px;
+}
+
+.otp-form-modal .info-header-otp .text {
+  font-size: 14px;
+  line-height: 2;
+  padding: 15px 0;
+}
+
+.otp-form-modal .timer-otp {
+  color: #b70707;
+}
+
+.otp-form-modal .all-input-otp {
+  margin: 20px 0;
+}
+
+.otp-form .all-input-otp .form-control {
+font-weight: 700;
+font-size: 24px;
+color: var(--netural-1000);
+border: 1px solid rgba(34, 34, 34, 0.1);
+padding: 8px 16px;
+text-align: center;
+border-radius: var(--border-radius-4);
+background-color: rgba(34, 34, 34, 0.1);
+height: 70px;
+width:  70px;
+}
+
+@media screen and (max-width: 425px) {
+  .otp-form-modal .info-header-otp :is(.title, .timer-down-otp) {
+    font-size: 14px;
+  }
+
+  .otp-form-modal .info-header-otp .text {
+    font-size: 12px;
+  }
+}

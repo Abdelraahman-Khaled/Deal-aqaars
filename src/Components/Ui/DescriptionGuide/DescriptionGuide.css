@@ -1,0 +1,18 @@
+.leave-button{
+    padding: 12px 16px;
+    gap: 8px;
+    background-color: rgba(23, 55, 148, 0.1);
+    color: var(--primary);
+    border-radius: var(--border-radius-2);
+    border: none;
+    max-height: fit-content;
+    min-width: max-content;
+}
+
+@media screen and (max-width:645px) {
+    .leave-container{
+        flex-direction: row-reverse;
+        flex-wrap: wrap;
+    }
+
+}

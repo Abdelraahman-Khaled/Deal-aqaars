@@ -1,0 +1,9 @@
+.all-pay-information-tab .pay-one-content-info {
+    padding: 10px 12px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+}
+
+.all-pay-information-tab .pay-one-content-info .icon-trash-remove {
+    cursor: pointer;
+}

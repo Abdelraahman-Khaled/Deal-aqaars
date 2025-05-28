@@ -1,0 +1,21 @@
+.companies-box{
+    border-radius: var(--border-radius-4);
+    border: 1px solid var(--netural-200);
+    padding: 24px;
+    display: flex; 
+    flex-direction: column;
+}
+.companies-box .col-12 {
+    border-bottom: 1px solid var(--netural-200);
+    padding-bottom: 16px;
+}
+
+.companies-box .col-12:last-of-type {
+    border-bottom: none;
+  }
+
+  @media screen and (max-width: 680px) {
+    .box-row{
+        flex-wrap: wrap;
+    }
+  }

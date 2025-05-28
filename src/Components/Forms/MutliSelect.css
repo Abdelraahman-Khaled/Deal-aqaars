@@ -1,0 +1,41 @@
+.badge{
+    border-radius: var(--border-radius-2);
+    padding: 4px 6px ;
+    gap:12px;
+    background:rgba(23, 55, 148, 0.1);
+    color: var(--netural-1000);
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    
+}
+.badge button{
+    border: none;
+}
+.search-input.foucs{
+    box-shadow: -1px 0px 0px 1px var(--primary);
+    border: 1px solid var(--primary);
+}
+input:focus-visible{
+outline:unset;
+border: none;
+}
+.mutli-search::-webkit-scrollbar {
+    display: none;
+}
+.mutli-search .dropdown-item:hover{
+    color: var(--netural-100);
+    background-color: var(--primary) !important;
+}
+
+
+
+.form-control:focus{
+    box-shadow: 0px 0px 0px 1px var(--primary);
+    border: 1px solid var(--primary);
+    }
+ 
+.phoneNumber{
+  border-right: 1px solid var(--netural-200);
+  }
+

@@ -1,0 +1,28 @@
+.home-hero{
+    background-image: url("../../assets/images/heroHome/home-bg.png");
+    min-height: 750px;
+    background-position: center;
+    background-size: cover;
+    border-radius: var(--border-radius-4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 48px;
+}
+.home-hero h2{
+    color: var(--netural-100);
+}
+@media screen and (max-width:992px) {
+    .home-hero{
+        min-height:560px;
+    }
+}
+@media screen and (max-width:768px) {
+    .home-hero{
+        min-height:400px;
+    }
+}
+.home-hero .tab-content{
+    padding: 0 10px;
+  }

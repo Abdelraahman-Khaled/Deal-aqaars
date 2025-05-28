@@ -1,0 +1,85 @@
+import React from 'react'
+import Garag from '../../../assets/Icons/Garag'
+import LocationIcon from '../../../assets/Icons/LocationIcon'
+import { Link } from 'react-router-dom'
+import "./CompoundCard.css"
+import FavIcon from '../FavIcon/FavIcon'
+import { useLanguage } from '../../Languages/LanguageContext'
+import WhatsIcon from '../../../assets/Icons/WhatsIcon'
+import CallIcon from '../../../assets/Icons/CallIcon'
+
+const CompoundCard = ({ title, location, details, price, img, company = false, connections = false, slider = false, wrapperClass, status }) => {
+
+    const { currentLanguage } = useLanguage()
+    return (
+        <div className={`compound-card space-4 d-flex ${wrapperClass} mb-4 `} style={company & wrapperClass === "flex-wrap" ? { width: "49%" } : { width: "100%" }} mb-4 dir={currentLanguage === "ar" ? "rtl" : "ltr"}>
+            <Link to={"/compounds-guide"} className={`  ${wrapperClass ? "w-100" : "w-50"}`}>
+                <div className='compound-img'>
+                    <img loading="lazy" src={img} alt="compoundImg" />
+                    {/* favIcon */}
+                    <FavIcon />
+                </div>
+            </Link>
+            {/* title */}
+            <div className='d-flex flex-column space-4 w-100'>
+                <div className='d-flex justify-content-between w-100 flex-column compound-title space-1'>
+                    <p className='b-5'>
+                        {title}
+                    </p>
+                    {
+                        slider && <p className='b-11 available ' >
+                            {currentLanguage === "ar" ? status || "بقي متاح" : status || "Available"}
+                        </p>
+                    }
+                </div>
+                {/* locations */}
+                <p className='b-11'>
+                    <LocationIcon />
+                    <span className='px-1'></span>
+                    {location}
+                </p>
+                {/* details */}
+                <p className='b-11'>
+                    <Garag />
+                    <span className='px-1'></span>
+                    {details}
+                </p>
+                {/* price */}
+                <p className='b-5 w-100'>
+                    تبدأ من  {price} ج.م
+                </p>
+
+                {/* Compnay */}
+                {
+                    company &&
+                    <Link to={"#"} className='connections pt-3 d-flex align-items-center space-2 w-100'>
+                        <div className='logo'>
+                            <img src="/Logo icon.png" alt="company" className='company' />
+                        </div>
+                        <div className='d-flex space-2 flex-column'>
+                            <p className="b-5">تطوير مصر للتطوير العقاري</p>
+                            <p className='b-12'>من 2014، 8 مشاريع</p>
+                        </div>
+                    </Link>
+                }
+                {
+                    connections &&
+                    <div className='connections d-flex justify-content-between w-100 pt-4 space-4 '>
+                        {/* whats */}
+                        <Link className='whats-button w-50 b-11 d-flex space-1 justify-content-center'>
+                            <WhatsIcon />
+                            واتساب
+                        </Link>
+                        {/* faceBook */}
+                        <Link className='facebook-button w-50 b-11 d-flex space-1 justify-content-center'>
+                            <CallIcon />
+                            اتصل
+                        </Link>
+                    </div>
+                }
+            </div>
+        </div>
+    )
+}
+
+export default CompoundCard

@@ -1,0 +1,20 @@
+.trade-card{
+    border-radius: var(--border-radius-4);
+    border: 1px solid var(--netural-200);
+    padding: 16px;
+}
+.trade-details{
+    background-color: rgba(223, 160, 39, 0.1);
+    border: 1px solid var(--netural-200);
+    padding: 8px;
+    border-radius: var(--border-radius-2);
+}
+
+.trade-icon{
+    border-radius: var(--border-radius-full);
+    border: 1px solid var(--netural-200);
+    padding: 8px;
+    width: max-content;
+    height: max-content;
+    align-self: center;
+}

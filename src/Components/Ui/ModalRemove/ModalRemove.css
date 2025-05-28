@@ -1,0 +1,57 @@
+/* MODAL REMOVE */
+.modal-remove .icon-remove-top {
+    background: #ff2b2b17;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.modal-remove .title {
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--dark-01-color);
+}
+
+.modal-remove .text {
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--gray-01-color);
+    padding: 15px 0;
+    line-height: 1.8;
+}
+
+.buttons-modal-bottom .btn-main {
+    background: var(--danger-01-color);
+    border-color: var(--danger-01-color);
+    box-shadow: none;
+}
+
+.buttons-modal-bottom .btn-cancel {
+    background: transparent;
+    color: var(--dark-01-color);
+    border-color: var(--dark-01-color);
+    transition: all 0.5s;
+
+}
+
+.buttons-modal-bottom .btn-cancel:hover {
+    background: var(--dark-01-color);
+    color: var(--white-01-color);
+}
+
+@media screen and (max-width:450px) {
+    .modal-remove .title {
+        font-size: 16px;
+        ;
+    }
+
+    .modal-remove .text {
+        font-size: 13px;
+
+    }
+
+}

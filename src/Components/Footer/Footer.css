@@ -1,0 +1,38 @@
+.footer{
+    margin-top: 40px;
+    padding-top: 16px;
+    background-color: #f2f2f2;
+   
+}
+.footer .keep-touch{
+    padding-bottom: 16px;
+}
+.footer .keep-touch p{
+    color: var(--netural-600);
+}
+.footer .keep-touch form{
+    display: flex ;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 10px;
+}
+.footer .keep-touch form label{
+    margin: 0;
+}
+.footer .links{
+    padding-bottom: 16px;
+}
+.footer .links,.footer .keep-touch{
+    border-bottom: 1px solid var(--netural-300);
+    
+}
+.footer .links a{
+    transition: 0.3s ease-in-out;
+}
+.footer .links a:hover{
+    color: var(--primary);
+}
+.footer .btn-submit{
+    min-width: 140px;
+}

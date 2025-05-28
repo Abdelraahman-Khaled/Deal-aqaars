@@ -1,0 +1,41 @@
+.account-information-content .input-control .icon-edit-input svg path {
+    stroke: var(--dark-01-color);
+}
+
+.account-information-content .input-control .icon-edit-input {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 3%;
+    cursor: pointer;
+}
+
+.input-number-tel .intl-tel-input {
+    width: 100%;
+}
+
+.input-number-tel .intl-tel-input input {
+    padding-right: 110px !important;
+}
+
+.input-number-tel .intl-tel-input.allow-dropdown.separate-dial-code.iti-sdc-4 .selected-flag {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100px;
+}
+
+.input-number-tel .intl-tel-input.allow-dropdown.separate-dial-code .selected-dial-code {
+    padding-left: 0 !important;
+}
+
+.input-control .intl-tel-input .flag-container .arrow {
+    display: none;
+
+}
+
+.input-number-tel .intl-tel-input .country-list {
+    text-align: right;
+    width: 100%;
+}

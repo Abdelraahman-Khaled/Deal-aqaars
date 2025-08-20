@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useLanguage } from "../../../../../Components/Languages/LanguageContext";
 import { Col, Row, Dropdown } from "react-bootstrap";
 import TabsContent from "../../../../../Components/Ui/TabsContent/TabsContent";
-import GreenRight from "../../../../../assets/Icons/GreenRight";
 import "./FinishSearch.css";
 import SearchToggle from "../../../../../Components/Ui/SearchComponents/SearchToggle ";
 import MultiSelect from "../../../../../Components/Forms/MultiSelect";

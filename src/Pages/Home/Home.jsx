@@ -18,6 +18,7 @@ const Home = () => {
 
     return (
         <>
+
             <HelmetInfo titlePage={currentLanguage === "ar" ? "الصفحة الرئيسية" : "Home"} />
             <ContainerMedia>
 

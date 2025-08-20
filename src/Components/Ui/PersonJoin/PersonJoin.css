@@ -1,0 +1,12 @@
+.person-join span{
+    color: var(--red-200) !important;
+    font-size: 14px;
+}
+.btn-cancel{
+    border: 1px solid var(--netural-200);
+    background-color: var(--netural-200);
+    color: var(--netural-600);
+}
+.btn-cancel:hover{
+    color: var(--netural-100);
+}

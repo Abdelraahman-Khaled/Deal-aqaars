@@ -16,7 +16,7 @@ const TradeCard = ({ title, rooms, bath, space, location, trade, since }) => {
         <div className='trade-card d-flex flex-column space-4 '>
             <div className='d-flex flex-column space-4 w-100'>
                 <div className='d-flex justify-content-between w-100 border-gray pb-3'>
-                    <p className='b-1 '>
+                    <p className='b-5 '>
                         {title}
                     </p>
                     <div className='d-flex gap-2'>
@@ -28,7 +28,7 @@ const TradeCard = ({ title, rooms, bath, space, location, trade, since }) => {
 
 
                 {/* locations */}
-                <p className='b-11'>
+                <p className='b-11 overflow-hidden'>
                     <LocationIcon />
                     <span className='px-1'></span>
                     {location}

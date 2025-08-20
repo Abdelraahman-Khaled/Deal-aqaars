@@ -9,13 +9,13 @@ const TextArea = ({ label, success, ...props }) => {
     // Add a comment to explain the custom styles
     const inputStyles = {
         borderColor: isError ? "#dc3545" : isSuccess ? "green" : "",
-        minHeight: "105px",
+        minHeight: "157px",
         // Add other styles as needed
     };
 
     return (
         <div
-            className={`w-100 input-field-info d-flex flex-column gap-1 mt-3 form-one align-items-end  ${meta.touched &&
+            className={`w-100 input-field-info d-flex flex-column gap-1 mt-2 form-one align-items-end  ${meta.touched &&
                 meta.error ? "is-invalid" : ""}`}
         >
             {/* <label htmlFor={props.id || props.name} className="form-label">

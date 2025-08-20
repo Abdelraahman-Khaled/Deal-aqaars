@@ -5,7 +5,7 @@ import ReactSlider from "react-slider";
 import MenuArrow from "../../../assets/Icons/MenuArrow";
 import { useLanguage } from "../../../Components/Languages/LanguageContext";  // Assuming you have LanguageContext
 
-const BudgetDropdown = ({ budget, setBudget, rotate }) => {
+const BudgetDropdown = ({ budget, setBudget, rotate, buttons = true, title }) => {
     const { currentLanguage } = useLanguage(); // Get the current language
 
     // Translations based on current language
@@ -35,9 +35,9 @@ const BudgetDropdown = ({ budget, setBudget, rotate }) => {
     const budgetText = `${(budget[0]).toLocaleString()} : ${(budget[1]).toLocaleString()}`;
 
     return (
-        <Dropdown className="d-flex budget">
+        <Dropdown className="d-flex budget justify-content-between">
             <Dropdown.Toggle variant="light" className="w-100 text-end">
-                {budget[0] === 1000000 ? text.budget : budgetText}
+                {budget[0] === 1000000 ? title || text.budget : budgetText}
             </Dropdown.Toggle>
             <Dropdown.Menu>
                 <div className="px-3 pt-4 pb-3">
@@ -57,10 +57,10 @@ const BudgetDropdown = ({ budget, setBudget, rotate }) => {
                         <p className="b-12">{budget[1].toLocaleString()} {currentLanguage === "ar" ? "ج.م" : "EGP"}</p>
                         <p className="b-12">{budget[0].toLocaleString()} {currentLanguage === "ar" ? "ج.م" : "EGP"}</p>
                     </div>
-                    <div className="d-flex flex-row space-4 mt-3">
+                    {buttons && <div className="d-flex flex-row space-4 mt-3">
                         <button className="btn-main btn-reset btn-confirm w-100" onClick={() => setBudget([1000000, 50000000])}>{text.reset}</button>
                         <button className="btn-main btn-confirm w-100 border">{text.done}</button>
-                    </div>
+                    </div>}
                 </div>
             </Dropdown.Menu>
             <MenuArrow rotate={rotate} />

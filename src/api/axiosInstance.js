@@ -1,7 +1,7 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const API_BASE_URL = "https://backend.atour.sa/api/v1";
+const API_BASE_URL = "https://deal-two.vercel.app/api/";
 
 const axiosInstance = axios.create({
     baseURL: API_BASE_URL,
@@ -12,12 +12,12 @@ const axiosInstance = axios.create({
 
 // Check if user is authenticated
 export const isAuthenticated = () => {
-    return !!localStorage.getItem("access_token");
+    return !!localStorage.getItem("token");
 };
 
 // Attach token to requests
 axiosInstance.interceptors.request.use((config) => {
-    const token = localStorage.getItem("access_token");
+    const token = localStorage.getItem("token");
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
@@ -43,7 +43,7 @@ axiosInstance.interceptors.response.use(
                 // Show toast first
                 toast.error(message);
                 // Clear token and redirect after a delay
-                localStorage.removeItem("access_token");
+                localStorage.removeItem("token");
                 setTimeout(() => {
                     window.location.href = "/";
                 }, 2000); // Wait 2 seconds before redirecting

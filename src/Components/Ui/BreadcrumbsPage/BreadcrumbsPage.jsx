@@ -2,8 +2,6 @@ import { Link } from "react-router-dom";
 import "./BreadcrumbsPage.css";
 import BreadcrumbsIcon from "../../../assets/Icons/BreadcrumbsIcon";
 import SmallLeftIcon from "../../../assets/Icons/SmallLeftIcon";
-import ContainerMedia from "../../ContainerMedia/ContainerMedia";
-import { useLanguage } from "../../Languages/LanguageContext";
 
 const BreadcrumbsPage = ({
     newClassBreadHeader,
@@ -11,9 +9,9 @@ const BreadcrumbsPage = ({
     titleTwoBread = null,
     textBreadActive,
     mainTitle,
-    mainRoute
+    mainRoute,
+    secondArrow = true
 }) => {
-    const { currentLanguage } = useLanguage(); // Get the current language
 
     return (
         <div
@@ -25,7 +23,7 @@ const BreadcrumbsPage = ({
                     <li className="breadcrumb-item">
                         <Link
                             to={mainRoute}
-                            className="link-bread d-flex align-items-center gap-2"
+                            className="link-bread d-flex align-items-center gap-2 b-16"
                         >
                             <BreadcrumbsIcon />
                             <SmallLeftIcon />
@@ -34,16 +32,19 @@ const BreadcrumbsPage = ({
                     </li>
 
                     {/* Chevron Icon */}
-                    <li className="breadcrumb-item">
-                        <div className="icon-chevron--1">
-                            <SmallLeftIcon />
-                        </div>
-                    </li>
+                    {
+                        secondArrow &&
+                        <li className="breadcrumb-item">
+                            <div className="icon-chevron--1">
+                                <SmallLeftIcon />
+                            </div>
+                        </li>
+                    }
 
                     {/* Second Breadcrumb: Conditional Rendering for titleTwoBread */}
                     {titleTwoBread && (
                         <>
-                            <li className="breadcrumb-item">
+                            <li className="breadcrumb-item ">
                                 <Link
                                     to={routeTitleTwoBread}
                                     className="link-bread d-flex align-items-center gap-2"
@@ -62,7 +63,7 @@ const BreadcrumbsPage = ({
                     )}
                     {/* Active Breadcrumb */}
                     <li
-                        className="breadcrumb-item active d-flex align-items-center gap-2"
+                        className="breadcrumb-item active d-flex align-items-center gap-2 b-16"
                         aria-current="page"
                     >
                         {textBreadActive}

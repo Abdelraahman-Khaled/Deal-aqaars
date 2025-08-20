@@ -32,7 +32,6 @@ html[lang="en"] .tabs-home ul::before {
     font-weight: 400;
     font-size: 0.875rem;
     line-height: 1.313rem;
-    z-index: 10;
 }
 .tabs-home ul li button{
     border: none !important;

@@ -7,7 +7,7 @@ import MenuArrow from '../../../assets/Icons/MenuArrow'
 const SpaceBox = ({ data, realEstate = false }) => {
     return (
         data?.map((item, index) => (
-            <div key={index} className='d-flex flex-column space-4 pb-4' style={{ width: realEstate ? "48%" : "100%" }}>
+            <div key={index} className='d-flex flex-column space-4 pb-4 ' style={{ width: realEstate ? "48%" : "100%" }}>
                 <p className='b-9 '>{item.title}</p>
                 <div className='space-box space-6'>
                     {

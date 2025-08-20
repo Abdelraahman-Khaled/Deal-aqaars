@@ -8,12 +8,19 @@ import { useLanguage } from '../../Languages/LanguageContext'
 import WhatsIcon from '../../../assets/Icons/WhatsIcon'
 import CallIcon from '../../../assets/Icons/CallIcon'
 
-const CompoundCard = ({ title, location, details, price, img, company = false, connections = false, slider = false, wrapperClass, status }) => {
+const CompoundCard = ({ title, location, details, price, img, company = false, connections = false, slider = false, wrapperClass, status, isSwiping = false }) => {
 
     const { currentLanguage } = useLanguage()
+
+
+    const handleClick = (e) => {
+        if (isSwiping) e.preventDefault();
+    };
     return (
         <div className={`compound-card space-4 d-flex ${wrapperClass} mb-4 `} style={company & wrapperClass === "flex-wrap" ? { width: "49%" } : { width: "100%" }} mb-4 dir={currentLanguage === "ar" ? "rtl" : "ltr"}>
-            <Link to={"/compounds-guide"} className={`  ${wrapperClass ? "w-100" : "w-50"}`}>
+            <Link to={"/compounds-guide"}
+                className={`  ${wrapperClass ? "w-100" : "w-50"}`}
+                onClick={handleClick}>
                 <div className='compound-img'>
                     <img loading="lazy" src={img} alt="compoundImg" />
                     {/* favIcon */}
@@ -45,7 +52,7 @@ const CompoundCard = ({ title, location, details, price, img, company = false, c
                     {details}
                 </p>
                 {/* price */}
-                <p className='b-5 w-100'>
+                <p className='b-11 w-100'>
                     تبدأ من  {price} ج.م
                 </p>
 

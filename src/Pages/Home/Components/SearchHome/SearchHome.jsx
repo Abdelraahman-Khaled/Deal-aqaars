@@ -242,7 +242,7 @@ const SearchHome = () => {
 
         <div className='search-home d-flex space-9 justify-content-center flex-column'>
             <div className='d-flex space-4 flex-column'>
-                <h5 className='text-center'>الناس بتدور على إيه؟ هتلاقيه هنا!</h5>
+                <h6 className='text-center'>الناس بتدور على إيه؟ هتلاقيه هنا!</h6>
                 <TabsContent
                     tabsData={tabsDataBio}
                     newClassTabsContent={"tabs-home "} />

@@ -326,14 +326,14 @@ const SalePage = () => {
                             titleTwoBread={false}
                             textBreadActive={"عقارات تطوير مصر للتطوير العقاري"}
                         />
-                        <p className="b-1 pt-2">
+                        <p className="b-1 pt-3">
                             عقارات تطوير مصر للتطوير العقاري
                         </p>
                     </div>
 
                     <div className='row g-4 pt-2 '>
                         {[...currentPageData]?.map((card, index) => (
-                            <div key={index} className='related-slider col-12 col-sm-6 col-lg-4 mt-0'>
+                            <div key={index} className='related-slider col-12 col-sm-6 col-lg-4  mt-0'>
                                 <RealStateCard
                                     key={index}
                                     title={card.title}

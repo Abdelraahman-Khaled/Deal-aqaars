@@ -42,9 +42,9 @@ const BannerHome = () => {
                     <div className="col-12 col-md-7 col-lg-5">
                         {/* ============ START INFO BANNER CONTENT =========== */}
                         <div className="info-banner-content d-flex flex-column space-7 text-center ">
-                            <h5 >
+                            <h6 >
                                 {localization[currentLanguage].title}
-                            </h5>
+                            </h6>
                             <p className="b-12">
                                 {localization[currentLanguage].description}
                             </p>

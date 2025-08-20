@@ -58,7 +58,6 @@ const GuidePage = ({ title, compound = true }) => {
             price: "7,457,874",
             img: compoundImg2,
         },
-
     ];
 
     return (

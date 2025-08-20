@@ -46,52 +46,6 @@ const AqarDetails = () => {
         { value: "inprogress", label: translations[currentLanguage].inProgress }
     ];
 
-    // finishing tabs
-    const tabsFinishing = [
-        {
-            eventKey: "tab1",
-            title: <></>,
-            content: (
-                <div className="d-flex flex-column space-6">
-                    <div className="d-flex space-4 flex-column justify-content-center">
-                        {
-                            translations[currentLanguage].allItemsFinishing.map((item, index) => (
-                                <p key={index} className={`b-12 pick bg-light-gray d-flex space-2`}
-                                    onClick={() => setFinishing(item)}>
-                                    {finishing === item}
-                                    {item}
-                                </p>
-                            ))
-                        }
-                    </div>
-                </div>
-            )
-        },
-    ];
-
-    // delivery date
-    const deliveryDate = [
-        {
-            eventKey: "tab1",
-            title: <></>,
-            content: (
-                <div className="d-flex flex-column space-6">
-                    <div className="d-flex space-4 flex-column justify-content-center">
-                        {
-                            translations[currentLanguage].allItemsDelivary.map((item, index) => (
-                                <p key={index} className={`b-12 pick bg-light-gray d-flex space-2`}
-                                    onClick={() => setDelivary(item)}>
-                                    {delivary === item}
-                                    {item}
-                                </p>
-                            ))
-                        }
-                    </div>
-                </div>
-            )
-        },
-    ];
-
 
     const tabsKind = [
         {

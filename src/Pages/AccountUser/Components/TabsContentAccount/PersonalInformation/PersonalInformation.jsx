@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import * as Yup from "yup";
-import ModalEditPersonalInformation from "./ModalEditPersonalInformation";
 import InputFiled from "../../../../../Components/Forms/InputField";
 import { useLanguage } from "../../../../../Components/Languages/LanguageContext";
 import EditIcon from "../../../../../assets/Icons/EditIcon";
@@ -10,10 +9,12 @@ import EmailIcon from "../../../../../assets/Icons/EmailIcon";
 import PhoneNumber from "../../../../../Components/Forms/PhoneNumber";
 import FormField from "../../../../../Components/Forms/FormField";
 import { Col, Row } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 const PersonalInformation = () => {
   const { currentLanguage } = useLanguage();
   const [edit, setEdit] = useState(false);
+  const userType = useSelector((state) => state.userType.userType);
 
   const initialValues = {
     name: "",
@@ -89,7 +90,7 @@ const PersonalInformation = () => {
             id="edit-profile-form"
           >
             <div className="p-4 form-container gap-2">
-              <Row className="g-3">
+              <Row className="g-3 mb-3">
                 <Col xs={12} lg={6}>
                   <div className="d-flex flex-column">
                     <label className="b-9 pb-2" style={{ minWidth: "150px" }}>
@@ -110,8 +111,14 @@ const PersonalInformation = () => {
               </Row>
 
 
+              <div className="mb-3 d-flex flex-column justify-content-between flex-wrap gap-3">
+                <label className="b-9 me-3" style={{ minWidth: "150px" }}>
+                  نوع الحساب <span>*</span>
+                </label>
+                <InputFiled name="type" placeholder={userType === "vendor" ? "مالك عقار" : "مطور عقاري (كمبوند)"} />
+              </div>
 
-              <div className="mb-4 d-flex flex-column justify-content-between flex-wrap gap-3">
+              <div className=" d-flex flex-column justify-content-between flex-wrap gap-3">
                 <label className="b-9 me-3" style={{ minWidth: "150px" }}>
                   الايميل <span>*</span>
                 </label>
@@ -134,6 +141,13 @@ const PersonalInformation = () => {
               <div className="d-flex flex-column space-1">
                 <p className="b-12" style={{ color: "var(--netural-700)" }}>رقم الموبايل</p>
                 <p className="b-11">011012015010</p>
+              </div>
+            </div>
+            <div className="d-flex flex-row align-items-center space-3 px-3">
+              <ProfileIcon />
+              <div className="d-flex flex-column space-1">
+                <p className="b-12" style={{ color: "var(--netural-700)" }}>نوع الحساب</p>
+                <p className="b-11">{userType === "vendor" ? "مالك عقار" : "مطور عقاري (كمبوند)"}</p>
               </div>
             </div>
             <div className="d-flex flex-row align-items-center space-3 px-3">

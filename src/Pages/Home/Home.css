@@ -10,7 +10,7 @@
     flex-direction: column;
     gap: 48px;
 }
-.home-hero h2{
+.home-hero h4{
     color: var(--netural-100);
 }
 @media screen and (max-width:992px) {

@@ -99,7 +99,7 @@ const CompoundTaps = () => {
     ];
 
     return (
-        <div className="compound-taps space-4 d-flex flex-column">
+        <div className="compound-taps space-4 d-flex flex-column w-75">
             <p className='b-5'>وحدات الكمباوند</p>
             <TabsContent
                 tabsData={tabs}

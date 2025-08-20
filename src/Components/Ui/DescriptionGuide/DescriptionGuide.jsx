@@ -11,13 +11,13 @@ const DescriptionGuide = ({ title, location, price, description, aqar = false, r
         <>
             <div className='d-flex justify-content-between py-4 space-3 flex-wrap'>
                 <div className='d-flex space-4 flex-column'>
-                    <p className='b-1'>{title}</p>
+                    <p className='b-3'>{title}</p>
                     {
                         description &&
                         <p className='b-11'>{description}</p>
                     }
                     <p className='b-11'><LocationIcon />{location}</p>
-                    {price && <p className='b-5'>تبدأ من {price} ج.م</p>}
+                    {price && <p className='b-11'>تبدأ من {price} ج.م</p>}
                     {
                         aqar &&
                         <div className='d-flex space-6'>

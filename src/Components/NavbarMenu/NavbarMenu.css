@@ -386,7 +386,10 @@
 .announcement-modal .modal-dialog{
   max-width: fit-content !important;
 }
-
+.announcement-modal .modal-content, .announcement-modal .modal-body{
+  min-height: fit-content !important;
+  height: fit-content !important;
+}
 .modal-announcement{
 border-radius: var(--border-radius-4);
 border: 1px solid var(--netural-200);
@@ -395,6 +398,7 @@ transition: 0.3s ease-in-out;
 display: flex;
 align-items: center;
 justify-content: center;
+height: fit-content;
 }
 
 .modal-announcement:hover{
@@ -417,9 +421,7 @@ justify-content: center;
   .modal-announcement {
     flex: 1 1 calc(50% - 8px); /* 2 items per row with 16px gap */
   }
-  .announcement-modal .modal-content{
-    min-height: 400px !important;
-  }
+  
   .modal-grid{
     width: 550px;
   }
@@ -516,4 +518,5 @@ justify-content: center;
   
 
  
+
   

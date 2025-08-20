@@ -11,15 +11,25 @@ import WhatsIcon from '../../../assets/Icons/WhatsIcon'
 import CallIcon from '../../../assets/Icons/CallIcon'
 import "./RealstateCard.css"
 
-const RealStateCard = ({ price, rooms, bath, space, details, location, offer, img, company = false, connections = false, wrapperClass, isFav }) => {
+const RealStateCard = ({ price, rooms, bath, space, details, location, offer, img, company = false, connections = false, wrapperClass, isFav, isSwiping = false }) => {
     const { currentLanguage } = useLanguage()
     const sliceWords = (text) => {
         const words = text.split(" ");
         return words.slice(0, 8).join(" ") + (words.length > 8 ? "..." : "");
     };
+
+
+    const handleClick = (e) => {
+        if (isSwiping) e.preventDefault();
+    };
+
+
     return (
         <div className={`compound-card space-4 d-flex ${wrapperClass} mb-4  `} style={company & wrapperClass === "flex-wrap" ? { width: "49%" } : { width: "100%" }} mb-4 dir={currentLanguage === "ar" ? "rtl" : "ltr"}>
-            <Link to={"/aqar-guide"} className={`  ${wrapperClass ? "w-100" : "w-50"}`}>
+            <Link to={"/aqar-guide"}
+                className={`  ${wrapperClass ? "w-100" : "w-50"}`}
+                onClick={handleClick}
+            >
                 <div className='compound-img'>
                     <img loading="lazy" src={img} alt="compoundImg" />
                     {/* favIcon */}
@@ -29,7 +39,7 @@ const RealStateCard = ({ price, rooms, bath, space, details, location, offer, im
             {/* price */}
             <div className='d-flex flex-column space-4 w-100'>
                 <div className='d-flex justify-content-between w-100'>
-                    <p className='b-1 min-w-max'>
+                    <p className='b-3 min-w-max'>
                         {price}  ج.م
                     </p>
                     <div className='d-flex gap-2 flex-wrap justify-content-end'>

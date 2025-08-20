@@ -1,0 +1,6 @@
+.section-header {
+  padding: 12px 8px;
+  background-color: #1737941a;
+  border-radius: var(--border-radius-4);
+  margin-bottom: 24px;
+}

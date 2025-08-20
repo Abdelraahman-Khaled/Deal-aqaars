@@ -269,7 +269,7 @@ const Trade = () => {
                                 </span>
                             </FormField>
                         </div>
-                        <Link to={"/join"} className="btn-main min-w-max">
+                        <Link to={"/join-trade"} className="btn-main min-w-max">
                             <AddIcon />
                             نزّل إعلانك للبدل
                         </Link>

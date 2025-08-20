@@ -5,7 +5,7 @@
     padding: 32px;
     border-radius: var(--border-radius-4);
 }
-.info-banner-content h5,.info-banner-content p{
+.info-banner-content h6,.info-banner-content p{
     color: var(--netural-100) ;
 
 }

@@ -37,7 +37,7 @@ const HeroSection = () => {
     ];
     return (
         <div className="home-hero my-4 ">
-            <h2 className='p-4 pb-0 text-center'>{currentLanguage === "ar" ? "كل العقارات في حتة واحدة!" : "All properties in one place!"}</h2>
+            <h4 className='p-4 pb-0 text-center'>{currentLanguage === "ar" ? "كل العقارات في حتة واحدة!" : "All properties in one place!"}</h4>
             <div className='w-100'>
                 <TabsContent
                     tabsData={tabsDataBio}

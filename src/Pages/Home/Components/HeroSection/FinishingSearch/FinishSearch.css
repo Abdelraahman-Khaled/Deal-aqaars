@@ -1,200 +1,200 @@
-.finishing{
-    border-radius: var(--border-radius-7);
-    background: var(--netural-100);
-    padding: 24px 24px;
-    width: 100%;
+.finishing {
+  border-radius: var(--border-radius-7);
+  background: var(--netural-100);
+  padding: 24px 24px;
+  width: 100%;
 }
 
-.select-type{
-    border-radius: var(--border-radius-4);
-    border: 1px solid var(--netural-200);
-    background-color: inherit;
-    gap: 8px;
+.select-type {
+  border-radius: var(--border-radius-4);
+  border: 1px solid var(--netural-200);
+  background-color: inherit;
+  gap: 8px;
 }
-.finishing .select-type button{
-    padding: 12px 32px;
-    border-radius: var(--border-radius-2);
-    border: none;
-    transition: 0.3s ease-in-out;
-    background-color: inherit;
+.finishing .select-type button {
+  padding: 12px 32px;
+  border-radius: var(--border-radius-2);
+  border: none;
+  transition: 0.3s ease-in-out;
+  background-color: inherit;
 }
-.finishing.finishing .select-type button{
-    padding: 12px 16px;
-}
-
-.finishing .select-type .selected{
-    background-color: rgba(23, 55, 148, 0.1);
+.finishing.finishing .select-type button {
+  padding: 12px 16px;
 }
 
- .finishing ul::before{
-    display: none !important;
+.finishing .select-type .selected {
+  background-color: rgba(23, 55, 148, 0.1);
 }
-.finishing .form-control,.finishing .dropdown{
-    padding: 16px 12px;
-    border-radius: var(--border-radius-4);
-    border: 1px solid var(--netural-200);
-    background-color: var(--netural-100);
 
+.finishing ul::before {
+  display: none !important;
 }
-.finishing .select-progress{
-    border-radius: var(--border-radius-4);
-    border: 1px solid var(--netural-200);
-    background-color: inherit;
-    display: flex;
-    gap: 8px;
+.finishing .form-control,
+.finishing .dropdown {
+  padding: 12px 8px;
+  border-radius: var(--border-radius-4);
+  border: 1px solid var(--netural-200);
+  background-color: var(--netural-100);
+}
+.finishing .select-progress {
+  border-radius: var(--border-radius-4);
+  border: 1px solid var(--netural-200);
+  background-color: inherit;
+  display: flex;
+  gap: 8px;
 }
 .finishing .select-progress button {
-    padding: 12px 8px;
-    color: var(--netural-1000) ;
+  padding: 12px 8px;
+  color: var(--netural-1000);
 }
-.finishing .dropdown button{
-    padding: 0;
-    border: none;
-    text-align: right !important;
+.finishing .dropdown button {
+  padding: 0;
+  border: none;
+  text-align: right !important;
 }
-[dir="ltr"] .finishing .dropdown button{
-    text-align: left !important;
-}
-
-.finishing .dropdown button:hover{
-    background-color: unset;
-}
-.finishing .dropdown button:active{
-    border: none;
-    background-color: unset;
-    color: var(--netural-1000);
-}
-.finishing  button.show{
-    border: none;
-    background-color: inherit;
-    color: var(--netural-1000);
+[dir="ltr"] .finishing .dropdown button {
+  text-align: left !important;
 }
 
-.finishing .search-input:focus{
+.finishing .dropdown button:hover {
+  background-color: unset;
+}
+.finishing .dropdown button:active {
+  border: none;
+  background-color: unset;
+  color: var(--netural-1000);
+}
+.finishing button.show {
+  border: none;
+  background-color: inherit;
+  color: var(--netural-1000);
+}
 
-    box-shadow: -1px 0px 0px 1px var(--primary);
-    border: 1px solid var(--primary);
+.finishing .search-input:focus {
+  box-shadow: -1px 0px 0px 1px var(--primary);
+  border: 1px solid var(--primary);
 }
 /* dropdown */
-.finishing .dropdown-menu.show{
-    border-radius: var(--border-radius-4);
-    padding: 16px;
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-    border: none;
-    width: 100%;
-    inset:unset !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, 30px) !important;
-    min-width: 450px;
+.finishing .dropdown-menu.show {
+  border-radius: var(--border-radius-4);
+  padding: 16px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  border: none;
+  width: 100%;
+  inset: unset !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, 30px) !important;
+  min-width: 450px;
 }
 /* نوع المكان  place kind */
-.finishing .place-kind{
-    gap: 24px;
+.finishing .place-kind {
+  gap: 24px;
 }
-.finishing .place-kind .nav-tabs .nav-link.active{
-    background-color: white;
-    border-bottom: 1px solid var(--primary) !important;
-    border-radius: 0px ;
+.finishing .place-kind .nav-tabs .nav-link.active {
+  background-color: white;
+  border-bottom: 1px solid var(--primary) !important;
+  border-radius: 0px;
 }
-.finishing .place-kind ul{
-    border: none;
-    justify-content: space-between;
-    width: 100%;
-    border-bottom: 1px solid var(--netural-300);
-    border-radius: 0px;
-    padding: 0px;
+.finishing .place-kind ul {
+  border: none;
+  justify-content: space-between;
+  width: 100%;
+  border-bottom: 1px solid var(--netural-300);
+  border-radius: 0px;
+  padding: 0px;
 }
 
 .finishing .place-kind ul li button {
-    padding: 12px 24px;
+  padding: 12px 24px;
 }
 /* pick */
 .finishing .pick {
-    border-radius: var(--border-radius-full);
-    padding: 8px 16px;
-    border: 1px solid var(--netural-300);
-    width: 100%;
-    text-align: center;
-    color: var(--netural-700);
-    cursor: pointer;
-    justify-content: center;
-    min-width: max-content;
+  border-radius: var(--border-radius-full);
+  padding: 8px 16px;
+  border: 1px solid var(--netural-300);
+  width: 100%;
+  text-align: center;
+  color: var(--netural-700);
+  cursor: pointer;
+  justify-content: right;
+  min-width: max-content;
+}
+.finishing .pick:hover {
+  color: var(--netural-1000);
+}
+.finishing .picked {
+  border-color: var(--green-200);
+  background-color: rgba(31, 193, 107, 0.1);
+}
 
+.btn-confirm,
+.btn-reset {
+  background: var(--primary);
+  border-radius: var(--border-radius-4);
+  padding: 12px 8px !important;
 }
-.finishing .pick:hover{
-    color: var(--netural-1000);
+.btn-confirm:hover {
+  background: var(--primary-300) !important;
 }
-.finishing .picked{
-    border-color: var(--green-200);
-    background-color: rgba(31, 193, 107, 0.1);
+.btn-reset:hover {
+  color: var(--netural-100);
 }
-
-.btn-confirm ,.btn-reset{
-    background : var(--primary);
-    border-radius: var(--border-radius-4);
-    padding: 12px 8px !important;
-}
-.btn-confirm:hover{
-    background: var(--primary-300) !important;
-}
-    .btn-reset:hover{
-    color: var(--netural-100);
-}
-.btn-reset{
-    background-color: var(--netural-100);
-    color: var(--primary);
-    border: 1px solid var(--primary) !important;
+.btn-reset {
+  background-color: var(--netural-100);
+  color: var(--primary);
+  border: 1px solid var(--primary) !important;
 }
 
 /* rooms dropdown */
-.finishing .rooms ul{
-display: none;
+.finishing .rooms ul {
+  display: none;
 }
 /* range slider */
-.finishing .slider-handle{
-    border-radius: 9999px;
-    cursor: pointer;
-    height: 24px;
-    margin-top: -11px;
-    position: absolute;
-    white-space: nowrap;
-    width: 24px;
-    z-index: 10;
-    --tw-bg-opacity: 1;
-    background-color: var(--netural-100);
-    border: 1px solid var(--primary);
+.finishing .slider-handle {
+  border-radius: 9999px;
+  cursor: pointer;
+  height: 24px;
+  margin-top: -11px;
+  position: absolute;
+  white-space: nowrap;
+  width: 24px;
+  z-index: 10;
+  --tw-bg-opacity: 1;
+  background-color: var(--netural-100);
+  border: 1px solid var(--primary);
 }
-.finishing .slider-rail, .slider-tracks{
-    cursor: pointer;
-    height: 4px;
-    position: absolute;
+.finishing .slider-rail,
+.slider-tracks {
+  cursor: pointer;
+  height: 4px;
+  position: absolute;
 }
 .slider-tracks {
-    --tw-bg-opacity: 1;
-    background-color: var(--primary);
+  --tw-bg-opacity: 1;
+  background-color: var(--primary);
 }
 
 .slider-track {
-    background: var(--primary);
-    height: 3px;
-    top: 0;
-    border-radius: 4px;
+  background: var(--primary);
+  height: 3px;
+  top: 0;
+  border-radius: 4px;
 }
 
-.slider-track.slider-track-0{
-    background-color: var(--netural-300);
+.slider-track.slider-track-0 {
+  background-color: var(--netural-300);
 }
-.slider-track.slider-track-1{
-    background-color: var(--primary) !important;
+.slider-track.slider-track-1 {
+  background-color: var(--primary) !important;
 }
 
-.slider-track.slider-track-2{
-    background-color: var(--netural-300) !important;
+.slider-track.slider-track-2 {
+  background-color: var(--netural-300) !important;
 }
 
 @media screen and (max-width: 768px) {
-    .select-type-container{
-        justify-content: center !important;
-    }
+  .select-type-container {
+    justify-content: center !important;
+  }
 }

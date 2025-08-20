@@ -9,6 +9,9 @@ import Google from "../../../assets/Icons/Google";
 import Facebook from "../../../assets/Icons/Facebook";
 import Apple from "../../../assets/Icons/Apple";
 import HelmetInfo from "../../Helmetinfo/HelmetInfo";
+import AuthAPI from "../../../api/authApi";
+import { useDispatch } from "react-redux";
+import { login } from "../../../store/authSlice";
 
 const content = {
     title: {
@@ -83,6 +86,7 @@ const content = {
 };
 
 const LoginForm = ({ setFormType }) => {
+    const [isLoading, setIsLoading] = useState(false);
     const [inputType, setInputType] = useState("password")
     const navigate = useNavigate()
     const { currentLanguage } = useLanguage()
@@ -115,27 +119,29 @@ const LoginForm = ({ setFormType }) => {
         password: "",
     };
 
+    const dispatch = useDispatch();
+
+
     const handleSubmit = async (values, { resetForm }) => {
-        return navigate("/")
+        setIsLoading(true);
         try {
-            const response = await AuthAPI.login(values.email, values.password);
-
-            // Store token in localStorage
-            localStorage.setItem("access_token", response.access_token);
-            // Store user details if needed
-            localStorage.setItem("user", JSON.stringify(response.user));
-            // Notify other components of the change
+            const response = await AuthAPI.login(values);
+            if (response.token) {
+                dispatch(login({ user: response.user, token: response.token }));
+            }
             window.dispatchEvent(new Event("storage")); // Trigger the storage event
-
             resetForm();
+            navigate("/"); // Redirect to home page after successful login
         } catch (error) {
             console.error("Login failed:", error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
     return (
 
-        <div className="form-container">
+        <div className="form-container my-3">
 
             <HelmetInfo titlePage={currentLanguage === "ar" ? "تسجيل الدخول" : "Login"} />
 
@@ -174,9 +180,21 @@ const LoginForm = ({ setFormType }) => {
                         <Link className="d-flex py-3 b-15" onClick={() => setFormType("forgotPassword")}>{content.forgetPassword[currentLanguage]}</Link>
                     </div>
                 </div>
-                <button type="submit" onClick={handleSubmit} className="btn-main btn-submit w-100 mt-3 b-11 p-3">
-                    {content.login[currentLanguage]}
+                <button
+                    type="submit"
+                    className="btn-main btn-submit w-100 b-11 p-3 d-flex justify-content-center align-items-center"
+                    disabled={isLoading}
+                >
+                    {isLoading ? (
+                        <>
+                            <span className="spinner-border spinner-border-sm me-2 text-white" role="status" />
+                            {currentLanguage === "ar" ? "جاري تسجيل الدخول..." : "Loging in..."}
+                        </>
+                    ) : (
+                        content.login[currentLanguage]
+                    )}
                 </button>
+
             </FormField>
             <div className="register-social">
                 <div className="separator">

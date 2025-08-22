@@ -81,7 +81,6 @@ const handleError = (error) => {
   }
 };
 
-
 const AuthAPI = {
   // login
   login: async (data) => {
@@ -131,7 +130,8 @@ const AuthAPI = {
   // logout
   logout: async () => {
     try {
-      localStorage.clear();
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
       toast.success(getToastMessages().logoutSuccess[getCurrentLanguage()]);
     } catch (error) {
       handleError(error);

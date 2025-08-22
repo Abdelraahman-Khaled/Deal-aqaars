@@ -11,7 +11,7 @@ import PhoneAds from '../../assets/Icons/PhoneAds'
 import DeleteButton from '../../Components/DeleteButton/DeleteButton'
 import CustomModal from '../../Components/CustomModal/CustomModal'
 import DeleteModal from '../../Components/DeleteButton/DeleteModal'
-import TradeIcon from '../../../../../../Github/Deal-aqaars/src/assets/Icons/TradeIcon'
+import TradeIcon from '../../assets/Icons/TradeIcon'
 
 const VendorAdsCard = ({ price, numAds, seen, title, tradeItem, likes, calls, date, rooms, bath, space, details, location, img, company = false, wrapperClass, isFav, isSwiping = false, trade = false }) => {
     const { currentLanguage } = useLanguage()

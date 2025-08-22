@@ -7,15 +7,14 @@ import { translations } from './translations'
 import SearchToggle from '../../Components/Ui/SearchComponents/SearchToggle '
 import "./vendor.css"
 import DropDown from '../../Components/DropDown/DropDown'
-import FormField from '../../../../../../Github/Deal-aqaars/src/Components/Forms/FormField'
-import InputFiled from '../../../../../../Github/Deal-aqaars/src/Components/Forms/InputField'
-import SearchIcon from '../../../../../../Github/Deal-aqaars/src/assets/Icons/SearchIcon'
 import VendorAdsCard from './VendorAdsCard'
 import AddannouncementIcon from '../../assets/Icons/AddannouncementIcon'
 import { useSelector } from 'react-redux'
 import CompanyProjectCard from '../../Components/CompanyProjectCard/CompanyProjectCard'
 import { data } from './companyCardData'
 import FininshCard from '../../Components/Ui/FinishCard/FinishCard'
+import FormField from '../../Components/Forms/FormField'
+import InputFiled from '../../Components/Forms/InputField'
 
 const VendorAds = () => {
     const { currentLanguage } = useLanguage(); // Get the current language

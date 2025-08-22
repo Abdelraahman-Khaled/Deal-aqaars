@@ -16,7 +16,6 @@ import CompoundDetailsPage from './Pages/Compound/Components/CompoundDetails/Com
 import CompoundAqarDetails from './Pages/Compound/Components/CompoundAqarDetails/CompoundAqarDetails';
 import AqarGuide from './Pages/Aqar/Components/AqarGuide';
 import SalePage from './Pages/salePage/SalePage';
-import JoinUs from './Pages/JoinUs/JoinUs';
 import FinishPage from './Pages/FinishPage/FinishPage';
 import FurnishDetails from './Pages/Furnish/FurnishDetails';
 import FinishDetails from './Pages/FinishPage/FinishDetails';
@@ -52,7 +51,14 @@ const App = () => {
                   {/* pages */}
                   <Route path="/" element={<Home />} />
 
+                  {/* Register */}
+                  <Route path="/login" element={<RegisterPage />} />
 
+                  {/* UserProfile */}
+                  <Route path="/profile" element={<AccountUser />} />
+
+
+                  {/* pages */}
                   <Route path="/compounds" element={<CompoundPage />} />
                   <Route path="/compounds-guide" element={<CompoundDetailsPage />} />
                   <Route path="/compound-details" element={<CompoundAqarDetails />} />
@@ -61,8 +67,6 @@ const App = () => {
                   <Route path="/aqar-guide" element={<AqarGuide />} />
 
                   <Route path="/sale" element={<SalePage />} />
-
-
 
                   {/* Furnish */}
                   <Route path="/furnish-details" element={<FurnishDetails />} />
@@ -84,8 +88,6 @@ const App = () => {
                   {/* ads */}
                   <Route path="/vendor-ads" element={<VendorAds />} />
 
-                  {/* UserProfile */}
-                  <Route path="/profile" element={<AccountUser />} />
 
                   {/* Favorite */}
                   <Route path="/favorite" element={<Favorite />} />
@@ -101,8 +103,7 @@ const App = () => {
                 </Route>
 
 
-                {/* Register */}
-                <Route path="/login" element={<RegisterPage />} />
+
 
 
 

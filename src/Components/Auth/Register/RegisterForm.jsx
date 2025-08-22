@@ -4,13 +4,15 @@ import * as Yup from "yup";
 import FormField from "../../Forms/FormField";
 import InputFiled from "../../Forms/InputField";
 import { useLanguage } from "../../Languages/LanguageContext";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import Google from "../../../assets/Icons/Google";
 import Facebook from "../../../assets/Icons/Facebook";
 import Apple from "../../../assets/Icons/Apple";
 import PhoneNumber from "../../Forms/PhoneNumber";
 import HelmetInfo from "../../Helmetinfo/HelmetInfo";
 import AuthAPI from "../../../api/authApi";
+import { useDispatch } from "react-redux";
+import { login } from "../../../store/authSlice";
 
 const content = {
     title: {
@@ -138,6 +140,8 @@ const RegisterForm = ({ setFormType }) => {
     const [inputType, setInputType] = useState("password")
     const [createWay, setCreateWay] = useState("email")
     const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     // validation
     const validationSchema = Yup.object().shape({
@@ -175,9 +179,10 @@ const RegisterForm = ({ setFormType }) => {
     const handleRegisterSubmit = async (values, { resetForm }) => {
         setIsLoading(true);
         try {
-            await AuthAPI.register(values);
+            const response = await AuthAPI.register(values);
             resetForm();
-            navigate("/"); // Redirect to home page after successful login
+            navigate("/");
+            dispatch(login({ user: response.user, token: response.token }));
         } catch (error) {
             console.error("Error register:", error);
         } finally {

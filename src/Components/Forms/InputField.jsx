@@ -35,7 +35,7 @@ const InputFiled = ({ label, success, setInputType, ...props }) => {
                     }`}
                 required
             />
-            {field.name === "password" || field.name === "confirmPassword" || field.name === "newPassword" ?
+            {field.name === "password" || field.name === "confirmNewPassword" || field.name === "newPassword" ?
                 <button
                     type="button"
                     className="password-toggle"

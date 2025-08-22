@@ -8,7 +8,10 @@ import { useLanguage } from "../../../../../Components/Languages/LanguageContext
 import FormField from "../../../../../Components/Forms/FormField";
 import InputFiled from "../../../../../Components/Forms/InputField";
 import * as Yup from "yup";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import AuthAPI from "../../../../../api/authApi";
+import { useDispatch } from "react-redux";
+import { deleteAccountSuccess, logout } from "../../../../../store/authSlice";
 
 const translations = {
   title: { ar: "امان الحساب", en: "Account security" },
@@ -28,23 +31,38 @@ const AccountInformationContent = () => {
   const [opacity, setOpacity] = useState(true);
   const [password, setPassword] = useState(false);
   const [inputType, setInputType] = useState("password")
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [showPassword, setShowPassword] = useState({
+    current: false,
+    new: false,
+    confirm: false,
+  });
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
 
   const [profileData, setProfileData] = useState({
-    oldPassword: "",
+    currentPassword: "",
     newPassword: "",
-    confirmPassword: "",
+    confirmNewPassword: "",
   });
 
   const initialValues = {
-    oldPassword: "",
+    currentPassword: "",
     newPassword: "",
-    confirmPassword: "",
+    confirmNewPassword: "",
   };
 
   const validationSchema = Yup.object({
-    oldPassword: Yup.string().required("هذا الحقل مطلوب"),
-    newPassword: Yup.string().email("بريد غير صالح").required("هذا الحقل مطلوب"),
-    confirmPassword: Yup.string().required("هذا الحقل مطلوب"),
+    currentPassword: Yup.string().required("هذا الحقل مطلوب"),
+    newPassword: Yup.string()
+      .min(6, "كلمة السر قصيرة")
+      .required("هذا الحقل مطلوب"),
+    confirmNewPassword: Yup.string()
+      .oneOf([Yup.ref("newPassword")], "كلمة السر غير متطابقة")
+      .required("هذا الحقل مطلوب"),
   });
 
 
@@ -52,7 +70,32 @@ const AccountInformationContent = () => {
     console.log("Submitted values:", values);
   };
 
+  // delete and logout
 
+  const handleDeleteAccount = async () => {
+    try {
+      await AuthAPI.deleteAccount();
+      dispatch(deleteAccountSuccess());
+      navigate("/");
+    }
+    catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleChangePassword = async (values) => {
+    setIsLoading(true);
+    console.log(values);
+
+    try {
+      const response = await AuthAPI.changePassword(values);
+      toast.success(response.message);
+    } catch (error) {
+      console.error("Error changing password:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   return (
     <div className="d-flex flex-column space-6">
@@ -100,6 +143,7 @@ const AccountInformationContent = () => {
             <button
               className="btn-second btn-main p-2 col-1 min-w-max b-10 error background-red"
               style={{ height: "fit-content" }}
+              onClick={handleDeleteAccount}
             >
               {translations.deleteBtn[currentLanguage]}
             </button>
@@ -110,7 +154,7 @@ const AccountInformationContent = () => {
         <FormField
           initialValues={initialValues}
           validationSchema={validationSchema}
-          onSubmit={handleSubmit}
+          onSubmit={handleChangePassword}
           id="edit-profile-form"
         >
           <div className="d-flex flex-column align-items-center">
@@ -121,7 +165,7 @@ const AccountInformationContent = () => {
                   الرقم السري الحالي <span>*</span>
                 </label>
                 <InputFiled
-                  name="password"
+                  name="currentPassword"
                   type={inputType}
                   placeholder={" • • • • • • • •"}
                   success
@@ -147,7 +191,7 @@ const AccountInformationContent = () => {
                   تأكيد الرقم السري الجديد <span>*</span>
                 </label>
                 <InputFiled
-                  name="confirmPassword"
+                  name="confirmNewPassword"
                   type={inputType}
                   placeholder={" • • • • • • • •"}
                   success
@@ -160,10 +204,20 @@ const AccountInformationContent = () => {
                 نسيت الرقم السري؟
               </Link>
 
-              <button className="btn-main w-100">
-                تغيير كلمة السر
+              <button
+                type="submit"
+                className="btn-main btn-submit w-100 b-11 p-3 d-flex justify-content-center align-items-center"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <span className="spinner-border spinner-border-sm me-2 text-white" role="status" />
+                    {currentLanguage === "ar" ? "جاري تغيير كلمة المرور..." : "Changing Password..."}
+                  </>
+                ) : (
+                  "تغيير كلمة السر"
+                )}
               </button>
-
             </div>
           </div>
         </FormField>

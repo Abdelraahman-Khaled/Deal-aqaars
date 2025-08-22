@@ -18,8 +18,7 @@ const UserDropMenu = () => {
     const { currentLanguage } = useLanguage();
     const handleLogout = () => {
         AuthAPI.logout();
-        dispatch(logout()); // ✅ كده هيمسح البيانات ويعمل re-render للـ Navbar
-
+        dispatch(logout()); 
     };
 
     const user = JSON.parse(localStorage.getItem("user"));

@@ -13,13 +13,17 @@ import ProfileIcon from "../../assets/Icons/ProfileIcon";
 import SecurityIcon from "../../assets/Icons/SecurityIcon";
 import { useLanguage } from "../../Components/Languages/LanguageContext";
 import BellIcon from "../../assets/Icons/BellIcon";
+import { useDispatch } from "react-redux";
+import { logout } from "../../store/authSlice";
+import AuthAPI from "../../api/authApi";
 
 const AccountUser = () => {
   const { currentLanguage } = useLanguage(); // Get the current language
+  const dispatch = useDispatch();
 
   const handleLogout = () => {
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("user");
+    AuthAPI.logout();
+    dispatch(logout());
   };
 
   const translations = {
@@ -104,8 +108,8 @@ const AccountUser = () => {
                   </ul>
                   <li className="nav-item nav  " role="presentation">
                     <Link
-                      onClick={handleLogout}
                       to="/"
+                      onClick={handleLogout}
                       className="logout-button d-flex align-items-center gap-2 w-100"
                     >
                       <LogoutIcon /> {translations.logout[currentLanguage]}

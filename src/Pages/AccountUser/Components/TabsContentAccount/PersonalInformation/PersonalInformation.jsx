@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 const PersonalInformation = () => {
   const { currentLanguage } = useLanguage();
   const [edit, setEdit] = useState(false);
+  const { user } = useSelector((state) => state.auth);
   const userType = useSelector((state) => state.userType.userType);
 
   const initialValues = {
@@ -55,7 +56,7 @@ const PersonalInformation = () => {
 
         <div className="align-self-center pb-5 p-3">
           <div className="profile-pic text-center">
-            <img src="./home.jpg" alt="Profile" className="w-100 h-100" />
+            <img src={user?.profileImage.url || "./home.jpg"} alt="Profile" className="w-100 h-100" />
           </div>
         </div>
       </div>

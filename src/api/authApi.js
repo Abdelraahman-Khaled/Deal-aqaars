@@ -10,6 +10,10 @@ const getToastMessages = () => ({
     ar: "تم تسجيل الخروج بنجاح",
     en: "Logout successful",
   },
+  deleteSuccess: {
+    ar: "تم مسح الاكونت بنجاح",
+    en: "Delete account successful",
+  },
   changePasswordSuccess: {
     ar: "تم تغيير كلمة المرور بنجاح",
     en: "Password changed successfully",
@@ -139,18 +143,37 @@ const AuthAPI = {
     }
   },
 
-  changePassword: async (currentPassword, newPassword) => {
+  // delete Acc
+  deleteAccount: async () => {
     try {
-      const response = await axiosInstance.post("/change-password", {
-        current_password: currentPassword,
-        password: newPassword,
-        password_confirmation: newPassword,
+      const response = await axiosInstance.delete("/user/delete-account");
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      toast.success(getToastMessages().deleteSuccess[getCurrentLanguage()]);
+      return response.data;
+    } catch (error) {
+      handleError(error);
+      throw error;
+    }
+  },
+
+  // change password
+  changePassword: async (data) => {
+    try {
+      const response = await axiosInstance.post("/user/change-Password", {
+        data,
       });
       toast.success(
         getToastMessages().changePasswordSuccess[getCurrentLanguage()]
       );
       return response.data;
     } catch (error) {
+      if (error.response && error.response.data.errors) {
+        const errors = error.response.data.errors;
+        Object.values(errors).forEach((errMsg) => {
+          toast.error(errMsg);
+        });
+      }
       handleError(error);
       throw error;
     }

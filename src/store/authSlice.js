@@ -25,8 +25,14 @@ const authSlice = createSlice({
       localStorage.removeItem("user");
       localStorage.removeItem("token");
     },
+    deleteAccountSuccess: (state) => {
+      state.user = null;
+      state.token = null;
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+    },
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, deleteAccountSuccess } = authSlice.actions;
 export default authSlice.reducer;

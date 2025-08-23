@@ -18,8 +18,9 @@ import AreaIcon from '../../../assets/Icons/AreaIcon'
 import HeartLikes from '../../../assets/Icons/HeartLikes'
 import Eye from '../../../assets/Icons/Eye'
 import PhoneAds from '../../../assets/Icons/PhoneAds'
+import defaultImage from '../../../assets/images/error-not-found.svg'
 
-const FininshCard = ({ title, img, icon, since, exprince, subtitles, isFav, companyAds = false, likes, seen, calls }) => {
+const FininshCard = ({ id, title, img, icon, since, exprince, subtitles, isFav, companyAds = false, likes, seen, calls, phoneNumber, hasWhatsapp, detailedAddress }) => {
     const { currentLanguage } = useLanguage()
     const [showProgress, setShowProgress] = useState(false);
 
@@ -27,9 +28,9 @@ const FininshCard = ({ title, img, icon, since, exprince, subtitles, isFav, comp
         <div className={`finish-card compound-card space-4 d-flex flex-column  mb-4  `} >
             {
                 img &&
-                <Link to={"#"} className='w-100'>
+                <Link to={`/finish-details/${id}`} state={{ id }} className='w-100'>
                     <div className='compound-img'>
-                        <img className='' loading="lazy" src={img} alt="compoundImg" />
+                        <img className='' loading="lazy" src={img || defaultImage} alt={title} onError={(e) => { e.target.src = defaultImage }} />
                         {/* favIcon */}
                         {!companyAds && <FavIcon isFav={isFav} />}
                     </div>
@@ -96,25 +97,43 @@ const FininshCard = ({ title, img, icon, since, exprince, subtitles, isFav, comp
 
                         :
                         <div className='row connections pt-4 g-2'>
-                            {/* WhatsApp */}
-                            <div className='col-12 col-md-4'>
-                                <Link className='whats-button w-100 b-11 d-flex space-1 justify-content-center'>
-                                    <WhatsIcon />
-                                    واتساب
-                                </Link>
-                            </div>
+                            {/* WhatsApp - Only show if hasWhatsapp is true */}
+                            {(hasWhatsapp || hasWhatsapp === undefined) && (
+                                <div className='col-12 col-md-4'>
+                                    <Link 
+                                        to={phoneNumber ? `https://wa.me/${phoneNumber.replace(/\D/g, '')}` : '#'} 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        className='whats-button w-100 b-11 d-flex space-1 justify-content-center'
+                                    >
+                                        <WhatsIcon />
+                                        واتساب
+                                    </Link>
+                                </div>
+                            )}
 
-                            {/* Location */}
-                            <div className='col-12 col-md-4'>
-                                <Link className='location-button w-100 b-11 d-flex space-1 justify-content-center'>
-                                    <LocationIcon />
-                                    اللوكيشن
-                                </Link>
-                            </div>
+                            {/* Location - Only show if detailedAddress exists */}
+                            {detailedAddress && (
+                                <div className='col-12 col-md-4'>
+                                    <Link 
+                                        to={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(detailedAddress)}`}
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        className='location-button w-100 b-11 d-flex space-1 justify-content-center'
+                                        title={detailedAddress}
+                                    >
+                                        <LocationIcon />
+                                        اللوكيشن
+                                    </Link>
+                                </div>
+                            )}
 
                             {/* Call */}
                             <div className='col-12 col-md-4'>
-                                <Link className='facebook-button w-100 b-11 d-flex space-1 justify-content-center'>
+                                <Link 
+                                    to={phoneNumber ? `tel:${phoneNumber}` : '#'}
+                                    className='facebook-button w-100 b-11 d-flex space-1 justify-content-center'
+                                >
                                     <CallIcon />
                                     اتصل
                                 </Link>

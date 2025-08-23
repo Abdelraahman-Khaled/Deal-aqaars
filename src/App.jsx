@@ -54,7 +54,7 @@ const App = () => {
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/login" element={<RegisterPage />} />
                 <Route path="/test-password" element={<TestPasswordToggle />} />
-                
+
                 <Route path="/" element={<Layout />}>
 
                   {/* pages */}
@@ -78,7 +78,8 @@ const App = () => {
                   <Route path="/furnish-details" element={<FurnishDetails />} />
 
                   {/* Finish */}
-                  <Route path="/finish-details" element={<FinishDetails />} />
+                  <Route path="/finish-details/:id" element={<FinishDetails />} />
+                  {/* <Route path="/finish-details" element={<FinishDetails />} /> */}
 
                   {/* finishPage */}
                   <Route path="/finish" element={<FinishPage />} />

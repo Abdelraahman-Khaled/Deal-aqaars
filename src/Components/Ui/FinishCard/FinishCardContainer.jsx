@@ -1,214 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FininshCard from './FinishCard';
 import './FinishCard.css'; // Make sure to import your CSS file
 import PaginationPage from '../../Pagenation/Pagination';
+import FinishingAPI from '../../../api/finishingApi';
+import Loader from '../../Loader/Loader';
+import ErrorNotFoundSvg from '../../../assets/images/error-not-found.svg';
 
 const FinishCardContainer = () => {
-    const cardData = [
-        {
-            img: "./home.jpg",
-            title: "المدينة للأثاث",
-            subtitles: ["مكاتب", "اكسسوارات", " مكتبات", "+15"],
-            exprince: "خبرة 15 سنة",
-            since: "2007"
-        },
-        {
-            img: "./hom2.jpg",
-            title: "أثاث العصري",
-            subtitles: ["كراسي", "مكاتب", "دواليب", "+10"],
-            exprince: "خبرة 10 سنوات",
-            since: "2012"
-        },
-        {
-            img: "./home1.jpg",
-            title: "البيت الحديث",
-            subtitles: ["غرف نوم", "أنتريهات", "مكتبات", "+20"],
-            exprince: "خبرة 20 سنة",
-            since: "2000"
-        },
-        {
-            img: "./home1.jpg",
-            title: "البيت الحديث",
-            subtitles: ["غرف نوم", "أنتريهات", "مكتبات", "+20"],
-            exprince: "خبرة 20 سنة",
-            since: "2000"
-        },
-        {
-            img: "./home.jpg",
-            title: "المدينة للأثاث",
-            subtitles: ["مكاتب", "اكسسوارات", " مكتبات", "+15"],
-            exprince: "خبرة 15 سنة",
-            since: "2007"
-        },
-        {
-            img: "./hom2.jpg",
-            title: "أثاث العصري",
-            subtitles: ["كراسي", "مكاتب", "دواليب", "+10"],
-            exprince: "خبرة 10 سنوات",
-            since: "2012"
-        },
-        {
-            img: "./home1.jpg",
-            title: "البيت الحديث",
-            subtitles: ["غرف نوم", "أنتريهات", "مكتبات", "+20"],
-            exprince: "خبرة 20 سنة",
-            since: "2000"
-        },
-        {
-            img: "./home1.jpg",
-            title: "البيت الحديث",
-            subtitles: ["غرف نوم", "أنتريهات", "مكتبات", "+20"],
-            exprince: "خبرة 20 سنة",
-            since: "2000"
-        },
-        {
-            img: "./home.jpg",
-            title: "المدينة للأثاث",
-            subtitles: ["مكاتب", "اكسسوارات", " مكتبات", "+15"],
-            exprince: "خبرة 15 سنة",
-            since: "2007"
-        },
-        {
-            img: "./hom2.jpg",
-            title: "أثاث العصري",
-            subtitles: ["كراسي", "مكاتب", "دواليب", "+10"],
-            exprince: "خبرة 10 سنوات",
-            since: "2012"
-        },
-        {
-            img: "./home1.jpg",
-            title: "البيت الحديث",
-            subtitles: ["غرف نوم", "أنتريهات", "مكتبات", "+20"],
-            exprince: "خبرة 20 سنة",
-            since: "2000"
-        },
-        {
-            img: "./home1.jpg",
-            title: "البيت الحديث",
-            subtitles: ["غرف نوم", "أنتريهات", "مكتبات", "+20"],
-            exprince: "خبرة 20 سنة",
-            since: "2000"
-        },
-        {
-            img: "./home.jpg",
-            title: "المدينة للأثاث",
-            subtitles: ["مكاتب", "اكسسوارات", " مكتبات", "+15"],
-            exprince: "خبرة 15 سنة",
-            since: "2007"
-        },
-        {
-            img: "./hom2.jpg",
-            title: "أثاث العصري",
-            subtitles: ["كراسي", "مكاتب", "دواليب", "+10"],
-            exprince: "خبرة 10 سنوات",
-            since: "2012"
-        },
-        {
-            img: "./home1.jpg",
-            title: "البيت الحديث",
-            subtitles: ["غرف نوم", "أنتريهات", "مكتبات", "+20"],
-            exprince: "خبرة 20 سنة",
-            since: "2000"
-        },
-        {
-            img: "./home1.jpg",
-            title: "البيت الحديث",
-            subtitles: ["غرف نوم", "أنتريهات", "مكتبات", "+20"],
-            exprince: "خبرة 20 سنة",
-            since: "2000"
-        },
-        {
-            img: "./home.jpg",
-            title: "المدينة للأثاث",
-            subtitles: ["مكاتب", "اكسسوارات", " مكتبات", "+15"],
-            exprince: "خبرة 15 سنة",
-            since: "2007"
-        },
-        {
-            img: "./hom2.jpg",
-            title: "أثاث العصري",
-            subtitles: ["كراسي", "مكاتب", "دواليب", "+10"],
-            exprince: "خبرة 10 سنوات",
-            since: "2012"
-        },
-        {
-            img: "./home1.jpg",
-            title: "البيت الحديث",
-            subtitles: ["غرف نوم", "أنتريهات", "مكتبات", "+20"],
-            exprince: "خبرة 20 سنة",
-            since: "2000"
-        },
-        {
-            img: "./home1.jpg",
-            title: "البيت الحديث",
-            subtitles: ["غرف نوم", "أنتريهات", "مكتبات", "+20"],
-            exprince: "خبرة 20 سنة",
-            since: "2000"
-        },
-        {
-            img: "./home.jpg",
-            title: "المدينة للأثاث",
-            subtitles: ["مكاتب", "اكسسوارات", " مكتبات", "+15"],
-            exprince: "خبرة 15 سنة",
-            since: "2007"
-        },
-        {
-            img: "./hom2.jpg",
-            title: "أثاث العصري",
-            subtitles: ["كراسي", "مكاتب", "دواليب", "+10"],
-            exprince: "خبرة 10 سنوات",
-            since: "2012"
-        },
-        {
-            img: "./home1.jpg",
-            title: "البيت الحديث",
-            subtitles: ["غرف نوم", "أنتريهات", "مكتبات", "+20"],
-            exprince: "خبرة 20 سنة",
-            since: "2000"
-        },
-        {
-            img: "./home1.jpg",
-            title: "البيت الحديث",
-            subtitles: ["غرف نوم", "أنتريهات", "مكتبات", "+20"],
-            exprince: "خبرة 20 سنة",
-            since: "2000"
-        },
-        {
-            img: "./home.jpg",
-            title: "المدينة للأثاث",
-            subtitles: ["مكاتب", "اكسسوارات", " مكتبات", "+15"],
-            exprince: "خبرة 15 سنة",
-            since: "2007"
-        },
-        {
-            img: "./hom2.jpg",
-            title: "أثاث العصري",
-            subtitles: ["كراسي", "مكاتب", "دواليب", "+10"],
-            exprince: "خبرة 10 سنوات",
-            since: "2012"
-        },
-        {
-            img: "./home1.jpg",
-            title: "البيت الحديث",
-            subtitles: ["غرف نوم", "أنتريهات", "مكتبات", "+20"],
-            exprince: "خبرة 20 سنة",
-            since: "2000"
-        },
-        {
-            img: "./home1.jpg",
-            title: "البيت الحديث",
-            subtitles: ["غرف نوم", "أنتريهات", "مكتبات", "+20"],
-            exprince: "خبرة 20 سنة",
-            since: "2000"
-        },
-    ];
+    const [finishingServices, setFinishingServices] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchFinishingServices = async () => {
+            try {
+                setLoading(true);
+                const response = await FinishingAPI.getAllFinishingServices();
+                console.log(response);
+
+                // Check if the response has the expected structure with pagination and data array
+                if (response && response.data) {
+                    setFinishingServices(response.data);
+                } else {
+                    // If response doesn't have the expected structure, use it directly
+                    setFinishingServices(response);
+                }
+                setError(null);
+            } catch (err) {
+                console.error("Error fetching finishing services:", err);
+                setError("Failed to load finishing services");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchFinishingServices();
+    }, []);
+
+    // Use the API data directly without fallback to static data
+    const cardData = finishingServices;
 
     // pagenation
     const [currentPage, setCurrentPage] = useState(0);
     const perPage = 15; // NUMBER OF PAGE ITEMS
-    const pageCount = Math.ceil(cardData?.length / perPage);
+    const pageCount = Math.ceil(cardData?.length / perPage) || 0;
     const offset = currentPage * perPage;
-    const currentPageData = cardData?.slice(offset, offset + perPage);
+    const currentPageData = cardData?.slice(offset, offset + perPage) || [];
 
 
     const handlePageChange = ({ selected }) => {
@@ -217,20 +54,54 @@ const FinishCardContainer = () => {
     };
     return (
         <>
-            <div className='card-container pt-4'>
-                {currentPageData.map((item, index) => (
-                    <div key={index} className='card-item'>
-                        <FininshCard
-                            img={item.img}
-                            subtitles={item.subtitles}
-                            exprince={item.exprince}
-                            since={item.since}
-                            title={item.title}
-                        />
+            {loading ? (
+                <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '300px' }}>
+                    <Loader />
+                </div>
+            ) : error ? (
+                <div className="w-100 text-center py-5">
+                    <img
+                        src={ErrorNotFoundSvg}
+                        alt="Error"
+                        style={{ width: '150px', marginBottom: '20px' }}
+                    />
+                    <h4 className="text-danger mb-2">حدث خطأ ما</h4>
+                    <p className="text-muted">يرجى المحاولة مرة أخرى لاحقاً</p>
+                    <p className="text-danger small">{error}</p>
+                </div>
+            ) : currentPageData.length === 0 ? (
+                <div className="w-100 text-center py-5" >
+                    <img
+                        src={ErrorNotFoundSvg}
+                        alt="Not Found"
+                        style={{ width: '150px', marginBottom: '20px' }}
+                    />
+                    <p>لا توجد خدمات تشطيب متاحة حالياً</p>
+                </div>
+            ) : (
+                <>
+                    <div className='card-container pt-4'>
+                        {currentPageData.map((item, index) => (
+                            <div key={index} className='card-item'>
+                                <FininshCard
+                                    id={item._id || index} // Use item.id if available, otherwise use index as fallback
+                                    img={item.images && item.images.length > 0 ? item.images[0] : item.img || "./home.jpg"}
+                                    subtitles={item.servicesOffered ?
+                                        item.servicesOffered.map(service => service.ar || service) :
+                                        item.services || item.subtitles}
+                                    exprince={item.companyDescription?.ar || item.experience || item.exprince}
+                                    since={item.createdAt ? new Date(item.createdAt).getFullYear() : item.since || item.establishedYear}
+                                    title={item.jobType?.ar || item.name || item.title}
+                                    phoneNumber={item.phoneNumber}
+                                    hasWhatsapp={item.hasWhatsapp}
+                                    detailedAddress={item.detailedAddress?.ar}
+                                />
+                            </div>
+                        ))}
                     </div>
-                ))}
-            </div>
-            {pageCount > 1 && <PaginationPage itemCount={pageCount} onPageChange={handlePageChange} />}
+                    {!loading && !error && currentPageData.length > 0 && pageCount > 1 && <PaginationPage itemCount={pageCount} onPageChange={handlePageChange} />}
+                </>
+            )}
         </>
     );
 };

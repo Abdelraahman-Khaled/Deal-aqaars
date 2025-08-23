@@ -3,7 +3,7 @@ import React from "react";
 import { useField } from "formik";
 import ShowPassword from "../../assets/Icons/ShowPassword";
 
-const InputFiled = ({ label, success, setInputType, ...props }) => {
+const InputFiled = ({ label, success, setInputType, showPasswordToggle = false, ...props }) => {
     const [field, meta, helpers] = useField(props);
     const isError = meta.touched && meta.error;
     const isSuccess = success && meta.touched && !meta.error;
@@ -35,7 +35,7 @@ const InputFiled = ({ label, success, setInputType, ...props }) => {
                     }`}
                 required
             />
-            {field.name === "password" || field.name === "confirmNewPassword" || field.name === "newPassword" ?
+            {(showPasswordToggle || (props.type === "password" && (field.name === "password" || field.name === "currentPassword" || field.name === "confirmNewPassword" || field.name === "newPassword"))) &&
                 <button
                     type="button"
                     className="password-toggle"
@@ -43,7 +43,7 @@ const InputFiled = ({ label, success, setInputType, ...props }) => {
                     aria-label="Toggle password visibility"
                 >
                     <ShowPassword />
-                </button> : <></>
+                </button>
             }
             {meta.touched && meta.error ? (
                 <div className="error">{meta.error}</div>

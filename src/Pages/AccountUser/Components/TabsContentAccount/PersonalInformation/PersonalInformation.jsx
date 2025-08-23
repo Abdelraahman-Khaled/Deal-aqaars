@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import * as Yup from "yup";
 import InputFiled from "../../../../../Components/Forms/InputField";
@@ -9,18 +10,22 @@ import EmailIcon from "../../../../../assets/Icons/EmailIcon";
 import PhoneNumber from "../../../../../Components/Forms/PhoneNumber";
 import FormField from "../../../../../Components/Forms/FormField";
 import { Col, Row } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import ProfileAPI from "../../../../../api/profileApi";
+import { toast } from "react-toastify";
+import { updateProfile } from "../../../../../store/authSlice";
 
 const PersonalInformation = () => {
   const { currentLanguage } = useLanguage();
   const [edit, setEdit] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { user } = useSelector((state) => state.auth);
-  const userType = useSelector((state) => state.userType.userType);
+  const dispatch = useDispatch();
 
   const initialValues = {
-    name: "",
-    email: "",
-    mobile: "",
+    name: user?.name || "",
+    email: user?.email || "",
+    mobile: user?.mobile || "",
   };
 
   const validationSchema = Yup.object({
@@ -29,8 +34,20 @@ const PersonalInformation = () => {
     mobile: Yup.string().required("هذا الحقل مطلوب"),
   });
 
-  const handleSubmit = (values) => {
-    console.log("Submitted values:", values);
+  const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      setIsLoading(true);
+      const response = await ProfileAPI.updateProfile(values);
+      dispatch(updateProfile(response.user));
+      toast.success(response.message || "Profile updated successfully");
+      setEdit(false);
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to update profile");
+      console.error("Error updating profile:", error);
+    } finally {
+      setIsLoading(false);
+      setSubmitting(false);
+    }
   };
 
   const translations = {
@@ -66,8 +83,11 @@ const PersonalInformation = () => {
           {translations.info[currentLanguage]}
           {edit ? (
             <div className="d-flex flex-row align-items-center space-2">
-              <button type="submit" form="edit-profile-form" className="btn-main p-2">
-                احفظ التعديلات
+              <button
+                className="btn-main p-2"
+                onClick={() => setEdit(false)}
+              >
+                حفظ التعديلات
               </button>
               <button
                 className="btn-main btn-second p-2 text-black border px-5 hover-text-white"
@@ -90,14 +110,14 @@ const PersonalInformation = () => {
             onSubmit={handleSubmit}
             id="edit-profile-form"
           >
-            <div className="p-4 form-container gap-2">
+            <div className="px-4 form-container gap-2">
               <Row className="g-3 mb-3">
                 <Col xs={12} lg={6}>
                   <div className="d-flex flex-column">
                     <label className="b-9 pb-2" style={{ minWidth: "150px" }}>
                       الاسم <span>*</span>
                     </label>
-                    <InputFiled name="name" placeholder="حسام علوان" />
+                    <InputFiled name="name" placeholder={user.name || "الاسم"} />
                   </div>
                 </Col>
 
@@ -106,26 +126,24 @@ const PersonalInformation = () => {
                     <label className="b-9 pb-2" style={{ minWidth: "150px" }}>
                       الموبايل <span>*</span>
                     </label>
-                    <PhoneNumber name="mobile" type="text" placeholder="011012015010" />
+                    <PhoneNumber name="mobile" type="text" placeholder={user.mobile || "رقم الهاتف"} />
                   </div>
                 </Col>
               </Row>
-
-
-              <div className="mb-3 d-flex flex-column justify-content-between flex-wrap gap-3">
-                <label className="b-9 me-3" style={{ minWidth: "150px" }}>
-                  نوع الحساب <span>*</span>
-                </label>
-                <InputFiled name="type" placeholder={userType === "vendor" ? "مالك عقار" : "مطور عقاري (كمبوند)"} />
-              </div>
 
               <div className=" d-flex flex-column justify-content-between flex-wrap gap-3">
                 <label className="b-9 me-3" style={{ minWidth: "150px" }}>
                   الايميل <span>*</span>
                 </label>
-                <InputFiled name="email" placeholder="hoss12345@gmail.com" />
+                <InputFiled name="email" placeholder={user.email || "expamle@gmail.com"} />
               </div>
-
+              <button
+                type="submit"
+                className="btn-main mt-3"
+                disabled={isLoading}
+              >
+                {isLoading ? "جاري الحفظ..." : "احفظ التعديلات"}
+              </button>
             </div>
           </FormField>
         ) : (
@@ -134,28 +152,28 @@ const PersonalInformation = () => {
               <ProfileIcon />
               <div className="d-flex flex-column space-1">
                 <p className="b-12" style={{ color: "var(--netural-700)" }}>الاسم</p>
-                <p className="b-11">حسام علوان</p>
+                <p className="b-11">{user.name || "مستحدم"}</p>
               </div>
             </div>
             <div className="d-flex flex-row align-items-center space-3 px-3">
               <PhoneIcon />
               <div className="d-flex flex-column space-1">
                 <p className="b-12" style={{ color: "var(--netural-700)" }}>رقم الموبايل</p>
-                <p className="b-11">011012015010</p>
+                <p className="b-11">{user.mobile || "رقم الموبايل"}</p>
               </div>
             </div>
             <div className="d-flex flex-row align-items-center space-3 px-3">
               <ProfileIcon />
               <div className="d-flex flex-column space-1">
                 <p className="b-12" style={{ color: "var(--netural-700)" }}>نوع الحساب</p>
-                <p className="b-11">{userType === "vendor" ? "مالك عقار" : "مطور عقاري (كمبوند)"}</p>
+                <p className="b-11">{user.role === "vendor" ? "مالك عقار" : "مطور عقاري (كمبوند)" || "مستخدم"}</p>
               </div>
             </div>
             <div className="d-flex flex-row align-items-center space-3 px-3">
               <EmailIcon />
               <div className="d-flex flex-column space-1">
                 <p className="b-12" style={{ color: "var(--netural-700)" }}>الايميل</p>
-                <p className="b-11">hoss12345@gmail.com</p>
+                <p className="b-11">{user.email || "expamle@gmail.com"}</p>
               </div>
             </div>
           </>

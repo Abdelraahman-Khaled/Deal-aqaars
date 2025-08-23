@@ -30,7 +30,9 @@ const AccountInformationContent = () => {
   const { currentLanguage } = useLanguage(); // Get current language
   const [opacity, setOpacity] = useState(true);
   const [password, setPassword] = useState(false);
-  const [inputType, setInputType] = useState("password")
+  const [currentPasswordType, setCurrentPasswordType] = useState("password")
+  const [newPasswordType, setNewPasswordType] = useState("password")
+  const [confirmPasswordType, setConfirmPasswordType] = useState("password")
   const [isLoading, setIsLoading] = useState(false);
 
   const [showPassword, setShowPassword] = useState({
@@ -89,7 +91,6 @@ const AccountInformationContent = () => {
 
     try {
       const response = await AuthAPI.changePassword(values);
-      toast.success(response.message);
     } catch (error) {
       console.error("Error changing password:", error);
     } finally {
@@ -166,10 +167,11 @@ const AccountInformationContent = () => {
                 </label>
                 <InputFiled
                   name="currentPassword"
-                  type={inputType}
+                  type={currentPasswordType}
                   placeholder={" • • • • • • • •"}
                   success
-                  setInputType={setInputType}
+                  setInputType={setCurrentPasswordType}
+                  showPasswordToggle={true}
                 />
               </div>
 
@@ -179,10 +181,11 @@ const AccountInformationContent = () => {
                 </label>
                 <InputFiled
                   name="newPassword"
-                  type={inputType}
+                  type={newPasswordType}
                   placeholder={" • • • • • • • •"}
                   success
-                  setInputType={setInputType}
+                  setInputType={setNewPasswordType}
+                  showPasswordToggle={true}
                 />
               </div>
 
@@ -192,10 +195,11 @@ const AccountInformationContent = () => {
                 </label>
                 <InputFiled
                   name="confirmNewPassword"
-                  type={inputType}
+                  type={confirmPasswordType}
                   placeholder={" • • • • • • • •"}
                   success
-                  setInputType={setInputType}
+                  setInputType={setConfirmPasswordType}
+                  showPasswordToggle={true}
                 />
               </div>
 

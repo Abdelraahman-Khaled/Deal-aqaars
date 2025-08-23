@@ -10,10 +10,20 @@ import LocationIcon from '../../assets/Icons/LocationIcon'
 import { Link } from 'react-router-dom'
 import TradeIcon from '../../assets/Icons/TradeIcon'
 
-const TradeCard = ({ title, rooms, bath, space, location, trade, since }) => {
+const TradeCard = ({ title, rooms, bath, space, location, trade, since, phoneNumber, hasWhatsapp, imageUrl }) => {
 
     return (
         <div className='trade-card d-flex flex-column space-4 '>
+            {imageUrl && (
+                <div className='trade-card-image mb-3'>
+                    <img 
+                        src={imageUrl} 
+                        alt={title} 
+                        className='w-100 rounded' 
+                        style={{ height: '180px', objectFit: 'cover' }} 
+                    />
+                </div>
+            )}
             <div className='d-flex flex-column space-4 w-100'>
                 <div className='d-flex justify-content-between w-100 border-gray pb-3'>
                     <p className='b-5 '>
@@ -61,16 +71,26 @@ const TradeCard = ({ title, rooms, bath, space, location, trade, since }) => {
                     <p className="b-12">{trade}</p>
                 </div>
                 <div className='connections d-flex justify-content-between w-100 pt-4 space-2 '>
-                    {/* whats */}
-                    <Link className='whats-button w-50 b-11 d-flex space-1 justify-content-center'>
-                        <WhatsIcon />
-                        واتساب
-                    </Link>
-                    {/* faceBook */}
-                    <Link className='facebook-button w-50 b-11 d-flex space-1 justify-content-center'>
+                    {/* WhatsApp button - only show if hasWhatsapp is true or not specified */}
+                    {(hasWhatsapp === undefined || hasWhatsapp) && (
+                        <a 
+                            href={phoneNumber ? `https://wa.me/${phoneNumber.replace(/\+/g, '').replace(/\s/g, '')}` : '#'} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className='whats-button w-50 b-11 d-flex space-1 justify-content-center'
+                        >
+                            <WhatsIcon />
+                            واتساب
+                        </a>
+                    )}
+                    {/* Call button */}
+                    <a 
+                        href={phoneNumber ? `tel:${phoneNumber}` : '#'} 
+                        className={`facebook-button ${hasWhatsapp === false ? 'w-100' : 'w-50'} b-11 d-flex space-1 justify-content-center`}
+                    >
                         <CallIcon />
                         اتصل
-                    </Link>
+                    </a>
                 </div>
             </div>
         </div>

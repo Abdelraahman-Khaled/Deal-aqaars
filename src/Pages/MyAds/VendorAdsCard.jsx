@@ -30,7 +30,7 @@ const VendorAdsCard = ({ price, numAds, seen, title, tradeItem, likes, calls, da
 
 
     return (
-        <div className={`compound-card space-4 d-flex ${wrapperClass} mb-4  `} style={company & wrapperClass === "flex-wrap" ? { width: "49%" } : { width: "100%" }} mb-4 dir={currentLanguage === "ar" ? "rtl" : "ltr"}>
+        <div className={`compound-card space-4 d-flex ${wrapperClass} mb-4  `} style={company & wrapperClass === "flex-wrap" ? { width: "49%" } : { width: "100%" }} dir={currentLanguage === "ar" ? "rtl" : "ltr"}>
             <Link to={"/aqar-guide"}
                 className={`  ${wrapperClass ? "w-100" : "w-50"}`}
                 onClick={handleClick}
@@ -54,7 +54,7 @@ const VendorAdsCard = ({ price, numAds, seen, title, tradeItem, likes, calls, da
                 </div>
                 {trade && <p className="b-9">{title}</p>}
                 {trade &&
-                    <p p className='b-12'>
+                    <p className='b-12'>
                         <LocationIcon />
                         <span className='px-1'></span>
                         {location}
@@ -85,7 +85,7 @@ const VendorAdsCard = ({ price, numAds, seen, title, tradeItem, likes, calls, da
                         </p>
                         {/* locations */}
 
-                        <p p className='b-12'>
+                        <p className='b-12'>
                             <LocationIcon />
                             <span className='px-1'></span>
                             {location}

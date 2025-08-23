@@ -15,6 +15,7 @@ import { data } from './companyCardData'
 import FininshCard from '../../Components/Ui/FinishCard/FinishCard'
 import FormField from '../../Components/Forms/FormField'
 import InputFiled from '../../Components/Forms/InputField'
+import SearchIcon from '../../assets/Icons/SearchIcon'
 
 const VendorAds = () => {
     const { currentLanguage } = useLanguage(); // Get the current language

@@ -17,7 +17,7 @@ const CompoundCard = ({ title, location, details, price, img, company = false, c
         if (isSwiping) e.preventDefault();
     };
     return (
-        <div className={`compound-card space-4 d-flex ${wrapperClass} mb-4 `} style={company & wrapperClass === "flex-wrap" ? { width: "49%" } : { width: "100%" }} mb-4 dir={currentLanguage === "ar" ? "rtl" : "ltr"}>
+        <div className={`compound-card space-4 d-flex ${wrapperClass} mb-4`} style={company & wrapperClass === "flex-wrap" ? { width: "49%" } : { width: "100%" }} dir={currentLanguage === "ar" ? "rtl" : "ltr"}>
             <Link to={"/compounds-guide"}
                 className={`  ${wrapperClass ? "w-100" : "w-50"}`}
                 onClick={handleClick}>

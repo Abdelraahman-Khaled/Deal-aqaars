@@ -556,10 +556,12 @@ textarea {
 .Toastify__toast--success {
   background: #1fc16b1a;
   color: var(--netural-1000);
+  opacity: 1;
 }
 .Toastify__toast--error {
   background: #dd1d2d1a;
   color: var(--netural-1000);
+  opacity: 1;
 }
 /* media  */
 @media (min-width: 1400px) {

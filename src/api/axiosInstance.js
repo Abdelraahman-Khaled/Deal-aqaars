@@ -15,12 +15,18 @@ export const isAuthenticated = () => {
     return !!localStorage.getItem("token");
 };
 
-// Attach token to requests
+// Attach token to requests and handle FormData
 axiosInstance.interceptors.request.use((config) => {
     const token = localStorage.getItem("token");
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
+    
+    // If sending FormData, let the browser set the correct Content-Type with boundary
+    if (config.data instanceof FormData) {
+        delete config.headers["Content-Type"];
+    }
+    
     return config;
 });
 
@@ -43,10 +49,10 @@ axiosInstance.interceptors.response.use(
                 // Show toast first
                 toast.error(message);
                 // Clear token and redirect after a delay
-                localStorage.removeItem("token");
-                setTimeout(() => {
-                    window.location.href = "/";
-                }, 2000); // Wait 2 seconds before redirecting
+                // localStorage.removeItem("token");
+                // setTimeout(() => {
+                //     window.location.href = "/";
+                // }, 2000); // Wait 2 seconds before redirecting
             }
         }
 

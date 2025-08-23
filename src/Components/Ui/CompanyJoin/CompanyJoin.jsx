@@ -10,6 +10,8 @@ import './PersonJoin.css';
 import { useLanguage } from '../../Languages/LanguageContext';
 import Select from "react-select";
 import ImageDropZone from '../../ImageDropZone/ImageDropZone';
+import CompanyAPI from '../../../api/companyApi';
+import { toast } from 'react-toastify';
 
 const content = {
     title: {
@@ -84,37 +86,72 @@ const content = {
 };
 
 export const CompanyJoin = ({ setShowCompany, setShowProgress }) => {
-    const [selected, setSelected] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const [companyType, setCompanyType] = useState(null);
+    const [logo, setLogo] = useState(null);
     const { currentLanguage } = useLanguage();
+
     const initialValues = {
-        name: '',
-        nationalId: '',
+        username: '',
+        companyName: '',
         address: '',
-        mobile: '',
-        hasWhatsApp: false,
+        registrationNumber: '',
+        website: '',
+        phoneNumber: '',
+        hasWhatsapp: false,
     };
 
     const validationSchema = Yup.object({
-        name: Yup.string().required('الاسم مطلوب'),
-        nationalId: Yup.string().required('رقم البطاقة مطلوب'),
+        username: Yup.string().required('اسم المستخدم مطلوب'),
+        companyName: Yup.string().required('اسم الشركة مطلوب'),
         address: Yup.string().required('العنوان مطلوب'),
-        mobile: Yup.string().required('رقم الموبايل مطلوب'),
+        registrationNumber: Yup.string().required('رقم السجل التجاري مطلوب'),
+        phoneNumber: Yup.string().required('رقم الموبايل مطلوب'),
     });
 
-    const handleSubmit = (values) => {
-        console.log('Form submitted:', values);
+    const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+        try {
+            setIsLoading(true);
+
+            if (!companyType) {
+                toast.error(currentLanguage === 'ar' ? 'يرجى اختيار نوع الشركة' : 'Please select company type');
+                return;
+            }
+
+            const companyData = {
+                ...values,
+                companyType: companyType.value,
+                logo: logo
+            };
+
+            console.log('Form data to submit:', companyData);
+
+            const response = await CompanyAPI.createCompany(companyData);
+            console.log('API Response:', response);
+
+            // Show success and proceed to next step
+            setShowProgress(true);
+            setShowCompany(false);
+            resetForm();
+        } catch (error) {
+            console.error('Error submitting form:', error);
+        } finally {
+            setIsLoading(false);
+            setSubmitting(false);
+        }
     };
 
     const handleInputChange = (name, file) => {
         console.log(`${name} updated:`, file);
+        setLogo(file);
     };
 
     const options = [
-        { value: "compunds", label: "مطور عقاري (كمبوند) - Developer (Compounds)" },
-        { value: "buldings", label: "مطور عقاري (عمارات) - Developer (Buldings)" },
+        { value: "developer_compound", label: "مطور عقاري (كمبوند) - Developer (Compounds)" },
+        { value: "developer_buldings", label: "مطور عقاري (عمارات) - Developer (Buldings)" },
         { value: "broker", label: "تسويق عقاري - Broker/Agent" },
         { value: "owner", label: "مالك العقار - Private Owner" },
-    ];
+    ]
 
     const customStyles = {
         control: (base) => ({
@@ -138,107 +175,114 @@ export const CompanyJoin = ({ setShowCompany, setShowProgress }) => {
     };
     return (
         <div className='person-join'>
-            <FormField
+            <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}
                 onSubmit={handleSubmit}
             >
-                {/* Name */}
-                <div className="mb-4 ">
-                    <label className="b-15 mb-2">
-                        اسم المستخدم  <span>*</span>
-                    </label>
-                    <InputFiled name="name" placeholder="مثال: masaproperties" />
-                </div>
+                {({ setFieldValue }) => (
+                    <Form>
+                        {/* Username */}
+                        <div className="mb-4 ">
+                            <label className="b-15 mb-2">
+                                اسم المستخدم  <span>*</span>
+                            </label>
+                            <InputFiled name="username" placeholder="مثال: masaproperties" />
+                        </div>
 
-                {/* National ID */}
-                <div className="mb-4 ">
-                    <label className="b-15 mb-2">
-                        اسم الشركة  <span>*</span>
-                    </label>
-                    <InputFiled name="nationalId" placeholder=" مثال: الماسة للتطوير العقاري" />
-                </div>
+                        {/* Company Name */}
+                        <div className="mb-4 ">
+                            <label className="b-15 mb-2">
+                                اسم الشركة  <span>*</span>
+                            </label>
+                            <InputFiled name="companyName" placeholder=" مثال: الماسة للتطوير العقاري" />
+                        </div>
 
-                {/* Address */}
-                <div className="mb-4 ">
-                    <label className="b-15 mb-2">
-                        العنوان بالتفصيل <span>*</span>
-                    </label>
-                    <InputFiled name="address" placeholder="العنوان" />
-                </div>
+                        {/* Address */}
+                        <div className="mb-4 ">
+                            <label className="b-15 mb-2">
+                                العنوان بالتفصيل <span>*</span>
+                            </label>
+                            <InputFiled name="address" placeholder="العنوان" />
+                        </div>
 
-                {/* commercial register */}
-                <div className="mb-4 ">
-                    <label className="b-15 mb-2">
-                        رقم السجل التجاري  <span>*</span>
-                    </label>
-                    <InputFiled name="address" placeholder="ادخل السجل التجاري" />
-                </div>
+                        {/* commercial register */}
+                        <div className="mb-4 ">
+                            <label className="b-15 mb-2">
+                                رقم السجل التجاري  <span>*</span>
+                            </label>
+                            <InputFiled name="registrationNumber" placeholder="ادخل السجل التجاري" />
+                        </div>
 
-                {/* website */}
-                <div className="mb-4 ">
-                    <label className="b-15 mb-2">
-                        رابط الموقع الخاص بالشركة (اختياري)  <span>*</span>
-                    </label>
-                    <InputFiled name="address" placeholder="ادخل  الموقع" />
-                </div>
+                        {/* website */}
+                        <div className="mb-4 ">
+                            <label className="b-15 mb-2">
+                                رابط الموقع الخاص بالشركة (اختياري)
+                            </label>
+                            <InputFiled name="website" placeholder="ادخل  الموقع" />
+                        </div>
 
-                {/* company type */}
-                <div className="mb-4 ">
-                    <label className="b-15 mb-2">
-                        نوع الشركة  <span>*</span>
-                    </label>
-                    <Select
-                        options={options}
-                        styles={customStyles}
-                        placeholder="ادخل نوع الشركة"
+                        {/* company type */}
+                        <div className="mb-4 ">
+                            <label className="b-15 mb-2">
+                                نوع الشركة  <span>*</span>
+                            </label>
+                            <Select
+                                options={options}
+                                styles={customStyles}
+                                placeholder="ادخل نوع الشركة"
+                                onChange={setCompanyType}
+                                value={companyType}
+                            />
+                        </div>
+
+
+                        {/* Mobile */}
+                        <div className="mb-4 ">
+                            <label className="b-15 mb-2 w-100">
+                                رقم الموبايل <span>*</span>
+                            </label>
+                            <PhoneNumber name="phoneNumber" placeholder="اكتب رقمك" />
+                        </div>
+
+                        {/* WhatsApp Switch */}
+                        <div className="b-15 mb-4 d-flex justify-content-between align-items-center">
+                            <div className="d-flex flex-row space-1 b-15">
+                                <WhatsIcon />
+                                يوجد واتساب علي هذا الرقم
+                            </div>
+                            <Switch
+                        checked={initialValues.hasWhatsapp}
+                        onChange={(e) => setFieldValue('hasWhatsapp', e.target.checked)}
                     />
-                </div>
+                        </div>
 
+                        {/* logo */}
+                        <div className="mb-4 ">
+                            <label className="b-15 mb-2 w-100">
+                                شعار الشركة  <span>*</span>
+                            </label>
+                            <ImageDropZone handleInputChange={handleInputChange} />
+                        </div>
 
-                {/* Mobile */}
-                <div className="mb-4 ">
-                    <label className="b-15 mb-2 w-100">
-                        رقم الموبايل <span>*</span>
-                    </label>
-                    <PhoneNumber name="mobile" placeholder="اكتب رقمك" />
-                </div>
-
-                {/* WhatsApp Switch */}
-                <div className="b-15 mb-4 d-flex justify-content-between align-items-center">
-                    <div className="d-flex flex-row space-1 b-15">
-                        <WhatsIcon />
-                        يوجد واتساب علي هذا الرقم
-                    </div>
-                    <Switch
-                        value={initialValues.hasWhatsApp}
-                        onChange={(val) => setFieldValue('hasWhatsApp', val)}
-                    />
-                </div>
-
-                {/* logo */}
-                <div className="mb-4 ">
-                    <label className="b-15 mb-2 w-100">
-                        شعار الشركة  <span>*</span>
-                    </label>
-                    <ImageDropZone handleInputChange={handleInputChange} />
-                </div>
-
-                <div className="d-flex space-3">
-                    <button
-                        onClick={() => { setShowProgress(true); setShowCompany(false) }}
-                        className="btn-main w-50" type="submit">
-                        ابعت الطلب
-                    </button>
-                    <button
-                        onClick={() => { setShowCompany(false) }}
-                        className="btn-main w-50 btn-cancel" type="reset">
-                        إلغاء
-                    </button>
-                </div>
-            </FormField>
-
-
+                        <div className="d-flex space-3">
+                            <button
+                                className="btn-main w-50"
+                                type="submit"
+                                disabled={isLoading}>
+                                {isLoading ? (currentLanguage === 'ar' ? 'جاري الإرسال...' : 'Sending...') : (currentLanguage === 'ar' ? 'ابعت الطلب' : 'Send Request')}
+                            </button>
+                            <button
+                                onClick={() => { setShowCompany(false) }}
+                                className="btn-main w-50 btn-cancel"
+                                type="reset"
+                                disabled={isLoading}>
+                                {currentLanguage === 'ar' ? 'إلغاء' : 'Cancel'}
+                            </button>
+                        </div>
+                    </Form>
+                )}
+            </Formik>
         </div>
     );
 };

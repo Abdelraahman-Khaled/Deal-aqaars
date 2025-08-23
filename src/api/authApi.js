@@ -160,9 +160,7 @@ const AuthAPI = {
   // change password
   changePassword: async (data) => {
     try {
-      const response = await axiosInstance.post("/user/change-Password", {
-        data,
-      });
+      const response = await axiosInstance.post("/user/change-Password", data);
       toast.success(
         getToastMessages().changePasswordSuccess[getCurrentLanguage()]
       );

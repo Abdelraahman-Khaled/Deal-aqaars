@@ -25,7 +25,7 @@ const RealStateCard = ({ price, rooms, bath, space, details, location, offer, im
 
 
     return (
-        <div className={`compound-card space-4 d-flex ${wrapperClass} mb-4  `} style={company & wrapperClass === "flex-wrap" ? { width: "49%" } : { width: "100%" }} mb-4 dir={currentLanguage === "ar" ? "rtl" : "ltr"}>
+        <div className={`compound-card space-4 d-flex ${wrapperClass} mb-4`} style={company & wrapperClass === "flex-wrap" ? { width: "49%" } : { width: "100%" }} dir={currentLanguage === "ar" ? "rtl" : "ltr"}>
             <Link to={"/aqar-guide"}
                 className={`  ${wrapperClass ? "w-100" : "w-50"}`}
                 onClick={handleClick}
@@ -77,11 +77,11 @@ const RealStateCard = ({ price, rooms, bath, space, details, location, offer, im
                     {location}
                 </p>
                 {/* offer */}
-                <div className='w-100'>
-                    <p className='b-11 available d-flex gap-1 ' style={{ color: "var(--yellow-100)", width: " fit-content" }}>
+                <div className='w-100 d-flex'>
+                    <div className='b-11 available d-flex gap-1' style={{ color: "var(--yellow-100)", width: "fit-content" }}>
                         <MoneyIcon />
                         مقدم {offer}{offer == 0 ? "%" : " ج.م"}
-                    </p>
+                    </div>
                 </div>
                 <div className='connections d-flex justify-content-between w-100 pt-4 space-2 '>
                     {/* whats */}

@@ -36,17 +36,17 @@
 .btn-scroll .progress-circle-track {
     fill: none;
     stroke: #f0f0f0;
-    stroke-width: 8;
+    strokeWidth: 8;
 }
 
 .btn-scroll .progress-circle-bar {
     fill: none;
     stroke: var(--warning-01-color);
-    stroke-width: 8;
-    stroke-linecap: round;
-    stroke-dasharray: 0 251.2;
+    strokeWidth: 8;
+    strokeLinecap: round;
+    strokeDasharray: 0 251.2;
     transform: rotate(-90deg);
-    transform-origin: 50% 50%;
+    transformOrigin: 50% 50%;
 }
 
 

@@ -33,6 +33,8 @@ import { Provider } from 'react-redux';
 import { store } from './store';
 import VendorAds from './Pages/MyAds/VendorAds';
 import { ToastContainer } from 'react-toastify';
+import AiBot from './Components/AiBot/AiBot';
+import TestPasswordToggle from './Components/TestPasswordToggle';
 
 const App = () => {
   return (
@@ -45,14 +47,18 @@ const App = () => {
               <ToastContainer
                 rtl={true}
               />
+              {/* in future to be add */}
+              {/* <AiBot /> */}
               <Routes>
+                {/* Standalone Register Page (without navbar/footer) */}
+                <Route path="/register" element={<RegisterPage />} />
+                <Route path="/login" element={<RegisterPage />} />
+                <Route path="/test-password" element={<TestPasswordToggle />} />
+                
                 <Route path="/" element={<Layout />}>
 
                   {/* pages */}
                   <Route path="/" element={<Home />} />
-
-                  {/* Register */}
-                  <Route path="/login" element={<RegisterPage />} />
 
                   {/* UserProfile */}
                   <Route path="/profile" element={<AccountUser />} />

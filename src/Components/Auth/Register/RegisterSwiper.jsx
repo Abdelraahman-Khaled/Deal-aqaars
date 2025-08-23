@@ -18,7 +18,7 @@ const RegisterSwiper = () => {
     const { currentLanguage } = useLanguage()
 
     return (
-        <div id="carouselExampleDark" className="carousel carousel-dark slide vh-100 p-3" data-bs-ride="carousel">
+        <div id="carouselExampleDark" className="carousel carousel-dark slide  h-100 p-3" data-bs-ride="carousel">
             {/* Indicators */}
             <div className="carousel-indicators custom-carousel-indicators">
                 <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" className="active bg-white"></button>

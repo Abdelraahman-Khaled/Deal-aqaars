@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="90" fill="#f8f9fa" stroke="#e9ecef" stroke-width="2" />
+  
+  <!-- Sad face -->
+  <circle cx="70" cy="80" r="8" fill="#6c757d" />
+  <circle cx="130" cy="80" r="8" fill="#6c757d" />
+  <path d="M60 130 Q100 110 140 130" stroke="#6c757d" stroke-width="6" fill="none" />
+  
+  <!-- Error symbol -->
+  <circle cx="160" cy="40" r="25" fill="#dc3545" />
+  <line x1="145" y1="40" x2="175" y2="40" stroke="white" stroke-width="4" />
+  
+  <!-- Broken connection lines -->
+  <line x1="30" y1="160" x2="60" y2="140" stroke="#adb5bd" stroke-width="3" stroke-dasharray="5,5" />
+  <line x1="170" y1="160" x2="140" y2="140" stroke="#adb5bd" stroke-width="3" stroke-dasharray="5,5" />
+  <line x1="100" y1="170" x2="100" y2="140" stroke="#adb5bd" stroke-width="3" stroke-dasharray="5,5" />
+</svg>

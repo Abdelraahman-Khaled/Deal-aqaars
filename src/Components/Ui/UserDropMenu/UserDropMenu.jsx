@@ -18,7 +18,7 @@ const UserDropMenu = () => {
     const { currentLanguage } = useLanguage();
     const handleLogout = () => {
         AuthAPI.logout();
-        dispatch(logout()); 
+        dispatch(logout());
     };
 
     const user = JSON.parse(localStorage.getItem("user"));
@@ -42,7 +42,7 @@ const UserDropMenu = () => {
         {
             label: { ar: "إعلاناتي", en: "My ads" },
             icon: <FolderAds />,
-            to: "/vendr-ads",
+            to: "/vendor-ads",
         },
         {
             label: { ar: "المساعدة", en: "Help" },

@@ -103,20 +103,20 @@ const NavbarMenu = () => {
                         {user ? (
                             <>
                                 <UserDropMenu />
-                                {userType === "vendor" || userType === "company" ?
+                                {/* {userType === "vendor" || userType === "company" ?
                                     <button onClick={() => setShowModal(true)} className="btn-main b-11" style={{ minWidth: "200px" }}>
                                         {content.announce[currentLanguage]}
                                     </button>
-                                    :
-                                    <>
-                                        <button onClick={() => setShowPerson(true)} className="btn-main b-11 " style={{ minWidth: "130px" }}>
-                                            {content.personJoin[currentLanguage]}
-                                        </button>
-                                        <button onClick={() => setShowCompany(true)} className="btn-main b-11 btn-second border" style={{ minWidth: "130px", borderColor: "var(--primary) !important" }}>
-                                            {content.companyJoin[currentLanguage]}
-                                        </button>
-                                    </>
-                                }
+                                    : 
+                                    <>*/}
+                                <button onClick={() => setShowPerson(true)} className="btn-main b-11 " style={{ minWidth: "130px" }}>
+                                    {content.personJoin[currentLanguage]}
+                                </button>
+                                <button onClick={() => setShowCompany(true)} className="btn-main b-11 btn-second border" style={{ minWidth: "130px", borderColor: "var(--primary) !important" }}>
+                                    {content.companyJoin[currentLanguage]}
+                                </button>
+                                {/* </> */}
+                                {/* } */}
                             </>
                         ) : (
                             <>

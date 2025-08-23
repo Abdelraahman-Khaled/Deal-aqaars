@@ -442,7 +442,7 @@ const JoinAqar = () => {
 
                                 {
                                     selectedGov &&
-                                    (<div div className="flex-fill min-w-0">
+                                    (<div className="flex-fill min-w-0">
                                         <label className="form-label b-12">المدينة <span>*</span></label>
                                         <Dropdown className="d-flex w-100">
                                             <Dropdown.Toggle variant="light" className="w-100 text-end">

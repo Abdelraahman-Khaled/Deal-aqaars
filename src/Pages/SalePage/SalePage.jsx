@@ -298,17 +298,28 @@ const SalePage = () => {
 
     const { currentLanguage } = useLanguage(); // Get the current language
 
-    // pagenation
-    const [currentPage, setCurrentPage] = useState(0);
-    const perPage = 15; // NUMBER OF PAGE ITEMS
-    const pageCount = Math.ceil(data?.length / perPage);
-    const offset = currentPage * perPage;
-    const currentPageData = data?.slice(offset, offset + perPage);
+    // pagination with your data structure
+    const [paginationData, setPaginationData] = useState({
+        totalProperties: data?.length || 0,
+        totalPages: Math.ceil((data?.length || 0) / 15),
+        currentPage: 1,
+        limit: 15
+    });
 
+    // Calculate current page data
+    const offset = (paginationData.currentPage - 1) * paginationData.limit;
+    const currentPageData = data?.slice(offset, offset + paginationData.limit);
 
-    const handlePageChange = ({ selected }) => {
-        setCurrentPage(selected);
+    const handlePageChange = ({ selected, page, pagination }) => {
+        setPaginationData(prev => ({
+            ...prev,
+            currentPage: page
+        }));
         window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top smoothly
+        
+        // Here you would typically make an API call with the new page
+        // Example: fetchProperties(page, pagination.limit)
+        console.log('Page changed to:', page, 'Pagination:', pagination);
     };
 
     return (
@@ -353,7 +364,7 @@ const SalePage = () => {
                         ))}
                     </div>
                 </div>
-                {pageCount > 1 && <PaginationPage itemCount={pageCount} onPageChange={handlePageChange} />}
+                {paginationData.totalPages > 1 && <PaginationPage pagination={paginationData} onPageChange={handlePageChange} />}
             </ContainerMedia>
 
         </>

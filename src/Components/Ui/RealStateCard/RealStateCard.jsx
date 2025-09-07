@@ -9,19 +9,21 @@ import MoneyIcon from '../../../assets/Icons/MoneyIcon'
 import { useLanguage } from '../../Languages/LanguageContext'
 import WhatsIcon from '../../../assets/Icons/WhatsIcon'
 import CallIcon from '../../../assets/Icons/CallIcon'
+import LocationDisplay from '../LocationDisplay/LocationDisplay'
+import SimpleImageSlider from '../SimpleImageSlider/SimpleImageSlider'
 import "./RealstateCard.css"
 
-const RealStateCard = ({ price, rooms, bath, space, details, location, offer, img, company = false, connections = false, wrapperClass, isFav, isSwiping = false }) => {
+const RealStateCard = ({ price, rooms, bath, space, details, location, offer, img, company = false, connections = false, wrapperClass, isFav, isSwiping = false, category, type, advertiser }) => {
     const { currentLanguage } = useLanguage()
+
     const sliceWords = (text) => {
-        const words = text.split(" ");
+        const words = text ? text.split(" ") : [];
         return words.slice(0, 8).join(" ") + (words.length > 8 ? "..." : "");
     };
 
-
     const handleClick = (e) => {
         if (isSwiping) e.preventDefault();
-    };
+    }
 
 
     return (
@@ -31,7 +33,7 @@ const RealStateCard = ({ price, rooms, bath, space, details, location, offer, im
                 onClick={handleClick}
             >
                 <div className='compound-img'>
-                    <img loading="lazy" src={img} alt="compoundImg" />
+                    <SimpleImageSlider images={img} alt="img" />
                     {/* favIcon */}
                     <FavIcon isFav={isFav} />
                 </div>
@@ -44,10 +46,10 @@ const RealStateCard = ({ price, rooms, bath, space, details, location, offer, im
                     </p>
                     <div className='d-flex gap-2 flex-wrap justify-content-end'>
                         <p className='b-11 available'>
-                            سكني
+                            {type || "سكني"}
                         </p>
                         <p className='b-11 available'>
-                            للبيع
+                            {category || "للبيع"}
                         </p>
                     </div>
                 </div>
@@ -71,11 +73,21 @@ const RealStateCard = ({ price, rooms, bath, space, details, location, offer, im
                     {sliceWords(details)}
                 </p>
                 {/* locations */}
-                <p className='b-11'>
-                    <LocationIcon />
-                    <span className='px-1'></span>
-                    {location}
-                </p>
+                <div className='b-11'>
+                    {location && location.lat && location.lon ? (
+                        <LocationDisplay
+                            lat={location.lat}
+                            lon={location.lon}
+                            className="compact"
+                        />
+                    ) : (
+                        <p className='b-11'>
+                            <LocationIcon />
+                            <span className='px-1'></span>
+                            {location || (currentLanguage === 'ar' ? 'موقع غير محدد' : 'Location not specified')}
+                        </p>
+                    )}
+                </div>
                 {/* offer */}
                 <div className='w-100 d-flex'>
                     <div className='b-11 available d-flex gap-1' style={{ color: "var(--yellow-100)", width: "fit-content" }}>
@@ -85,15 +97,27 @@ const RealStateCard = ({ price, rooms, bath, space, details, location, offer, im
                 </div>
                 <div className='connections d-flex justify-content-between w-100 pt-4 space-2 '>
                     {/* whats */}
-                    <Link className='whats-button w-50 b-11 d-flex space-1 justify-content-center'>
-                        <WhatsIcon />
-                        واتساب
-                    </Link>
-                    {/* faceBook */}
-                    <Link className='facebook-button w-50 b-11 d-flex space-1 justify-content-center'>
-                        <CallIcon />
-                        اتصل
-                    </Link>
+                    {advertiser?.whatsapp && advertiser?.phone && (
+                        <a
+                            href={`https://wa.me/${advertiser.phone.replace(/[^0-9]/g, '')}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className='whats-button w-50 b-11 d-flex space-1 justify-content-center'
+                        >
+                            <WhatsIcon />
+                            واتساب
+                        </a>
+                    )}
+                    {/* call */}
+                    {advertiser?.phone && (
+                        <a
+                            href={`tel:${advertiser.phone}`}
+                            className='facebook-button w-50 b-11 d-flex space-1 justify-content-center'
+                        >
+                            <CallIcon />
+                            اتصل
+                        </a>
+                    )}
                 </div>
             </div>
         </div>

@@ -5,6 +5,11 @@
 .width-full{
     width: 100% !important;
 }
+
+.compound-img {
+    position: relative;
+}
+
 @media screen  and (min-width:992px) and (max-width:1200px) {
   .width-full   .compound-img img{
         width: 230px !important ;

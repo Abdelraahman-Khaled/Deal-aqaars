@@ -7,3 +7,38 @@
 .custom-dropdown{
     height: fit-content;
 }
+
+/* Loading Container Centering */
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 300px;
+    text-align: center;
+    gap: 1rem;
+}
+
+.loading-container p {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--netural-700);
+    font-weight: 500;
+}
+
+.no-properties {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 200px;
+    text-align: center;
+}
+
+.no-properties p {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--netural-600);
+    font-weight: 400;
+}

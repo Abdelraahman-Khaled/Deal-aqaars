@@ -12,8 +12,11 @@ import PhoneAds from '../../assets/Icons/PhoneAds'
 import CustomModal from '../CustomModal/CustomModal'
 import DeleteModal from '../DeleteButton/DeleteModal'
 import { useState } from 'react'
+import FavIcon from '../Ui/FavIcon/FavIcon'
+import SimpleImageSlider from '../Ui/SimpleImageSlider/SimpleImageSlider'
+import LocationDisplay from '../Ui/LocationDisplay/LocationDisplay'
 
-const CompanyProjectCard = ({ calls, likes, seen, title, location, details, price, img, company = false, connections = false, slider = false, wrapperClass, status, isSwiping = false }) => {
+const CompanyProjectCard = ({ id, lat, lon, calls, likes, seen, title, location, details, price, img, company = false, connections = false, slider = false, wrapperClass, status, isSwiping = false, isFav }) => {
 
     const { currentLanguage } = useLanguage()
     const [showProgress, setShowProgress] = useState(false);
@@ -28,9 +31,9 @@ const CompanyProjectCard = ({ calls, likes, seen, title, location, details, pric
                 className={`  ${wrapperClass ? "w-100" : "w-50"}`}
                 onClick={handleClick}>
                 <div className='compound-img'>
-                    <img loading="lazy" src={img} alt="compoundImg" />
+                    <SimpleImageSlider images={img} alt="img" />
                     {/* favIcon */}
-                    <AddToFavIcon />
+                    <FavIcon isFav={isFav} />
                 </div>
             </Link>
             <div className='d-flex gap-3 w-100'>
@@ -57,9 +60,7 @@ const CompanyProjectCard = ({ calls, likes, seen, title, location, details, pric
                 </div>
                 {/* locations */}
                 <p className='b-12'>
-                    <LocationIcon />
-                    <span className='px-1'></span>
-                    {location}
+                    <LocationDisplay lat={lat} lon={lon} />
                 </p>
                 {/* details */}
                 <p className='b-12'>

@@ -90,27 +90,62 @@ const PropertyAPI = {
     }
   },
 
+  // Get current user's properties
+  getMyProperties: async () => {
+    try {
+      const response = await axiosInstance.get('/property/me');
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching user properties:', error.response || error.message);
+      handleError(error);
+      throw error;
+    }
+  },
+
   // Create new property
   createProperty: async (data) => {
     try {
       const formData = new FormData();
       
-      // Append all property data fields
-      Object.keys(data).forEach(key => {
-        if (key === 'images' && Array.isArray(data[key])) {
-          // Handle multiple images
-          data[key].forEach((image, index) => {
-            formData.append('images', image);
-          });
-        } else if (key === 'features' && Array.isArray(data[key])) {
-          // Handle features array
-          data[key].forEach((feature, index) => {
-            formData.append(`features[${index}]`, feature);
-          });
-        } else if (data[key] !== undefined && data[key] !== null) {
-          formData.append(key, data[key]);
-        }
-      });
+      // Helper function to append nested objects to FormData
+      const appendToFormData = (obj, prefix = '') => {
+        Object.keys(obj).forEach(key => {
+          const value = obj[key];
+          const formKey = prefix ? `${prefix}[${key}]` : key;
+          
+          if (value === null || value === undefined) {
+            return;
+          }
+          
+          if (Array.isArray(value)) {
+            if (key === 'images') {
+              // Handle image files
+              value.forEach((image) => {
+                formData.append('images', image);
+              });
+            } else if (key === 'coordinates') {
+              // Handle location coordinates array
+              value.forEach((coord, index) => {
+                formData.append(`${formKey}[]`, coord);
+              });
+            } else {
+              // Handle other arrays like paymentMethods
+              value.forEach((item, index) => {
+                formData.append(`${formKey}[]`, item);
+              });
+            }
+          } else if (typeof value === 'object' && value !== null) {
+            // Handle nested objects like details, title, description, location, advertiser
+            appendToFormData(value, formKey);
+          } else {
+            // Handle primitive values
+            formData.append(formKey, value);
+          }
+        });
+      };
+      
+      // Append all data to FormData
+      appendToFormData(data);
 
       const response = await axiosInstance.post("/property", formData, {
         headers: {

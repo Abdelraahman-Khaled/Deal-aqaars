@@ -173,7 +173,7 @@ const RegisterForm = ({ setFormType }) => {
         mobile: "",
         password: "",
         confirmPassword: "",
-        role: "vendor"
+        role: "admin"
     };
 
     const handleRegisterSubmit = async (values, { resetForm }) => {

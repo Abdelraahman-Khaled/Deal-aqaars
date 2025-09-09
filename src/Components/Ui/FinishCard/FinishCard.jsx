@@ -19,6 +19,7 @@ import HeartLikes from '../../../assets/Icons/HeartLikes'
 import Eye from '../../../assets/Icons/Eye'
 import PhoneAds from '../../../assets/Icons/PhoneAds'
 import defaultImage from '../../../assets/images/error-not-found.svg'
+import SimpleImageSlider from '../SimpleImageSlider/SimpleImageSlider'
 
 const FininshCard = ({ id, title, img, icon, since, exprince, subtitles, isFav, companyAds = false, likes, seen, calls, phoneNumber, hasWhatsapp, detailedAddress }) => {
     const { currentLanguage } = useLanguage()
@@ -30,8 +31,11 @@ const FininshCard = ({ id, title, img, icon, since, exprince, subtitles, isFav, 
                 img &&
                 <Link to={`/finish-details/${id}`} state={{ id }} className='w-100'>
                     <div className='compound-img'>
-                        <img className='' loading="lazy" src={img || defaultImage} alt={title} onError={(e) => { e.target.src = defaultImage }} />
-                        {/* favIcon */}
+                        <div className='compound-img'>
+                            <SimpleImageSlider images={img} alt="img" />
+                            {/* favIcon */}
+                            <FavIcon isFav={isFav} />
+                        </div>                        {/* favIcon */}
                         {!companyAds && <FavIcon isFav={isFav} />}
                     </div>
                 </Link>
@@ -100,9 +104,9 @@ const FininshCard = ({ id, title, img, icon, since, exprince, subtitles, isFav, 
                             {/* WhatsApp - Only show if hasWhatsapp is true */}
                             {(hasWhatsapp || hasWhatsapp === undefined) && (
                                 <div className='col-12 col-md-4'>
-                                    <Link 
-                                        to={phoneNumber ? `https://wa.me/${phoneNumber.replace(/\D/g, '')}` : '#'} 
-                                        target="_blank" 
+                                    <Link
+                                        to={phoneNumber ? `https://wa.me/${phoneNumber.replace(/\D/g, '')}` : '#'}
+                                        target="_blank"
                                         rel="noopener noreferrer"
                                         className='whats-button w-100 b-11 d-flex space-1 justify-content-center'
                                     >
@@ -115,9 +119,9 @@ const FininshCard = ({ id, title, img, icon, since, exprince, subtitles, isFav, 
                             {/* Location - Only show if detailedAddress exists */}
                             {detailedAddress && (
                                 <div className='col-12 col-md-4'>
-                                    <Link 
+                                    <Link
                                         to={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(detailedAddress)}`}
-                                        target="_blank" 
+                                        target="_blank"
                                         rel="noopener noreferrer"
                                         className='location-button w-100 b-11 d-flex space-1 justify-content-center'
                                         title={detailedAddress}
@@ -130,7 +134,7 @@ const FininshCard = ({ id, title, img, icon, since, exprince, subtitles, isFav, 
 
                             {/* Call */}
                             <div className='col-12 col-md-4'>
-                                <Link 
+                                <Link
                                     to={phoneNumber ? `tel:${phoneNumber}` : '#'}
                                     className='facebook-button w-100 b-11 d-flex space-1 justify-content-center'
                                 >

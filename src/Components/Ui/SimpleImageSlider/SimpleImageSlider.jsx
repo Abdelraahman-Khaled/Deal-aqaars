@@ -6,14 +6,25 @@ const SimpleImageSlider = ({ images, alt = "image", className = "" }) => {
     const { currentLanguage } = useLanguage()
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
+    // Default placeholder image
+    const placeholderImage = '/aqar01.jpg' // Using existing image from public folder as placeholder
+
     // Process images to handle different formats
     let processedImages
-    if (Array.isArray(images)) {
+    if (!images || (Array.isArray(images) && images.length === 0)) {
+        // If no images provided or empty array, use placeholder
+        processedImages = [placeholderImage]
+    } else if (Array.isArray(images)) {
         // If images is array, check if items are objects with url property or strings
         processedImages = images.map(item => typeof item === 'object' && item.url ? item.url : item)
+        // Filter out empty/null/undefined images and use placeholder if all are empty
+        processedImages = processedImages.filter(img => img && img.trim() !== '')
+        if (processedImages.length === 0) {
+            processedImages = [placeholderImage]
+        }
     } else {
         // Single image (string)
-        processedImages = [images]
+        processedImages = images && images.trim() !== '' ? [images] : [placeholderImage]
     }
 
     const hasMultipleImages = processedImages.length > 1

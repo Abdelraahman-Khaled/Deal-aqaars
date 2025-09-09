@@ -6,7 +6,10 @@ import ShareIcon from '../../../assets/Icons/ShareIcon'
 import Bed from '../../../assets/Icons/Bed'
 import BathIcon from '../../../assets/Icons/BathIcon'
 import AreaIcon from '../../../assets/Icons/AreaIcon'
-const DescriptionGuide = ({ title, location, price, description, aqar = false, rooms, bath, space }) => {
+import Eye from '../../../assets/Icons/Eye'
+import ListIcon from '../../../assets/Icons/ListIcon'
+import LocationDisplay from '../LocationDisplay/LocationDisplay'
+const DescriptionGuide = ({ title, location, price, description, aqar = false, rooms, bath, space, view, floor, lat, lon }) => {
     return (
         <>
             <div className='d-flex justify-content-between py-4 space-3 flex-wrap'>
@@ -16,11 +19,13 @@ const DescriptionGuide = ({ title, location, price, description, aqar = false, r
                         description &&
                         <p className='b-11'>{description}</p>
                     }
-                    <p className='b-11'><LocationIcon />{location}</p>
+                    <p className='b-11'>
+                        <LocationDisplay lat={lat} lon={lon} />
+                    </p>
                     {price && <p className='b-11'>تبدأ من {price} ج.م</p>}
                     {
                         aqar &&
-                        <div className='d-flex space-6'>
+                        <div className='d-flex space-6 flex-wrap'>
                             <p className='d-flex align-items-center gap-2 b-11'>
                                 <Bed />
                                 {rooms}
@@ -33,6 +38,18 @@ const DescriptionGuide = ({ title, location, price, description, aqar = false, r
                                 <AreaIcon />
                                 {space} متر مربع
                             </p>
+                            {view && (
+                                <p className='d-flex align-items-center gap-2 b-11'>
+                                    <Eye />
+                                    {view}
+                                </p>
+                            )}
+                            {floor && (
+                                <p className='d-flex align-items-center gap-2 b-11'>
+                                    <ListIcon />
+                                    الطابق {floor}
+                                </p>
+                            )}
                         </div>
                     }
                 </div>

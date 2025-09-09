@@ -36,6 +36,32 @@ border: none;
     }
  
 .phoneNumber{
+  background-color: #f8f9fa;
+  font-weight: 500;
+  color: var(--netural-600);
+  min-width: 45px;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.phoneNumber.rounded-start {
+  border-left: 1px solid var(--netural-200);
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+.phoneNumber.rounded-end {
   border-right: 1px solid var(--netural-200);
-  }
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+/* RTL support for phone input */
+.form-control[dir="rtl"] {
+  text-align: right;
+}
+
+.form-control[dir="ltr"] {
+  text-align: left;
+}
 

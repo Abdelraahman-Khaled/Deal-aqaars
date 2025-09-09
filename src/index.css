@@ -554,12 +554,12 @@ textarea {
   display: none;
 }
 .Toastify__toast--success {
-  background: #1fc16b1a;
+  background: #1fc16b80;
   color: var(--netural-1000);
   opacity: 1;
 }
 .Toastify__toast--error {
-  background: #dd1d2d1a;
+  background: #dd1d2d80;
   color: var(--netural-1000);
   opacity: 1;
 }

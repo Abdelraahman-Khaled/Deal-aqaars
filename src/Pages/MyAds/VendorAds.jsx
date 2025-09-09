@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import BreadcrumbsPage from '../../Components/Ui/BreadcrumbsPage/BreadcrumbsPage'
 import HelmetInfo from '../../Components/Helmetinfo/HelmetInfo'
 import ContainerMedia from '../../Components/ContainerMedia/ContainerMedia'
@@ -16,13 +16,48 @@ import FininshCard from '../../Components/Ui/FinishCard/FinishCard'
 import FormField from '../../Components/Forms/FormField'
 import InputFiled from '../../Components/Forms/InputField'
 import SearchIcon from '../../assets/Icons/SearchIcon'
+import PropertyAPI from '../../api/propertyApi'
+import Loader from '../../Components/Loader/Loader'
+import { current } from '@reduxjs/toolkit'
 
 const VendorAds = () => {
     const { currentLanguage } = useLanguage(); // Get the current language
     const [toggle, setToggle] = useState("realestate");
     const [rotate, setRotate] = useState(false);
     const [activeTab, setActiveTab] = useState("منشور");
+    const [properties, setProperties] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const userType = useSelector((state) => state.userType.userType);
+
+    // Fetch user's properties
+    useEffect(() => {
+        const fetchMyProperties = async () => {
+            try {
+                setLoading(true);
+                const response = await PropertyAPI.getMyProperties();
+                setProperties(response.data);
+                console.log(response.data);
+
+                setError(null);
+            } catch (err) {
+                console.error('Error fetching properties:', err);
+                setError(err.message || 'Failed to fetch properties');
+                setProperties([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchMyProperties();
+    }, []);
+
+    // Handle property deletion
+    const handleDeleteProperty = (deletedPropertyId) => {
+        setProperties(prevProperties => 
+            prevProperties.filter(property => property._id !== deletedPropertyId)
+        );
+    };
 
     const tabs = [
         { value: "realestate", label: translations[currentLanguage].realestate },
@@ -174,67 +209,84 @@ const VendorAds = () => {
                         </div>
                         {/* cards */}
                         <div className='row g-4 pt-2 '>
-
-                            {
-                                data?.length > 0 ?
-                                    data.map((card, index) => (
-                                        <div key={index} className='related-slider col-12 col-sm-6 col-lg-4  mt-0'>
-                                            {toggle === "realestate" ?
-                                                <VendorAdsCard
+                            {loading ? (
+                                <div className="col-12 text-center py-5">
+                                    <Loader />
+                                    <p className="mt-2">جاري تحميل الإعلانات...</p>
+                                </div>
+                            ) : error ? (
+                                <div className="col-12 text-center py-5">
+                                    <p className="text-danger">حدث خطأ في تحميل الإعلانات: {error}</p>
+                                    <button
+                                        className="btn btn-primary mt-2"
+                                        onClick={() => window.location.reload()}
+                                    >
+                                        إعادة المحاولة
+                                    </button>
+                                </div>
+                            ) : properties?.length > 0 ? (
+                                properties.map((property, index) => (
+                                    <div key={property.id || index} className='related-slider col-12 col-sm-6 col-lg-4  mt-0'>
+                                        {toggle === "realestate" ?
+                                            <VendorAdsCard
+                                                key={index}
+                                                id={property._id}
+                                                title={property.title[currentLanguage]}
+                                                lat={property.location.coordinates[0]}
+                                                lon={property.location.coordinates[1]}
+                                                details={property.description[currentLanguage]}
+                                                img={property.images}
+                                                company={true}
+                                                rooms={property.details.rooms}
+                                                bath={property.details.bathroooms}
+                                                space={property.details.space}
+                                                wrapperClass={true}
+                                                price={"5161565156"}
+                                                numAds={index + 1}
+                                                date={property.createdAt}
+                                                seen={"1"}
+                                                likes={"1"}
+                                                calls={"1"}
+                                                tradeItem={"asad"}
+                                                trade={toggle === "trade" ? true : false}
+                                                onDelete={handleDeleteProperty}
+                                            />
+                                            : toggle === "project" ?
+                                                <CompanyProjectCard
                                                     key={index}
-                                                    title={card.title}
-                                                    location={card.location}
-                                                    details={card.details}
-                                                    img={card.img}
-                                                    company={true}
-                                                    rooms={3}
-                                                    bath={2}
-                                                    space={130}
-                                                    wrapperClass={true}
-                                                    price={card.price}
-                                                    numAds={card.numAds}
-                                                    date={card.date}
-                                                    seen={card.seen}
-                                                    likes={card.likes}
-                                                    calls={card.calls}
-                                                    tradeItem={card.tradeItem}
-                                                    trade={toggle === "trade" ? true : false}
+                                                    title={property.title[currentLanguage]}
+                                                    lat={property.location.coordinates[0]}
+                                                    lon={property.location.coordinates[1]}
+                                                    details={property.description[currentLanguage]}
+                                                    price={"130000"}
+                                                    img={property.images}
+                                                    slider={true}
+                                                    wrapperClass="flex-wrap"
+                                                    seen={"1"}
+                                                    likes={"2"}
+                                                    calls={"3"}
                                                 />
-                                                : toggle === "project" ?
-                                                    <CompanyProjectCard
-                                                        key={index}
-                                                        title={card.title}
-                                                        location={card.location}
-                                                        details={card.details}
-                                                        price={card.price}
-                                                        img={card.img}
-                                                        slider={true}
-                                                        wrapperClass="flex-wrap"
-                                                        seen={card.seen}
-                                                        likes={card.likes}
-                                                        calls={card.calls}
-                                                    />
-                                                    :
-                                                    <FininshCard
-                                                        img={card.imgFinish}
-                                                        subtitles={card.subtitles}
-                                                        exprince={card.exprince}
-                                                        since={card.since}
-                                                        title={card.titleFinish}
-                                                        companyAds={true}
-                                                        seen={card.seen}
-                                                        likes={card.likes}
-                                                        calls={card.calls}
-                                                    />
-                                            }
-                                        </div>
-                                    ))
-                                    :
-                                    <div className='d-flex flex-column justify-content-center align-items-center gap-4'>
-                                        <AddannouncementIcon />
-                                        <p className='b-12 w-25 text-center'>يلا مستني إيه؟ مفيش ولا إعلان منشور! ضيف إعلاناتك دلوقتي ووصل لملايين المستخدمين</p>
+                                                :
+                                                <FininshCard
+                                                    img={property.images}
+                                                    subtitles={""}
+                                                    exprince={"property.exprince"}
+                                                    since={"property.since"}
+                                                    title={property.title[currentLanguage]}
+                                                    companyAds={true}
+                                                    seen={"1"}
+                                                    likes={"2"}
+                                                    calls={"3"}
+                                                />
+                                        }
                                     </div>
-                            }
+                                ))
+                            ) : (
+                                <div className='d-flex flex-column justify-content-center align-items-center gap-4'>
+                                    <AddannouncementIcon />
+                                    <p className='b-12 w-25 text-center'>يلا مستني إيه؟ مفيش ولا إعلان منشور! ضيف إعلاناتك دلوقتي ووصل لملايين المستخدمين</p>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

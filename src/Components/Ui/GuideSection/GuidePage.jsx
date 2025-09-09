@@ -44,6 +44,8 @@ const GuidePage = ({ title, compound = true }) => {
             const response = await PropertyAPI.getAllProperties();
             if (response && response.data) {
                 setProperties(response.data);
+                console.log(response.data);
+
                 setPagination(response.pagination);
             }
         } catch (error) {
@@ -167,6 +169,7 @@ const GuidePage = ({ title, compound = true }) => {
                         const locationCoords = formatLocation(property.location);
                         return (
                             <RealStateCard
+                                id={property._id}
                                 key={property._id || index}
                                 title={property.title ? property.title[currentLanguage] : 'Property'}
                                 location={locationCoords}

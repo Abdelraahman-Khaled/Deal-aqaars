@@ -196,7 +196,12 @@ const JoinFinish = () => {
 
                             {/* map */}
                             <div className="mb-5">
-                                <Map showOverlay={false} />
+                                <Map 
+                                    showOverlay={false} 
+                                    lat={30.0444} 
+                                    lon={31.2357} 
+                                    locationName={"موقع الشركة"} 
+                                />
                             </div>
 
 

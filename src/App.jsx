@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from './Components/Languages/LanguageContext';
 import { HelmetProvider } from "react-helmet-async";
+import { PropertyProvider } from './contexts/PropertyContext';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "bootstrap/dist/css/bootstrap.rtl.min.css";
@@ -43,7 +44,8 @@ const App = () => {
         <BrowserRouter>
           <LanguageProvider>
             <HelmetProvider>
-              <ScrollToTop />
+              <PropertyProvider>
+                <ScrollToTop />
               <ToastContainer
                 rtl={true}
               />
@@ -70,7 +72,7 @@ const App = () => {
                   <Route path="/compound-details" element={<CompoundAqarDetails />} />
 
                   <Route path="/realestate" element={<Aqar />} />
-                  <Route path="/aqar-guide" element={<AqarGuide />} />
+                  <Route path="/aqar-guide/:id" element={<AqarGuide />} />
 
                   <Route path="/sale" element={<SalePage />} />
 
@@ -115,6 +117,7 @@ const App = () => {
 
 
               </Routes>
+              </PropertyProvider>
             </HelmetProvider>
           </LanguageProvider>
         </BrowserRouter>

@@ -1,6 +1,6 @@
 import React from 'react'
 import LocationIcon from '../../../assets/Icons/LocationIcon'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import FavIcon from '../FavIcon/FavIcon'
 import Bed from '../../../assets/Icons/Bed'
 import BathIcon from '../../../assets/Icons/BathIcon'
@@ -13,9 +13,13 @@ import LocationDisplay from '../LocationDisplay/LocationDisplay'
 import SimpleImageSlider from '../SimpleImageSlider/SimpleImageSlider'
 import "./RealstateCard.css"
 
-const RealStateCard = ({ price, rooms, bath, space, details, location, offer, img, company = false, connections = false, wrapperClass, isFav, isSwiping = false, category, type, advertiser }) => {
+const RealStateCard = ({ id, price, rooms, bath, space, details, location, offer, img, company = false, connections = false, wrapperClass, isFav, isSwiping = false, category, type, advertiser }) => {
     const { currentLanguage } = useLanguage()
 
+
+
+
+    
     const sliceWords = (text) => {
         const words = text ? text.split(" ") : [];
         return words.slice(0, 8).join(" ") + (words.length > 8 ? "..." : "");
@@ -28,7 +32,7 @@ const RealStateCard = ({ price, rooms, bath, space, details, location, offer, im
 
     return (
         <div className={`compound-card space-4 d-flex ${wrapperClass} mb-4`} style={company & wrapperClass === "flex-wrap" ? { width: "49%" } : { width: "100%" }} dir={currentLanguage === "ar" ? "rtl" : "ltr"}>
-            <Link to={"/aqar-guide"}
+            <Link to={`/aqar-guide/${id}`}
                 className={`  ${wrapperClass ? "w-100" : "w-50"}`}
                 onClick={handleClick}
             >

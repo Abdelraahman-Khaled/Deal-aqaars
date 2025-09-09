@@ -16,8 +16,7 @@ export const Thumb = ({ selected, onClick, imgSrc, images, setShowModal, showMod
                     alt="Thumbnail"
                 />
             </div>
-            {/* <span className='camera-icon b-16 d-flex space-2 align-items-center' onClick={() => setShowModal(true)}>{images.length}<CameraICon /></span > */}
-            {/* custom modal to dispay image */}
+
             <CustomModal
                 showModal={showModal}
                 onHide={() => setShowModal(false)}

@@ -66,7 +66,11 @@ const CompoundDetailsPage = () => {
                                 />
                                 <CompoundTaps />
                                 <AdsDescription />
-                                <Map />
+                                <Map 
+                                    lat={29.6000} 
+                                    lon={32.3500} 
+                                    locationName={"IL Monte Galala - إل مونت جلاله"} 
+                                />
                                 <CompanyToSee data={data} />
                             </div>
                             <div className="col-12 col-xl-3 d-flex flex-column space-6">

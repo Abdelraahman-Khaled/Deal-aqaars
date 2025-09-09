@@ -12,8 +12,11 @@ import DeleteButton from '../../Components/DeleteButton/DeleteButton'
 import CustomModal from '../../Components/CustomModal/CustomModal'
 import DeleteModal from '../../Components/DeleteButton/DeleteModal'
 import TradeIcon from '../../assets/Icons/TradeIcon'
+import SimpleImageSlider from '../../Components/Ui/SimpleImageSlider/SimpleImageSlider'
+import FavIcon from '../../Components/Ui/FavIcon/FavIcon'
+import LocationDisplay from '../../Components/Ui/LocationDisplay/LocationDisplay'
 
-const VendorAdsCard = ({ price, numAds, seen, title, tradeItem, likes, calls, date, rooms, bath, space, details, location, img, company = false, wrapperClass, isFav, isSwiping = false, trade = false }) => {
+const VendorAdsCard = ({ id, price, numAds, seen, title, tradeItem, likes, calls, date, rooms, bath, space, details, location, img, company = false, wrapperClass, isFav, isSwiping = false, trade = false, onDelete }) => {
     const { currentLanguage } = useLanguage()
     const [showProgress, setShowProgress] = useState(false);
 
@@ -31,13 +34,14 @@ const VendorAdsCard = ({ price, numAds, seen, title, tradeItem, likes, calls, da
 
     return (
         <div className={`compound-card space-4 d-flex ${wrapperClass} mb-4  `} style={company & wrapperClass === "flex-wrap" ? { width: "49%" } : { width: "100%" }} dir={currentLanguage === "ar" ? "rtl" : "ltr"}>
-            <Link to={"/aqar-guide"}
+            <Link to={`/aqar-guide/${id}`}
                 className={`  ${wrapperClass ? "w-100" : "w-50"}`}
                 onClick={handleClick}
             >
                 <div className='compound-img'>
-                    <img loading="lazy" src={img} alt="compoundImg" />
+                    <SimpleImageSlider images={img} alt="img" />
                     {/* favIcon */}
+                    <FavIcon isFav={isFav} />
                 </div>
             </Link>
             {/* price */}
@@ -55,9 +59,8 @@ const VendorAdsCard = ({ price, numAds, seen, title, tradeItem, likes, calls, da
                 {trade && <p className="b-9">{title}</p>}
                 {trade &&
                     <p className='b-12'>
-                        <LocationIcon />
-                        <span className='px-1'></span>
-                        {location}
+                      
+                        <LocationDisplay lat={lat} lon={lon} />
                     </p>
                 }
                 {!trade && <p className="b-9">{price} ج.م</p>}
@@ -138,7 +141,11 @@ const VendorAdsCard = ({ price, numAds, seen, title, tradeItem, likes, calls, da
                 newClass={"progress-modal"}
             >
                 <div>
-                    <DeleteModal setShowProgress={setShowProgress} />
+                    <DeleteModal 
+                        setShowProgress={setShowProgress} 
+                        propertyId={id}
+                        onDelete={onDelete}
+                    />
                 </div>
             </CustomModal>
         </div >

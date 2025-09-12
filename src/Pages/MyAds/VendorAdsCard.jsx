@@ -15,10 +15,12 @@ import TradeIcon from '../../assets/Icons/TradeIcon'
 import SimpleImageSlider from '../../Components/Ui/SimpleImageSlider/SimpleImageSlider'
 import FavIcon from '../../Components/Ui/FavIcon/FavIcon'
 import LocationDisplay from '../../Components/Ui/LocationDisplay/LocationDisplay'
+import UpdatePropertyModal from './UpdatePropertyModal'
 
-const VendorAdsCard = ({ id, price, numAds, seen, title, tradeItem, likes, calls, date, rooms, bath, space, details, location, img, company = false, wrapperClass, isFav, isSwiping = false, trade = false, onDelete }) => {
+const VendorAdsCard = ({ propertyData, id, price, numAds, seen, lat, lon, title, tradeItem, likes, calls, date, rooms, bath, space, details, location, img, company = false, wrapperClass, isFav, isSwiping = false, trade = false, onDelete }) => {
     const { currentLanguage } = useLanguage()
     const [showProgress, setShowProgress] = useState(false);
+    const [showUpdateModal, setShowUpdateModal] = useState(false);
 
 
     const sliceWords = (text) => {
@@ -52,14 +54,14 @@ const VendorAdsCard = ({ id, price, numAds, seen, title, tradeItem, likes, calls
                     </p>
                     <div className='d-flex gap-2 flex-wrap justify-content-end'>
                         <p className='b-16 available'>
-                            {date}
+                            {date ? date.split('T')[0] : ''}
                         </p>
                     </div>
                 </div>
                 {trade && <p className="b-9">{title}</p>}
                 {trade &&
                     <p className='b-12'>
-                      
+
                         <LocationDisplay lat={lat} lon={lon} />
                     </p>
                 }
@@ -89,9 +91,7 @@ const VendorAdsCard = ({ id, price, numAds, seen, title, tradeItem, likes, calls
                         {/* locations */}
 
                         <p className='b-12'>
-                            <LocationIcon />
-                            <span className='px-1'></span>
-                            {location}
+                            <LocationDisplay lat={lat} lon={lon} />
                         </p>
                     </>
                 }
@@ -128,7 +128,7 @@ const VendorAdsCard = ({ id, price, numAds, seen, title, tradeItem, likes, calls
                     </div>
 
                     {/* edit */}
-                    <button className='btn-main w-50'>
+                    <button className='btn-main w-50' onClick={() => setShowUpdateModal(true)}>
                         عدل على الاعلان
                     </button>
                 </div>
@@ -141,13 +141,22 @@ const VendorAdsCard = ({ id, price, numAds, seen, title, tradeItem, likes, calls
                 newClass={"progress-modal"}
             >
                 <div>
-                    <DeleteModal 
-                        setShowProgress={setShowProgress} 
+                    <DeleteModal
+                        setShowProgress={setShowProgress}
                         propertyId={id}
                         onDelete={onDelete}
                     />
                 </div>
             </CustomModal>
+
+            {/* update modal */}
+            <UpdatePropertyModal
+                showModal={showUpdateModal}
+                setShowModal={setShowUpdateModal}
+                propertyId={id}
+                propertyData={propertyData}
+                onUpdate={onDelete} // Refresh the list after update
+            />
         </div >
     )
 }

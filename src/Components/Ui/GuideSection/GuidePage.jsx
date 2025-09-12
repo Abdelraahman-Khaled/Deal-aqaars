@@ -24,6 +24,7 @@ const GuidePage = ({ title, compound = true }) => {
     const [properties, setProperties] = useState([]);
     const [loading, setLoading] = useState(false);
     const [pagination, setPagination] = useState(null);
+    
     const progressTabs = [
         { value: "inprogress", label: translations[currentLanguage].inProgress },
         { value: "ready", label: translations[currentLanguage].ready },

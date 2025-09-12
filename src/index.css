@@ -1,6 +1,5 @@
 * {
   margin: 0;
-  padding: 0;
   color: var(--netural-1000);
   list-style: none;
   text-decoration: none !important;
@@ -19,7 +18,7 @@
   --primary: #173794;
   --primary-100: #98aeef;
   --primary-200: #416ae1;
-  --primary-300: #1c42b3;
+  --primary-300: #1c42b3 !important;
   --primary-400: #0d2055;
   /* Secondary */
   --secondary: #dfa027;
@@ -39,11 +38,11 @@
   --netural-900: #3b3b3b;
   --netural-1000: #222222;
   /* red */
-  --red-200: #d00416;
+  --red-200: #d00416 !important;
   /* green */
   --green-200: #00813d;
   /* toasts */
-  --yellow-100: #dfa027;
+  --yellow-100: #dfa027 !important;
   --danger-01-color: #dd1d2d;
   --dark-01-color: #212121;
   --dark-02-color: #121212;
@@ -512,7 +511,15 @@ textarea {
 .w-600 .modal-content {
   min-width: 650px !important;
 }
-
+span.required-asterisk {
+  color: var(--red-200) !important;
+}
+@media (min-width: 576px) {
+  .modal-dialog {
+    max-width: auto;
+    justify-content: center;
+  }
+}
 .progress-modal .modal-dialog {
   min-width: 680px !important;
 }
@@ -554,12 +561,10 @@ textarea {
   display: none;
 }
 .Toastify__toast--success {
-  background: #1fc16b80;
   color: var(--netural-1000);
   opacity: 1;
 }
 .Toastify__toast--error {
-  background: #dd1d2d80;
   color: var(--netural-1000);
   opacity: 1;
 }

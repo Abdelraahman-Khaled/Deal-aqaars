@@ -21,7 +21,7 @@ import Select from "react-select";
 import TextArea from '../../Components/Forms/TextArea';
 import NestedDropdownAccordion from '../../Components/NestedDropdownAccordion/NestedDropdownAccordion';
 import { nestedLocationData } from '../../Components/NestedDropdownAccordion/nestedLocationData';
-import PlaceTypeDropdown from '../../Components/Ui/SearchComponents/PlaceTypeDropdown ';
+import PlaceTypeDropdown from '../../Components/Ui/SearchComponents/PlaceTypeDropdown';
 import ImageUploadGrid from '../../Components/ImageUploadGrid/ImageUploadGrid';
 
 const Compound3 = ({ formData, setFormData }) => {

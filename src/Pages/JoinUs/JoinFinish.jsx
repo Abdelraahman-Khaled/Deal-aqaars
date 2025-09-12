@@ -17,6 +17,7 @@ import ImageUploadGrid from '../../Components/ImageUploadGrid/ImageUploadGrid';
 import BreadcrumbsPage from '../../Components/Ui/BreadcrumbsPage/BreadcrumbsPage';
 import SectionHeader from '../../Components/SectionHeader/SectionHeader';
 import Checkbox from '../../Components/Forms/Checkbox';
+import FinishingAPI from '../../api/finishingApi';
 
 const JoinFinish = () => {
     const { currentLanguage } = useLanguage(); // Get the current language
@@ -61,205 +62,243 @@ const JoinFinish = () => {
         "اوض ألعاب",
         "شرفة",
     ]
+    const initialValues = {
+        type: "", // apartment
+        images: [],
+    };
 
+    const handleSubmit = async (values, { resetForm }) => {
+        const formData = new FormData();
+
+        // whatIHave
+        formData.append("type", values.type);
+        formData.append("details[propertyType]", values.propertyType);
+
+
+        // images
+        if (values.images && values.images.length > 0) {
+            values.images.forEach((file) => {
+                formData.append("images", file);
+            });
+            console.log("Images being sent:", values.images.length, "files");
+        } else {
+            console.log("No images to send");
+        }
+
+        setIsItemLoading(true)
+        try {
+            const response = await FinishingAPI.createFinishingService(formData);
+            console.log(response);
+            setShowModal(true);
+            resetForm();
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setIsItemLoading(false);
+        }
+    };
     return (
         <>
             <HelmetInfo titlePage={currentLanguage === "ar" ? "اعلن عن  خدمات التشطيب" : "Announce finishing services"} />
 
-            <FormField>
+            <FormField
+                initialValues={initialValues}
+                onSubmit={handleSubmit}
+            >
+                {({ values, setFieldValue }) => (
 
-                <ContainerMedia>
-                    <div className='form-container py-4 align-items-center'>
-                        <div className='w-100'>
-                            <div className='pb-4'>
-                                <BreadcrumbsPage
-                                    newClassBreadHeader={"biography-bread breadcrumb-page-2"}
-                                    mainTitle={"اعلن عن التشطيب"}
-                                    routeTitleTwoBread={false}
-                                    titleTwoBread={false}
-                                    secondArrow={false}
-                                />
-                            </div>
-                            <p className='b-1 pb-3 mb-2'>انضم لينا واعلن عن خدمات التشطيب بتاعتك!</p>
+                    <ContainerMedia>
+                        <div className='form-container py-4 align-items-center'>
+                            <div className='w-100'>
+                                <div className='pb-4'>
+                                    <BreadcrumbsPage
+                                        newClassBreadHeader={"biography-bread breadcrumb-page-2"}
+                                        mainTitle={"اعلن عن التشطيب"}
+                                        routeTitleTwoBread={false}
+                                        titleTwoBread={false}
+                                        secondArrow={false}
+                                    />
+                                </div>
+                                <p className='b-1 pb-3 mb-2'>انضم لينا واعلن عن خدمات التشطيب بتاعتك!</p>
 
-                            {/* company Details */}
+                                {/* company Details */}
 
-                            <SectionHeader text={"بيانات الشركة"} />
+                                <SectionHeader text={"بيانات الشركة"} />
 
-                            {/* name company */}
-                            <div className="mb-4 ">
+                                {/* name company */}
+                                <div className="mb-4 ">
+                                    <label className="b-12 mb-2">
+                                        اسم الشركة  <span className='required-asterisk'>*</span>
+                                    </label>
+                                    <InputFiled name="name" placeholder={" اكتب اسم شركتك هنا"} />
+                                </div>
+
+                                {/* full details */}
+                                <div className="mb-4 flex-wrap d-flex align-items-center justify-content-between ">
+                                    <label className="b-12 ">
+                                        وصف الشركة   <span className='required-asterisk'>*</span>
+                                    </label>
+                                    <TextArea name="description" maxLength="700" placeholder={"قول للناس بتقدم إيه "} />
+                                </div>
+
+
+                                {/* Company services */}
+                                <SectionHeader text={"خدمات الشركة"} />
+
+
+                                {/* finish or furnihsing */}
                                 <label className="b-12 mb-2">
-                                    اسم الشركة  <span>*</span>
+                                    اختار نوع شغلك   <span className='required-asterisk'>*</span>
                                 </label>
-                                <InputFiled name="name" placeholder={" اكتب اسم شركتك هنا"} />
-                            </div>
+                                <div className="mb-4 d-flex flex-wrap gap-3 custom-responsive-buttons">
 
-                            {/* full details */}
-                            <div className="mb-4 flex-wrap d-flex align-items-center justify-content-between ">
-                                <label className="b-12 ">
-                                    وصف الشركة   <span>*</span>
-                                </label>
-                                <TextArea name="description" maxLength="700" placeholder={"قول للناس بتقدم إيه "} />
-                            </div>
-
-
-                            {/* Company services */}
-                            <SectionHeader text={"خدمات الشركة"} />
-
-
-                            {/* finish or furnihsing */}
-                            <label className="b-12 mb-2">
-                                اختار نوع شغلك   <span>*</span>
-                            </label>
-                            <div className="mb-4 d-flex flex-wrap gap-3 custom-responsive-buttons">
-
-                                <div
-                                    className="py-2 px-2 border rounded-pill text-center option-finish-btn"
-                                    style={{
-                                        backgroundColor: type === "furnishing" ? "rgba(23, 55, 148, 0.1)" : "",
-                                        color: type === "furnishing" ? "var(--primary)" : "",
-                                    }}
-                                    onClick={() => setType("furnishing")}
-                                >
-                                    فرش
-                                </div>
-                                <div
-                                    className="py-2 px-2 border rounded-pill text-center option-finish-btn"
-                                    style={{
-                                        backgroundColor: type === "finishing" ? "rgba(23, 55, 148, 0.1)" : "",
-                                        color: type === "finishing" ? "var(--primary)" : "",
-                                    }}
-                                    onClick={() => setType("finishing")}
-                                >
-                                    تشطيب
-                                </div>
-                            </div>
-
-
-                            {/* offers */}
-                            <div className="mb-4 ">
-                                <label className="b-12 mb-2">
-                                    الخدمات اللي بتقدمها <span>*</span>
-                                </label>
-
-                                <div className='d-flex flex-wrap space-6 align-items-center mb-4'>
-                                    {
-                                        checkboxs.map((checkbox, index) => (
-                                            <Checkbox key={index} text={checkbox} />
-                                        ))
-                                    }
-                                </div>
-                            </div>
-
-                            {/* call */}
-                            <SectionHeader text={"بيانات التواصل"} />
-
-
-
-
-                            {/* mobile */}
-
-                            <div className="mb-4 lg-w-30">
-                                <label className="b-12 mb-2" style={{ minWidth: "150px" }}>
-                                    رقم الموبايل
-                                    <span>*</span></label>
-                                <PhoneNumber name="mobile" type="text" placeholder={"اكتب رقمك"} />
-                            </div>
-
-
-                            <div className='b-15 mb-4 d-flex justify-content-between align-items-center lg-w-30'>
-                                <div className='d-flex flex-row space-1'>
-                                    <WhatsIcon />
-                                    يوجد واتساب علي هذا الرقم
-                                </div>
-                                <Switch />
-                            </div>
-
-
-                            <Checkbox text={"تواصل معي عن طريق الايميل"} newClass={"mb-4"} />
-
-
-
-                            {/* location description */}
-                            <SectionHeader text={"العنوان بالتفصيل"} />
-
-
-                            {/*  location Details */}
-                            <div className="mb-4 ">
-                                <label className="b-12 mb-2">
-                                    العنوان بالتفصيل <span>*</span>
-                                </label>
-                                <InputFiled name="company" placeholder={"اكتب عنوانك بالتفصيل "} />
-                            </div>
-
-
-
-                            {/* map */}
-                            <div className="mb-5">
-                                <Map 
-                                    showOverlay={false} 
-                                    lat={30.0444} 
-                                    lon={31.2357} 
-                                    locationName={"موقع الشركة"} 
-                                />
-                            </div>
-
-
-                            {/* pictures */}
-
-                            <div className='py-3 px-2 rounded-3 mb-4' style={{ backgroundColor: "rgba(23, 55, 148, 0.1)" }}>
-                                <p className="b-10">
-                                    صور من شغلك قبل كده
-                                </p>
-                            </div>
-
-
-                            <div className='mb-4'>
-                                <ImageUploadGrid />
-                            </div>
-
-
-                            <div className="d-flex justify-content-center mt-5 pt-3">
-                                <button type="submit" className="btn-main btn-submit b-11" onClick={() => setShowModal(true)}>
-                                    ابعت الطلب
-                                </button>
-                            </div>
-
-                            <CustomModal
-                                showModal={showModal}
-                                onHide={() => setShowModal(false)}
-                                setShowModal={setShowModal}
-                                newClass={"success-modal images-modal join"}
-                            >
-                                <div className="d-flex text-center flex-column align-items-center justify-content-center w-100 space-4 p-5">
-                                    <div className="position-relative">
-                                        <DotLottieReact
-                                            src="./animation/success.lottie"
-                                            loop
-                                            autoplay
-                                        />
+                                    <div
+                                        className="py-2 px-2 border rounded-pill text-center option-finish-btn"
+                                        style={{
+                                            backgroundColor: type === "furnishing" ? "rgba(23, 55, 148, 0.1)" : "",
+                                            color: type === "furnishing" ? "var(--primary)" : "",
+                                        }}
+                                        onClick={() => setType("furnishing")}
+                                    >
+                                        فرش
                                     </div>
-                                    <div className="position-absolute top-1000">
-                                        <DotLottieReact
-                                            src="./animation/successpapers.lottie"
-                                            loop
-                                            autoplay
-                                        />
+                                    <div
+                                        className="py-2 px-2 border rounded-pill text-center option-finish-btn"
+                                        style={{
+                                            backgroundColor: type === "finishing" ? "rgba(23, 55, 148, 0.1)" : "",
+                                            color: type === "finishing" ? "var(--primary)" : "",
+                                        }}
+                                        onClick={() => setType("finishing")}
+                                    >
+                                        تشطيب
                                     </div>
-                                    <h6>💡 طلبك وصل!</h6>
-                                    <p className="b-15" style={{ color: "var(--netural-700)" }}>تمام، تسجيلك كتاجر في التشطيبات وصل بنجاح! ✨ هنراجع بياناتك وهنكلمك قريب عشان نكمل باقي الخطوات. خليك متابع تنبيهاتك لأي جديد! 🚀</p>
-                                    <Link to={"/"} className="btn-main btn-submit mt-3 b-11 py-3 px-2">
-                                        ارجع للرئيسية
-                                    </Link>
                                 </div>
 
-                            </CustomModal>
 
+                                {/* offers */}
+                                <div className="mb-4 ">
+                                    <label className="b-12 mb-2">
+                                        الخدمات اللي بتقدمها <span className='required-asterisk'>*</span>
+                                    </label>
+
+                                    <div className='d-flex flex-wrap space-6 align-items-center mb-4'>
+                                        {
+                                            checkboxs.map((checkbox, index) => (
+                                                <Checkbox key={index} text={checkbox} />
+                                            ))
+                                        }
+                                    </div>
+                                </div>
+
+                                {/* call */}
+                                <SectionHeader text={"بيانات التواصل"} />
+
+
+
+
+                                {/* mobile */}
+
+                                <div className="mb-4 lg-w-30">
+                                    <label className="b-12 mb-2" style={{ minWidth: "150px" }}>
+                                        رقم الموبايل
+                                        <span className='required-asterisk'>*</span></label>
+                                    <PhoneNumber name="mobile" type="text" placeholder={"اكتب رقمك"} />
+                                </div>
+
+
+                                <div className='b-15 mb-4 d-flex justify-content-between align-items-center lg-w-30'>
+                                    <div className='d-flex flex-row space-1'>
+                                        <WhatsIcon />
+                                        يوجد واتساب علي هذا الرقم
+                                    </div>
+                                    <Switch />
+                                </div>
+
+
+                                <Checkbox text={"تواصل معي عن طريق الايميل"} newClass={"mb-4"} />
+
+
+
+                                {/* location description */}
+                                <SectionHeader text={"العنوان بالتفصيل"} />
+
+
+                                {/*  location Details */}
+                                <div className="mb-4 ">
+                                    <label className="b-12 mb-2">
+                                        العنوان بالتفصيل <span className='required-asterisk'>*</span>
+                                    </label>
+                                    <InputFiled name="company" placeholder={"اكتب عنوانك بالتفصيل "} />
+                                </div>
+
+
+
+                                {/* map */}
+                                <div className="mb-5">
+                                    <Map
+                                        showOverlay={false}
+                                        lat={30.0444}
+                                        lon={31.2357}
+                                        locationName={"موقع الشركة"}
+                                    />
+                                </div>
+
+
+                                {/* pictures */}
+
+                                <div className='py-3 px-2 rounded-3 mb-4' style={{ backgroundColor: "rgba(23, 55, 148, 0.1)" }}>
+                                    <p className="b-10">
+                                        صور من شغلك قبل كده
+                                    </p>
+                                </div>
+
+
+                                <div className='mb-4'>
+                                    <ImageUploadGrid />
+                                </div>
+
+
+                                <div className="d-flex justify-content-center mt-5 pt-3">
+                                    <button type="submit" className="btn-main btn-submit b-11" onClick={() => setShowModal(true)}>
+                                        ابعت الطلب
+                                    </button>
+                                </div>
+
+                                <CustomModal
+                                    showModal={showModal}
+                                    onHide={() => setShowModal(false)}
+                                    setShowModal={setShowModal}
+                                    newClass={"success-modal images-modal join"}
+                                >
+                                    <div className="d-flex text-center flex-column align-items-center justify-content-center w-100 space-4 p-5">
+                                        <div className="position-relative">
+                                            <DotLottieReact
+                                                src="./animation/success.lottie"
+                                                loop
+                                                autoplay
+                                            />
+                                        </div>
+                                        <div className="position-absolute top-1000">
+                                            <DotLottieReact
+                                                src="./animation/successpapers.lottie"
+                                                loop
+                                                autoplay
+                                            />
+                                        </div>
+                                        <h6>💡 طلبك وصل!</h6>
+                                        <p className="b-15" style={{ color: "var(--netural-700)" }}>تمام، تسجيلك كتاجر في التشطيبات وصل بنجاح! ✨ هنراجع بياناتك وهنكلمك قريب عشان نكمل باقي الخطوات. خليك متابع تنبيهاتك لأي جديد! 🚀</p>
+                                        <Link to={"/"} className="btn-main btn-submit mt-3 b-11 py-3 px-2">
+                                            ارجع للرئيسية
+                                        </Link>
+                                    </div>
+
+                                </CustomModal>
+
+                            </div >
                         </div >
-                    </div >
-                </ContainerMedia >
+                    </ContainerMedia >
+                )}
             </FormField >
-
         </>
     )
 }

@@ -7,7 +7,7 @@ const ToastContainerApp = () => {
             <div className="toast-One">
                 <ToastContainer
                     position="top-right"
-                    autoClose={5000}
+                    autoClose={false}
                     hideProgressBar={false}
                     newestOnTop={false}
                     closeOnClick
@@ -15,7 +15,6 @@ const ToastContainerApp = () => {
                     pauseOnFocusLoss
                     draggable
                     pauseOnHover
-                    theme="colored"
                 />
             </div>
         </>

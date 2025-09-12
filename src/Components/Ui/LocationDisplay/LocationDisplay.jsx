@@ -7,6 +7,9 @@ const LocationDisplay = ({ lat, lon, showIcon = true, className = '' }) => {
     const [locationName, setLocationName] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    // Remove debug console log
+    // Check if coordinates are valid
+    const hasValidCoordinates = lat !== undefined && lon !== undefined && !isNaN(lat) && !isNaN(lon);
 
     // Function to get location name from coordinates using reverse geocoding
     const getLocationName = async (latitude, longitude) => {
@@ -65,26 +68,26 @@ const LocationDisplay = ({ lat, lon, showIcon = true, className = '' }) => {
     };
 
     useEffect(() => {
-        if (lat && lon && !isNaN(lat) && !isNaN(lon)) {
+        if (hasValidCoordinates) {
             getLocationName(lat, lon);
         } else {
             setLocationName(currentLanguage === 'ar' ? 'موقع غير محدد' : 'Location not specified');
         }
-    }, [lat, lon, currentLanguage]);
+    }, [lat, lon, currentLanguage, hasValidCoordinates]);
 
     const handleLocationClick = () => {
-        if (lat && lon && !isNaN(lat) && !isNaN(lon)) {
+        if (hasValidCoordinates) {
             // Open location in Google Maps
             const mapsUrl = `https://www.google.com/maps?q=${lat},${lon}`;
             window.open(mapsUrl, '_blank');
         }
     };
 
-    if (!lat || !lon || isNaN(lat) || isNaN(lon)) {
+    if (!hasValidCoordinates) {
         return (
-            <div className={`location-display ${className}`} dir={currentLanguage === 'ar' ? 'rtl' : 'ltr'}>
+            <div className={`location-display ${className}`} dir={currentLanguage === 'ar' ? 'rtl' : 'ltr'} >
                 {showIcon && <LocationIcon />}
-                <span className="location-text">
+                <span className="location-text" style={{ color: "var(--primary)" }}>
                     {currentLanguage === 'ar' ? 'موقع غير محدد' : 'Location not specified'}
                 </span>
             </div>
@@ -93,7 +96,7 @@ const LocationDisplay = ({ lat, lon, showIcon = true, className = '' }) => {
 
     const getDisplayClasses = () => {
         let classes = `location-display ${className}`;
-        if (lat && lon) classes += ' clickable';
+        if (hasValidCoordinates) classes += ' clickable';
         if (loading) classes += ' loading';
         if (error) classes += ' error';
         return classes;
@@ -110,12 +113,12 @@ const LocationDisplay = ({ lat, lon, showIcon = true, className = '' }) => {
                     handleLocationClick();
                 }
             }}
-            tabIndex={lat && lon ? 0 : -1}
-            role={lat && lon ? 'button' : undefined}
+            tabIndex={hasValidCoordinates ? 0 : -1}
+            role={hasValidCoordinates ? 'button' : undefined}
             title={currentLanguage === 'ar' ? 'انقر لفتح في خرائط جوجل' : 'Click to open in Google Maps'}
         >
             {showIcon && <LocationIcon />}
-            <span className="location-text">
+            <span className="location-text" style={{ color: "var(--primary)" }}>
                 {loading ? (
                     currentLanguage === 'ar' ? 'جاري التحميل...' : 'Loading...'
                 ) : error ? (
@@ -124,7 +127,7 @@ const LocationDisplay = ({ lat, lon, showIcon = true, className = '' }) => {
                     locationName || `${lat.toFixed(4)}, ${lon.toFixed(4)}`
                 )}
             </span>
-            {lat && lon && !loading && (
+            {hasValidCoordinates && !loading && (
                 <span className="coordinates" title={`${lat}, ${lon}`}>
                 </span>
             )}

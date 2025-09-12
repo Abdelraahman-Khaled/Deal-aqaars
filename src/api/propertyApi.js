@@ -46,21 +46,28 @@ const PropertyAPI = {
   getAllProperties: async (filters = {}) => {
     try {
       const queryParams = new URLSearchParams();
-      
+
       // Add filters to query params
-      Object.keys(filters).forEach(key => {
-        if (filters[key] !== undefined && filters[key] !== null && filters[key] !== '') {
+      Object.keys(filters).forEach((key) => {
+        if (
+          filters[key] !== undefined &&
+          filters[key] !== null &&
+          filters[key] !== ""
+        ) {
           queryParams.append(key, filters[key]);
         }
       });
-      
+
       const queryString = queryParams.toString();
-      const url = queryString ? `/property?${queryString}` : '/property';
-      
+      const url = queryString ? `/property?${queryString}` : "/property";
+
       const response = await axiosInstance.get(url);
       return response.data;
     } catch (error) {
-      console.error("Error fetching properties:", error.response || error.message);
+      console.error(
+        "Error fetching properties:",
+        error.response || error.message
+      );
       handleError(error);
       throw error;
     }
@@ -72,7 +79,10 @@ const PropertyAPI = {
       const response = await axiosInstance.get(`/property/${id}`);
       return response.data;
     } catch (error) {
-      console.error(`Error fetching property with ID ${id}:`, error.response || error.message);
+      console.error(
+        `Error fetching property with ID ${id}:`,
+        error.response || error.message
+      );
       handleError(error);
       throw error;
     }
@@ -84,7 +94,10 @@ const PropertyAPI = {
       const response = await axiosInstance.get(`/property/user/${userId}`);
       return response.data;
     } catch (error) {
-      console.error(`Error fetching properties for user ${userId}:`, error.response || error.message);
+      console.error(
+        `Error fetching properties for user ${userId}:`,
+        error.response || error.message
+      );
       handleError(error);
       throw error;
     }
@@ -93,71 +106,30 @@ const PropertyAPI = {
   // Get current user's properties
   getMyProperties: async () => {
     try {
-      const response = await axiosInstance.get('/property/me');
+      const response = await axiosInstance.get("/property/me");
       return response.data;
     } catch (error) {
-      console.error('Error fetching user properties:', error.response || error.message);
+      console.error(
+        "Error fetching user properties:",
+        error.response || error.message
+      );
       handleError(error);
       throw error;
     }
   },
 
   // Create new property
-  createProperty: async (data) => {
+  createProperty: async (formData) => {
     try {
-      const formData = new FormData();
-      
-      // Helper function to append nested objects to FormData
-      const appendToFormData = (obj, prefix = '') => {
-        Object.keys(obj).forEach(key => {
-          const value = obj[key];
-          const formKey = prefix ? `${prefix}[${key}]` : key;
-          
-          if (value === null || value === undefined) {
-            return;
-          }
-          
-          if (Array.isArray(value)) {
-            if (key === 'images') {
-              // Handle image files
-              value.forEach((image) => {
-                formData.append('images', image);
-              });
-            } else if (key === 'coordinates') {
-              // Handle location coordinates array
-              value.forEach((coord, index) => {
-                formData.append(`${formKey}[]`, coord);
-              });
-            } else {
-              // Handle other arrays like paymentMethods
-              value.forEach((item, index) => {
-                formData.append(`${formKey}[]`, item);
-              });
-            }
-          } else if (typeof value === 'object' && value !== null) {
-            // Handle nested objects like details, title, description, location, advertiser
-            appendToFormData(value, formKey);
-          } else {
-            // Handle primitive values
-            formData.append(formKey, value);
-          }
-        });
-      };
-      
-      // Append all data to FormData
-      appendToFormData(data);
-
+      // The formData is already prepared in JoinTrade.jsx, so we just need to send it
       const response = await axiosInstance.post("/property", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      
-      toast.success(getToastMessages().createSuccess[getCurrentLanguage()]);
       return response.data;
     } catch (error) {
-      console.error("Error creating property:", error.response || error.message);
-      handleError(error);
+      console.error("Error creating swap:", error.response || error.message);
       throw error;
     }
   },
@@ -166,15 +138,20 @@ const PropertyAPI = {
   updateProperty: async (id, data) => {
     try {
       const formData = new FormData();
-      
+
       // Append all property data fields
-      Object.keys(data).forEach(key => {
-        if (key === 'images' && Array.isArray(data[key])) {
-          // Handle multiple images
+      Object.keys(data).forEach((key) => {
+        if (key === "images" && Array.isArray(data[key])) {
+          // Handle multiple images (new uploads)
           data[key].forEach((image, index) => {
-            formData.append('images', image);
+            formData.append("images", image);
           });
-        } else if (key === 'features' && Array.isArray(data[key])) {
+        } else if (key === "existingImages" && Array.isArray(data[key])) {
+          // Handle existing image URLs
+          data[key].forEach((imageUrl, index) => {
+            formData.append(`existingImages[${index}]`, imageUrl);
+          });
+        } else if (key === "features" && Array.isArray(data[key])) {
           // Handle features array
           data[key].forEach((feature, index) => {
             formData.append(`features[${index}]`, feature);
@@ -189,11 +166,14 @@ const PropertyAPI = {
           "Content-Type": "multipart/form-data",
         },
       });
-      
+
       toast.success(getToastMessages().updateSuccess[getCurrentLanguage()]);
       return response.data;
     } catch (error) {
-      console.error(`Error updating property with ID ${id}:`, error.response || error.message);
+      console.error(
+        `Error updating property with ID ${id}:`,
+        error.response || error.message
+      );
       handleError(error);
       throw error;
     }
@@ -206,7 +186,10 @@ const PropertyAPI = {
       toast.success(getToastMessages().deleteSuccess[getCurrentLanguage()]);
       return response.data;
     } catch (error) {
-      console.error(`Error deleting property with ID ${id}:`, error.response || error.message);
+      console.error(
+        `Error deleting property with ID ${id}:`,
+        error.response || error.message
+      );
       handleError(error);
       throw error;
     }
@@ -216,22 +199,31 @@ const PropertyAPI = {
   searchProperties: async (searchQuery, filters = {}) => {
     try {
       const queryParams = new URLSearchParams();
-      
+
       if (searchQuery) {
-        queryParams.append('search', searchQuery);
+        queryParams.append("search", searchQuery);
       }
-      
+
       // Add filters to query params
-      Object.keys(filters).forEach(key => {
-        if (filters[key] !== undefined && filters[key] !== null && filters[key] !== '') {
+      Object.keys(filters).forEach((key) => {
+        if (
+          filters[key] !== undefined &&
+          filters[key] !== null &&
+          filters[key] !== ""
+        ) {
           queryParams.append(key, filters[key]);
         }
       });
-      
-      const response = await axiosInstance.get(`/property/search?${queryParams.toString()}`);
+
+      const response = await axiosInstance.get(
+        `/property/search?${queryParams.toString()}`
+      );
       return response.data;
     } catch (error) {
-      console.error("Error searching properties:", error.response || error.message);
+      console.error(
+        "Error searching properties:",
+        error.response || error.message
+      );
       handleError(error);
       throw error;
     }
@@ -243,7 +235,10 @@ const PropertyAPI = {
       const response = await axiosInstance.get("/property/favorites");
       return response.data;
     } catch (error) {
-      console.error("Error fetching favorite properties:", error.response || error.message);
+      console.error(
+        "Error fetching favorite properties:",
+        error.response || error.message
+      );
       handleError(error);
       throw error;
     }
@@ -252,11 +247,16 @@ const PropertyAPI = {
   // Add property to favorites
   addToFavorites: async (propertyId) => {
     try {
-      const response = await axiosInstance.post(`/property/${propertyId}/favorite`);
+      const response = await axiosInstance.post(
+        `/property/${propertyId}/favorite`
+      );
       toast.success(getToastMessages().favoriteAdded[getCurrentLanguage()]);
       return response.data;
     } catch (error) {
-      console.error(`Error adding property ${propertyId} to favorites:`, error.response || error.message);
+      console.error(
+        `Error adding property ${propertyId} to favorites:`,
+        error.response || error.message
+      );
       handleError(error);
       throw error;
     }
@@ -265,11 +265,16 @@ const PropertyAPI = {
   // Remove property from favorites
   removeFromFavorites: async (propertyId) => {
     try {
-      const response = await axiosInstance.delete(`/property/${propertyId}/favorite`);
+      const response = await axiosInstance.delete(
+        `/property/${propertyId}/favorite`
+      );
       toast.success(getToastMessages().favoriteRemoved[getCurrentLanguage()]);
       return response.data;
     } catch (error) {
-      console.error(`Error removing property ${propertyId} from favorites:`, error.response || error.message);
+      console.error(
+        `Error removing property ${propertyId} from favorites:`,
+        error.response || error.message
+      );
       handleError(error);
       throw error;
     }
@@ -281,7 +286,10 @@ const PropertyAPI = {
       const response = await axiosInstance.get("/property/stats");
       return response.data;
     } catch (error) {
-      console.error("Error fetching property statistics:", error.response || error.message);
+      console.error(
+        "Error fetching property statistics:",
+        error.response || error.message
+      );
       handleError(error);
       throw error;
     }
@@ -290,10 +298,15 @@ const PropertyAPI = {
   // Get properties by category
   getPropertiesByCategory: async (category) => {
     try {
-      const response = await axiosInstance.get(`/property/category/${category}`);
+      const response = await axiosInstance.get(
+        `/property/category/${category}`
+      );
       return response.data;
     } catch (error) {
-      console.error(`Error fetching properties for category ${category}:`, error.response || error.message);
+      console.error(
+        `Error fetching properties for category ${category}:`,
+        error.response || error.message
+      );
       handleError(error);
       throw error;
     }
@@ -302,10 +315,15 @@ const PropertyAPI = {
   // Get properties by location
   getPropertiesByLocation: async (location) => {
     try {
-      const response = await axiosInstance.get(`/property/location/${location}`);
+      const response = await axiosInstance.get(
+        `/property/location/${location}`
+      );
       return response.data;
     } catch (error) {
-      console.error(`Error fetching properties for location ${location}:`, error.response || error.message);
+      console.error(
+        `Error fetching properties for location ${location}:`,
+        error.response || error.message
+      );
       handleError(error);
       throw error;
     }

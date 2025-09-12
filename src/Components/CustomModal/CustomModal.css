@@ -1,7 +1,6 @@
 .modal{
   height: unset;
   --bs-modal-width:400px;
-  top: 50px;
 }
 .modal-open {
     padding: 0 !important;
@@ -61,7 +60,7 @@
     padding-bottom: 15px;
     border:none;
     color: var(--netural-1000); 
-    min-height: 700px;
+    min-height: 650px;
   }
 
   .modal .modal-body span,.modal .modal-body .b-12{
@@ -77,7 +76,7 @@
     .slick-slider .slick-track, .slick-slider .slick-list {
       margin-right: -8px;
     }
-  
+  }
   /* SCREEN 575PX */
   @media screen and (max-width:575px) {
     .modal .modal-content {

@@ -4,7 +4,7 @@ export const translations = {
   en: {
     aqar: "Choose Your Aqar",
     type: "Choose Your Type",
-    aqarDetails: [
+    aqarType: [
       "Villas",
       "Chalets",
       " Twin Houses",
@@ -12,7 +12,7 @@ export const translations = {
       "Commercial Offices",
       "apartment",
     ],
-    aqarType: ["sale", "rent"],
+    aqarCategory: ["sale", "rent"],
     chooseView: "Choose View",
     view: [
       "main Street",
@@ -53,7 +53,7 @@ export const translations = {
   ar: {
     aqar: "اختار نوع العقار",
     type: "اختار القسم",
-    aqarDetails: [
+    aqarType: [
       "فلل",
       "شاليهات",
       "توين هاوس",
@@ -61,7 +61,7 @@ export const translations = {
       "مكتب تجاري",
       "شقة",
     ],
-    aqarType: ["للبيع", "للايجار"],
+    aqarCategory: ["للبيع", "للايجار"],
     chooseView: "اختر المنطقة",
     view: [
       "شارع رئيسي",

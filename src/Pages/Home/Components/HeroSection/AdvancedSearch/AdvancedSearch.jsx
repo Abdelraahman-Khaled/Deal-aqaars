@@ -7,7 +7,7 @@ import TabsContent from "../../../../../Components/Ui/TabsContent/TabsContent";
 import GreenRight from "../../../../../assets/Icons/GreenRight";
 import MultiSelect from "../../../../../Components/Forms/MultiSelect";
 import BudgetDropdown from "../../../../../Components/Ui/SearchComponents/BudgetDropdown";
-import PlaceTypeDropdown from "../../../../../Components/Ui/SearchComponents/PlaceTypeDropdown ";
+import PlaceTypeDropdown from "../../../../../Components/Ui/SearchComponents/PlaceTypeDropdown";
 import SearchToggle from "../../../../../Components/Ui/SearchComponents/SearchToggle ";
 import MenuArrow from "../../../../../assets/Icons/MenuArrow";
 

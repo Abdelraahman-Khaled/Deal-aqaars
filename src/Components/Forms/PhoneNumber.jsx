@@ -2,7 +2,7 @@ import React from "react";
 import { useField } from "formik";
 import ShowPassword from "../../assets/Icons/ShowPassword";
 import { useLanguage } from '../Languages/LanguageContext';
-import "./MutliSelect.css";
+import "./PhoneNumber.css";
 
 const PhoneNumber = ({ label, success, setInputType, ...props }) => {
     const { currentLanguage } = useLanguage();
@@ -15,23 +15,10 @@ const PhoneNumber = ({ label, success, setInputType, ...props }) => {
     };
 
     return (
-        <div className={`form-group input-field-info position-relative form-one ${isError ? "has-error" : ""}`}>
-            {/* <label htmlFor={props.id || props.name} className="form-label">
-                {label}
-            </label> */}
-
+        <div className="phone-number-container">
             <div className="position-relative">
-                {/* +02 prefix */}
                 <div
-                    className={`phoneNumber position-absolute top-50 translate-middle-y d-flex align-items-center px-2 text-muted h-100 ${
-                        currentLanguage === 'ar' ? 'rounded-start' : 'rounded-end'
-                    }`}
-                    style={{
-                        [currentLanguage === 'ar' ? 'right' : 'left']: "0px",
-                        zIndex: 2,
-                        borderLeft: currentLanguage === 'ar' ? '1px solid var(--netural-200)' : 'none',
-                        borderRight: currentLanguage === 'en' ? '1px solid var(--netural-200)' : 'none'
-                    }}
+                    className={`phone-number-prefix ${currentLanguage === 'ar' ? 'prefix-rtl' : 'prefix-ltr'}`}
                 >
                     +02
                 </div>
@@ -43,10 +30,11 @@ const PhoneNumber = ({ label, success, setInputType, ...props }) => {
                     onChange={(e) => {
                         helpers.setValue(e.target.value);
                     }}
-                    className={`form-control ${currentLanguage === 'ar' ? 'pe-5' : 'ps-5'} ${isError ? "is-invalid" : isSuccess ? "active-border" : ""}`}
+                    className={`phone-number-input ${isError ? "is-invalid" : isSuccess ? "is-valid" : ""}`}
                     style={{
                         direction: currentLanguage === 'ar' ? 'rtl' : 'ltr',
-                        textAlign: currentLanguage === 'ar' ? 'right' : 'left'
+                        paddingRight: currentLanguage === 'ar' ? '3.5rem' : '0.75rem',
+                        paddingLeft: currentLanguage === 'ar' ? '0.75rem' : '3.5rem'
                     }}
                     required
                 />
@@ -63,7 +51,7 @@ const PhoneNumber = ({ label, success, setInputType, ...props }) => {
                 </button>
             )}
 
-            {isError && <div className="error">{meta.error}</div>}
+            {isError && <div className="phone-number-error">{meta.error}</div>}
         </div>
     );
 };

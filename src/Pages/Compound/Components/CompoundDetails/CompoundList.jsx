@@ -8,7 +8,7 @@ import MenuArrow from '../../../../assets/Icons/MenuArrow';
 import { translations } from './translations';
 import "./compound.css"
 import BudgetDropdown from '../../../../Components/Ui/SearchComponents/BudgetDropdown';
-import PlaceTypeDropdown from '../../../../Components/Ui/SearchComponents/PlaceTypeDropdown ';
+import PlaceTypeDropdown from '../../../../Components/Ui/SearchComponents/PlaceTypeDropdown';
 
 const CompoundList = () => {
     const { currentLanguage } = useLanguage(); // Get the current language

@@ -99,6 +99,7 @@ export const CompanyJoin = ({ setShowCompany, setShowProgress }) => {
         website: '',
         phoneNumber: '',
         hasWhatsapp: false,
+        logo: [],
     };
 
     const validationSchema = Yup.object({
@@ -252,9 +253,8 @@ export const CompanyJoin = ({ setShowCompany, setShowProgress }) => {
                                 يوجد واتساب علي هذا الرقم
                             </div>
                             <Switch
-                        checked={initialValues.hasWhatsapp}
-                        onChange={(e) => setFieldValue('hasWhatsapp', e.target.checked)}
-                    />
+                                name="hasWhatsapp"
+                            />
                         </div>
 
                         {/* logo */}

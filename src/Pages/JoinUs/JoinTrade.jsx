@@ -16,7 +16,6 @@ import ImageUploadGrid from '../../Components/ImageUploadGrid/ImageUploadGrid';
 import BreadcrumbsPage from '../../Components/Ui/BreadcrumbsPage/BreadcrumbsPage';
 import SectionHeader from '../../Components/SectionHeader/SectionHeader';
 import SwapAPI from '../../api/swapApi';
-import MapPick from '../../Components/Ui/Map/MapPick';
 
 const JoinTrade = () => {
     const { currentLanguage } = useLanguage();
@@ -36,7 +35,7 @@ const JoinTrade = () => {
         images: [],
     };
 
-    const handleCreateTrade = async (values) => {
+    const handleCreateTrade = async (values, { resetForm }) => {
         const formData = new FormData();
 
         // whatIHave
@@ -53,11 +52,11 @@ const JoinTrade = () => {
 
         // location
         formData.append("location[type]", "Point");
-        
+
         // Use dynamic coordinates if available, otherwise use Cairo as default
-        const longitude = values.longitude || 31.2357; // Cairo longitude as fallback
-        const latitude = values.latitude || 30.0444;  // Cairo latitude as fallback
-        
+        const longitude = values.longitude
+        const latitude = values.latitude
+
         formData.append("location[coordinates][]", longitude);
         formData.append("location[coordinates][]", latitude);
 
@@ -76,8 +75,9 @@ const JoinTrade = () => {
 
         try {
             const response = await SwapAPI.createSwap(formData)
-            console.log("✅ Success:", response);
+            console.log("✅ Success:", response);   
             setShowModal(true);
+            resetForm()
         } catch (error) {
             console.error("❌ Error creating swap:", error);
         }

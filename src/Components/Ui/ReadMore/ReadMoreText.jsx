@@ -11,8 +11,8 @@ const ReadMoreText = ({ text, maxLength, newClass }) => {
   return (
     <div>
       <p className={` b-4 ${newClass}`} >
-        {showAll ? text : `${text.slice(0, maxLength)}... `}
-        {text.length > maxLength && (
+        {showAll ? text : text ? `${text.slice(0, maxLength)}... ` : ''}
+        {text && text.length > maxLength && (
           <span className='w-100 read-more px-2' style={{ color: 'var(--yellow-100)' }} onClick={() => {
             setShowAll(!showAll);
             setRotate(!rotate);

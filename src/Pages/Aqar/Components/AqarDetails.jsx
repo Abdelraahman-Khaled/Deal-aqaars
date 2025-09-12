@@ -7,7 +7,7 @@ import { useLanguage } from '../../../Components/Languages/LanguageContext';
 import MultiSelect from '../../../Components/Forms/MultiSelect';
 import MenuArrow from '../../../assets/Icons/MenuArrow';
 import BudgetDropdown from '../../../Components/Ui/SearchComponents/BudgetDropdown';
-import PlaceTypeDropdown from '../../../Components/Ui/SearchComponents/PlaceTypeDropdown ';
+import PlaceTypeDropdown from '../../../Components/Ui/SearchComponents/PlaceTypeDropdown';
 import TabsContent from '../../../Components/Ui/TabsContent/TabsContent';
 
 const AqarDetails = () => {

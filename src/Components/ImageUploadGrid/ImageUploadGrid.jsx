@@ -8,31 +8,35 @@ const ImageUploadGrid = ({ name }) => {
     const [field, , helpers] = useField(name); // formik field
     const [uploadedImages, setUploadedImages] = useState([]);
 
-    // Effect to initialize previews from existing field value and log current state
     useEffect(() => {
-        console.log('ImageUploadGrid field value:', field.value);
-
-        // If field has values but no previews, generate previews
-        if (field.value?.length > 0 && uploadedImages.length === 0) {
-            field.value.forEach((file) => {
+        const loadImages = async () => {
+            const newPreviews = [];
+            for (const file of field.value || []) {
                 if (file instanceof File) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        if (e.target?.result) {
-                            setUploadedImages((prev) => [...prev, e.target.result]);
-                        }
-                    };
-                    reader.readAsDataURL(file);
+                    newPreviews.push(await readFileAsDataURL(file));
+                } else {
+                    // Assuming file is already a URL string if not a File object
+                    newPreviews.push(file);
                 }
-            });
-        }
+            }
+            setUploadedImages(newPreviews);
+        };
+
+        loadImages();
     }, [field.value]);
+
+    const readFileAsDataURL = (file) => {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target?.result);
+            reader.readAsDataURL(file);
+        });
+    };
 
     const handleImageUpload = (event) => {
         const files = event.target.files;
         if (files) {
             const newFiles = Array.from(files);
-            console.log('New files selected:', newFiles.length, 'files');
 
             // Validate files are images and not too large
             const validFiles = newFiles.filter(file => {
@@ -52,32 +56,13 @@ const ImageUploadGrid = ({ name }) => {
             // Update formik value (keep old + new)
             const updatedFiles = [...(field.value || []), ...validFiles];
             helpers.setValue(updatedFiles);
-            console.log('Updated Formik field with', updatedFiles.length, 'total files');
-
-            // Preview images
-            validFiles.forEach((file) => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    if (e.target?.result) {
-                        setUploadedImages((prev) => [...prev, e.target.result]);
-                    }
-                };
-                reader.readAsDataURL(file);
-            });
         }
     };
 
     const removeImage = (index) => {
-        console.log('Removing image at index:', index);
-
-        // Remove from previews
-        setUploadedImages((prev) => prev.filter((_, i) => i !== index));
-
         // Remove from formik field
         const newFiles = (field.value || []).filter((_, i) => i !== index);
         helpers.setValue(newFiles);
-
-        console.log('After removal, remaining files:', newFiles.length);
     };
 
     return (

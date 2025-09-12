@@ -18,13 +18,13 @@ const SimpleImageSlider = ({ images, alt = "image", className = "" }) => {
         // If images is array, check if items are objects with url property or strings
         processedImages = images.map(item => typeof item === 'object' && item.url ? item.url : item)
         // Filter out empty/null/undefined images and use placeholder if all are empty
-        processedImages = processedImages.filter(img => img && img.trim() !== '')
+        processedImages = processedImages.filter(img => img && (typeof img === 'string' ? img.trim() !== '' : true))
         if (processedImages.length === 0) {
             processedImages = [placeholderImage]
         }
     } else {
         // Single image (string)
-        processedImages = images && images.trim() !== '' ? [images] : [placeholderImage]
+        processedImages = images && (typeof images === 'string' ? images.trim() !== '' : true) ? [images] : [placeholderImage]
     }
 
     const hasMultipleImages = processedImages.length > 1

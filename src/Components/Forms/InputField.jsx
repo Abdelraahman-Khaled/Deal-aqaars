@@ -24,6 +24,7 @@ const InputFiled = ({ label, success, setInputType, showPasswordToggle = false, 
                 {...field}
                 {...props}
                 value={field.value || ""}
+                placeholder={field.value || props.placeholder || ""}
                 onChange={(e) => {
                     helpers.setValue(e.target.value);
                 }}
@@ -33,7 +34,6 @@ const InputFiled = ({ label, success, setInputType, showPasswordToggle = false, 
                         ? "active-border"
                         : ""
                     }`}
-                required
             />
             {(showPasswordToggle || (props.type === "password" && (field.name === "password" || field.name === "currentPassword" || field.name === "confirmNewPassword" || field.name === "newPassword"))) &&
                 <button

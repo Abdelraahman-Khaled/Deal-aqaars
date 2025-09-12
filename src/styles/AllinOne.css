@@ -2351,7 +2351,6 @@ html[dir="ltr"] .main-date-picker--1 .input-date-content .icon-date-add {
 .modal {
   height: unset;
   --bs-modal-width: 400px;
-  top: 50px;
 }
 .modal-open {
   padding: 0 !important;
@@ -2408,7 +2407,7 @@ html[dir="ltr"] .main-date-picker--1 .input-date-content .icon-date-add {
   padding-bottom: 15px;
   border: none;
   color: var(--netural-1000);
-  min-height: 700px;
+  min-height: 650px;
 }
 
 .modal .modal-body span,
@@ -3234,14 +3233,9 @@ a {
   flex-direction: column;
   gap: 2rem;
 }
-.form-container span {
-  color: var(--red-200);
-  font-size: 14px;
-}
 .form-control {
   padding: 12px 8px 12px 12px;
   border-radius: var(--border-radius-4);
-  color: rgba(157, 157, 157, 1);
 }
 .btn-submit {
   font-weight: 500;

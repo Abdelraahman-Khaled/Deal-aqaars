@@ -151,8 +151,7 @@ export const PersonJoin = ({ setShowPerson, setShowProgress }) => {
                         يوجد واتساب علي هذا الرقم
                     </div>
                     <Switch
-                        value={initialValues.hasWhatsApp}
-                        onChange={(val) => setFieldValue('hasWhatsApp', val)}
+                        name="hasWhatsApp"
                     />
                 </div>
 

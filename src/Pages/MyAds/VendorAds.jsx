@@ -54,7 +54,7 @@ const VendorAds = () => {
 
     // Handle property deletion
     const handleDeleteProperty = (deletedPropertyId) => {
-        setProperties(prevProperties => 
+        setProperties(prevProperties =>
             prevProperties.filter(property => property._id !== deletedPropertyId)
         );
     };
@@ -232,8 +232,8 @@ const VendorAds = () => {
                                                 key={index}
                                                 id={property._id}
                                                 title={property.title[currentLanguage]}
-                                                lat={property.location.coordinates[0]}
-                                                lon={property.location.coordinates[1]}
+                                                lon={property.location.coordinates[0]}
+                                                lat={property.location.coordinates[1]}
                                                 details={property.description[currentLanguage]}
                                                 img={property.images}
                                                 company={true}
@@ -241,7 +241,7 @@ const VendorAds = () => {
                                                 bath={property.details.bathroooms}
                                                 space={property.details.space}
                                                 wrapperClass={true}
-                                                price={"5161565156"}
+                                                price={property.details.price}
                                                 numAds={index + 1}
                                                 date={property.createdAt}
                                                 seen={"1"}
@@ -250,6 +250,7 @@ const VendorAds = () => {
                                                 tradeItem={"asad"}
                                                 trade={toggle === "trade" ? true : false}
                                                 onDelete={handleDeleteProperty}
+                                                propertyData={property}
                                             />
                                             : toggle === "project" ?
                                                 <CompanyProjectCard
@@ -258,7 +259,7 @@ const VendorAds = () => {
                                                     lat={property.location.coordinates[0]}
                                                     lon={property.location.coordinates[1]}
                                                     details={property.description[currentLanguage]}
-                                                    price={"130000"}
+                                                    price={property.details.price}
                                                     img={property.images}
                                                     slider={true}
                                                     wrapperClass="flex-wrap"

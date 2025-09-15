@@ -155,7 +155,7 @@ const FinishingAPI = {
         return response.data;
       } else {
         // If no images, send as JSON
-        const response = await axiosInstance.put(`/finishing/${id}`, data);
+        const response = await axiosInstance.put(`/finish/${id}`, data);
         toast.success(getToastMessages().updateSuccess[getCurrentLanguage()]);
         return response.data;
       }
@@ -172,7 +172,7 @@ const FinishingAPI = {
   // Delete finishing service by ID
   deleteFinishingService: async (id) => {
     try {
-      const response = await axiosInstance.delete(`/finishing/${id}`);
+      const response = await axiosInstance.delete(`/finish/${id}`);
       toast.success(getToastMessages().deleteSuccess[getCurrentLanguage()]);
       return response.data;
     } catch (error) {

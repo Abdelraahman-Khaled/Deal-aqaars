@@ -129,44 +129,22 @@ const PropertyAPI = {
       });
       return response.data;
     } catch (error) {
-      console.error("Error creating swap:", error.response || error.message);
+      console.error(
+        "Error creating property:",
+        error.response || error.message
+      );
       throw error;
     }
   },
 
   // Update property
-  updateProperty: async (id, data) => {
+  updateProperty: async (id, formData) => {
     try {
-      const formData = new FormData();
-
-      // Append all property data fields
-      Object.keys(data).forEach((key) => {
-        if (key === "images" && Array.isArray(data[key])) {
-          // Handle multiple images (new uploads)
-          data[key].forEach((image, index) => {
-            formData.append("images", image);
-          });
-        } else if (key === "existingImages" && Array.isArray(data[key])) {
-          // Handle existing image URLs
-          data[key].forEach((imageUrl, index) => {
-            formData.append(`existingImages[${index}]`, imageUrl);
-          });
-        } else if (key === "features" && Array.isArray(data[key])) {
-          // Handle features array
-          data[key].forEach((feature, index) => {
-            formData.append(`features[${index}]`, feature);
-          });
-        } else if (data[key] !== undefined && data[key] !== null) {
-          formData.append(key, data[key]);
-        }
-      });
-
       const response = await axiosInstance.put(`/property/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-
       toast.success(getToastMessages().updateSuccess[getCurrentLanguage()]);
       return response.data;
     } catch (error) {

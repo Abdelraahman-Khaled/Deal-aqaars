@@ -18,61 +18,85 @@ import BreadcrumbsPage from '../../Components/Ui/BreadcrumbsPage/BreadcrumbsPage
 import SectionHeader from '../../Components/SectionHeader/SectionHeader';
 import Checkbox from '../../Components/Forms/Checkbox';
 import FinishingAPI from '../../api/finishingApi';
+import GoogleSearchBoxWithMap from '../../Components/GoogleMap/GoogleSearchBoxWithMap';
+import "./JoinUs.css"
 
 const JoinFinish = () => {
     const { currentLanguage } = useLanguage(); // Get the current language
-
+    const [isItemLoading, setIsItemLoading] = useState(false)
 
     const [showModal, setShowModal] = useState(false);
     const [selectCompany, setSelectCompany] = useState(translations[currentLanguage].company);
-    const [rotate, setRotate] = useState(false);
     const [type, setType] = useState("furnishing");
 
 
-    const tabsCompany = [
-        {
-            eventKey: "tab1",
-            title: <></>,
-            content: (
-                <div className="d-flex flex-column space-6">
-                    <div className="d-flex space-4 flex-column justify-content-center">
-                        {
-                            translations[currentLanguage].companyDetails.map((item, index) => (
-                                <p key={index} className={`b-12 pick rounded-3 bg-light-gray d-flex space-2`}
-                                    onClick={() => setHome(item)}>
-                                    {selectCompany === item}
-                                    {item}
-                                </p>
-                            ))
-                        }
-                    </div>
-                </div>
-            )
-        },
-    ];
-
+    
     const checkboxs = [
-        "حديقة",
-        "اكسسورارات حمام",
-        "مطبخ",
-        "اوض معيشة",
-        "اوض نوم",
-        "اوض ملابس",
-        "اوض ضيوف",
-        "اوض ألعاب",
-        "شرفة",
+        { ar: "حديقة", en: "Garden" },
+        { ar: "اكسسورارات حمام", en: "Bathroom accessories" },
+        { ar: "مطبخ", en: "Kitchen" },
+        { ar: "اوض معيشة", en: "Living rooms" },
+        { ar: "اوض نوم", en: "Bedrooms" },
+        { ar: "اوض ملابس", en: "Dressing rooms" },
+        { ar: "اوض ضيوف", en: "Guest rooms" },
+        { ar: "اوض ألعاب", en: "Game rooms" },
+        { ar: "شرفة", en: "Balcony" },
     ]
     const initialValues = {
-        type: "", // apartment
-        images: [],
+        companyDescription: {
+            ar: "",
+            en: "",
+        },
+        jobType: {
+            ar: "",
+            en: "",
+        },
+        servicesOffered: [],
+        phoneNumber: "",
+        hasWhatsapp: false,
+        allowEmailContact: false,
+        detailedAddress: {
+            ar: "",
+            en: "",
+        },
+        location: {
+            type: "Point",
+            coordinates: [],
+        },
     };
 
     const handleSubmit = async (values, { resetForm }) => {
         const formData = new FormData();
 
-        // whatIHave
-        formData.append("type", values.type);
-        formData.append("details[propertyType]", values.propertyType);
+        // description
+        formData.append("companyDescription[ar]", values.companyDescription.ar);
+        formData.append("companyDescription[en]", values.companyDescription.en);
+
+        // jobtype
+        formData.append("jobType[ar]", values.jobType.ar);
+        formData.append("jobType[en]", values.jobType.en);
+
+        // servicesOffered
+        values.servicesOffered.forEach((service, index) => {
+            formData.append(`servicesOffered[${index}][ar]`, service.ar);
+            formData.append(`servicesOffered[${index}][en]`, service.en);
+        });
+
+        // phoneNumber
+        formData.append("phoneNumber", values.phoneNumber);
+        formData.append("hasWhatsapp", values.hasWhatsapp);
+        formData.append("allowEmailContact", values.allowEmailContact);
+
+        // address
+        formData.append("detailedAddress[ar]", values.detailedAddress.ar);
+        formData.append("detailedAddress[en]", values.detailedAddress.en);
+
+
+        // lat long
+        formData.append("location[type]", values.location.type);
+        formData.append("location[coordinates][]", values.location.coordinates[0]);
+        formData.append("location[coordinates][]", values.location.coordinates[1]);
+
 
 
         // images
@@ -125,20 +149,21 @@ const JoinFinish = () => {
 
                                 <SectionHeader text={"بيانات الشركة"} />
 
-                                {/* name company */}
-                                <div className="mb-4 ">
-                                    <label className="b-12 mb-2">
-                                        اسم الشركة  <span className='required-asterisk'>*</span>
-                                    </label>
-                                    <InputFiled name="name" placeholder={" اكتب اسم شركتك هنا"} />
-                                </div>
+
 
                                 {/* full details */}
                                 <div className="mb-4 flex-wrap d-flex align-items-center justify-content-between ">
                                     <label className="b-12 ">
                                         وصف الشركة   <span className='required-asterisk'>*</span>
                                     </label>
-                                    <TextArea name="description" maxLength="700" placeholder={"قول للناس بتقدم إيه "} />
+                                    <TextArea name="companyDescription.ar" maxLength="700" placeholder={"قول للناس بتقدم إيه "} />
+                                </div>
+
+                                <div className="mb-4 flex-wrap d-flex align-items-center justify-content-between ">
+                                    <label className="b-12 ">
+                                        وصف الشركة بالانجليزي   <span className='required-asterisk'>*</span>
+                                    </label>
+                                    <TextArea name="companyDescription.en" maxLength="700" placeholder={"قول للناس بتقدم إيه "} />
                                 </div>
 
 
@@ -184,7 +209,20 @@ const JoinFinish = () => {
                                     <div className='d-flex flex-wrap space-6 align-items-center mb-4'>
                                         {
                                             checkboxs.map((checkbox, index) => (
-                                                <Checkbox key={index} text={checkbox} />
+                                                <Checkbox
+                                                    key={index}
+                                                    text={checkbox[currentLanguage]}
+                                                    onChange={(isChecked) => {
+                                                        if (isChecked) {
+                                                            setFieldValue("servicesOffered", [...values.servicesOffered, checkbox]);
+                                                        } else {
+                                                            setFieldValue(
+                                                                "servicesOffered",
+                                                                values.servicesOffered.filter((item) => item.ar !== checkbox.ar)
+                                                            );
+                                                        }
+                                                    }}
+                                                />
                                             ))
                                         }
                                     </div>
@@ -211,7 +249,7 @@ const JoinFinish = () => {
                                         <WhatsIcon />
                                         يوجد واتساب علي هذا الرقم
                                     </div>
-                                    <Switch />
+                                    <Switch name="hasWhatsapp" />
                                 </div>
 
 
@@ -228,18 +266,19 @@ const JoinFinish = () => {
                                     <label className="b-12 mb-2">
                                         العنوان بالتفصيل <span className='required-asterisk'>*</span>
                                     </label>
-                                    <InputFiled name="company" placeholder={"اكتب عنوانك بالتفصيل "} />
+                                    <InputFiled name="detailedAddress.ar" placeholder={"اكتب عنوانك بالتفصيل "} />
                                 </div>
 
 
 
                                 {/* map */}
                                 <div className="mb-5">
-                                    <Map
-                                        showOverlay={false}
-                                        lat={30.0444}
-                                        lon={31.2357}
-                                        locationName={"موقع الشركة"}
+                                    <GoogleSearchBoxWithMap
+                                        setLatitude={(lat) => setFieldValue("location.coordinates[1]", lat)}
+                                        setLongitude={(lng) => setFieldValue("location.coordinates[0]", lng)}
+                                        isItemLoading={isItemLoading}
+                                        longitude={values.location.coordinates[0]}
+                                        latitude={values.location.coordinates[1]}
                                     />
                                 </div>
 
@@ -254,12 +293,12 @@ const JoinFinish = () => {
 
 
                                 <div className='mb-4'>
-                                    <ImageUploadGrid />
+                                    <ImageUploadGrid name={"images"} />
                                 </div>
 
 
                                 <div className="d-flex justify-content-center mt-5 pt-3">
-                                    <button type="submit" className="btn-main btn-submit b-11" onClick={() => setShowModal(true)}>
+                                    <button type="submit" className="btn-main btn-submit b-11" >
                                         ابعت الطلب
                                     </button>
                                 </div>
@@ -273,7 +312,7 @@ const JoinFinish = () => {
                                     <div className="d-flex text-center flex-column align-items-center justify-content-center w-100 space-4 p-5">
                                         <div className="position-relative">
                                             <DotLottieReact
-                                                src="./animation/success.lottie"
+                                                src="/animation/success.lottie"
                                                 loop
                                                 autoplay
                                             />

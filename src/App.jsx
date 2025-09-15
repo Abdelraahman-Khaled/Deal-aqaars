@@ -1,6 +1,4 @@
 import React from 'react'
-import 'primereact/resources/themes/lara-light-cyan/theme.css';
-import "./styles/PrimeReact.css"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from './Components/Languages/LanguageContext';
 import { HelmetProvider } from "react-helmet-async";
@@ -37,8 +35,12 @@ import { store } from './store';
 import VendorAds from './Pages/MyAds/VendorAds';
 import { ToastContainer } from 'react-toastify';
 import AiBot from './Components/AiBot/AiBot';
-import TestPasswordToggle from './Components/TestPasswordToggle';
 import { PrimeReactProvider } from 'primereact/api';
+import { CompoundProvider } from './contexts/CompoundContext';
+import 'primereact/resources/themes/lara-light-cyan/theme.css';
+import "./styles/PrimeReact.css"
+import UpdateAqar from './Pages/Update/UpdateAqar';
+
 const App = () => {
   return (
     <>
@@ -48,84 +50,86 @@ const App = () => {
             <LanguageProvider>
               <HelmetProvider>
                 <PropertyProvider>
-                  <ScrollToTop />
-                  <ToastContainer
-                    rtl={true}
-                  />
-                  {/* in future to be add */}
-                  {/* <AiBot /> */}
-                  <Routes>
-                    {/* Standalone Register Page (without navbar/footer) */}
-                    <Route path="/register" element={<RegisterPage />} />
-                    <Route path="/login" element={<RegisterPage />} />
-                    <Route path="/test-password" element={<TestPasswordToggle />} />
+                  <CompoundProvider>
+                    <ScrollToTop />
+                    <ToastContainer
+                      rtl={true}
+                    />
+                    {/* in future to be add */}
+                    {/* <AiBot /> */}
+                    <Routes>
+                      {/* Standalone Register Page (without navbar/footer) */}
+                      <Route path="/register" element={<RegisterPage />} />
+                      <Route path="/login" element={<RegisterPage />} />
 
-                    <Route path="/" element={<Layout />}>
+                      <Route path="/" element={<Layout />}>
 
-                      {/* pages */}
-                      <Route path="/" element={<Home />} />
+                        {/* pages */}
+                        <Route path="/" element={<Home />} />
 
-                      {/* UserProfile */}
-                      <Route path="/profile" element={<AccountUser />} />
-
-
-                      {/* pages */}
-                      <Route path="/compounds" element={<CompoundPage />} />
-                      <Route path="/compounds-guide" element={<CompoundDetailsPage />} />
-                      <Route path="/compound-details" element={<CompoundAqarDetails />} />
-
-                      <Route path="/realestate" element={<Aqar />} />
-                      <Route path="/aqar-guide/:id" element={<AqarGuide />} />
-
-                      <Route path="/sale" element={<SalePage />} />
-
-                      {/* Furnish */}
-                      <Route path="/furnish-details" element={<FurnishDetails />} />
-
-                      {/* Finish */}
-                      <Route path="/finish-details/:id" element={<FinishDetails />} />
-                      {/* <Route path="/finish-details" element={<FinishDetails />} /> */}
-
-                      {/* finishPage */}
-                      <Route path="/finish" element={<FinishPage />} />
-
-                      {/* join us */}
-                      {/* <Route path="/join" element={<JoinUs />} /> */}
-                      <Route path="/join-aqar" element={<JoinAqar />} />
-                      <Route path="/join-company" element={<JoinCompany />} />
-                      <Route path="/join-trade" element={<JoinTrade />} />
-                      <Route path="/join-finish" element={<JoinFinish />} />
+                        {/* UserProfile */}
+                        <Route path="/profile" element={<AccountUser />} />
 
 
-                      {/* ads */}
-                      <Route path="/vendor-ads" element={<VendorAds />} />
+                        {/* pages */}
+                        <Route path="/compounds" element={<CompoundPage />} />
+                        <Route path="/compounds-guide/:id" element={<CompoundDetailsPage />} />
+                        <Route path="/compound-details/:id" element={<CompoundAqarDetails />} />
+
+                        <Route path="/realestate" element={<Aqar />} />
+                        <Route path="/aqar-guide/:id" element={<AqarGuide />} />
+
+                        <Route path="/sale" element={<SalePage />} />
+
+                        {/* Furnish */}
+                        <Route path="/furnish-details" element={<FurnishDetails />} />
+
+                        {/* Finish */}
+                        <Route path="/finish-details/:id" element={<FinishDetails />} />
+                        {/* <Route path="/finish-details" element={<FinishDetails />} /> */}
+
+                        {/* finishPage */}
+                        <Route path="/finish" element={<FinishPage />} />
+
+                        {/* join us */}
+                        {/* <Route path="/join" element={<JoinUs />} /> */}
+                        <Route path="/join-aqar" element={<JoinAqar />} />
+                        <Route path="/join-company" element={<JoinCompany />} />
+                        <Route path="/join-trade" element={<JoinTrade />} />
+                        <Route path="/join-finish" element={<JoinFinish />} />
+                        {/* Updates */}
+                        <Route path="/update-aqar/:id" element={<UpdateAqar />} />
+
+                        {/* ads */}
+                        <Route path="/vendor-ads" element={<VendorAds />} />
 
 
-                      {/* Favorite */}
-                      <Route path="/favorite" element={<Favorite />} />
+                        {/* Favorite */}
+                        <Route path="/favorite" element={<Favorite />} />
 
-                      {/* Favorite */}
-                      <Route path="/notifications" element={<Notifications />} />
+                        {/* Favorite */}
+                        <Route path="/notifications" element={<Notifications />} />
 
-                      {/* Trade */}
-                      <Route path="/trade" element={<Trade />} />
+                        {/* Trade */}
+                        <Route path="/trade" element={<Trade />} />
 
-                      <Route path="*" element={<NotFound />} />
+                        <Route path="*" element={<NotFound />} />
 
-                    </Route>
-
-
-
+                      </Route>
 
 
 
-                  </Routes>
+
+
+
+                    </Routes>
+                  </CompoundProvider>
                 </PropertyProvider>
               </HelmetProvider>
             </LanguageProvider>
           </BrowserRouter>
         </Provider>
-      </PrimeReactProvider>
+      </PrimeReactProvider >
     </>
   )
 }

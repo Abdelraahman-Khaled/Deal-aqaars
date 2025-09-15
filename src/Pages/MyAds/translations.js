@@ -4,6 +4,7 @@ export const translations = {
   en: {
     realestate: "Real Estate",
     trade: "Trade",
+    swaps: "Swaps",
     project: "Real Estate Project",
     finishing: "Finishing",
     aqar: "Choose Your Aqar",
@@ -53,10 +54,13 @@ export const translations = {
     phoneLabel: "Phone Number",
     phonePlaceholder: "Enter your number",
     whatsappText: "WhatsApp available on this number",
+    whatIHave: "What I Have",
+    whatIWant: "What I Want",
   },
   ar: {
     realestate: "عقارات",
     trade: "تبديل",
+    swaps: "مبادلات",
     project: " مشروع عقاري",
     finishing: "تشطيب",
 
@@ -103,5 +107,7 @@ export const translations = {
     phoneLabel: "رقم الموبايل",
     phonePlaceholder: "اكتب رقمك",
     whatsappText: "يوجد واتساب علي هذا الرقم",
+    whatIHave: "ما أملك",
+    whatIWant: "ما أريد",
   },
 };

@@ -16,6 +16,7 @@ import TwoAds from '../../Components/Ui/TwoAds/TwoAds'
 import ComparisonSlider from '../../Components/ComparisonSlider/ComparisonSlider'
 import FinishingAPI from '../../api/finishingApi'
 import Loader from '../../Components/Loader/Loader'
+import { useFinishing } from '../../contexts/FinishingContext'
 
 const images = [
     {
@@ -89,10 +90,16 @@ const FinishDetails = () => {
     const [finishingData, setFinishingData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    
+    const { finishingServices, loading: finishingServicesLoading, error: finishingServicesError, fetchFinishingServices } = useFinishing();
+    const relatedServices = finishingServices.slice(0, 10);
+
+    useEffect(() => {
+        fetchFinishingServices();
+    }, [fetchFinishingServices]);
+
     // Get the ID from URL params or from state if passed via Link
     const finishingId = id || (location.state && location.state.id);
-    
+
     useEffect(() => {
         const fetchFinishingData = async () => {
             if (!finishingId) {
@@ -100,11 +107,13 @@ const FinishDetails = () => {
                 setLoading(false);
                 return;
             }
-            
+
             try {
                 setLoading(true);
-                const data = await FinishingAPI.getFinishingById(finishingId);
-                setFinishingData(data);
+                const response = await FinishingAPI.getFinishingById(finishingId);
+                console.log(response.data);
+
+                setFinishingData(response.data);
                 setError(null);
             } catch (err) {
                 console.error('Error fetching finishing details:', err);
@@ -113,12 +122,12 @@ const FinishDetails = () => {
                 setLoading(false);
             }
         };
-        
+
         fetchFinishingData();
     }, [finishingId]);
-    
+
     // Fallback offers if not available in API data
-    const offers = finishingData?.services || ["سباكة", "كهربا", "جبس ديكور", "عزل", "ارضيات", "دهانات", "تكييف", "انارة", "تجهيزات"]
+    const offers = finishingData?.servicesOffered?.map(service => service[currentLanguage]) || ["سباكة", "كهربا", "جبس ديكور", "عزل", "ارضيات", "دهانات", "تكييف", "انارة", "تجهيزات"]
 
     if (loading) {
         return (
@@ -148,9 +157,9 @@ const FinishDetails = () => {
     }
 
     // Use data from API or fallback to static data if needed
-    const title = finishingData?.title || "مؤسسة البنايات الحديثة";
-    const companyLocation = finishingData?.location || "القاهره الكبري - التجمع الخامس - شارع التسعين";
-    
+    const title = finishingData?.companyDescription[currentLanguage];
+    const companyLocation = finishingData?.detailedAddress[currentLanguage];
+
     return (
         <>
             <HelmetInfo titlePage={currentLanguage === "ar" ? "تفاصيل افرش بيتك" : "Furnish home details"} />
@@ -161,9 +170,11 @@ const FinishDetails = () => {
                         <BreadcrumbsPage
                             newClassBreadHeader={"biography-bread breadcrumb-page-2"}
                             mainTitle={"تشطيبات"}
-                            routeTitleTwoBread={false}
-                            titleTwoBread={"شطب بيتك"}
-                            textBreadActive={title}
+                            mainRoute={"/finish"}
+                            routeTitleTwoBread={true}
+                            titleTwoBread={false}
+                            textBreadActive={finishingData?.companyDescription[currentLanguage]}
+
                         />
                     </header>
                     <main>
@@ -175,6 +186,8 @@ const FinishDetails = () => {
                                 <DescriptionGuide
                                     title={"مؤسسة البنايات الحديثة"}
                                     location={"القاهره الكبري - التجمع الخامس - شارع التسعين"}
+                                    lon={finishingData?.location?.coordinates[0]}
+                                    lat={finishingData?.location?.coordinates[1]}
                                 />
                                 <Offers title={"ايه اللي بيقدمه البيانات الحديثة"} offers={offers} />
 
@@ -185,19 +198,25 @@ const FinishDetails = () => {
                                     <ComparisonSlider />
                                 </div>
 
-                                <AdsDescription title={"مين هي شركة البيانات الحديثة؟"} />
-                                <Map />
+                                <AdsDescription title={finishingData?.companyDescription[currentLanguage]} description={finishingData?.companyDescription[currentLanguage]} />
+                                <Map lat={finishingData?.location?.coordinates[1]} lon={finishingData?.location?.coordinates[0]} />
+
 
 
                                 <RealatedSlider title={"شركات تاني"}>
-                                    {cardData.map((item, index) => (
+                                    {relatedServices.map((item, index) => (
                                         <div key={index} className="slider-card-wrapper w-100">
                                             <FininshCard
-                                                img={item.img}
-                                                subtitles={item.subtitles}
-                                                exprince={item.exprince}
-                                                since={item.since}
-                                                title={item.title}
+                                                id={item._id || index}
+                                                img={item.images && item.images.length > 0 ? item.images[0] : item.img || "./home.jpg"}
+                                                subtitles={item.servicesOffered ?
+                                                    item.servicesOffered.map(service => service.ar || service) :
+                                                    item.services || item.subtitles}
+                                                exprince={item.companyDescription?.ar || item.experience || item.exprince}
+                                                title={item.jobType?.ar || item.name || item.title}
+                                                phoneNumber={item.phoneNumber}
+                                                hasWhatsapp={item.hasWhatsapp}
+                                                detailedAddress={item.detailedAddress?.ar}
                                             />
                                         </div>
                                     ))}

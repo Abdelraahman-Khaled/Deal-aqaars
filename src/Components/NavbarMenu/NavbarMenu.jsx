@@ -135,11 +135,11 @@ const NavbarMenu = () => {
                     <Navbar.Collapse id="basic-navbar-nav" className="nav-menu">
                         <Nav className="me-auto space-4" data-aos="fade-right ">
                             {/* sale */}
-                            <NavLink className="nav-link b-11" to="/sale">
+                            <NavLink className="nav-link b-11" to="/realestate">
                                 {content.sale[currentLanguage]}
                             </NavLink>
                             {/* rent */}
-                            <NavLink className="nav-link b-11" to="/realestate">
+                            <NavLink className="nav-link b-11" to="/compounds">
                                 {content.rent[currentLanguage]}
                             </NavLink>
                             {/* trade */}

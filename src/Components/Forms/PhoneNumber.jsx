@@ -4,7 +4,7 @@ import ShowPassword from "../../assets/Icons/ShowPassword";
 import { useLanguage } from '../Languages/LanguageContext';
 import "./PhoneNumber.css";
 
-const PhoneNumber = ({ label, success, setInputType, ...props }) => {
+const PhoneNumber = ({ label, success, setInputType, required = true, ...props }) => {
     const { currentLanguage } = useLanguage();
     const [field, meta, helpers] = useField(props);
     const isError = meta.touched && meta.error;
@@ -36,7 +36,7 @@ const PhoneNumber = ({ label, success, setInputType, ...props }) => {
                         paddingRight: currentLanguage === 'ar' ? '3.5rem' : '0.75rem',
                         paddingLeft: currentLanguage === 'ar' ? '0.75rem' : '3.5rem'
                     }}
-                    required
+                    required={required}
                 />
             </div>
 

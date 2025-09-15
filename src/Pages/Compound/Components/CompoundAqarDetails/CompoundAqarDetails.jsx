@@ -12,10 +12,23 @@ import UnitDetails from '../../../../Components/Ui/UnitDetails/UnitDetails';
 import RealEstateAds from '../../../../Components/Ui/RealEstateAds/RealEstateAds';
 import CompanyToSee from '../../../../Components/Ui/CompanyToSee/CompanyToSee';
 import SpaceBox from '../../../../Components/Ui/SpaceBox/SpaceBox';
+import { useParams } from 'react-router-dom';
+import { useCompound } from '../../../../contexts/CompoundContext';
+import PropertyShowcaseExample from '../../../../Components/Ui/PropertyShowcase/PropertyShowcaseExample';
 
 const CompoundAqarDetails = () => {
     const { currentLanguage } = useLanguage(); // Get the current language
     const [isRealEstate, setIsRealEstate] = useState(false); // State to track if realEstate mode is active
+    const { id } = useParams()
+    const { compound, loading, error, fetchCompound, clearCompound } = useCompound();
+
+    useEffect(() => {
+        if (id) {
+            fetchCompound(id);
+        }
+        return () => clearCompound(); // cleanup on unmount
+    }, [id, fetchCompound, clearCompound]);
+    console.log(compound);
 
     // Listen for window resize events
     useEffect(() => {
@@ -57,8 +70,16 @@ const CompoundAqarDetails = () => {
 
     const unitDetails = [
         {
-            space: "102 متر²", floor: "الاول", front: "شارع رئيسي", numOfAds: "EG-5696885", paymentWay: "كاش أو تقسيط",
-            numRooms: "2", finishingType: "اكسترا سوبر لوكس", yearDelivary: "2028", meterPrice: "147,480 ج.م/متر²", AdsType: "المطور"
+            space: compound?.units[0].aqarDetails.space,
+            floor: compound?.units[0].aqarDetails.floor,
+            front: compound?.units[0].aqarDetails.view,
+            numOfAds: "",
+            paymentWay: compound?.units.map(unit => unit.aqarDetails.paymentType),
+            numRooms: compound?.units[0].aqarDetails.rooms,
+            finishingType: compound?.units[0].aqarDetails.finishingType,
+            yearDelivary: compound?.units[0].aqarDetails.handingYear,
+            meterPrice: compound?.units[0].aqarDetails.price,
+            AdsType: compound?.units[0].aqarDetails.ownerType,
         }
     ]
 
@@ -120,25 +141,35 @@ const CompoundAqarDetails = () => {
                     <header className='pb-4'>
                         <BreadcrumbsPage
                             newClassBreadHeader={"biography-bread breadcrumb-page-2"}
-                            mainTitle={"دليل الكومباوندات"}
+                            mainTitle={compound?.title[currentLanguage]}
+                            mainRoute={"/realestate"}
                             routeTitleTwoBread={false}
-                            titleTwoBread={"IL Monte Galala - إل مونت جلاله"}
+                            titleTwoBread={compound?.announcementLocation}
                             textBreadActive={"شاليهات 102 متر² للبيع"}
                         />
                     </header>
 
                     <main>
-                        <ImageSlider slides={SLIDES} options={OPTIONS} />
+                        <PropertyShowcaseExample images={compounds?.compoundImages?.length > 0 ? compounds?.compoundImages.map((item) => item.url) : []} lat={compound?.detailedLocation.coordinates[0]} lon={compound?.detailedLocation.coordinates[1]} />
                         <div className="row gy-4">
                             <div className="col-12 col-xl-9 d-flex flex-column space-6">
                                 <DescriptionGuide
-                                    title={" 7,457,874 ج.م"}
-                                    location={"الجيزة - 6 أكتوبر - طريق الواحات"}
-                                    description={"شاليهات 102 متر² للبيع فى IL Monte Galala - إل مونت جلاله-العين السخنة - البحر الأحمر"}
+                                    title={compound?.units[0].aqarDetails.price + " " + "ج.م"}
+                                    lat={compound?.detailedLocation.coordinates[0]}
+                                    lon={compound?.detailedLocation.coordinates[1]}
+                                    aqar={true}
+                                    rooms={compound?.units[0].aqarDetails.rooms}
+                                    bath={compound?.units[0].aqarDetails.bathrooms}
+                                    space={compound?.units[0].aqarDetails.space}
+                                    description={compound?.units[0].unitDetails.announcementTitle[currentLanguage]}
                                 />
                                 <UnitDetails data={unitDetails} />
                                 <AdsDescription />
-                                <Map />
+                                <Map
+                                    lon={compound?.detailedLocation.coordinates[0]}
+                                    lat={compound?.detailedLocation.coordinates[1]}
+                                    locationName={compound?.title[currentLanguage]}
+                                />
                                 <p className="b-5">وحدات تانيه جوا الكومباوند</p>
                                 <div className='d-flex flex-wrap space-1 justify-content-between'>
                                     <SpaceBox data={compoundDetails} realEstate={isRealEstate} />

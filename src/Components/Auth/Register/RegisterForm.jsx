@@ -13,6 +13,7 @@ import HelmetInfo from "../../Helmetinfo/HelmetInfo";
 import AuthAPI from "../../../api/authApi";
 import { useDispatch } from "react-redux";
 import { login } from "../../../store/authSlice";
+import { Password } from "primereact/password";
 
 const content = {
     title: {
@@ -137,7 +138,8 @@ const content = {
 
 const RegisterForm = ({ setFormType }) => {
     const { currentLanguage } = useLanguage()
-    const [inputType, setInputType] = useState("password")
+    const [value, setValue] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [createWay, setCreateWay] = useState("email")
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
@@ -207,116 +209,123 @@ const RegisterForm = ({ setFormType }) => {
                     validationSchema={validationSchema}
                     onSubmit={handleRegisterSubmit}
                 >
-                    <div className="space-4 d-flex flex-column mb-5">
-                        {
-                            createWay === "email" ?
-                                (
-                                    <>
-                                        {/* input email */}
-                                        <div className="row g-3">
-                                            <div className="col-12 col-md-6">
-                                                <p className="b-11 pb-2">{content.emailLabel[currentLanguage]} <span>*</span></p>
-                                                <InputFiled
-                                                    name="name"
-                                                    type="text"
-                                                    placeholder={content.emailPlaceHolder[currentLanguage]}
-                                                    success
-                                                />
-                                            </div>
-                                            <div className="col-12 col-md-6">
-                                                <p className="b-11 pb-2">{content.phone[currentLanguage]} <span>*</span></p>
-                                                <InputFiled
-                                                    name="mobile"
-                                                    type="text"
-                                                    placeholder={content.phone[currentLanguage]}
-                                                    success
-                                                />
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <p className="b-11 pb-2">{content.email[currentLanguage]} <span>*</span></p>
-                                            <InputFiled
-                                                name="email"
-                                                type="text"
-                                                placeholder={"example@gmail.com"}
-                                                success
-                                            />
-                                        </div>
+                    {({ values, setFieldValue }) => (
+                        <>
+                            <div className="space-4 d-flex flex-column mb-5">
+                                {
+                                    createWay === "email" ?
+                                        (
+                                            <>
+                                                {/* input email */}
+                                                <div className="row g-3">
+                                                    <div className="col-12 col-md-6">
+                                                        <p className="b-11 pb-2">{content.emailLabel[currentLanguage]} <span>*</span></p>
+                                                        <InputFiled
+                                                            name="name"
+                                                            type="text"
+                                                            placeholder={content.emailPlaceHolder[currentLanguage]}
+                                                            success
+                                                        />
+                                                    </div>
+                                                    <div className="col-12 col-md-6">
+                                                        <p className="b-11 pb-2">{content.phone[currentLanguage]} <span>*</span></p>
+                                                        <InputFiled
+                                                            name="mobile"
+                                                            type="text"
+                                                            placeholder={content.phone[currentLanguage]}
+                                                            success
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <p className="b-11 pb-2">{content.email[currentLanguage]} <span>*</span></p>
+                                                    <InputFiled
+                                                        name="email"
+                                                        type="text"
+                                                        placeholder={"example@gmail.com"}
+                                                        success
+                                                    />
+                                                </div>
 
-                                        {/* <Link to={"#"} className="b-14 text-decoration-underline" onClick={() => setCreateWay("phone")}>
+                                                {/* <Link to={"#"} className="b-14 text-decoration-underline" onClick={() => setCreateWay("phone")}>
                                             استخدم رقم موبايلك بدل الايميل
                                         </Link> */}
 
 
-                                        {/* input password */}
-                                        <div>
-                                            <div className="row g-3">
-                                                <div className="col-12 col-md-6">
-                                                    <p className="b-11 pb-2">{content.passwordLabel[currentLanguage]} <span>*</span></p>
-                                                    <InputFiled
-                                                        name="password"
-                                                        type={inputType}
-                                                        placeholder={" • • • • • • • •"}
-                                                        success
-                                                        setInputType={setInputType}
-                                                    />
-                                                </div>
-                                                <div className="col-12 col-md-6">
-                                                    <p className="b-11 pb-2">{content.passwordConfirmLabel[currentLanguage]} <span>*</span></p>
-                                                    <InputFiled
-                                                        name="confirmPassword"
-                                                        type={inputType}
-                                                        placeholder={" • • • • • • • •"}
-                                                        success
-                                                        setInputType={setInputType}
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="form-check d-flex gap-2 my-2 box-shadow b-12" >
-                                                <input className={`form-check-input  ${currentLanguage === "en" && "mx-0"}`} type="checkbox" value="" id="flexCheckChecked" />
-                                                <label className="form-check-label" for="flexCheckChecked">
-                                                    {content.agree[currentLanguage]}
-                                                </label>
-                                                <Link className="b-11" to={"#"} >{content.terms[currentLanguage]}</Link>
-                                            </div>
-                                        </div>
-                                    </>
-                                ) :
-                                (
-                                    createWay === "phone" &&
-                                    <>
-                                        <div>
-                                            <p className="b-11 pb-2">{content.phoneLabel[currentLanguage]} <span>*</span></p>
-                                            <PhoneNumber
-                                                name="phone"
-                                                type="text"
-                                                placeholder={content.phone[currentLanguage]}
-                                                success
-                                            />
-                                        </div>
-                                        <Link to={"#"} className="b-14 text-decoration-underline" onClick={() => setCreateWay("email")}>
-                                            استخدم الايميل بدل رقم الموبايل
-                                        </Link>
-                                    </>
-                                )
-                        }
+                                                {/* input password */}
+                                                <div>
+                                                    <div className="row g-3">
+                                                        <div className="col-12 col-md-6">
+                                                            <p className="b-11 pb-2">{content.passwordLabel[currentLanguage]} <span>*</span></p>
 
-                    </div>
-                    {/* <button type="submit" onClick={() => createWay === "email" ? setFormType("verifyAccount") : setFormType("otp")} className="btn-main btn-submit w-100  b-11 p-3"> */}
-                    <button
-                        type="submit"
-                        className="btn-main btn-submit w-100 b-11 p-3 d-flex justify-content-center align-items-center"
-                        disabled={isLoading}
-                    >
-                        {isLoading ? (
-                            <>
-                                <span className="spinner-border spinner-border-sm me-2 text-white" role="status" />
-                                {currentLanguage === "ar" ? "جاري انشاء مستخدم..." : "Creating New acc..."}
-                            </>
-                        ) : (
-                            content.startNow[currentLanguage]
-                        )}
-                    </button>
+                                                            <Password name="password" value={value}
+                                                                onChange={(e) => {
+                                                                    setValue(e.target.value);
+                                                                    setFieldValue("password", e.target.value);
+                                                                }}
+                                                                toggleMask />
+
+                                                        </div>
+                                                        <div className="col-12 col-md-6">
+                                                            <p className="b-11 pb-2">{content.passwordConfirmLabel[currentLanguage]} <span>*</span></p>
+
+                                                            <Password name="confirmPassword" value={confirmPassword}
+                                                                onChange={(e) => {
+                                                                    setConfirmPassword(e.target.value)
+                                                                    setFieldValue("confirmPassword", e.target.value)
+                                                                }}
+                                                                toggleMask />
+
+                                                        </div>
+                                                    </div>
+                                                    <div className="form-check d-flex gap-2 my-2 box-shadow b-12" >
+                                                        <input className={`form-check-input  ${currentLanguage === "en" && "mx-0"}`} type="checkbox" value="" id="flexCheckChecked" />
+                                                        <label className="form-check-label" for="flexCheckChecked">
+                                                            {content.agree[currentLanguage]}
+                                                        </label>
+                                                        <Link className="b-11" to={"#"} >{content.terms[currentLanguage]}</Link>
+                                                    </div>
+                                                </div>
+                                            </>
+                                        ) :
+                                        (
+                                            createWay === "phone" &&
+                                            <>
+                                                <div>
+                                                    <p className="b-11 pb-2">{content.phoneLabel[currentLanguage]} <span>*</span></p>
+                                                    <PhoneNumber
+                                                        name="phone"
+                                                        type="text"
+                                                        placeholder={content.phone[currentLanguage]}
+                                                        success
+                                                    />
+                                                </div>
+                                                <Link to={"#"} className="b-14 text-decoration-underline" onClick={() => setCreateWay("email")}>
+                                                    استخدم الايميل بدل رقم الموبايل
+                                                </Link>
+                                            </>
+                                        )
+                                }
+
+                            </div>
+                            {/* <button type="submit" onClick={() => createWay === "email" ? setFormType("verifyAccount") : setFormType("otp")} className="btn-main btn-submit w-100  b-11 p-3"> */}
+                            <button
+                                type="submit"
+                                className="btn-main btn-submit w-100 b-11 p-3 d-flex justify-content-center align-items-center"
+                                disabled={isLoading}
+                            >
+                                {isLoading ? (
+                                    <>
+                                        <span className="spinner-border spinner-border-sm me-2 text-white" role="status" />
+                                        {currentLanguage === "ar" ? "جاري انشاء مستخدم..." : "Creating New acc..."}
+                                    </>
+                                ) : (
+                                    content.startNow[currentLanguage]
+                                )}
+                            </button>
+                        </>
+                    )}
+
                 </FormField>
 
                 <div className="register-social">

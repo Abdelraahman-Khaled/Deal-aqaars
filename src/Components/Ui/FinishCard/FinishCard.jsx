@@ -9,9 +9,7 @@ import "./FinishCard.css"
 import Water from '../../../assets/Icons/Water'
 import Electricity from '../../../assets/Icons/Electricity'
 import Board from '../../../assets/Icons/Board'
-import DeleteButton from '../../DeleteButton/DeleteButton'
-import CustomModal from '../../CustomModal/CustomModal'
-import DeleteModal from '../../DeleteButton/DeleteModal'
+import DeleteModal from '../DeleteModal/DeleteModal'
 import Bed from '../../../assets/Icons/Bed'
 import BathIcon from '../../../assets/Icons/BathIcon'
 import AreaIcon from '../../../assets/Icons/AreaIcon'
@@ -20,10 +18,19 @@ import Eye from '../../../assets/Icons/Eye'
 import PhoneAds from '../../../assets/Icons/PhoneAds'
 import defaultImage from '../../../assets/images/error-not-found.svg'
 import SimpleImageSlider from '../SimpleImageSlider/SimpleImageSlider'
+import { useFinishing } from '../../../contexts/FinishingContext'
+import UpdateFinishingModal from '../../UpdateFinishingModal/UpdateFinishingModal'
 
-const FininshCard = ({ id, title, img, icon, since, exprince, subtitles, isFav, companyAds = false, likes, seen, calls, phoneNumber, hasWhatsapp, detailedAddress }) => {
+const FininshCard = ({ id, title, img, icon, exprince, subtitles, isFav, companyAds = false, likes, seen, calls, phoneNumber, hasWhatsapp, detailedAddress, finishingServiceData }) => {
     const { currentLanguage } = useLanguage()
     const [showProgress, setShowProgress] = useState(false);
+    const [showUpdateModal, setShowUpdateModal] = useState(false);
+    const { fetchMyFinishingServices } = useFinishing()
+
+    const handleDeleteSuccess = () => {
+        fetchMyFinishingServices()
+        setShowProgress(false)
+    }
 
     return (
         <div className={`finish-card compound-card space-4 d-flex flex-column  mb-4  `} >
@@ -48,7 +55,7 @@ const FininshCard = ({ id, title, img, icon, since, exprince, subtitles, isFav, 
                 </div>
                 <div className='d-flex flex-column gap-2 text pb-4'>
                     <p className="b-5">{title}</p>
-                    <p className='b-12'>من {since || "2007"}، {exprince} مشاريع</p>
+                    <p className='b-12'> {exprince}</p>
                 </div>
             </Link>
 
@@ -88,12 +95,12 @@ const FininshCard = ({ id, title, img, icon, since, exprince, subtitles, isFav, 
                             </div>
                             <div className='connections d-flex justify-content-between w-100 pt-4 space-2 '>
                                 {/* delete */}
-                                <div onClick={() => setShowProgress(true)} className='w-50'>
-                                    <DeleteButton text="حذف الاعلان" newClass='w-100' />
-                                </div>
+                                <button onClick={() => setShowProgress(true)} className='btn-main w-50'>
+                                    حذف الاعلان
+                                </button>
 
                                 {/* edit */}
-                                <button className='btn-main w-50'>
+                                <button onClick={() => setShowUpdateModal(true)} className='btn-main w-50'>
                                     عدل على الاعلان
                                 </button>
                             </div>
@@ -147,16 +154,20 @@ const FininshCard = ({ id, title, img, icon, since, exprince, subtitles, isFav, 
 
             </div>
             {/* delete modal*/}
-            <CustomModal
+            <DeleteModal
                 showModal={showProgress}
-                onHide={() => setShowProgress(false)}
                 setShowModal={setShowProgress}
-                newClass={"progress-modal"}
-            >
-                <div>
-                    <DeleteModal setShowProgress={setShowProgress} />
-                </div>
-            </CustomModal>
+                finishingServiceId={id}
+                type="finishing"
+                onDelete={handleDeleteSuccess}
+            />
+
+            {/* Update Finishing Modal */}
+            <UpdateFinishingModal
+                showModal={showUpdateModal}
+                setShowModal={setShowUpdateModal}
+                finishingServiceData={finishingServiceData}
+            />
         </div >
     )
 }

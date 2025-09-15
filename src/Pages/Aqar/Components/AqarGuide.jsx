@@ -70,7 +70,6 @@ const AqarGuide = () => {
             yearDelivary: "",
             meterPrice: property?.details.space,
             AdsType: property?.ownerType,
-
         }
     ]
 
@@ -169,22 +168,21 @@ const AqarGuide = () => {
                         <div className="row gy-4">
                             <div className="col-12 col-xl-9 d-flex flex-column space-8">
                                 <DescriptionGuide
-                                    title={"7,457,874 ج.م"}
+                                    title={property?.details.price + " " + "ج.م"}
                                     lat={property.location.coordinates[0]}
                                     lon={property.location.coordinates[1]}
                                     aqar={true}
                                     rooms={property.details.rooms}
                                     bath={property.details.bathrooms}
                                     space={property.details.space}
-                                    view={property.details.view}
-                                    floor={property.details.floor}
+                                    description={property.description[currentLanguage]}
                                 />
                                 <UnitDetails data={unitDetails} />
                                 <AdsDescription title={property.title[currentLanguage]} description={property.description[currentLanguage]} />
-                                <Map 
-                                    lat={property.location.coordinates[0]} 
-                                    lon={property.location.coordinates[1]} 
-                                    locationName={property.title[currentLanguage]} 
+                                <Map
+                                    lon={property.location.coordinates[0]}
+                                    lat={property.location.coordinates[1]}
+                                    locationName={property.title[currentLanguage]}
                                 />
 
                                 {/* related slider */}

@@ -13,6 +13,7 @@ import compoundImg1 from "../../../assets/images/compounds/compound1.png";
 import compoundImg2 from "../../../assets/images/compounds/compound2.png";
 import RealStateCard from '../RealStateCard/RealStateCard';
 import HouseLoader from '../../Loader/HouseLoader';
+import CompoundAPI from '../../../api/compoundApi';
 
 
 
@@ -22,9 +23,10 @@ const GuidePage = ({ title, compound = true }) => {
     const [toggle1, setToggle1] = useState("nest");
     const [rotate, setRotate] = useState(false);
     const [properties, setProperties] = useState([]);
+    const [compounds, setCompounds] = useState([]);
     const [loading, setLoading] = useState(false);
     const [pagination, setPagination] = useState(null);
-    
+
     const progressTabs = [
         { value: "inprogress", label: translations[currentLanguage].inProgress },
         { value: "ready", label: translations[currentLanguage].ready },
@@ -55,6 +57,22 @@ const GuidePage = ({ title, compound = true }) => {
             setLoading(false);
         }
     };
+    const fetchCompounds = async () => {
+        try {
+            setLoading(true);
+            const response = await CompoundAPI.getAllCompounds();
+            if (response && response.data) {
+                setCompounds(response.data);
+                console.log("compoundsdata", response.data);
+
+                setPagination(response.pagination);
+            }
+        } catch (error) {
+            console.error('Error fetching properties:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     // Format location from coordinates
     const formatLocation = (location) => {
@@ -75,36 +93,12 @@ const GuidePage = ({ title, compound = true }) => {
     useEffect(() => {
         if (!compound) {
             fetchProperties();
+        } else {
+            fetchCompounds()
         }
     }, [compound]);
 
-    // card Data
-    const data = [
-        {
-            id: 1,
-            title: "IL Monte Galala - إل مونت جلاله",
-            location: "العين السخنة - البحر الأحمر",
-            details: "ستوديو ، ستوديو بحديقة ، شقه غرفتين ، ...",
-            price: "7,457,874",
-            img: compoundImg,
-        },
-        {
-            id: 2,
-            title: "IL Monte Galala - إل مونت جلاله",
-            location: "العين السخنة - البحر الأحمر",
-            details: "ستوديو ، ستوديو بحديقة ، شقه غرفتين ، ...",
-            price: "7,457,874",
-            img: compoundImg1,
-        },
-        {
-            id: 3,
-            title: "IL Monte Galala - إل مونت جلاله",
-            location: "العين السخنة - البحر الأحمر",
-            details: "ستوديو ، ستوديو بحديقة ، شقه غرفتين ، ...",
-            price: "7,457,874",
-            img: compoundImg2,
-        },
-    ];
+
 
     return (
         <div className=' guide compound d-flex flex-wrap  flex-md-row  justify-content-between'>
@@ -112,7 +106,7 @@ const GuidePage = ({ title, compound = true }) => {
             <div className='d-flex space-6 flex-column col-12  col-lg-8 '>
                 {
                     compound &&
-                    <h6>{title}</h6>
+                    <h6>{title + " " + compounds.length + " " + "مشروع بأسعار كل الوحدات"}</h6>
                 }
                 <div className='d-flex flex-wrap space-3 justify-content-between align-items-center'>
                     {!compound &&
@@ -142,19 +136,36 @@ const GuidePage = ({ title, compound = true }) => {
                     </div>
                 </div>
                 <div className='d-flex flex-wrap  flex-row justify-content-between'>
-                    {compound && data.map((card, index) => (
-                        <CompoundCard
-                            key={index}
-                            title={card.title}
-                            location={card.location}
-                            details={card.details}
-                            price={card.price}
-                            img={card.img}
-                            company={true}
-                            connections={true}
-                            wrapperClass={toggle1 === "nest" ? "flex-wrap" : ""}
-                        />
-                    ))}
+                    {compound && loading && (
+                        <div className="loading-container">
+                            <p>{currentLanguage === 'ar' ? 'جاري تحميل كموندات...' : 'Loading compounds...'}</p>
+                            <HouseLoader size="large" />
+                        </div>
+                    )}
+                    {compound && !loading && compounds.length === 0 && (
+                        <div className="no-properties">
+                            <p>{currentLanguage === 'ar' ? 'لا توجد كموندات متاحة' : 'No compounds available'}</p>
+                        </div>
+                    )}
+                    {compound && !loading && compounds.map((compound, index) => {
+                        const locationCoords = formatLocation(compound.detailedLocation);
+                        return (
+                            <CompoundCard
+                                id={compound._id}
+                                key={index}
+                                title={compound.title[currentLanguage]}
+                                location={compound.announcementLocation}
+                                details={compound.details}
+                                price={compound.unitData.prices[0]}
+                                img={compound.compoundImages}
+                                company={true}
+                                connections={true}
+                                wrapperClass={toggle1 === "nest" ? "flex-wrap" : ""}
+                                advertiser={compound.contact}
+
+                            />
+                        )
+                    })}
                     {!compound && loading && (
                         <div className="loading-container">
                             <p>{currentLanguage === 'ar' ? 'جاري تحميل العقارات...' : 'Loading properties...'}</p>

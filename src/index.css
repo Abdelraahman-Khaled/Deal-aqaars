@@ -40,7 +40,7 @@
   /* red */
   --red-200: #d00416 !important;
   /* green */
-  --green-200: #00813d;
+  --green-200: #00813d !important;
   /* toasts */
   --yellow-100: #dfa027 !important;
   --danger-01-color: #dd1d2d;

@@ -1,8 +1,8 @@
 <svg width="194" height="64" viewBox="0 0 194 64" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <rect x="1.23438" y="0.867188" width="191.999" height="62" rx="7.5" stroke="#727272"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M21.3578 14.8974C20.9624 15.3143 20.7285 15.9663 20.7285 16.8102V46.9193C20.7285 47.7631 20.9624 48.4146 21.3578 48.8314L21.4566 48.9314L38.2511 32.0628V31.6663L21.4566 14.7981" fill="#59C9F4"/>
+<path fillRule="evenodd" clipRule="evenodd" d="M21.3578 14.8974C20.9624 15.3143 20.7285 15.9663 20.7285 16.8102V46.9193C20.7285 47.7631 20.9624 48.4146 21.3578 48.8314L21.4566 48.9314L38.2511 32.0628V31.6663L21.4566 14.7981" fill="#59C9F4"/>
 <mask id="mask0_290_7979" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="38" y="26" width="14" height="12">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M38.2461 26.0586H51.7335V37.7491H38.2461V26.0586Z" fill="black"/>
+<path fillRule="evenodd" clipRule="evenodd" d="M38.2461 26.0586H51.7335V37.7491H38.2461V26.0586Z" fill="black"/>
 </mask>
 <g mask="url(#mask0_290_7979)">
 <mask id="mask1_290_7979" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="38" y="26" width="15" height="12">

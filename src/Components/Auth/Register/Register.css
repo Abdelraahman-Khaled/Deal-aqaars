@@ -101,18 +101,39 @@ a {
 html[dir="ltr"] .register-social .btn-submit p {
   min-width: 160px;
 }
-.password-toggle {
-  border: none;
+.p-password {
+  width: 100%;
+  position: relative;
+}
+[dir="rtl"] .p-password .p-inputtext {
+  direction: ltr;
+}
+.p-password .p-inputtext {
+  width: 100%;
+  padding: 12px 8px 12px 12px;
+  border-radius: var(--border-radius-4);
+  border: 1px solid var(--netural-200);
+  background-color: var(--netural-100);
+}
+
+.p-password .p-inputtext:focus {
+  box-shadow: -1px 0px 0px 1px var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.p-password .p-password-toggle {
   position: absolute;
   top: 50%;
-  left: 15px;
-  background: inherit;
   transform: translateY(-50%);
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
-.was-validated .form-control:invalid ~ .password-toggle,
-.form-control.is-invalid ~ .password-toggle {
-  top: 30%;
-  transform: translateY(-40%);
+
+html[dir="ltr"] .p-password .p-password-toggle {
+  left: unset;
+  right: 12px;
 }
 
 html[dir="ltr"] .password-toggle {

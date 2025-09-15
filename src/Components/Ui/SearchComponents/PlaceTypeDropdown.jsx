@@ -4,13 +4,13 @@ import { Dropdown } from "react-bootstrap";
 import TabsContent from "../TabsContent/TabsContent";
 import MenuArrow from "../../../assets/Icons/MenuArrow";
 
-const PlaceTypeDropdown = ({ placeType, placeTypeDetails, tabsKind, rotate }) => (
+const PlaceTypeDropdown = ({ placeType, placeTypeDetails, tabsKind, rotate, onChange }) => (
     <Dropdown className="d-flex">
         <Dropdown.Toggle variant="light" className="w-100 text-end">
             {placeType}{placeTypeDetails && " / " + placeTypeDetails}
         </Dropdown.Toggle>
         <Dropdown.Menu>
-            <TabsContent tabsData={tabsKind} newClassTabsContent="tabs-home place-kind" />
+            <TabsContent tabsData={tabsKind} newClassTabsContent="tabs-home place-kind" onSelect={onChange} />
         </Dropdown.Menu>
         <MenuArrow rotate={rotate} />
     </Dropdown>

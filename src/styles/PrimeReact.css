@@ -101,3 +101,6 @@
 .p-dropdown-items-wrapper {
   max-height: max-content !important;
 }
+.p-icon-field > .p-input-icon {
+  margin-top: -0.75rem;
+}

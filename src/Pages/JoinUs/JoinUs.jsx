@@ -214,7 +214,7 @@ const JoinUs = () => {
                 <div className="d-flex text-center flex-column align-items-center justify-content-center w-100 space-4 p-5">
                     <div className="position-relative">
                         <DotLottieReact
-                            src="./animation/success.lottie"
+                            src="/animation/success.lottie"
                             loop
                             autoplay
                         />

@@ -5,11 +5,12 @@ import "./AdvancedSearch.css";
 import { Col, Dropdown, Row, Container } from "react-bootstrap";
 import TabsContent from "../../../../../Components/Ui/TabsContent/TabsContent";
 import GreenRight from "../../../../../assets/Icons/GreenRight";
-import MultiSelect from "../../../../../Components/Forms/MultiSelect";
+// import MultiSelect from "../../../../../Components/Forms/MultiSelect";
 import BudgetDropdown from "../../../../../Components/Ui/SearchComponents/BudgetDropdown";
 import PlaceTypeDropdown from "../../../../../Components/Ui/SearchComponents/PlaceTypeDropdown";
 import SearchToggle from "../../../../../Components/Ui/SearchComponents/SearchToggle ";
 import MenuArrow from "../../../../../assets/Icons/MenuArrow";
+import { MultiSelect } from "primereact/multiselect";
 
 const AdvancedSearch = () => {
     const { currentLanguage } = useLanguage();
@@ -25,13 +26,21 @@ const AdvancedSearch = () => {
     const [budget, setBudget] = useState([1000000, 50000000]);
     const [selectedValues, setSelectedValues] = useState([]);
 
-    const multiOptions = [
-        { value: "1", text: "أكتوبر", selected: false },
-        { value: "2", text: "المعادي", selected: false },
-        { value: "3", text: "بلبن", selected: false },
-        { value: "4", text: "السادات", selected: false },
-        { value: "5", text: "إسكندرية", selected: false },
+    const [selectedCities, setSelectedCities] = useState(null);
+    const cities = [
+        { name: 'أكتوبر', code: 'NY' },
+        { name: 'المعادي', code: 'RM' },
+        { name: 'بلبن', code: 'LDN' },
+        { name: 'السادات', code: 'IST' },
+        { name: 'إسكندرية', code: 'PRS' }
     ];
+    // const multiOptions = [
+    //     { value: "1", name: "أكتوبر", selected: false },
+    //     { value: "2", name: "المعادي", selected: false },
+    //     { value: "3", name: "بلبن", selected: false },
+    //     { value: "4", name: "السادات", selected: false },
+    //     { value: "5", name: "إسكندرية", selected: false },
+    // ];
 
     const tabs = [
         { value: "sale", label: translations[currentLanguage].forSale },
@@ -227,12 +236,9 @@ const AdvancedSearch = () => {
                     {/* Second Column - Search Inputs */}
                     <Col className="p-0">
                         <div className="d-flex flex-column gap-3 h-100 ">
-                            <div className="position-relative w-100">
-                                <MultiSelect
-                                    options={multiOptions}
-                                    defaultSelected={[]}
-                                    onChange={(values) => setSelectedValues(values)}
-                                />
+                            <div className="w-100">
+                                <MultiSelect value={selectedCities} onChange={(e) => setSelectedCities(e.value)} options={cities} optionLabel="name" display="chip"
+                                    placeholder="Select Cities" maxSelectedLabels={3} className="form-control search-input d-flex align-items-center p-0" />
                             </div>
 
                             <Row className="g-2 justify-content-between space-1 flex-column flex-sm-row">

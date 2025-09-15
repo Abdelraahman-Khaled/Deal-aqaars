@@ -128,8 +128,10 @@ const VendorAdsCard = ({ propertyData, id, price, numAds, seen, lat, lon, title,
                     </div>
 
                     {/* edit */}
-                    <button className='btn-main w-50' onClick={() => setShowUpdateModal(true)}>
-                        عدل على الاعلان
+                    <button className='btn-main w-50'>
+                        <Link to={`/update-aqar/${id}`} className='text-white'>
+                            عدل على الاعلان
+                        </Link>
                     </button>
                 </div>
             </div>
@@ -150,13 +152,13 @@ const VendorAdsCard = ({ propertyData, id, price, numAds, seen, lat, lon, title,
             </CustomModal>
 
             {/* update modal */}
-            <UpdatePropertyModal
+            {/* <UpdatePropertyModal
                 showModal={showUpdateModal}
                 setShowModal={setShowUpdateModal}
                 propertyId={id}
                 propertyData={propertyData}
                 onUpdate={onDelete} // Refresh the list after update
-            />
+            /> */}
         </div >
     )
 }

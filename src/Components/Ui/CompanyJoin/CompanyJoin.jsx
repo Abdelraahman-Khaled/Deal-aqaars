@@ -97,6 +97,7 @@ export const CompanyJoin = ({ setShowCompany, setShowProgress }) => {
         address: '',
         registrationNumber: '',
         website: '',
+        companyType: "",
         phoneNumber: '',
         hasWhatsapp: false,
         logo: [],

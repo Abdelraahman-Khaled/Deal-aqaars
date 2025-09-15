@@ -13,7 +13,7 @@ import Switch from '../../Components/Forms/Switch';
 import ImageUploadGrid from '../../Components/ImageUploadGrid/ImageUploadGrid';
 import CustomModal from '../../Components/CustomModal/CustomModal';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import BreadcrumbsPage from '../../Components/Ui/BreadcrumbsPage/BreadcrumbsPage';
 import SectionHeader from '../../Components/SectionHeader/SectionHeader';
 import PropertyAPI from '../../api/propertyApi';
@@ -24,8 +24,9 @@ import GoogleSearchBoxWithMap from '../../Components/GoogleMap/GoogleSearchBoxWi
 import PlaceTypeDropdown from '../../Components/Ui/SearchComponents/PlaceTypeDropdown';
 import "./JoinUs.css"
 
-const JoinAqar = () => {
+const UpdateAqar = () => {
     const { currentLanguage } = useLanguage(); // Get the current language
+    const { id } = useParams()
 
 
     const [showModal, setShowModal] = useState(false);
@@ -52,26 +53,8 @@ const JoinAqar = () => {
     const [selectedTown, setSelectedTown] = useState("");
 
 
-    const egyptLocations = {
-        "Cairo": {
-            "Nasr City": ["1st District", "6th District"],
-            "Heliopolis": ["Korba", "El-Montaza"]
-        },
-        "Giza": {
-            "Dokki": ["Tahrir Street", "Mosadak"],
-            "6th October": ["El Motamayez", "Sheikh Zayed"]
-        },
-        "Alexandria": {
-            "Smouha": ["Green Plaza", "Sporting"],
-            "Stanley": ["Bridge Area", "Beach Area"]
-        }
-    };
 
-    const governorates = Object.keys(egyptLocations);
-    const towns = selectedGov ? Object.keys(egyptLocations[selectedGov]) : [];
-    const cities = selectedGov && selectedTown
-        ? egyptLocations[selectedGov][selectedTown]
-        : [];
+
     const tabsKind = [
         {
             eventKey: "tab1",
@@ -212,7 +195,7 @@ const JoinAqar = () => {
         space: "",
         view: "",
         price: "",
-        paymentMethods: "",
+        paymentMethods: [],
         rooms: "",
         floor: "",
         bathrooms: "",
@@ -229,7 +212,6 @@ const JoinAqar = () => {
 
         // whatIHave
         formData.append("type", values.type);
-        formData.append("details[propertyType]", values.propertyType);
 
         // titles
         formData.append("title[ar]", values.titleAr);
@@ -244,16 +226,21 @@ const JoinAqar = () => {
 
 
         // lat long
-        formData.append("location[type]", "Point");
-        formData.append("location[coordinates][]", longitude);
-        formData.append("location[coordinates][]", latitude);
+        if (longitude && latitude) {
+            formData.append("location[type]", "Point");
+            formData.append("location[coordinates][]", longitude);
+            formData.append("location[coordinates][]", latitude);
+        }
 
 
         // Details
+        formData.append("details[propertyType]", values.propertyType);
         formData.append("details[space]", values.space);
         formData.append("details[view]", values.view);
         formData.append("details[price]", values.price);
-        formData.append("details[paymentMethods][]", values.paymentMethods);
+        if (values.paymentMethods && values.paymentMethods.length > 0) {
+            formData.append("details[paymentMethods][]", values.paymentMethods);
+        }
         formData.append("details[rooms]", values.rooms);
         formData.append("details[floor]", values.floor);
         formData.append("details[bathrooms]", values.bathrooms);
@@ -277,7 +264,7 @@ const JoinAqar = () => {
 
         setIsItemLoading(true)
         try {
-            const response = await PropertyAPI.createProperty(formData);
+            const response = await PropertyAPI.updateProperty(id, formData);
             setShowModal(true);
             resetForm();
         } catch (err) {
@@ -290,7 +277,7 @@ const JoinAqar = () => {
 
     return (
         <>
-            <HelmetInfo titlePage={currentLanguage === "ar" ? "أعلن عن عقارك" : "Advertise your property"} />
+            <HelmetInfo titlePage={currentLanguage === "ar" ? "حدث عقارك" : "Update your property"} />
 
             <FormField initialValues={initialValues}
                 onSubmit={handleSubmit}
@@ -303,14 +290,14 @@ const JoinAqar = () => {
                                 <div className='pb-4'>
                                     <BreadcrumbsPage
                                         newClassBreadHeader={"biography-bread breadcrumb-page-2"}
-                                        mainTitle={"أعلن عن  عقارك"}
+                                        mainTitle={"حدث عقارك"}
                                         routeTitleTwoBread={false}
                                         titleTwoBread={false}
                                         secondArrow={false}
                                     />
                                 </div>
 
-                                <p className='b-1 mb-2 pb-3 '>أعلن عن عقارك</p>
+                                <p className='b-1 mb-2 pb-3 '>حدث عن عقارك</p>
 
                                 {/* Type */}
                                 <Row className=" gx-4 mb-4">
@@ -425,7 +412,7 @@ const JoinAqar = () => {
                                         رقم الموبايل
                                         <span className="required-asterisk">*</span>
                                     </label>
-                                    <PhoneNumber name="phone" type="text" placeholder={"اكتب رقمك"} />
+                                    <PhoneNumber name="phone" type="text" placeholder={"اكتب رقمك"} required={false} />
                                 </div>
 
 
@@ -657,4 +644,4 @@ const JoinAqar = () => {
     )
 }
 
-export default JoinAqar
+export default UpdateAqar

@@ -17,11 +17,9 @@
   max-width: unset;
 }
 
-.success-modal .modal-content {
-  min-height:fit-content;
+.success-modal.join .modal-content {
+  min-height: fit-content;
 }
-
-
 .option-finish-btn {
   width: 100%;
   transition: all 0.3s ease;

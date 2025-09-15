@@ -2292,9 +2292,7 @@ html[dir="ltr"] .main-date-picker--1 .input-date-content .icon-date-add {
   min-height: 500px;
 }
 
-.success-modal.modal {
-  top: 20%;
-}
+
 /* Responsive */
 @media (max-width: 768px) {
   .join-us.form-container {

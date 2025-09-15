@@ -12,6 +12,7 @@ import HelmetInfo from "../../Helmetinfo/HelmetInfo";
 import AuthAPI from "../../../api/authApi";
 import { useDispatch } from "react-redux";
 import { login } from "../../../store/authSlice";
+import { Password } from "primereact/password";
 
 const content = {
     title: {
@@ -87,32 +88,32 @@ const content = {
 
 const LoginForm = ({ setFormType }) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [inputType, setInputType] = useState("password")
+    const [value, setValue] = useState('');
+
     const navigate = useNavigate()
     const { currentLanguage } = useLanguage()
     // yup validation 
     const validationSchema = Yup.object().shape({
         email: Yup.string()
             .required(content.validation.emailRequired[currentLanguage])
-            .test(
-                "email",
-                content.validation.emailInvalid[currentLanguage],
-                function (value) {
-                    return (
-                        Yup.string().email().isValidSync(value) ||
-                        Yup.string()
-                            .matches(/^[0-9]{10,14}$/, {
-                                message: content.validation.phoneInvalid[currentLanguage],
-                                excludeEmptyString: true,
-                            })
-                            .isValidSync(value)
-                    );
+            .test("email-or-phone", content.validation.emailInvalid[currentLanguage], function (value) {
+                if (!value) return false;
+
+                const isEmail = Yup.string().email().isValidSync(value);
+                const isPhone = /^[0-9]{10,14}$/.test(value);
+
+                if (!isEmail && !isPhone) {
+                    return this.createError({
+                        message: content.validation.emailInvalid[currentLanguage],
+                    });
                 }
-            ),
+                return true;
+            }),
         password: Yup.string()
             .min(8, content.validation.passwordMinLength[currentLanguage])
             .required(content.validation.passwordRequired[currentLanguage]),
     });
+
 
     const initialValues = {
         email: "",
@@ -156,45 +157,48 @@ const LoginForm = ({ setFormType }) => {
                 validationSchema={validationSchema}
                 onSubmit={handleSubmit}
             >
-                <div className="space-4 d-flex flex-column">
-                    {/* input email */}
-                    <div>
-                        <p className="b-11 pb-2">{content.email[currentLanguage]} <span>*</span></p>
-                        <InputFiled
-                            name="email"
-                            type="text"
-                            placeholder={"example@gmail.com"}
-                            success
-                        />
-                    </div>
-                    {/* input password */}
-                    <div>
-                        <p className="b-11 pb-2">{content.passwordLabel[currentLanguage]} <span>*</span></p>
-                        <InputFiled
-                            name="password"
-                            type={inputType}
-                            placeholder={" • • • • • • • •"}
-                            success
-                            setInputType={setInputType}
-                        />
-                        <Link className="d-flex py-3 b-15" onClick={() => setFormType("forgotPassword")}>{content.forgetPassword[currentLanguage]}</Link>
-                    </div>
-                </div>
-                <button
-                    type="submit"
-                    className="btn-main btn-submit w-100 b-11 p-3 d-flex justify-content-center align-items-center"
-                    disabled={isLoading}
-                >
-                    {isLoading ? (
-                        <>
-                            <span className="spinner-border spinner-border-sm me-2 text-white" role="status" />
-                            {currentLanguage === "ar" ? "جاري تسجيل الدخول..." : "Loging in..."}
-                        </>
-                    ) : (
-                        content.login[currentLanguage]
-                    )}
-                </button>
+                {({ values, setFieldValue }) => (
+                    <>
+                        <div className="space-4 d-flex flex-column">
+                            {/* input email */}
+                            <div>
+                                <p className="b-11 pb-2">{content.email[currentLanguage]} <span>*</span></p>
+                                <InputFiled
+                                    name="email"
+                                    type="text"
+                                    placeholder={"example@gmail.com"}
+                                    success
+                                />
+                            </div>
+                            {/* input password */}
+                            <div>
+                                <p className="b-11 pb-2">{content.passwordLabel[currentLanguage]} <span>*</span></p>
 
+                                <Password name="password" value={value} className="d-block" feedback={false}
+                                    onChange={(e) => {
+                                        setValue(e.target.value);
+                                        setFieldValue("password", e.target.value);
+                                    }}
+                                    toggleMask />
+                                <Link className="d-flex py-3 b-15" onClick={() => setFormType("forgotPassword")}>{content.forgetPassword[currentLanguage]}</Link>
+                            </div>
+                        </div>
+                        <button
+                            type="submit"
+                            className="btn-main btn-submit w-100 b-11 p-3 d-flex justify-content-center align-items-center"
+                            disabled={isLoading}
+                        >
+                            {isLoading ? (
+                                <>
+                                    <span className="spinner-border spinner-border-sm me-2 text-white" role="status" />
+                                    {currentLanguage === "ar" ? "جاري تسجيل الدخول..." : "Loging in..."}
+                                </>
+                            ) : (
+                                content.login[currentLanguage]
+                            )}
+                        </button>
+                    </>
+                )}
             </FormField>
             <div className="register-social">
                 <div className="separator">

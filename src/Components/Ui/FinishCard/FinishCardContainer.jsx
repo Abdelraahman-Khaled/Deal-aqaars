@@ -2,41 +2,18 @@ import React, { useState, useEffect } from 'react';
 import FininshCard from './FinishCard';
 import './FinishCard.css'; // Make sure to import your CSS file
 import PaginationPage from '../../Pagenation/Pagination';
-import FinishingAPI from '../../../api/finishingApi';
 import Loader from '../../Loader/Loader';
 import ErrorNotFoundSvg from '../../../assets/images/error-not-found.svg';
+import { useFinishing } from '../../../contexts/FinishingContext';
+import { useLanguage } from '../../Languages/LanguageContext';
 
 const FinishCardContainer = () => {
-    const [finishingServices, setFinishingServices] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const { finishingServices, loading, error, fetchFinishingServices } = useFinishing();
 
     useEffect(() => {
-        const fetchFinishingServices = async () => {
-            try {
-                setLoading(true);
-                const response = await FinishingAPI.getAllFinishingServices();
-                console.log(response);
-
-                // Check if the response has the expected structure with pagination and data array
-                if (response && response.data) {
-                    setFinishingServices(response.data);
-                } else {
-                    // If response doesn't have the expected structure, use it directly
-                    setFinishingServices(response);
-                }
-                setError(null);
-            } catch (err) {
-                console.error("Error fetching finishing services:", err);
-                setError("Failed to load finishing services");
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchFinishingServices();
-    }, []);
-
+    }, [fetchFinishingServices]);
+    const { currentLanguage } = useLanguage()
     // Use the API data directly without fallback to static data
     const cardData = finishingServices;
 
@@ -89,12 +66,12 @@ const FinishCardContainer = () => {
                                     subtitles={item.servicesOffered ?
                                         item.servicesOffered.map(service => service.ar || service) :
                                         item.services || item.subtitles}
-                                    exprince={item.companyDescription?.ar || item.experience || item.exprince}
-                                    since={item.createdAt ? new Date(item.createdAt).getFullYear() : item.since || item.establishedYear}
-                                    title={item.jobType?.ar || item.name || item.title}
+                                    exprince={item.companyDescription[currentLanguage]}
+                                    since={"0"}
+                                    title={item.jobType[currentLanguage]}
                                     phoneNumber={item.phoneNumber}
                                     hasWhatsapp={item.hasWhatsapp}
-                                    detailedAddress={item.detailedAddress?.ar}
+                                    detailedAddress={item.detailedAddress[currentLanguage]}
                                 />
                             </div>
                         ))}

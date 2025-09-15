@@ -1,10 +1,11 @@
 import React from 'react'
 import YellowArrow from '../../../assets/Icons/YellowArrow'
 import './SpaceBox.css'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import MenuArrow from '../../../assets/Icons/MenuArrow'
 
 const SpaceBox = ({ data, realEstate = false }) => {
+    const { id } = useParams()
     return (
         data?.map((item, index) => (
             <div key={index} className='d-flex flex-column space-4 pb-4 ' style={{ width: realEstate ? "48%" : "100%" }}>
@@ -14,7 +15,7 @@ const SpaceBox = ({ data, realEstate = false }) => {
                         item?.spaces.map((space, i) => (
                             <div key={i} className='d-flex justify-content-between align-items-center space-2'>
                                 <p className='b-12'>{space} متر مربع</p>
-                                <Link to={"#"} className='d-flex align-items-center space-2'>
+                                <Link to={`/compound-details/${id}`} className='d-flex align-items-center space-2'>
                                     <p className='b-12'>{item.prices[i]} ج.م</p>
                                     <YellowArrow color={'var(--netural-1000)'} />
                                 </Link>

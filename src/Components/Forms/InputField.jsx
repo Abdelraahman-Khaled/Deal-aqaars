@@ -17,9 +17,11 @@ const InputFiled = ({ label, success, setInputType, showPasswordToggle = false, 
             className={`form-group  input-field-info d-flex flex-column  position-relative form-one ${meta.touched && meta.error ? "has-error" : ""
                 }`}
         >
-            {/* <label htmlFor={props.id || props.name} className="form-label">
-                {label}
-            </label> */}
+            {label && (
+                <label htmlFor={field.name} className="block text-sm font-medium text-gray-700 pb-2">
+                    {label}
+                </label>
+            )}
             <input
                 {...field}
                 {...props}

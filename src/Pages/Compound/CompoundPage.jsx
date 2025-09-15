@@ -18,7 +18,7 @@ const CompoundPage = () => {
 
                     <CompoundList />
                     <Places />
-                    <GuidePage title={"دليل الكمبوندات - 1659 مشروع بأسعار كل الوحدات"} />
+                    <GuidePage title={"دليل الكمبوندات "} />
 
                 </ContainerMedia>
 

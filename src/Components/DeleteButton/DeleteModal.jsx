@@ -2,28 +2,37 @@ import React, { useState } from 'react'
 import TrashIcon from '../../assets/Icons/TrashIcon'
 import DeleteButton from './DeleteButton'
 import PropertyAPI from '../../api/propertyApi'
+import FinishingAPI from '../../api/finishingApi'
 
-const DeleteModal = ({ setShowProgress, propertyId, onDelete }) => {
+const DeleteModal = ({ setShowProgress, propertyId, finishingServiceId, onDelete, type = "property" }) => {
     const [isDeleting, setIsDeleting] = useState(false)
 
     const handleDelete = async () => {
-        if (!propertyId) {
+        if (type === "property" && !propertyId) {
             console.error('Property ID is required for deletion')
+            return
+        } else if (type === "finishing" && !finishingServiceId) {
+            console.error('Finishing Service ID is required for deletion')
             return
         }
 
         try {
             setIsDeleting(true)
-            await PropertyAPI.deleteProperty(propertyId)
-            
-            // Call the onDelete callback to refresh the list
-            if (onDelete) {
-                onDelete(propertyId)
+            if (type === "property") {
+                await PropertyAPI.deleteProperty(propertyId)
+                if (onDelete) {
+                    onDelete(propertyId)
+                }
+            } else if (type === "finishing") {
+                await FinishingAPI.deleteFinishingService(finishingServiceId)
+                if (onDelete) {
+                    onDelete(finishingServiceId)
+                }
             }
             
             setShowProgress(false)
         } catch (error) {
-            console.error('Error deleting property:', error)
+            console.error(`Error deleting ${type}:`, error)
         } finally {
             setIsDeleting(false)
         }
@@ -35,16 +44,16 @@ const DeleteModal = ({ setShowProgress, propertyId, onDelete }) => {
             </div>
             <div className='d-flex flex-column align-items-center space-6 w-100 px-3'>
                 <p className="b-1">
-                    متأكد إنك عايز تحذف العقار؟
+                    متأكد إنك عايز تحذف ال${type === "property" ? "عقار" : "تشطيب"}؟
                 </p>
                 <p className="b-15">
-                    لو حذفت العقار، مش هتقدر ترجعه تاني. تأكيدك مهم علشان نكمل.
+                    لو حذفت ال${type === "property" ? "عقار" : "تشطيب"}، مش هتقدر ترجعه تاني. تأكيدك مهم علشان نكمل.
                 </p>
                 <div className=' d-flex justify-content-between w-100 pt-4 space-2 '>
                     {/* delete */}
                     <div onClick={handleDelete} className='w-50'>
                         <DeleteButton 
-                            text={isDeleting ? "جاري الحذف..." : "احذف العقار"} 
+                            text={isDeleting ? "جاري الحذف..." : `احذف ال${type === "property" ? "عقار" : "تشطيب"}`}
                             newClass='w-100' 
                             disabled={isDeleting}
                         />

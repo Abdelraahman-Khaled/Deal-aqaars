@@ -5,7 +5,6 @@ import './ImageSlider.css';
 import CameraICon from '../../../assets/Icons/CameraIcon';
 
 const ImageSlider = ({ slides, options }) => {
-    console.log(slides);
 
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [showModal, setShowModal] = useState(false);

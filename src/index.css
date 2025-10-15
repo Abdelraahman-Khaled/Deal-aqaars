@@ -568,6 +568,10 @@ span.required-asterisk {
   color: var(--netural-1000);
   opacity: 1;
 }
+
+.place-kind  .tab-content{
+    width: 100%;
+}
 /* media  */
 @media (min-width: 1400px) {
   .container-lg {

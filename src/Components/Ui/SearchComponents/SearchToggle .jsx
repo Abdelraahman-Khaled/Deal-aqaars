@@ -5,7 +5,7 @@ import ListIcon from "../../../assets/Icons/ListIcon";
 
 const SearchToggle = ({ toggleState, setToggleState, tabs = [], progress = false, newClass, nest = false, list = false }) => (
     <>
-        <ul className={`nav nav-tabs ${newClass ? newClass : ""} ${progress ? "select-progress" : ""}`} id="uncontrolled-tab-example" role="tablist">
+        <ul className={`nav nav-tabs  ${newClass ? newClass : ""} ${progress ? "select-progress" : ""}`} id="uncontrolled-tab-example" role="tablist">
             {tabs.map((tab, index) => (
                 <li className="nav-item" role="presentation" key={index}>
                     <button

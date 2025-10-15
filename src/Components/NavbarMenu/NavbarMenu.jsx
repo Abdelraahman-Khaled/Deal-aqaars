@@ -69,14 +69,18 @@ const NavbarMenu = () => {
     const userType = useSelector((state) => state.userType.userType);
     const dispatch = useDispatch();
 
+console.log(user);
 
     if (user?.role === "user") {
-        dispatch(setUserType("vendor"));
+        dispatch(setUserType("user"));
     } else if (user?.role === "vendor") {
+        dispatch(setUserType("vendor"));
+    } else if (user?.company_id !== null) {
         dispatch(setUserType("company"));
     } else {
         dispatch(setUserType("user"));
     }
+    
 
     return (
         <>

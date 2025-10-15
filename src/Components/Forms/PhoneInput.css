@@ -1,0 +1,44 @@
+.PhoneInputContainer {
+  max-width: 300px;
+  margin: 40px auto;
+  font-family: "Inter", sans-serif;
+}
+
+.PhoneInputLabel {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.PhoneInput {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.PhoneInputInput {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+}
+
+.PhoneInputCountryIcon {
+  width: 20px;
+  height: 15px;
+  margin-right: 8px;
+}
+
+.PhoneInputCountrySelect {
+  border: none;
+  background: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.PhoneInputCountrySelectArrow {
+  margin-left: 5px;
+}

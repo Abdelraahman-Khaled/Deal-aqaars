@@ -4,14 +4,25 @@ import { Col, Row, Dropdown } from "react-bootstrap";
 import TabsContent from "../../../../../Components/Ui/TabsContent/TabsContent";
 import "./FinishSearch.css";
 import SearchToggle from "../../../../../Components/Ui/SearchComponents/SearchToggle ";
-import MultiSelect from "../../../../../Components/Forms/MultiSelect";
 import { translations } from "./translations"; // Import translations
 import MenuArrow from "../../../../../assets/Icons/MenuArrow";
+import { MultiSelect } from "primereact/multiselect";
 
 const FinishingSearch = () => {
     const { currentLanguage } = useLanguage(); // Get the current language
     const [toggle1, setToggle1] = useState("Furnish");
     const [home, setHome] = useState(translations[currentLanguage].Want);
+
+
+      const [selectedCities, setSelectedCities] = useState(null);
+    const cities = [
+        { name: 'أكتوبر', code: 'NY' },
+        { name: 'المعادي', code: 'RM' },
+        { name: 'بلبن', code: 'LDN' },
+        { name: 'السادات', code: 'IST' },
+        { name: 'إسكندرية', code: 'PRS' }
+    ];
+
 
     // arrow
     const [rotate, setRotate] = useState(false);
@@ -187,19 +198,15 @@ const FinishingSearch = () => {
                     </div>
                 </Col>
                 {/* Search Input */}
-                <Col xs={12} md={7} lg={4} className="d-flex flex-row space-3 p-0  ">
-                    <div className="position-relative w-100">
-                        <MultiSelect
-                            options={multiOptions}
-                            defaultSelected={[]}
-                            onChange={(values) => setSelectedValues(values)}
-                            placeholder={"فين المكان"}
-                        />
-                    </div>
+                <Col xs={12} md={7} lg={4} className="p-0 h-100">
+                          <div className="h-100" >
+                                <MultiSelect value={selectedCities} onChange={(e) => setSelectedCities(e.value)} options={cities} optionLabel="name" display="chip"
+                                    placeholder="Select Cities" maxSelectedLabels={3} className="h-100 form-control w-100  search-input d-flex align-items-center p-0" />
+                            </div>
                 </Col>
                 <Col xs={12} md={5} lg={2} className="d-flex flex-row space-3 p-0 min-w-max">
                     <Col onClick={() => setRotate(!rotate)} >
-                        <Dropdown className="d-flex">
+                        <Dropdown className="d-flex h-100">
                             <Dropdown.Toggle variant="light" className="w-100 text-end">
                                 {home}
                             </Dropdown.Toggle>

@@ -234,16 +234,16 @@ const AdvancedSearch = () => {
                     </Col>
 
                     {/* Second Column - Search Inputs */}
-                    <Col className="p-0">
+                    <Col className="d-flex">
                         <div className="d-flex flex-column gap-3 h-100 ">
-                            <div className="w-100">
+                            <div className="w-100 pb-2">
                                 <MultiSelect value={selectedCities} onChange={(e) => setSelectedCities(e.value)} options={cities} optionLabel="name" display="chip"
                                     placeholder="Select Cities" maxSelectedLabels={3} className="form-control search-input d-flex align-items-center p-0" />
                             </div>
 
                             <Row className="g-2 justify-content-between space-1 flex-column flex-sm-row">
-                                <Col className="p-0">
-                                    <div onClick={() => setRotatePlace(!rotatePlace)}>
+                                <Col className="m-0 ">
+                                    <div className="" onClick={() => setRotatePlace(!rotatePlace)}>
                                         <PlaceTypeDropdown
                                             placeType={placeType}
                                             placeTypeDetails={placeTypeDetails}
@@ -253,8 +253,8 @@ const AdvancedSearch = () => {
                                     </div>
                                 </Col>
 
-                                <Col className="p-0">
-                                    <div onClick={() => setRotate(!rotate)}>
+                                <Col className="m-0">
+                                    <div className="h-100" onClick={() => setRotate(!rotate)}>
                                         <Dropdown className="h-100">
                                             <Dropdown.Toggle variant="light" className="w-100 text-end d-flex align-items-center justify-content-between">
                                                 {rooms === "" && baths === ""

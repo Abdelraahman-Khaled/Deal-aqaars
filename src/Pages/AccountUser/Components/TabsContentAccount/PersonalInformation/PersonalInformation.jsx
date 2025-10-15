@@ -14,6 +14,8 @@ import { useSelector, useDispatch } from "react-redux";
 import ProfileAPI from "../../../../../api/profileApi";
 import { toast } from "react-toastify";
 import { updateProfile } from "../../../../../store/authSlice";
+import PhoneNumberInput from "../../../../../Components/Forms/PhoneNumberInput";
+import PhoneInput from "../../../../../Components/Forms/PhoneNumberInput";
 
 const PersonalInformation = () => {
   const { currentLanguage } = useLanguage();

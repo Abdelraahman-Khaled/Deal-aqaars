@@ -36,6 +36,7 @@ const ProfileAPI = {
       throw error; // Rethrow for further handling
     }
   },
+ 
 };
 
 export default ProfileAPI;

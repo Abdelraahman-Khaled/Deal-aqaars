@@ -40,7 +40,10 @@ const CompanyAPI = {
       const response = await axiosInstance.get("/company");
       return response.data;
     } catch (error) {
-      console.error("Error fetching companies:", error.response || error.message);
+      console.error(
+        "Error fetching companies:",
+        error.response || error.message
+      );
       handleError(error);
       throw error;
     }
@@ -52,7 +55,10 @@ const CompanyAPI = {
       const response = await axiosInstance.get(`/company/${id}`);
       return response.data;
     } catch (error) {
-      console.error(`Error fetching company with ID ${id}:`, error.response || error.message);
+      console.error(
+        `Error fetching company with ID ${id}:`,
+        error.response || error.message
+      );
       handleError(error);
       throw error;
     }
@@ -64,17 +70,19 @@ const CompanyAPI = {
       // Check if data contains logo to determine content type
       if (data.logo) {
         const formData = new FormData();
-        
+
         // Append all data fields to formData
         if (data.username) formData.append("username", data.username);
         if (data.companyName) formData.append("companyName", data.companyName);
         if (data.address) formData.append("address", data.address);
-        if (data.registrationNumber) formData.append("registrationNumber", data.registrationNumber);
+        if (data.registrationNumber)
+          formData.append("registrationNumber", data.registrationNumber);
         if (data.website) formData.append("website", data.website);
         if (data.companyType) formData.append("companyType", data.companyType);
         if (data.phoneNumber) formData.append("phoneNumber", data.phoneNumber);
-        if (data.hasWhatsapp !== undefined) formData.append("hasWhatsapp", data.hasWhatsapp);
-        
+        if (data.hasWhatsapp !== undefined)
+          formData.append("hasWhatsapp", data.hasWhatsapp);
+
         // Append logo file
         formData.append("logo", data.logo);
 
@@ -83,7 +91,7 @@ const CompanyAPI = {
             "Content-Type": "multipart/form-data",
           },
         });
-        
+
         toast.success(getToastMessages().createSuccess[getCurrentLanguage()]);
         return response.data;
       } else {
@@ -98,6 +106,17 @@ const CompanyAPI = {
       throw error;
     }
   },
+  beingVendor: async (data) => {
+    try {
+      const response = await axiosInstance.put("/user/profile", data);
+      toast.success(getToastMessages().updateSuccess[getCurrentLanguage()]);
+      return response.data;
+    } catch (error) {
+      console.error("Error updating profile:", error.response || error.message);
+      handleError(error);
+      throw error;
+    }
+  },
 
   // Delete company by ID
   deleteCompany: async (id) => {
@@ -106,7 +125,10 @@ const CompanyAPI = {
       toast.success(getToastMessages().deleteSuccess[getCurrentLanguage()]);
       return response.data;
     } catch (error) {
-      console.error(`Error deleting company with ID ${id}:`, error.response || error.message);
+      console.error(
+        `Error deleting company with ID ${id}:`,
+        error.response || error.message
+      );
       handleError(error);
       throw error;
     }

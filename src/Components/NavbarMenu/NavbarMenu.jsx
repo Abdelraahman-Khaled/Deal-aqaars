@@ -69,18 +69,18 @@ const NavbarMenu = () => {
     const userType = useSelector((state) => state.userType.userType);
     const dispatch = useDispatch();
 
-console.log(user);
+    console.log(user);
 
     if (user?.role === "user") {
         dispatch(setUserType("user"));
     } else if (user?.role === "vendor") {
         dispatch(setUserType("vendor"));
-    } else if (user?.company_id !== null) {
+    } else if (user?.companyId !== null) {
         dispatch(setUserType("company"));
     } else {
         dispatch(setUserType("user"));
     }
-    
+
 
     return (
         <>
@@ -190,7 +190,7 @@ console.log(user);
                                     <span className="d-none d-lg-flex">
                                         <UserDropMenu />
                                     </span>
-                                    {userType === "vendor" || userType === "company" ?
+                                    {userType === "vendor" ?
                                         <button onClick={() => setShowModal(true)} className="btn-main b-11" style={{ minWidth: "200px" }}>
                                             {content.announce[currentLanguage]}
                                         </button>

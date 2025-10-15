@@ -35,9 +35,9 @@
 /* favicon */
 .fav-icon{
     position: absolute;
-    top: 15px;
-    right: 15px;
-    z-index: 1;
+    top: 25px;
+    right: 25px;
+    z-index: 10;
     background: rgba(34, 34, 34, 0.5);
     border-radius: var(--border-radius-2);
     padding: 8px;

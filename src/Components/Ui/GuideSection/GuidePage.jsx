@@ -8,12 +8,10 @@ import Ads from '../../Auth/Ads/Ads';
 import PropertyAPI from '../../../api/propertyApi';
 import "./Guide.css"
 // images
-import compoundImg from "../../../assets/images/compounds/compound.png";
-import compoundImg1 from "../../../assets/images/compounds/compound1.png";
-import compoundImg2 from "../../../assets/images/compounds/compound2.png";
 import RealStateCard from '../RealStateCard/RealStateCard';
-import HouseLoader from '../../Loader/HouseLoader';
 import CompoundAPI from '../../../api/compoundApi';
+import PaginationPage from '../../Pagenation/Pagination';
+import Loader from '../../Loader/Loader';
 
 
 
@@ -25,7 +23,21 @@ const GuidePage = ({ title, compound = true }) => {
     const [properties, setProperties] = useState([]);
     const [compounds, setCompounds] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [pagination, setPagination] = useState(null);
+    const [pagenation, setPagenation] = useState({});
+
+
+    console.log("pagenation", pagenation);
+
+    // pagenation
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const handlePageChange = ({ selected }) => {
+        const newPage = selected + 1; // react-paginate is 0-based
+        setCurrentPage(newPage);
+        fetchProperties(newPage);     // fetch new page from API
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
 
     const progressTabs = [
         { value: "inprogress", label: translations[currentLanguage].inProgress },
@@ -41,15 +53,14 @@ const GuidePage = ({ title, compound = true }) => {
     ];
 
     // Fetch properties from API
-    const fetchProperties = async () => {
+    const fetchProperties = async (page = 1) => {
         try {
             setLoading(true);
-            const response = await PropertyAPI.getAllProperties();
+            const response = await PropertyAPI.getAllProperties(page); // pass page
+            console.log(response.data);
             if (response && response.data) {
-                setProperties(response.data);
-                console.log(response.data);
-
-                setPagination(response.pagination);
+                setProperties(response.data);               // only that page’s properties
+                setPagenation(response.pagination);         // use API pagination object
             }
         } catch (error) {
             console.error('Error fetching properties:', error);
@@ -57,6 +68,8 @@ const GuidePage = ({ title, compound = true }) => {
             setLoading(false);
         }
     };
+
+
     const fetchCompounds = async () => {
         try {
             setLoading(true);
@@ -65,7 +78,6 @@ const GuidePage = ({ title, compound = true }) => {
                 setCompounds(response.data);
                 console.log("compoundsdata", response.data);
 
-                setPagination(response.pagination);
             }
         } catch (error) {
             console.error('Error fetching properties:', error);
@@ -74,16 +86,7 @@ const GuidePage = ({ title, compound = true }) => {
         }
     };
 
-    // Format location from coordinates
-    const formatLocation = (location) => {
-        if (location && location.coordinates && location.coordinates.length === 2) {
-            return {
-                lat: location.coordinates[1], // latitude
-                lon: location.coordinates[0]  // longitude
-            };
-        }
-        return null;
-    };
+
 
     // Format price
     const formatPrice = (price) => {
@@ -139,7 +142,7 @@ const GuidePage = ({ title, compound = true }) => {
                     {compound && loading && (
                         <div className="loading-container">
                             <p>{currentLanguage === 'ar' ? 'جاري تحميل كموندات...' : 'Loading compounds...'}</p>
-                            <HouseLoader size="large" />
+                            <Loader />
                         </div>
                     )}
                     {compound && !loading && compounds.length === 0 && (
@@ -154,7 +157,8 @@ const GuidePage = ({ title, compound = true }) => {
                                 id={compound._id}
                                 key={index}
                                 title={compound.title[currentLanguage]}
-                                location={compound.announcementLocation}
+                                lat={compound.announcementLocation?.coordinates[1]}
+                                lon={compound.announcementLocation?.coordinates[0]}
                                 details={compound.details}
                                 price={compound.unitData.prices[0]}
                                 img={compound.compoundImages}
@@ -169,7 +173,7 @@ const GuidePage = ({ title, compound = true }) => {
                     {!compound && loading && (
                         <div className="loading-container">
                             <p>{currentLanguage === 'ar' ? 'جاري تحميل العقارات...' : 'Loading properties...'}</p>
-                            <HouseLoader size="large" />
+                            <Loader />
                         </div>
                     )}
                     {!compound && !loading && properties.length === 0 && (
@@ -177,32 +181,41 @@ const GuidePage = ({ title, compound = true }) => {
                             <p>{currentLanguage === 'ar' ? 'لا توجد عقارات متاحة' : 'No properties available'}</p>
                         </div>
                     )}
-                    {!compound && !loading && properties.map((property, index) => {
-                        const locationCoords = formatLocation(property.location);
-                        return (
-                            <RealStateCard
-                                id={property._id}
-                                key={property._id || index}
-                                title={property.title ? property.title[currentLanguage] : 'Property'}
-                                location={locationCoords}
-                                details={property.description ? property.description[currentLanguage] : ''}
-                                price={formatPrice(property.details?.price)}
-                                img={property.images && property.images.length > 0 ? property.images : '/aqar01.jpg'}
-                                company={true}
-                                connections={true}
-                                wrapperClass={toggle1 === "nest" ? "flex-wrap" : "width-full"}
-                                rooms={property.details?.rooms || 0}
-                                bath={property.details?.bathrooms || 0}
-                                space={property.details?.space || 0}
-                                offer={formatPrice(property.details?.price)}
-                                type={property.type}
-                                category={property.category}
-                                advertiser={property.advertiser}
-                            />
-                        );
-                    })}
+                    {!compound && !loading && properties.length > 0 && properties.map((property, index) => (
+                        <RealStateCard
+                            key={property._id || index}
+                            id={property._id}
+                            title={property.title ? property.title[currentLanguage] : 'Property'}
+                            lat={property.location.coordinates[0]}
+                            lon={property.location.coordinates[1]}
+                            details={property.description ? property.description[currentLanguage] : ''}
+                            price={formatPrice(property.details?.price)}
+                            img={property.images?.length > 0 ? property.images : '/aqar01.jpg'}
+                            company={true}
+                            connections={true}
+                            wrapperClass={toggle1 === "nest" ? "flex-wrap" : "width-full"}
+                            rooms={property.details?.rooms || 0}
+                            bath={property.details?.bathrooms || 0}
+                            space={property.details?.space || 0}
+                            offer={formatPrice(property.details?.price)}
+                            type={property.type}
+                            category={property.category}
+                            advertiser={property.advertiser}
+                        />
+                    ))}
+
+
                 </div>
+                {pagenation?.totalPages > 1 && (
+                    <PaginationPage
+                        itemCount={pagenation.totalPages}
+                        onPageChange={handlePageChange}
+                        forcePage={currentPage - 1} // react-paginate uses 0-based index
+                    />
+                )}
+
             </div>
+
 
             {/* Ads */}
             <Ads />

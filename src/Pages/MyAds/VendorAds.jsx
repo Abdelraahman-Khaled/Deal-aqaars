@@ -102,10 +102,17 @@ const VendorAds = () => {
         );
     };
 
+    const handleDeleteFinish = () => {
+        fetchMyFinishingServices(); // Re-fetch services to update UI
+    };
+
+    const handleDeleteSwap = () => {
+        fetchMySwaps(); // Re-fetch swaps to update UI
+    };
     const user = useSelector((state) => state.auth.user);
     const tabs = [
         { value: "realestate", label: translations[currentLanguage].realestate },
-        { value: "swaps", label: translations[currentLanguage].trade },
+        { value: "swaps", label: translations[currentLanguage].swaps },
     ];
 
     const tabsCompany = [
@@ -269,31 +276,76 @@ const VendorAds = () => {
                                             إعادة المحاولة
                                         </button>
                                     </div>
-                                ) : myFinishingServices ?
-                                    <div className='related-slider col-12 col-sm-6 col-lg-4  mt-0'>
-                                        <FininshCard
-                                            img={myFinishingServices.images}
-                                            subtitles={myFinishingServices.servicesOffered ?
-                                                myFinishingServices.servicesOffered.map(service => service[currentLanguage]) :
-                                                myFinishingServices.services || myFinishingServices.subtitles}
-                                            exprince={myFinishingServices.companyDescription?.[currentLanguage] || myFinishingServices.experience || myFinishingServices.exprince}
-                                            title={myFinishingServices.jobType?.[currentLanguage] || myFinishingServices.name || myFinishingServices.title}
-                                            phoneNumber={myFinishingServices.phoneNumber}
-                                            hasWhatsapp={myFinishingServices.hasWhatsapp}
-                                            detailedAddress={myFinishingServices.detailedAddress?.[currentLanguage]}
-                                            companyAds={true}
-                                            seen={"1"}
-                                            likes={"2"}
-                                            calls={"3"}
-                                        />
-                                    </div>
-                                    : (
-                                        <div className='d-flex flex-column justify-content-center align-items-center gap-4'>
-                                            <AddannouncementIcon />
-                                            <p className='b-12 w-25 text-center'>لا توجد إعلانات تشطيبات خاصة بك.</p>
+                                ) : myFinishingServices && myFinishingServices.length > 0 ? (
+                                    myFinishingServices.map((service, index) => (
+                                        <div className='related-slider col-12 col-sm-6 col-lg-4  mt-0' key={index}>
+                                            <FininshCard
+                                                id={service._id}
+                                                img={service.images}
+                                                subtitles={service.servicesOffered ?
+                                                    service.servicesOffered.map(service => service[currentLanguage]) :
+                                                    service.services || service.subtitles}
+                                                exprince={service.companyDescription?.[currentLanguage] || service.experience || service.exprince}
+                                                title={service.jobType?.[currentLanguage] || service.name || service.title}
+                                                phoneNumber={service.phoneNumber}
+                                                hasWhatsapp={service.hasWhatsapp}
+                                                detailedAddress={service.detailedAddress?.[currentLanguage]}
+                                                companyAds={true}
+                                                seen={"1"}
+                                                likes={"2"}
+                                                calls={"3"}
+                                                onDelete={handleDeleteFinish}
+                                            />
                                         </div>
-                                    )
-                            ) : (
+                                    ))
+                                ) : (
+                                    <div className='d-flex flex-column justify-content-center align-items-center gap-4'>
+                                        <AddannouncementIcon />
+                                        <p className='b-12 w-25 text-center'>لا توجد إعلانات تشطيبات خاصة بك.</p>
+                                    </div>
+                                )
+                            ) : toggle === "swaps" ? (
+                                loading ? (
+                                    <div className="col-12 text-center py-5">
+                                        <Loader />
+                                        <p className="mt-2">جاري تحميل الإعلانات...</p>
+                                    </div>
+                                ) : error ? (
+                                    <div className="col-12 text-center py-5">
+                                        <p className="text-danger">حدث خطأ في تحميل الإعلانات: {error}</p>
+                                    </div>
+                                ) : swaps.length > 0 ? (
+                                    swaps.map((swap, index) => (
+                                        <div className="related-slider col-12 col-sm-6 col-lg-4 mt-0" key={swap._id || index}>
+                                            <VendorAdsCard
+                                                numAds={index + 1}
+                                                id={swap._id}
+                                                title={swap.whatIHave?.propertyType}
+                                                trade={true}
+                                                location={swap.locationLabel}
+                                                images={swap.images}
+                                                listedBy={swap.listedBy}
+                                                phoneNumber={swap.contact?.phoneNumber}
+                                                hasWhatsapp={swap.contact?.hasWhatsapp}
+                                                since={swap.createdAt}
+                                                seen={"1"}
+                                                likes={"1"}
+                                                calls={"1"}
+                                                tradeItem={swap.whatIWant?.propertyType}
+                                                date={swap.createdAt}
+                                                onDelete={handleDeleteSwap}
+                                                lat={swap?.location?.coordinates[0]}
+                                                lon={swap?.location?.coordinates[1]}
+                                            />
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className='d-flex flex-column justify-content-center align-items-center gap-4'>
+                                        <AddannouncementIcon />
+                                        <p className='b-12 w-25 text-center'>لا توجد مبادلات خاصة بك.</p>
+                                    </div>
+                                )
+                            ) : ( // This block handles realestate and project
                                 loading ? (
                                     <div className="col-12 text-center py-5">
                                         <Loader />
@@ -309,7 +361,7 @@ const VendorAds = () => {
                                             إعادة المحاولة
                                         </button>
                                     </div>
-                                ) : properties?.length > 0 ? (
+                                ) : properties.length > 0 ? (
                                     properties.map((property, index) => (
                                         <div key={property.id || index} className='related-slider col-12 col-sm-6 col-lg-4  mt-0'>
                                             {toggle === "realestate" ?
@@ -317,23 +369,16 @@ const VendorAds = () => {
                                                     key={index}
                                                     id={property._id}
                                                     title={property.title[currentLanguage]}
-                                                    lon={property.location.coordinates[0]}
-                                                    lat={property.location.coordinates[1]}
-                                                    details={property.description[currentLanguage]}
-                                                    img={property.images}
-                                                    company={true}
-                                                    rooms={property.details.rooms}
-                                                    bath={property.details.bathroooms}
-                                                    space={property.details.space}
-                                                    wrapperClass={true}
-                                                    price={property.details.price}
-                                                    numAds={index + 1}
-                                                    date={property.createdAt}
+                                                    location={property.locationLabel}
+                                                    images={property.images}
+                                                    listedBy={property.listedBy}
+                                                    phoneNumber={property.contact?.phoneNumber}
+                                                    hasWhatsapp={property.contact?.hasWhatsapp}
+                                                    since={property.createdAt}
                                                     seen={"1"}
                                                     likes={"1"}
                                                     calls={"1"}
-                                                    tradeItem={"asad"}
-                                                    trade={toggle === "trade" ? true : false}
+                                                    date={property.createdAt}
                                                     onDelete={handleDeleteProperty}
                                                     propertyData={property}
                                                 />
@@ -352,53 +397,22 @@ const VendorAds = () => {
                                                         likes={"2"}
                                                         calls={"3"}
                                                     />
-                                                    : toggle === "swaps" ?
-                                                        <div className="row g-4 pt-2 ">
-                                                            {swaps.map((swap, index) => (
-                                                                <>
-                                                                    <TradeCard
-                                                                        key={index} 
-                                                                        id={swap._id}
-                                                                        title={swap.whatIHave.description}
-                                                                        trade={swap.whatIWant.description}
-                                                                        location={swap.locationLabel}
-                                                                        images={swap.images}
-                                                                        listedBy={swap.listedBy}
-                                                                        phoneNumber={swap.contact?.phoneNumber}
-                                                                        hasWhatsapp={swap.contact?.hasWhatsapp}
-                                                                        createdAt={swap.createdAt}
-                                                                    />
-                                                                </>
-                                                            ))}
-                                                        </div>
-                                                        :
-                                                        <FininshCard
-                                                            id={item._id || index} // Use item.id if available, otherwise use index as fallback
-                                                            img={item.images && item.images.length > 0 ? item.images[0] : item.img || "./home.jpg"}
-                                                            subtitles={item.servicesOffered ?
-                                                                item.servicesOffered.map(service => service.ar || service) :
-                                                                item.services || item.subtitles}
-                                                            exprince={item.companyDescription[currentLanguage]}
-                                                            since={"0"}
-                                                            title={item.jobType[currentLanguage]}
-                                                            phoneNumber={item.phoneNumber}
-                                                            hasWhatsapp={item.hasWhatsapp}
-                                                            detailedAddress={item.detailedAddress[currentLanguage]}
-                                                        />
+                                                    : null
                                             }
                                         </div>
                                     ))
                                 ) : (
                                     <div className='d-flex flex-column justify-content-center align-items-center gap-4'>
                                         <AddannouncementIcon />
-                                        <p className='b-12 w-25 text-center'>يلا مستني إيه؟ مفيش ولا إعلان منشور! ضيف إعلاناتك دلوقتي ووصل لملايين المستخدمين</p>
+                                        <p className='b-12 w-25 text-center'>لا توجد إعلانات عقارية خاصة بك.</p>
                                     </div>
                                 )
-                            )}
+                            )
+                            }
                         </div>
                     </div>
                 </div>
-            </ContainerMedia >
+            </ContainerMedia>
         </>
     )
 }

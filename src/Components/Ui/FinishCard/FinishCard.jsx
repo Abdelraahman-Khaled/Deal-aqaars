@@ -9,7 +9,6 @@ import "./FinishCard.css"
 import Water from '../../../assets/Icons/Water'
 import Electricity from '../../../assets/Icons/Electricity'
 import Board from '../../../assets/Icons/Board'
-import DeleteModal from '../DeleteModal/DeleteModal'
 import Bed from '../../../assets/Icons/Bed'
 import BathIcon from '../../../assets/Icons/BathIcon'
 import AreaIcon from '../../../assets/Icons/AreaIcon'
@@ -19,9 +18,11 @@ import PhoneAds from '../../../assets/Icons/PhoneAds'
 import defaultImage from '../../../assets/images/error-not-found.svg'
 import SimpleImageSlider from '../SimpleImageSlider/SimpleImageSlider'
 import { useFinishing } from '../../../contexts/FinishingContext'
-import UpdateFinishingModal from '../../UpdateFinishingModal/UpdateFinishingModal'
+import CustomModal from '../../CustomModal/CustomModal'
+import DeleteModal from '../../DeleteButton/DeleteModal'
+import DeleteButton from '../../DeleteButton/DeleteButton'
 
-const FininshCard = ({ id, title, img, icon, exprince, subtitles, isFav, companyAds = false, likes, seen, calls, phoneNumber, hasWhatsapp, detailedAddress, finishingServiceData }) => {
+const FininshCard = ({ id, title, img, icon, exprince, subtitles, isFav, companyAds = false, likes, seen, calls, phoneNumber, hasWhatsapp, detailedAddress, finishingServiceData, onDelete }) => {
     const { currentLanguage } = useLanguage()
     const [showProgress, setShowProgress] = useState(false);
     const [showUpdateModal, setShowUpdateModal] = useState(false);
@@ -95,13 +96,15 @@ const FininshCard = ({ id, title, img, icon, exprince, subtitles, isFav, company
                             </div>
                             <div className='connections d-flex justify-content-between w-100 pt-4 space-2 '>
                                 {/* delete */}
-                                <button onClick={() => setShowProgress(true)} className='btn-main w-50'>
-                                    حذف الاعلان
-                                </button>
+                                <div onClick={() => setShowProgress(true)} className='w-50'>
+                                    <DeleteButton text="حذف الاعلان" newClass='w-100' />
+                                </div>
 
                                 {/* edit */}
-                                <button onClick={() => setShowUpdateModal(true)} className='btn-main w-50'>
-                                    عدل على الاعلان
+                                <button className='btn-main w-50'>
+                                    <Link to={`/update-finish/${id}`} className='text-white'>
+                                        عدل على الاعلان
+                                    </Link>
                                 </button>
                             </div>
                         </>
@@ -154,20 +157,23 @@ const FininshCard = ({ id, title, img, icon, exprince, subtitles, isFav, company
 
             </div>
             {/* delete modal*/}
-            <DeleteModal
+            <CustomModal
                 showModal={showProgress}
+                onHide={() => setShowProgress(false)}
                 setShowModal={setShowProgress}
-                finishingServiceId={id}
-                type="finishing"
-                onDelete={handleDeleteSuccess}
-            />
+                newClass={"progress-modal"}
+            >
+                <div>
+                    <DeleteModal
+                        setShowProgress={setShowProgress}
+                        finishingServiceId={id}
+                        type="finishing"
+                        onDelete={onDelete}
+                    />
+                </div>
+            </CustomModal>
 
-            {/* Update Finishing Modal */}
-            <UpdateFinishingModal
-                showModal={showUpdateModal}
-                setShowModal={setShowUpdateModal}
-                finishingServiceData={finishingServiceData}
-            />
+
         </div >
     )
 }

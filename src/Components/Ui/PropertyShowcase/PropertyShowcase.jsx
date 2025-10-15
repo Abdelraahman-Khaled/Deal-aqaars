@@ -86,9 +86,7 @@ const PropertyShowcase = ({
         setIsDragging(false);
     };
 
-    const handleShowAllImages = () => {
-        setShowAllImages(true);
-    };
+  
 
     return (
         <div className="property-showcase">

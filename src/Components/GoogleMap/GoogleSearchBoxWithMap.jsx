@@ -80,7 +80,7 @@ export default function GoogleSearchBoxWithMap(props) {
         <input
           type="text"
           className="form-control form-control-solid mb-5 ps-14"
-          placeholder="ابحث عن مكان..."
+          placeholder=" ابحث عن مكان على الخريطة ..."
           onChange={(e) => console.log(e.target.value)}
         />
       </Autocomplete>

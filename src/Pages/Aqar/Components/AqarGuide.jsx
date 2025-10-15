@@ -18,11 +18,11 @@ import compoundImg1 from "../../../assets/images/compounds/compound1.png";
 import compoundImg2 from "../../../assets/images/compounds/compound2.png";
 import TwoAds from '../../../Components/Ui/TwoAds/TwoAds';
 import { useParams } from 'react-router-dom';
-import HouseLoader from '../../../Components/Loader/HouseLoader';
 import { translations } from './translations';
 import PropertyShowcaseExample from '../../../Components/Ui/PropertyShowcase/PropertyShowcaseExample';
 import LocationDisplay from '../../../Components/Ui/LocationDisplay/LocationDisplay';
 import { current } from '@reduxjs/toolkit';
+import Loader from '../../../Components/Loader/Loader';
 
 const AqarGuide = () => {
     const { currentLanguage } = useLanguage(); // Get the current language
@@ -116,7 +116,7 @@ const AqarGuide = () => {
     if (loading) {
         return (
             <div className='d-flex justify-content-center align-items-center min-vh-100'>
-                <HouseLoader />
+                <Loader />
             </div>
         );
     }

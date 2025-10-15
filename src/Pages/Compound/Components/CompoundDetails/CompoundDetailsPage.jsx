@@ -12,8 +12,8 @@ import CompanyCard from '../../../../Components/Ui/CompanyCard/CompanyCard';
 import CompoundsAds from '../../../../Components/Ui/CompoundsAds/CompoundsAds';
 import { useParams } from 'react-router-dom';
 import { useCompound } from '../../../../contexts/CompoundContext';
-import HouseLoader from '../../../../Components/Loader/HouseLoader';
 import PropertyShowcaseExample from '../../../../Components/Ui/PropertyShowcase/PropertyShowcaseExample';
+import Loader from '../../../../Components/Loader/Loader';
 
 const CompoundDetailsPage = () => {
     const { currentLanguage } = useLanguage(); // Get the current language
@@ -41,7 +41,7 @@ const CompoundDetailsPage = () => {
     if (loading) {
         return (
             <div className='d-flex justify-content-center align-items-center min-vh-100'>
-                <HouseLoader />
+                <Loader />
             </div>
         );
     }

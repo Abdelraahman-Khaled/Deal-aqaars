@@ -11,7 +11,7 @@ import Switch from '../../Components/Forms/Switch';
 import Map from '../../Components/Ui/Map/Map';
 import CustomModal from '../../Components/CustomModal/CustomModal';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import TextArea from '../../Components/Forms/TextArea';
 import ImageUploadGrid from '../../Components/ImageUploadGrid/ImageUploadGrid';
 import BreadcrumbsPage from '../../Components/Ui/BreadcrumbsPage/BreadcrumbsPage';
@@ -22,7 +22,8 @@ import GoogleSearchBoxWithMap from '../../Components/GoogleMap/GoogleSearchBoxWi
 import * as Yup from 'yup';
 import "./JoinUs.css"
 
-const JoinFinish = () => {
+const UpdateFinish = () => {
+    const { id } = useParams();
     const { currentLanguage } = useLanguage(); // Get the current language
     const [isItemLoading, setIsItemLoading] = useState(false)
 
@@ -112,7 +113,7 @@ const JoinFinish = () => {
 
         setIsItemLoading(true)
         try {
-            const response = await FinishingAPI.createFinishingService(formData);
+            const response = await FinishingAPI.updateFinishingService(id, formData);
             console.log(response);
             setShowModal(true);
             resetForm();
@@ -372,4 +373,4 @@ const JoinFinish = () => {
     )
 }
 
-export default JoinFinish
+export default UpdateFinish

@@ -13,13 +13,13 @@ import LocationDisplay from '../LocationDisplay/LocationDisplay'
 import SimpleImageSlider from '../SimpleImageSlider/SimpleImageSlider'
 import "./RealstateCard.css"
 
-const RealStateCard = ({ id, price, rooms, bath, space, details, location, offer, img, company = false, connections = false, wrapperClass, isFav, isSwiping = false, category, type, advertiser }) => {
+const RealStateCard = ({ id, price, rooms, bath, space, details, location, offer, img, company = false, connections = false, wrapperClass, isFav, isSwiping = false, category, type, advertiser, lat, lon }) => {
     const { currentLanguage } = useLanguage()
 
 
 
 
-    
+
     const sliceWords = (text) => {
         const words = text ? text.split(" ") : [];
         return words.slice(0, 8).join(" ") + (words.length > 8 ? "..." : "");
@@ -31,17 +31,17 @@ const RealStateCard = ({ id, price, rooms, bath, space, details, location, offer
 
 
     return (
-        <div className={`compound-card space-4 d-flex ${wrapperClass} mb-4`} style={company & wrapperClass === "flex-wrap" ? { width: "49%" } : { width: "100%" }} dir={currentLanguage === "ar" ? "rtl" : "ltr"}>
+        <div className={`position-relative compound-card space-4 d-flex ${wrapperClass} mb-4`} style={company & wrapperClass === "flex-wrap" ? { width: "49%" } : { width: "100%" }} dir={currentLanguage === "ar" ? "rtl" : "ltr"}>
             <Link to={`/aqar-guide/${id}`}
-                className={`  ${wrapperClass ? "w-100" : "w-50"}`}
+                className={`   ${wrapperClass ? "w-100" : "w-50"}`}
                 onClick={handleClick}
             >
-                <div className='compound-img'>
+                <div className=' compound-img'>
                     <SimpleImageSlider images={img} alt="img" />
                     {/* favIcon */}
-                    <FavIcon isFav={isFav} />
                 </div>
             </Link>
+            <FavIcon isFav={isFav} id={id} type="property" />
             {/* price */}
             <div className='d-flex flex-column space-4 w-100'>
                 <div className='d-flex justify-content-between w-100'>
@@ -78,10 +78,10 @@ const RealStateCard = ({ id, price, rooms, bath, space, details, location, offer
                 </p>
                 {/* locations */}
                 <div className='b-11'>
-                    {location && location.lat && location.lon ? (
+                    {lat && lon ? (
                         <LocationDisplay
-                            lat={location.lat}
-                            lon={location.lon}
+                            lat={lat}
+                            lon={lon}
                             className="compact"
                         />
                     ) : (
@@ -93,12 +93,14 @@ const RealStateCard = ({ id, price, rooms, bath, space, details, location, offer
                     )}
                 </div>
                 {/* offer */}
-                <div className='w-100 d-flex'>
-                    <div className='b-11 available d-flex gap-1' style={{ color: "var(--yellow-100)", width: "fit-content" }}>
-                        <MoneyIcon />
-                        مقدم {offer}{offer == 0 ? "%" : " ج.م"}
-                    </div>
-                </div>
+                {
+                    category != "cash" &&
+                    <div className='w-100 d-flex'>
+                        <div className='b-11 available d-flex gap-1' style={{ color: "var(--yellow-100)", width: "fit-content" }}>
+                            <MoneyIcon />
+                            مقدم {offer}{offer == 0 ? "%" : " ج.م"}
+                        </div>
+                    </div>}
                 <div className='connections d-flex justify-content-between w-100 pt-4 space-2 '>
                     {/* whats */}
                     {advertiser?.whatsapp && advertiser?.phone && (
@@ -129,3 +131,4 @@ const RealStateCard = ({ id, price, rooms, bath, space, details, location, offer
 }
 
 export default RealStateCard
+export { RealStateCard }

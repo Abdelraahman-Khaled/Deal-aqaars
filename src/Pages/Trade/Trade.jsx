@@ -26,8 +26,8 @@ const Trade = () => {
 
     // Function to force error state for testing
     const forceErrorState = () => {
-        const errorMessage = currentLanguage === "ar" ? 
-            "فشل تحميل إعلانات البدل. يرجى المحاولة مرة أخرى لاحقاً." : 
+        const errorMessage = currentLanguage === "ar" ?
+            "فشل تحميل إعلانات البدل. يرجى المحاولة مرة أخرى لاحقاً." :
             "Failed to load trades. Please try again later.";
         setTrades([]);
         setError(errorMessage);
@@ -40,10 +40,10 @@ const Trade = () => {
             try {
                 setIsLoading(true);
                 setError(null); // Reset error state before fetching
-                
+
                 // Uncomment the line below to test error state
-                 // return forceErrorState();
-                
+                // return forceErrorState();
+
                 const response = await SwapAPI.getAllSwaps();
                 // Check if response contains the swaps array
                 if (response && response.swaps && Array.isArray(response.swaps)) {
@@ -53,8 +53,8 @@ const Trade = () => {
                 }
             } catch (error) {
                 console.error("Error fetching trades:", error);
-                const errorMessage = currentLanguage === "ar" ? 
-                    "فشل تحميل إعلانات البدل. يرجى المحاولة مرة أخرى لاحقاً." : 
+                const errorMessage = currentLanguage === "ar" ?
+                    "فشل تحميل إعلانات البدل. يرجى المحاولة مرة أخرى لاحقاً." :
                     "Failed to load trades. Please try again later.";
                 setTrades([]); // Clear trades on error
                 setError(errorMessage);
@@ -135,10 +135,10 @@ const Trade = () => {
                         ) : error ? (
                             // Error state display
                             <div className="w-100 text-center py-5">
-                                <img 
-                                    src={ErrorNotFoundSvg} 
-                                    alt="Error" 
-                                    style={{ width: '150px', marginBottom: '20px' }} 
+                                <img
+                                    src={ErrorNotFoundSvg}
+                                    alt="Error"
+                                    style={{ width: '150px', marginBottom: '20px' }}
                                 />
                                 <h4 className="text-danger mb-2">{currentLanguage === "ar" ? "حدث خطأ ما" : "Something Went Wrong"}</h4>
                                 <p className="text-muted">{currentLanguage === "ar" ? "يرجى المحاولة مرة أخرى لاحقاً" : "Please try again later"}</p>
@@ -147,71 +147,31 @@ const Trade = () => {
                         ) : currentPageData.length === 0 ? (
                             // Empty state display
                             <div className="w-100 text-center py-5" style={{ backgroundColor: '#f8f9fa', borderRadius: '8px', padding: '30px', boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}>
-                                <img 
-                                    src={ErrorNotFoundSvg} 
-                                    alt="Not Found" 
-                                    style={{ width: '150px', marginBottom: '20px' }} 
+                                <img
+                                    src={ErrorNotFoundSvg}
+                                    alt="Not Found"
+                                    style={{ width: '150px', marginBottom: '20px' }}
                                 />
                                 <p>{currentLanguage === "ar" ? "لا توجد إعلانات للبدل حالياً" : "No trade ads available at the moment"}</p>
                             </div>
                         ) : (
                             <div className='card-container '>
-                                {currentPageData.map((card, index) => {
-                                    // Format data based on whether it's from API or hardcoded data
-                                    const isApiData = card._id !== undefined;
-                                    
-                                    // Calculate time since posting
-                                    let timeSince = card.since || "حديثاً";
-                                    if (isApiData && card.createdAt) {
-                                        const createdDate = new Date(card.createdAt);
-                                        const now = new Date();
-                                        const diffDays = Math.floor((now - createdDate) / (1000 * 60 * 60 * 24));
-                                        
-                                        if (currentLanguage === "ar") {
-                                            if (diffDays === 0) {
-                                                timeSince = "اليوم";
-                                            } else if (diffDays === 1) {
-                                                timeSince = "قبل يوم";
-                                            } else if (diffDays < 7) {
-                                                timeSince = `قبل ${diffDays} أيام`;
-                                            } else if (diffDays < 30) {
-                                                timeSince = `قبل ${Math.floor(diffDays / 7)} أسابيع`;
-                                            } else {
-                                                timeSince = `قبل ${Math.floor(diffDays / 30)} شهر`;
-                                            }
-                                        } else {
-                                            if (diffDays === 0) {
-                                                timeSince = "Today";
-                                            } else if (diffDays === 1) {
-                                                timeSince = "1 day ago";
-                                            } else if (diffDays < 7) {
-                                                timeSince = `${diffDays} days ago`;
-                                            } else if (diffDays < 30) {
-                                                timeSince = `${Math.floor(diffDays / 7)} weeks ago`;
-                                            } else {
-                                                timeSince = `${Math.floor(diffDays / 30)} months ago`;
-                                            }
-                                        }
-                                    }
-                                    
+                                {currentPageData?.map((card, index) => {
                                     return (
                                         <div key={card._id || card.id || index} className='card-item'>
                                             <TradeCard
                                                 key={card._id || card.id || index}
-                                                title={isApiData ? 
-                                                    `${card.whatIHave?.propertyType || "عقار"} ${card.whatIHave?.description || ""}` : 
-                                                    card.title}
-                                                rooms={isApiData ? "3" : card.rooms}
-                                                bath={isApiData ? "2" : card.bath}
-                                                space={isApiData ? "120" : card.space}
-                                                location={isApiData ? card.locationLabel : card.location}
-                                                trade={isApiData ? 
-                                                    `${card.whatIWant?.propertyType || "عقار"} ${card.whatIWant?.description || ""}` : 
-                                                    card.trade}
-                                                since={timeSince}
-                                                phoneNumber={isApiData && card.contact ? card.contact.phoneNumber : null}
-                                                hasWhatsapp={isApiData && card.contact ? card.contact.hasWhatsapp : undefined}
-                                                imageUrl={isApiData && card.images && card.images.length > 0 ? card.images[0].url.trim() : null}
+                                                title={card.whatIHave?.propertyType}
+                                                rooms={card.rooms}
+                                                bath={card.bath}
+                                                space={card.space}
+                                                lat={card.location?.coordinates[0]}
+                                                lon={card.location?.coordinates[1]}
+                                                trade={card.whatIWant?.propertyType}
+                                                since={card.createdAt}
+                                                phoneNumber={currentPageData && card.contact ? card.contact.phoneNumber : null}
+                                                hasWhatsapp={currentPageData && card.contact ? card.contact.hasWhatsapp : undefined}
+                                                imageUrl={currentPageData && card.images && card.images.length > 0 ? card.images[0].url.trim() : null}
                                             />
                                         </div>
                                     );

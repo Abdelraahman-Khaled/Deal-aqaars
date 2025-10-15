@@ -48,7 +48,7 @@ const FinishingAPI = {
       throw error;
     }
   },
-  
+
   // Get finishing service by ID
   getFinishingById: async (id) => {
     try {
@@ -99,13 +99,13 @@ const FinishingAPI = {
   // Create new finishing service
   createFinishingService: async (formData) => {
     try {
-        const response = await axiosInstance.post("/finish", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        toast.success(getToastMessages().createSuccess[getCurrentLanguage()]);
-        return response.data;
+      const response = await axiosInstance.post("/finish", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      toast.success(getToastMessages().createSuccess[getCurrentLanguage()]);
+      return response.data;
     } catch (error) {
       console.error(
         "Error creating finishing service:",
@@ -117,48 +117,16 @@ const FinishingAPI = {
   },
 
   // Update finishing service
-  updateFinishingService: async (id, data) => {
+  updateFinishingService: async (id, formData) => {
     try {
-      // Check if data contains images to determine content type
-      if (data.images && data.images.length > 0) {
-        const formData = new FormData();
-
-        // Append all data fields to formData
-        if (data.name) formData.append("name", data.name);
-        if (data.description) formData.append("description", data.description);
-        if (data.type) formData.append("type", data.type);
-        if (data.services && data.services.length > 0) {
-          data.services.forEach((service, index) => {
-            formData.append(`services[${index}]`, service);
-          });
-        }
-        if (data.mobile) formData.append("mobile", data.mobile);
-        if (data.hasWhatsapp !== undefined)
-          formData.append("hasWhatsapp", data.hasWhatsapp);
-        if (data.contactByEmail !== undefined)
-          formData.append("contactByEmail", data.contactByEmail);
-
-        // Append image files
-        if (data.images && data.images.length > 0) {
-          data.images.forEach((image, index) => {
-            formData.append(`images[${index}]`, image);
-          });
-        }
-
-        const response = await axiosInstance.put(`/finish/${id}`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-
-        toast.success(getToastMessages().updateSuccess[getCurrentLanguage()]);
-        return response.data;
-      } else {
-        // If no images, send as JSON
-        const response = await axiosInstance.put(`/finish/${id}`, data);
-        toast.success(getToastMessages().updateSuccess[getCurrentLanguage()]);
-        return response.data;
-      }
+      // If no images, send as JSON
+      const response = await axiosInstance.put(`/finish/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      toast.success(getToastMessages().updateSuccess[getCurrentLanguage()]);
+      return response.data;
     } catch (error) {
       console.error(
         `Error updating finishing service with ID ${id}:`,

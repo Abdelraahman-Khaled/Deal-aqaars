@@ -60,7 +60,7 @@ export const translations = {
   ar: {
     realestate: "عقارات",
     trade: "تبديل",
-    swaps: "مبادلات",
+    swaps: "تبديل",
     project: " مشروع عقاري",
     finishing: "تشطيب",
 

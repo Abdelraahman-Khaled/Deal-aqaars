@@ -17,11 +17,14 @@ import BreadcrumbsPage from '../../Components/Ui/BreadcrumbsPage/BreadcrumbsPage
 import SectionHeader from '../../Components/SectionHeader/SectionHeader';
 import SwapAPI from '../../api/swapApi';
 import "./JoinUs.css"
+import GoogleSearchBoxWithMap from '../../Components/GoogleMap/GoogleSearchBoxWithMap';
 
 const JoinTrade = () => {
     const { currentLanguage } = useLanguage();
     const [showModal, setShowModal] = useState(false);
-
+    const [latitude, setLatitude] = useState('')
+    const [longitude, setLongitude] = useState('')
+    const [isSubmitting, setIsSubmitting] = useState(false)
     // initial values for the form
     const initialValues = {
         havePropertyType: "",
@@ -30,8 +33,6 @@ const JoinTrade = () => {
         wantDescription: "",
         phoneNumber: "",
         hasWhatsapp: false,
-        longitude: "",
-        latitude: "",
         locationLabel: "",
         images: [],
     };
@@ -51,15 +52,11 @@ const JoinTrade = () => {
         formData.append("contact[phoneNumber]", values.phoneNumber);
         formData.append("contact[hasWhatsapp]", values.hasWhatsapp);
 
-        // location
+        // lat long
         formData.append("location[type]", "Point");
-
-        // Use dynamic coordinates if available, otherwise use Cairo as default
-        const longitude = values.longitude
-        const latitude = values.latitude
-
         formData.append("location[coordinates][]", longitude);
         formData.append("location[coordinates][]", latitude);
+
 
         // locationLabel
         formData.append("locationLabel", values.locationLabel);
@@ -75,12 +72,16 @@ const JoinTrade = () => {
         }
 
         try {
+            setIsSubmitting(true)
+            
             const response = await SwapAPI.createSwap(formData)
             console.log("✅ Success:", response);
             setShowModal(true);
             resetForm()
         } catch (error) {
             console.error("❌ Error creating swap:", error);
+        } finally {
+            setIsSubmitting(false)
         }
     };
 
@@ -111,12 +112,12 @@ const JoinTrade = () => {
                             <SectionHeader text={"عايز تبدل ايه"} />
 
                             <div className="mb-4 ">
-                                <label className="b-12 mb-2">نوع الحاجة اللي معاك <span>*</span></label>
+                                <label className="b-12 mb-2">نوع الحاجة اللي معاك <span className="required-asterisk">*</span></label>
                                 <InputFiled name="havePropertyType" placeholder="مثلاً: شقة، عربية، موبايل..." />
                             </div>
 
                             <div className="mb-4">
-                                <label className="b-12">الوصف الكامل <span>*</span></label>
+                                <label className="b-12">الوصف الكامل <span className="required-asterisk">*</span></label>
                                 <TextArea name="haveDescription" maxLength="700" placeholder="مواصفات الحاجة اللي معاك" />
                             </div>
 
@@ -124,12 +125,12 @@ const JoinTrade = () => {
                             <SectionHeader text={"محتاج ايه"} />
 
                             <div className="mb-4 ">
-                                <label className="b-12 mb-2">إيه الحاجة اللي بتدور عليها <span>*</span></label>
+                                <label className="b-12 mb-2">إيه الحاجة اللي بتدور عليها <span className="required-asterisk">*</span></label>
                                 <InputFiled name="wantPropertyType" placeholder="مثلاً: فيلا، عربية..." />
                             </div>
 
                             <div className="mb-4">
-                                <label className="b-12">الوصف الكامل <span>*</span></label>
+                                <label className="b-12">الوصف الكامل <span className="required-asterisk">*</span></label>
                                 <TextArea name="wantDescription" maxLength="700" placeholder="مواصفات الحاجة اللي بتدور عليها" />
                             </div>
 
@@ -137,7 +138,7 @@ const JoinTrade = () => {
                             <SectionHeader text={"بيانات التواصل"} />
 
                             <div className="mb-4 lg-w-30">
-                                <label className="b-12 mb-2">رقم الموبايل<span>*</span></label>
+                                <label className="b-12 mb-2">رقم الموبايل<span className="required-asterisk">*</span></label>
                                 <PhoneNumber name="phoneNumber" placeholder="اكتب رقمك" />
                             </div>
 
@@ -152,13 +153,21 @@ const JoinTrade = () => {
                             <SectionHeader text={"العنوان بالتفصيل"} />
 
                             <div className="mb-4 ">
-                                <label className="b-12 mb-2">العنوان بالتفصيل <span>*</span></label>
+                                <label className="b-12 mb-2">العنوان بالتفصيل <span className="required-asterisk">*</span></label>
                                 <InputFiled name="locationLabel" placeholder="اكتب عنوانك بالتفصيل" />
                             </div>
 
 
                             <div className="mb-5">
-                                {/* <MapPick /> */}
+                                <label className="b-12 mb-2">العنوان بالخريطة <span className="required-asterisk">*</span></label>
+
+                                <GoogleSearchBoxWithMap
+                                    setLatitude={setLatitude}
+                                    setLongitude={setLongitude}
+                                    isItemLoading={isSubmitting}
+                                    longitude={longitude}
+                                    latitude={latitude}
+                                />
                             </div>
 
                             {/* images */}
@@ -169,8 +178,8 @@ const JoinTrade = () => {
 
                             {/* submit */}
                             <div className="d-flex justify-content-center mt-5 pt-3">
-                                <button type="submit" className="btn-main btn-submit b-11">
-                                    ابعت الطلب
+                                <button type="submit" className="btn-main btn-submit b-11" disabled={isSubmitting}>
+                                    {isSubmitting ? "جاري الإرسال..." : "ابعت الطلب"}
                                 </button>
                             </div>
 

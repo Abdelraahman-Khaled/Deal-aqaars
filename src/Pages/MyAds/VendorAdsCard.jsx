@@ -59,28 +59,38 @@ const VendorAdsCard = ({ propertyData, id, price, numAds, seen, lat, lon, title,
                     </div>
                 </div>
                 {trade && <p className="b-9">{title}</p>}
-                {trade &&
+                {trade && lat > 0 && lon > 0 &&
                     <p className='b-12'>
 
                         <LocationDisplay lat={lat} lon={lon} />
                     </p>
                 }
-                {!trade && <p className="b-9">{price} ج.م</p>}
+                {trade && location &&
+                    <p className='b-12'>
+                        {location}
+                    </p>
+                }
+                {!trade &&
+                    <>
+                        <p className="b-9">{price} ج.م</p>
+                        <div className='d-flex gap-2'>
+                            <p className='d-flex align-items-center gap-2 b-12'>
+                                <Bed />
+                                {rooms}
+                            </p>
+                            <p className='d-flex align-items-center gap-2 b-12'>
+                                <BathIcon />
+                                {bath}
+                            </p>
+                            <p className='d-flex align-items-center gap-2 b-12'>
+                                <AreaIcon />
+                                {space} متر مربع
+                            </p>
+                        </div>
+                    </>
+                }
                 {/* specifications */}
-                <div className='d-flex gap-2'>
-                    <p className='d-flex align-items-center gap-2 b-12'>
-                        <Bed />
-                        {rooms}
-                    </p>
-                    <p className='d-flex align-items-center gap-2 b-12'>
-                        <BathIcon />
-                        {bath}
-                    </p>
-                    <p className='d-flex align-items-center gap-2 b-12'>
-                        <AreaIcon />
-                        {space} متر مربع
-                    </p>
-                </div>
+
 
                 {!trade &&
                     <>
@@ -147,6 +157,7 @@ const VendorAdsCard = ({ propertyData, id, price, numAds, seen, lat, lon, title,
                         setShowProgress={setShowProgress}
                         propertyId={id}
                         onDelete={onDelete}
+                        type={trade ? "swap" : "property"}
                     />
                 </div>
             </CustomModal>

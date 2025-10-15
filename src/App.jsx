@@ -40,6 +40,7 @@ import { CompoundProvider } from './contexts/CompoundContext';
 import 'primereact/resources/themes/lara-light-cyan/theme.css';
 import "./styles/PrimeReact.css"
 import UpdateAqar from './Pages/Update/UpdateAqar';
+import UpdateFinish from './Pages/Update/UpdateFinish';
 
 const App = () => {
   return (
@@ -99,6 +100,7 @@ const App = () => {
                         <Route path="/join-finish" element={<JoinFinish />} />
                         {/* Updates */}
                         <Route path="/update-aqar/:id" element={<UpdateAqar />} />
+                        <Route path="/update-finish/:id" element={<UpdateFinish />} />
 
                         {/* ads */}
                         <Route path="/vendor-ads" element={<VendorAds />} />

@@ -26,7 +26,7 @@ import { Field } from "formik";
 import PhoneNumberValidation from "../../Components/Forms/PhoneNumberInput";
 
 
-const JoinAqar = () => {
+const JoinCommercial = () => {
     
     const [isHouse,setIsHouse] = useState(false);
     const { currentLanguage } = useLanguage(); // Get the current language
@@ -581,4 +581,4 @@ const JoinAqar = () => {
   );
 };
 
-export default JoinAqar;
+export default JoinCommercial;

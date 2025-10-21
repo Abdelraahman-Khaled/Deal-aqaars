@@ -25,11 +25,9 @@ import SearchToggle from "../../Components/Ui/SearchComponents/SearchToggle ";
 import { Field } from "formik";
 import PhoneNumberValidation from "../../Components/Forms/PhoneNumberInput";
 
-
-const JoinAqar = () => {
-    
-    const [isHouse,setIsHouse] = useState(false);
-    const { currentLanguage } = useLanguage(); // Get the current language
+const JoinLand = () => {
+  const [isHouse, setIsHouse] = useState(false);
+  const { currentLanguage } = useLanguage(); // Get the current language
   const [toggle, setToggle] = useState("sale");
 
   const [showModal, setShowModal] = useState(false);
@@ -38,8 +36,7 @@ const JoinAqar = () => {
   const [selectVeiw, setSelectView] = useState(
     translations[currentLanguage].chooseView
   );
-  
- 
+
   const [paymentWay, setPaymentWay] = useState(
     translations[currentLanguage].paymentWay
   );
@@ -53,7 +50,6 @@ const JoinAqar = () => {
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
   const [isItemLoading, setIsItemLoading] = useState(false);
-
 
   const [selectedGov, setSelectedGov] = useState("");
   const [selectedTown, setSelectedTown] = useState("");
@@ -85,7 +81,6 @@ const JoinAqar = () => {
       ? egyptLocations[selectedGov][selectedTown]
       : [];
 
-
   const initialValues = {
     type: "", // apartment
     category: "", // rent ,sale
@@ -108,10 +103,9 @@ const JoinAqar = () => {
     images: [],
   };
 
-  useEffect(()=>{
-      selectType === "house" ? setIsHouse(true) : setIsHouse(false);
-  },[selectType])
-
+  useEffect(() => {
+    selectType === "house" ? setIsHouse(true) : setIsHouse(false);
+  }, [selectType]);
 
   const handleSubmit = async (values, { resetForm }) => {
     const formData = new FormData();
@@ -176,7 +170,7 @@ const JoinAqar = () => {
     <>
       <HelmetInfo
         titlePage={
-          currentLanguage === "ar" ? "أعلن عن عقارك" : "Advertise your property"
+          currentLanguage === "ar" ? "أعلن عن اراضي" : "Advertise your land"
         }
       />
 
@@ -195,7 +189,7 @@ const JoinAqar = () => {
                   />
                 </div>
 
-                <p className="b-1 mb-2 pb-3 ">أعلن عن عقارك</p>
+                <p className="b-1 mb-2 pb-3 ">أعلن عن أرض</p>
                 <div className="select-type join tabs-home justify-content-center mb-4">
                   <SearchToggle
                     toggleState={toggle}
@@ -207,7 +201,7 @@ const JoinAqar = () => {
                 <Row className=" gx-4 mb-4">
                   <Col xs={12} md={12}>
                     <label className="b-12 mb-2">
-                      نوع العقار
+                      نوع الأرض
                       <span className="required-asterisk"> *</span>
                     </label>
 
@@ -217,16 +211,16 @@ const JoinAqar = () => {
                         setSelectType(e.value); // القيمة الانجليزية
                         setFieldValue("type", e.value); // القيمة الانجليزية
                       }}
-                      options={translations[currentLanguage].aqarType}
+                      options={translations[currentLanguage].landType}
                       optionLabel="label" // هيعرض اللي في label
                       optionValue="value" // هيخزن value (انجليزي)
                       name="type"
-                      placeholder={translations[currentLanguage].aqar}
+                      placeholder={translations[currentLanguage].land}
                     />
                   </Col>
                   {/* <Col xs={12} md={4}>
                     <label className="b-12 mb-2">
-                      نوع العقار في السوق
+                      نوع الأرض في السوق
                       <span className="required-asterisk"> *</span>
                     </label>
                     <div onClick={() => setRotate2(!rotate2)}>
@@ -245,10 +239,10 @@ const JoinAqar = () => {
                     </div>
                   </Col> */}
                 </Row>
-                {/* <NestedDropdownAccordion data={nestedLocationData} title="عنوان العقار" placeholder="اختر المكان" /> */}
+                {/* <NestedDropdownAccordion data={nestedLocationData} title="عنوان الأرض" placeholder="اختر المكان" /> */}
 
                 {/* Details */}
-                <SectionHeader text={"تفاصيل العقار"} />
+                <SectionHeader text={"تفاصيل الأرض"} />
                 {/* location */}
 
                 <div className="mb-4 ">
@@ -338,12 +332,13 @@ const JoinAqar = () => {
                 </div>
 
                 {/* Aqar description */}
-                <SectionHeader text={" وصف العقار"} />
+                <SectionHeader text={" وصف الأرض"} />
 
                 {/* Row 1 */}
+
                 {/* size */}
                 <Row className="g-3 mb-4">
-                  <Col xs={12} md={2}>
+                  <Col xs={12} md={4}>
                     <label className="b-12 mb-2">
                       المساحة (بالمتر){" "}
                       <span className="required-asterisk"> *</span>
@@ -351,7 +346,7 @@ const JoinAqar = () => {
                     <InputFiled name="space" placeholder={"2م"} />
                   </Col>
                   {/* front of house */}
-                  <Col xs={12} md={3}>
+                  <Col xs={12} md={4}>
                     <label className="b-12 mb-2">
                       تطل على<span className="required-asterisk"> *</span>
                     </label>
@@ -370,28 +365,36 @@ const JoinAqar = () => {
                     ></Dropdown>
                   </Col>
 
-                  {/* Finishing */}
-                  <Col xs={12} md={2}>
+                      {/* aqar souq */}
+                  <Col xs={12} md={4}>
                     <label className="b-12 mb-2">
-                      نوع التطشيب <span className="required-asterisk"> *</span>
+                      نوع الأرض ف السوق{" "}
+                      <span className="required-asterisk"> *</span>
                     </label>
                     <Dropdown
-                      value={finishing}
+                      value={aqarSouq}
                       onChange={(e) => {
-                        setFinishing(e.value);
-                        setFieldValue("finishing", e.value);
+                        setAqarSouq(e.value);
+                        setFieldValue("souq", e.value);
                       }}
-                      options={translations[currentLanguage].finishingDetails}
-                      placeholder={translations[currentLanguage].finishing}
-                      name="finishing"
-                    >
+                      options={translations[currentLanguage].aqarSouqDetails}
+                      placeholder={translations[currentLanguage].aqarLand}
+                      name="souq"
                       optionValue="value" // هيخزن value (انجليزي)
                       optionLabel="label" // هيعرض اللي في label
-                    </Dropdown>
+                    ></Dropdown>
+                  </Col>
+
+                     {/* price */}
+                   <Col xs={12} md={6}>
+                    <label className="b-12 mb-2">
+                      السعر <span className="required-asterisk"> *</span>
+                    </label>
+                    <InputFiled name="price" placeholder={"السعر"} />
                   </Col>
 
                   {/* payment */}
-                  <Col xs={12} md={2}>
+                  <Col xs={12} md={6}>
                     <label className="b-12 mb-2">
                       طريقة الدفع<span className="required-asterisk"> *</span>
                     </label>
@@ -410,103 +413,17 @@ const JoinAqar = () => {
                     ></Dropdown>
                   </Col>
 
-                  {/* aqar souq */}
-                  <Col xs={12} md={3}>
-                    <label className="b-12 mb-2">
-                      نوع العقار ف السوق{" "}
-                      <span className="required-asterisk"> *</span>
-                    </label>
-                    <Dropdown
-                      value={aqarSouq}
-                      onChange={(e) => {
-                        setAqarSouq(e.value);
-                        setFieldValue("souq", e.value);
-                      }}
-                      options={translations[currentLanguage].aqarSouqDetails}
-                      placeholder={translations[currentLanguage].aqarSouq}
-                      name="souq"
-                      optionValue="value" // هيخزن value (انجليزي)
-                      optionLabel="label" // هيعرض اللي في label
-                    ></Dropdown>
-                  </Col>
+               
                 </Row>
-
-                {/* Row 2 */}
-
-                <Row className="g-3 mb-4">
-
-             {
-                !isHouse &&  
-                <>
-                {/* rooms number */}
-                  <Col xs={12} md={2}>
-                    <label className="b-12 mb-2">
-                      عدد الغرف <span className="required-asterisk"> *</span>
-                    </label>
-                    <InputFiled name="rooms" placeholder={"عدد الغرف"} />
-                  </Col>
-
-                  {/* no.floor */}
-                  <Col xs={12} md={2}>
-                    <label className="b-12 mb-2">
-                      الدور <span className="required-asterisk"> *</span>
-                    </label>
-                    <InputFiled name="floor" placeholder={" رقم الدور "} />
-                  </Col>
-
-                  {/* no.Bathroom */}
-                  <Col xs={12} md={2}>
-                    <label className="b-12 mb-2">
-                      الحمامات <span className="required-asterisk"> *</span>
-                    </label>
-                    <InputFiled
-                      name="bathrooms"
-                      placeholder={" عدد الحمامات "}
-                    />
-                  </Col>
-                </>
-             }
-
-                  {/* no.build */}
-                  <Col xs={12} md={3}>
-                    <label className="b-12 mb-2">
-                     سنة البناء<span className="required-asterisk"> *</span>
-                    </label>
-                    <InputFiled
-                      name="handoverDate"
-                      placeholder={"حدد سنة البناء"}
-                    />
-                  </Col>
-
-                  {/* no.Year */}
-                  <Col xs={12} md={3}>
-                    <label className="b-12 mb-2">
-                      سنة التسليم <span className="required-asterisk"> *</span>
-                    </label>
-                    <InputFiled
-                      name="handoverDate"
-                      placeholder={"حدد سنة التسليم "}
-                    />
-                  </Col>
-                      {/* price */}
-                  <Col xs={12} md={2}>
-                    <label className="b-12 mb-2">
-                      السعر <span className="required-asterisk"> *</span>
-                    </label>
-                    <InputFiled name="price" placeholder={"السعر"} />
-                  </Col>
-                </Row>
-
-              
 
                 {/* Location of the property */}
-                <SectionHeader text={"عنوان العقار"} />
+                <SectionHeader text={"عنوان الأرض"} />
 
                 {/* location */}
 
                 <div className="mb-4 ">
                   <label className="b-12 mb-2">
-                    عنوان العقار <span className="required-asterisk">*</span>
+                    عنوان الأرض <span className="required-asterisk">*</span>
                   </label>
 
                   <div className="mb-5">
@@ -560,9 +477,9 @@ const JoinAqar = () => {
                     </div>
                     <h6>💡 طلبك وصل!</h6>
                     <p className="b-15" style={{ color: "var(--netural-700)" }}>
-                      تمام، تسجيلك كتاجر في التشطيبات وصل بنجاح! ✨ هنراجع
-                      بياناتك وهنكلمك قريب عشان نكمل باقي الخطوات. خليك متابع
-                      تنبيهاتك لأي جديد! 🚀
+                      تمام، تسجيلك كأرض وصل بنجاح! ✨ هنراجع بياناتك وهنكلمك
+                      قريب عشان نكمل باقي الخطوات. خليك متابع تنبيهاتك لأي جديد!
+                      🚀
                     </p>
                     <Link
                       to={"/"}
@@ -581,4 +498,4 @@ const JoinAqar = () => {
   );
 };
 
-export default JoinAqar;
+export default JoinLand;

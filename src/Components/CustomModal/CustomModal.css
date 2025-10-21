@@ -37,6 +37,7 @@
   .modal .modal-header {
     justify-content: space-between;
     padding: 10px 20px !important;
+    border-bottom: none;
   }
   
   .modal .modal-title {

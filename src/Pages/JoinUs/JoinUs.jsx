@@ -135,7 +135,7 @@ const JoinUs = () => {
 
                     <div className="mb-4 flex-wrap d-flex align-items-center justify-content-between flex-wrap gap-3">
                         <label className="b-9 me-3" style={{ minWidth: "150px" }}>
-                            {content.companyName[currentLanguage]} <span>*</span>
+                            {content.companyName[currentLanguage]} <span className="required-asterisk">*</span>
                         </label>
                         <InputFiled name="companyName" placeholder={content.companyNameHolder[currentLanguage]} />
                     </div>
@@ -143,13 +143,13 @@ const JoinUs = () => {
 
                     <div className="mb-4 flex-wrap d-flex align-items-center justify-content-between ">
                         <label className="b-9 me-3" style={{ minWidth: "150px" }}>
-                            {content.description[currentLanguage]} <span>*</span></label>
+                            {content.description[currentLanguage]} <span className="required-asterisk">*</span></label>
                         <TextArea name="description" maxLength="500" placeholder={content.descriptionHolder[currentLanguage]} />
                     </div>
 
                     <div className="mb-4 flex-wrap d-flex align-items-center space-7 advanced-search p-0">
                         <label className="b-9 me-3" style={{ minWidth: "150px" }}>
-                            {content.workType[currentLanguage]} <span>*</span></label>
+                            {content.workType[currentLanguage]} <span className="required-asterisk">*</span></label>
                         <div className="d-flex gap-3">
                             <p className={`pick bg-light-gray ${work === "furnishing" && "picked"}`} onClick={() => setWork("furnishing")}>فرش</p>
                             <p className={`pick bg-light-gray ${work === "finishing" && "picked"}`} onClick={() => setWork("finishing")}>تشطيب</p>
@@ -158,7 +158,7 @@ const JoinUs = () => {
 
                     <div className="mb-4  d-flex flex-wrap align-items-center justify-content-between space-7">
                         <label className="b-9 me-3" style={{ minWidth: "150px" }}>
-                            {content.services[currentLanguage]} <span>*</span></label>
+                            {content.services[currentLanguage]} <span className="required-asterisk">*</span></label>
                         <NormalMultiSelect
                             options={multiOptions}
                             defaultSelected={[]}
@@ -173,7 +173,7 @@ const JoinUs = () => {
 
                     <div className="mb-4  d-flex flex-wrap align-items-center justify-content-between">
                         <label className="b-9 me-3 mb-3" style={{ minWidth: "150px" }}>
-                            {content.mobile[currentLanguage]} <span>*</span></label>
+                            {content.mobile[currentLanguage]} <span className="required-asterisk">*</span></label>
                         <PhoneNumber name="mobile" type="text" placeholder={content.mobileHolder[currentLanguage]} />
                     </div>
 
@@ -185,7 +185,7 @@ const JoinUs = () => {
 
                     <div className="mb-4 flex-wrap d-flex align-items-center justify-content-between">
                         <label className="b-9 me-3 mb-3" style={{ minWidth: "150px" }}>
-                            {content.location[currentLanguage]} <span>*</span></label>
+                            {content.location[currentLanguage]} <span className="required-asterisk">*</span></label>
                         <InputFiled name="location" placeholder={content.locationHolder[currentLanguage]} />
                     </div>
 
@@ -193,7 +193,7 @@ const JoinUs = () => {
 
                     <div className="mb-4 flex-row flex-wrap d-flex align-items-center justify-content-between space-7 ">
                         <label className="b-9 me-3" style={{ minWidth: "150px" }}>
-                            {content.upload[currentLanguage]} <span>*</span></label>
+                            {content.upload[currentLanguage]} <span className="required-asterisk">*</span></label>
                         <UploadImages name="images" label={content.upload[currentLanguage]} />
                     </div>
 

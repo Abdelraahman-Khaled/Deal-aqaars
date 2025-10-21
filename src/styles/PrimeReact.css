@@ -1,7 +1,7 @@
 .p-dropdown {
   display: flex;
   align-items: center;
-  padding: 12px 8px;
+  padding: 8px 10px;
   border-radius: var(--border-radius-4);
   border: 1px solid var(--netural-200);
   background-color: var(--netural-100);

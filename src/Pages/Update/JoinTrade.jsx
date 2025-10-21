@@ -111,12 +111,12 @@ const JoinTrade = () => {
                             <SectionHeader text={"عايز تبدل ايه"} />
 
                             <div className="mb-4 ">
-                                <label className="b-12 mb-2">نوع الحاجة اللي معاك <span>*</span></label>
+                                <label className="b-12 mb-2">نوع الحاجة اللي معاك <span className="required-asterisk">*</span></label>
                                 <InputFiled name="havePropertyType" placeholder="مثلاً: شقة، عربية، موبايل..." />
                             </div>
 
                             <div className="mb-4">
-                                <label className="b-12">الوصف الكامل <span>*</span></label>
+                                <label className="b-12">الوصف الكامل <span className="required-asterisk">*</span></label>
                                 <TextArea name="haveDescription" maxLength="700" placeholder="مواصفات الحاجة اللي معاك" />
                             </div>
 
@@ -124,12 +124,12 @@ const JoinTrade = () => {
                             <SectionHeader text={"محتاج ايه"} />
 
                             <div className="mb-4 ">
-                                <label className="b-12 mb-2">إيه الحاجة اللي بتدور عليها <span>*</span></label>
+                                <label className="b-12 mb-2">إيه الحاجة اللي بتدور عليها <span className="required-asterisk">*</span></label>
                                 <InputFiled name="wantPropertyType" placeholder="مثلاً: فيلا، عربية..." />
                             </div>
 
                             <div className="mb-4">
-                                <label className="b-12">الوصف الكامل <span>*</span></label>
+                                <label className="b-12">الوصف الكامل <span className="required-asterisk">*</span></label>
                                 <TextArea name="wantDescription" maxLength="700" placeholder="مواصفات الحاجة اللي بتدور عليها" />
                             </div>
 
@@ -137,7 +137,7 @@ const JoinTrade = () => {
                             <SectionHeader text={"بيانات التواصل"} />
 
                             <div className="mb-4 lg-w-30">
-                                <label className="b-12 mb-2">رقم الموبايل<span>*</span></label>
+                                <label className="b-12 mb-2">رقم الموبايل<span className="required-asterisk">*</span></label>
                                 <PhoneNumber name="phoneNumber" placeholder="اكتب رقمك" />
                             </div>
 
@@ -152,7 +152,7 @@ const JoinTrade = () => {
                             <SectionHeader text={"العنوان بالتفصيل"} />
 
                             <div className="mb-4 ">
-                                <label className="b-12 mb-2">العنوان بالتفصيل <span>*</span></label>
+                                <label className="b-12 mb-2">العنوان بالتفصيل <span className="required-asterisk">*</span></label>
                                 <InputFiled name="locationLabel" placeholder="اكتب عنوانك بالتفصيل" />
                             </div>
 

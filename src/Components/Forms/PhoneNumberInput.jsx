@@ -1,26 +1,32 @@
-import React from 'react';
-import 'react-phone-number-input/style.css';
-import PhoneInput from 'react-phone-number-input';
-import './PhoneInput.css';
+import { useState } from "react";
+import PhoneInput from "react-phone-input-2"
+import 'react-phone-input-2/lib/style.css'
+import './PhoneNumberValidation.css'
+import { isValidPhoneNumber } from 'libphonenumber-js';
 
-const PhoneNumberInput = ({ value, onChange }) => {
+function PhoneNumberValidation({ field, form ,placeholder }) {
+  const [valid, setValid] = useState(true);
+  const [countryCode, setCountryCode] = useState("eg"); // Default country code
+
+    const handleChange = (value, country) => {
+    form.setFieldValue(field.name, value); // ✅ Update Formik value
+    setCountryCode(country.countryCode);
+    setValid(isValidPhoneNumber(value, country.countryCode.toUpperCase()));
+  };
+
   return (
-    <div className="PhoneInputContainer">
-      <label className="PhoneInputLabel">
-        Phone Number:
-      </label>
+    <div className="phoneValidation-container">
       <PhoneInput
-        placeholder="Enter phone number"
-        value={value}
-        onChange={onChange}
-        defaultCountry="EG"
-        international
-        countryCallingCodeEditable={false}
-        className="PhoneInput"
-        inputClassName="PhoneInputInput"
+        country={countryCode}
+        value={field.value}
+        onChange={handleChange}
+        inputProps={{
+          required: true
+        }}
+        placeholder={"+201121323475" || placeholder}
       />
+      {!valid && <p className="error fs-8">Please enter a valid phone number</p>}
     </div>
   );
-};
-
-export default PhoneNumberInput;
+}
+export default PhoneNumberValidation

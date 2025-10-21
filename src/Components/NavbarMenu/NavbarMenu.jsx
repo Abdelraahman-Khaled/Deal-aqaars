@@ -23,6 +23,9 @@ import { setUserType } from "../../store/userTypeSlice";
 import { PersonJoin } from "../Ui/PersonJoin/PersonJoin";
 import RequestProgress from "../Ui/PersonJoin/RequestProgress";
 import { CompanyJoin } from "../Ui/CompanyJoin/CompanyJoin";
+import Land from "../../assets/Icons/Land";
+import Commercial from "../../assets/Icons/Commercial";
+import Industrial from "../../assets/Icons/Industrial";
 
 
 const content = {
@@ -42,6 +45,9 @@ const content = {
 const announcementPerson = [
     { id: 1, text: "اعلن عن عقارك", icon: <HouseSimpleIcon />, link: "join-aqar" },
     { id: 2, text: "اعلن عن اي حاجه عايز تبدلها", icon: <SwapModalIcon />, link: "join-trade" },
+    { id: 3, text: "اعلن عن أرض", icon: <Land />, link: "joinLand" },
+    { id: 4, text: "اعلن عن وحدة تجارية", icon: <Commercial />, link: "joinCommercial" },
+    { id: 5, text: "اعلن عن وحدة صناعية", icon: <Industrial />, link: "joinIndustrial" },
 ];
 const announcementCompany = [
     { id: 1, text: "اعلن عن عقار", icon: <HouseSimpleIcon />, link: "join-aqar" },

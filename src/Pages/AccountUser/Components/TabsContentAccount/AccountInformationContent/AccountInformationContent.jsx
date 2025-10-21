@@ -163,7 +163,7 @@ const AccountInformationContent = () => {
 
               <div className="w-100 d-flex flex-column justify-content-between flex-wrap gap-1">
                 <label className="b-11 me-3 pb-2" style={{ minWidth: "150px" }}>
-                  الرقم السري الحالي <span>*</span>
+                  الرقم السري الحالي <span className="required-asterisk">*</span>
                 </label>
                 <InputFiled
                   name="currentPassword"
@@ -177,7 +177,7 @@ const AccountInformationContent = () => {
 
               <div className="w-100 d-flex flex-column justify-content-between flex-wrap gap-1">
                 <label className="b-11 me-3 pb-2" style={{ minWidth: "150px" }}>
-                  الرقم السري الجديد <span>*</span>
+                  الرقم السري الجديد <span className="required-asterisk">*</span>
                 </label>
                 <InputFiled
                   name="newPassword"
@@ -191,7 +191,7 @@ const AccountInformationContent = () => {
 
               <div className="w-100 d-flex flex-column justify-content-between flex-wrap gap-1">
                 <label className="b-11 me-3" style={{ minWidth: "150px" }}>
-                  تأكيد الرقم السري الجديد <span>*</span>
+                  تأكيد الرقم السري الجديد <span className="required-asterisk">*</span>
                 </label>
                 <InputFiled
                   name="confirmNewPassword"

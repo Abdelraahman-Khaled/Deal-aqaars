@@ -41,6 +41,8 @@ import 'primereact/resources/themes/lara-light-cyan/theme.css';
 import "./styles/PrimeReact.css"
 import UpdateAqar from './Pages/Update/UpdateAqar';
 import UpdateFinish from './Pages/Update/UpdateFinish';
+import JoinLand from './Pages/JoinUs/JoinLand';
+import JoinCommercial from './Pages/JoinUs/JoinCommercial';
 
 const App = () => {
   return (
@@ -95,6 +97,8 @@ const App = () => {
                         {/* join us */}
                         {/* <Route path="/join" element={<JoinUs />} /> */}
                         <Route path="/join-aqar" element={<JoinAqar />} />
+                        <Route path="/joinLand" element={<JoinLand />} />
+                        <Route path="/joinCommercial" element={<JoinCommercial />} />
                         <Route path="/join-company" element={<JoinCompany />} />
                         <Route path="/join-trade" element={<JoinTrade />} />
                         <Route path="/join-finish" element={<JoinFinish />} />

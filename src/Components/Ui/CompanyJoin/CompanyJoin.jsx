@@ -187,7 +187,7 @@ export const CompanyJoin = ({ setShowCompany, setShowProgress }) => {
                         {/* Username */}
                         <div className="mb-4 ">
                             <label className="b-15 mb-2">
-                                اسم المستخدم  <span>*</span>
+                                اسم المستخدم  <span className="required-asterisk">*</span>
                             </label>
                             <InputFiled name="username" placeholder="مثال: masaproperties" />
                         </div>
@@ -195,7 +195,7 @@ export const CompanyJoin = ({ setShowCompany, setShowProgress }) => {
                         {/* Company Name */}
                         <div className="mb-4 ">
                             <label className="b-15 mb-2">
-                                اسم الشركة  <span>*</span>
+                                اسم الشركة  <span className="required-asterisk">*</span>
                             </label>
                             <InputFiled name="companyName" placeholder=" مثال: الماسة للتطوير العقاري" />
                         </div>
@@ -203,7 +203,7 @@ export const CompanyJoin = ({ setShowCompany, setShowProgress }) => {
                         {/* Address */}
                         <div className="mb-4 ">
                             <label className="b-15 mb-2">
-                                العنوان بالتفصيل <span>*</span>
+                                العنوان بالتفصيل <span className="required-asterisk">*</span>
                             </label>
                             <InputFiled name="address" placeholder="العنوان" />
                         </div>
@@ -211,7 +211,7 @@ export const CompanyJoin = ({ setShowCompany, setShowProgress }) => {
                         {/* commercial register */}
                         <div className="mb-4 ">
                             <label className="b-15 mb-2">
-                                رقم السجل التجاري  <span>*</span>
+                                رقم السجل التجاري  <span className="required-asterisk">*</span>
                             </label>
                             <InputFiled name="registrationNumber" placeholder="ادخل السجل التجاري" />
                         </div>
@@ -227,7 +227,7 @@ export const CompanyJoin = ({ setShowCompany, setShowProgress }) => {
                         {/* company type */}
                         <div className="mb-4 ">
                             <label className="b-15 mb-2">
-                                نوع الشركة  <span>*</span>
+                                نوع الشركة  <span className="required-asterisk">*</span>
                             </label>
                             <Select
                                 options={options}
@@ -242,7 +242,7 @@ export const CompanyJoin = ({ setShowCompany, setShowProgress }) => {
                         {/* Mobile */}
                         <div className="mb-4 ">
                             <label className="b-15 mb-2 w-100">
-                                رقم الموبايل <span>*</span>
+                                رقم الموبايل <span className="required-asterisk">*</span>
                             </label>
                             <PhoneNumber name="phoneNumber" placeholder="اكتب رقمك" />
                         </div>
@@ -261,7 +261,7 @@ export const CompanyJoin = ({ setShowCompany, setShowProgress }) => {
                         {/* logo */}
                         <div className="mb-4 ">
                             <label className="b-15 mb-2 w-100">
-                                شعار الشركة  <span>*</span>
+                                شعار الشركة  <span className="required-asterisk">*</span>
                             </label>
                             <ImageDropZone handleInputChange={handleInputChange} />
                         </div>

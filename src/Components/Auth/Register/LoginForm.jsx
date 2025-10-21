@@ -162,7 +162,7 @@ const LoginForm = ({ setFormType }) => {
                         <div className="space-4 d-flex flex-column">
                             {/* input email */}
                             <div>
-                                <p className="b-11 pb-2">{content.email[currentLanguage]} <span>*</span></p>
+                                <p className="b-11 pb-2">{content.email[currentLanguage]} <span className="required-asterisk">*</span></p>
                                 <InputFiled
                                     name="email"
                                     type="text"
@@ -172,7 +172,7 @@ const LoginForm = ({ setFormType }) => {
                             </div>
                             {/* input password */}
                             <div>
-                                <p className="b-11 pb-2">{content.passwordLabel[currentLanguage]} <span>*</span></p>
+                                <p className="b-11 pb-2">{content.passwordLabel[currentLanguage]} <span className="required-asterisk">*</span></p>
 
                                 <Password name="password" value={value} className="d-block" feedback={false}
                                     onChange={(e) => {

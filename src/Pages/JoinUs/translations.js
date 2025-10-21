@@ -1,6 +1,9 @@
 export const translations = {
   en: {
+    forSale: "For Sale",
+    forRent: "For Rent",
     aqar: "Choose your aqar",
+    land: "Choose your land",
     type: "Choose your type",
     aqarType: [
       { label: "villa", value: "villa" },
@@ -9,6 +12,15 @@ export const translations = {
       { label: "penthouse", value: "penthouse" },
       { label: "commercial office", value: "commercial_office" },
       { label: "apartment", value: "apartment" },
+      { label: "house", value: "house" },
+    ],
+     landType: [
+      { label: "Residential Building Land", value: "residential_land" },
+      { label: "Administrative Land", value: "administrative_land" },
+      { label: "Commercial Land", value: "commercial_land" },
+      { label: "Penthouse", value: "penthouse" },
+      { label: "Agricultural Land", value: "agricultural_land" },
+      { label: "Industrial Land", value: "industrial_land" },
     ],
     aqarCategory: [
       { label: "sale", value: "sale" },
@@ -37,12 +49,13 @@ export const translations = {
       { label: "cash and installment", value: "cash_and_installment" },
     ],
     aqarSouq: "Choose type of property in the market",
+    aqarLand: "Choose type of land in the market",
     aqarSouqDetails: [
       {
-        label: "(first residence) from the developer",
+        label: " From Developer (Primary)",
         value: "first_residence",
       },
-      { label: "from the property owner", value: "from_owner" },
+      { label: "From Owner (Resale)", value: "from_owner" },
     ],
     finishing: "Choose type of finishing",
     finishingDetails: [
@@ -58,9 +71,12 @@ export const translations = {
     whatsappText: "WhatsApp available on this number",
   },
   ar: {
+    forSale: "للبيع",
+    forRent: "للإيجار",
     aqar: "اختار نوع العقار",
+    land: "اختار نوع الأرض",
     type: "اختار القسم",
-    aqarType: [
+     aqarType: [
       { label: "فلل", value: "villa" },
       { label: "شاليهات", value: "chalet" },
       { label: "توين هاوس", value: "twin_house" },
@@ -68,11 +84,19 @@ export const translations = {
       { label: "مكتب تجاري", value: "commercial_office" },
       { label: "شقة", value: "apartment" },
     ],
+    landType: [
+      { label: "أرض مباني سكنية", value: "residential_land" },
+      { label: "أرض إدارية", value: "administrative_land" },
+      { label: "أرض تجارية", value: "commercial_land" },
+      { label: "بنت هاوس", value: "penthouse" },
+      { label: " أرض زراعية", value: "agricultural_land" },
+      { label: "أرض صناعية", value: "industrial_land" },
+    ],
     aqarCategory: [
       { label: "للبيع", value: "sale" },
       { label: "للايجار", value: "rent" },
     ],
-    chooseView: "اختر المنطقة",
+    chooseView: " اختار الاطلالة ",
     view: [
       { label: "شارع رئيسي", value: "main_street" },
       { label: "ناصية", value: "corner" },
@@ -95,11 +119,12 @@ export const translations = {
       { label: "كاش و قسط", value: "cash_and_installment" },
     ],
     aqarSouq: " اختار نوع العقار ف السوق ",
+    aqarLand: " اختار نوع الأرض ف السوق ",
     aqarSouqDetails: [
-      { label: "(اول سكن)من المطور", value: "first_residence" },
-      { label: "من مالك العقار", value: "from_owner" },
+      { label: "من المطور (أول سكن)", value: "first_residence" },
+      { label: " من مالك العقار (ريسيل)", value: "from_owner" },
     ],
-    finishing: "اختر نوع التشطيب",
+    finishing: "التشطيب عامل إزاي",
     finishingDetails: [
       { label: "extra super lux", value: "extraSuperLux" },
       { label: "super lux", value: "superLux" },

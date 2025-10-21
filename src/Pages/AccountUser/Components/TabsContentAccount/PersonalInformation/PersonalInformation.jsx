@@ -7,15 +7,14 @@ import EditIcon from "../../../../../assets/Icons/EditIcon";
 import ProfileIcon from "../../../../../assets/Icons/ProfileIcon";
 import PhoneIcon from "../../../../../assets/Icons/PhoneIcon";
 import EmailIcon from "../../../../../assets/Icons/EmailIcon";
-import PhoneNumber from "../../../../../Components/Forms/PhoneNumber";
 import FormField from "../../../../../Components/Forms/FormField";
 import { Col, Row } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import ProfileAPI from "../../../../../api/profileApi";
 import { toast } from "react-toastify";
 import { updateProfile } from "../../../../../store/authSlice";
-import PhoneNumberInput from "../../../../../Components/Forms/PhoneNumberInput";
-import PhoneInput from "../../../../../Components/Forms/PhoneNumberInput";
+import PhoneNumberValidation from "../../../../../Components/Forms/PhoneNumberInput";
+import { Field } from "formik";
 
 const PersonalInformation = () => {
   const { currentLanguage } = useLanguage();
@@ -23,6 +22,7 @@ const PersonalInformation = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+
 
   const initialValues = {
     name: user?.name || "",
@@ -117,7 +117,7 @@ const PersonalInformation = () => {
                 <Col xs={12} lg={6}>
                   <div className="d-flex flex-column">
                     <label className="b-9 pb-2" style={{ minWidth: "150px" }}>
-                      الاسم <span>*</span>
+                      الاسم <span className="required-asterisk">*</span>
                     </label>
                     <InputFiled name="name" placeholder={user.name || "الاسم"} />
                   </div>
@@ -126,16 +126,17 @@ const PersonalInformation = () => {
                 <Col xs={12} lg={6}>
                   <div className="d-flex flex-column">
                     <label className="b-9 pb-2" style={{ minWidth: "150px" }}>
-                      الموبايل <span>*</span>
+                      الموبايل <span className="required-asterisk">*</span>
                     </label>
-                    <PhoneNumber name="mobile" type="text" placeholder={user.mobile || "رقم الهاتف"} />
+                <Field name="mobile" component={PhoneNumberValidation} />
+
                   </div>
                 </Col>
               </Row>
 
               <div className=" d-flex flex-column justify-content-between flex-wrap gap-3">
                 <label className="b-9 me-3" style={{ minWidth: "150px" }}>
-                  الايميل <span>*</span>
+                  الايميل <span className="required-asterisk">*</span>
                 </label>
                 <InputFiled name="email" placeholder={user.email || "expamle@gmail.com"} />
               </div>

@@ -1,0 +1,40 @@
+.phoneValidation-container{
+    direction: rtl;
+}
+[dir="rtl"] .phoneValidation-container{
+    direction: ltr;
+}
+.react-tel-input .selected-flag {
+    display: flex;
+    justify-content: center;
+    padding: 0px;
+}
+
+[dir=rtl] .react-tel-input .selected-flag .arrow {
+    left: 20px;
+}
+
+.react-tel-input .selected-flag {
+    background: #f8f9fa;
+    padding: 0 20px;
+}
+
+.react-tel-input .form-control {
+    border-radius: var(--border-radius-4);
+    border: 1px solid rgba(206, 206, 206, 1);
+    width: 100%;
+    padding: 12px 8px 12px 56px;
+    font-size: 1rem;
+    font-weight: 400;
+    display: block;
+    line-height: 1.5;
+    height: 42px;
+}
+[dir=ltr] .react-tel-input .form-control {
+    padding: 12px 8px 12px 20px;
+}
+.react-tel-input .flag-dropdown {
+    border-radius: 5px;
+    height: 100%;
+
+}

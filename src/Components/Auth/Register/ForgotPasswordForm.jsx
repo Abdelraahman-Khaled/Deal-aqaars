@@ -102,7 +102,7 @@ const ForgotPasswordForm = () => {
                 validationSchema={validationSchema}
                 onSubmit={handleForgetSubmit}
             >
-                <p className="b-11 pb-2">{content.email[currentLanguage]} <span>*</span></p>
+                <p className="b-11 pb-2">{content.email[currentLanguage]} <span className="required-asterisk">*</span></p>
                 <InputFiled
                     name="email"
                     type="text"

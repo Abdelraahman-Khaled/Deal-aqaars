@@ -393,13 +393,13 @@ const Compound3 = ({ formData, setFormData }) => {
                         <div className='row'>
                             <div className="mb-4 w-50">
                                 <label className="b-12 mb-2">
-                                    عنوان الاعلان  <span>*</span>
+                                    عنوان الاعلان  <span className="required-asterisk">*</span>
                                 </label>
                                 <InputFiled name="location" placeholder={"عنوان الاعلان"} />
                             </div>
                             <div className="mb-4 w-50 ">
                                 <label className="b-12 mb-2">
-                                    عنوان الاعلان بالانجليزي  <span>*</span>
+                                    عنوان الاعلان بالانجليزي  <span className="required-asterisk">*</span>
                                 </label>
                                 <InputFiled name="location" placeholder={"عنوان الاعلان"} />
                             </div>
@@ -408,14 +408,14 @@ const Compound3 = ({ formData, setFormData }) => {
                         {/* Company */}
                         <div className="mb-4 ">
                             <label className="b-12 ">
-                                تفاصيل الاعلان <span>*</span>
+                                تفاصيل الاعلان <span className="required-asterisk">*</span>
                             </label>
                             <TextArea name="location" placeholder={"عنوان الاعلان"} />
                         </div>
 
                         <div className="mb-4 ">
                             <label className="b-12 ">
-                                تفاصيل الاعلان بالانجليزي<span>*</span>
+                                تفاصيل الاعلان بالانجليزي<span className="required-asterisk">*</span>
                             </label>
                             <TextArea name="location" placeholder={"عنوان الاعلان بالانجليزي"} />
                         </div>

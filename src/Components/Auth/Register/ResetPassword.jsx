@@ -100,7 +100,7 @@ const ResetPassword = () => {
             >
                 <div className="space-4 d-flex flex-column">
                     <div>
-                        <p className="b-11">{content.newPassword[currentLanguage]} <span>*</span></p>
+                        <p className="b-11">{content.newPassword[currentLanguage]} <span className="required-asterisk">*</span></p>
                         <InputFiled
                             name="password"
                             type={inputType}
@@ -110,7 +110,7 @@ const ResetPassword = () => {
                         />
                     </div>
                     <div>
-                        <p className="b-11">{content.confirmNewPassword[currentLanguage]} <span>*</span></p>
+                        <p className="b-11">{content.confirmNewPassword[currentLanguage]} <span className="required-asterisk">*</span></p>
                         <InputFiled
                             name="confirmPassword"
                             type={inputType}

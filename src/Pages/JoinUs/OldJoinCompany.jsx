@@ -73,7 +73,7 @@ const OldJoinCompany = () => {
                             {/* Name */}
                             <div className="mb-4 ">
                                 <label className="b-8 mb-2">
-                                    الاسم  <span>*</span>
+                                    الاسم  <span className="required-asterisk">*</span>
                                 </label>
                                 <InputFiled name="name" placeholder={"الاسم بالكامل"} />
                             </div>
@@ -81,7 +81,7 @@ const OldJoinCompany = () => {
                             {/* Company */}
                             <div className="mb-4 ">
                                 <label className="b-8 mb-2">
-                                    الشركة  <span>*</span>
+                                    الشركة  <span className="required-asterisk">*</span>
                                 </label>
                                 <InputFiled name="company" placeholder={"اسم الشركة"} />
                             </div>
@@ -89,7 +89,7 @@ const OldJoinCompany = () => {
                             {/* Company */}
                             <div className="mb-4 ">
                                 <label className="b-8 mb-2">
-                                    نوع الشركة  <span>*</span>
+                                    نوع الشركة  <span className="required-asterisk">*</span>
                                 </label>
                                 <div onClick={() => setRotate(!rotate)}>
                                     <Dropdown className="d-flex w-100">
@@ -123,7 +123,7 @@ const OldJoinCompany = () => {
                             <div className="mb-4 lg-w-30">
                                 <label className="b-8 mb-2" style={{ minWidth: "150px" }}>
                                     رقم الموبايل
-                                    <span>*</span></label>
+                                    <span className="required-asterisk">*</span></label>
                                 <PhoneNumber name="mobile" type="text" placeholder={"اكتب رقمك"} />
                             </div>
 
@@ -156,7 +156,7 @@ const OldJoinCompany = () => {
                             {/* Company location */}
                             <div className="mb-4 ">
                                 <label className="b-8 mb-2">
-                                    عنوان  الشركة  <span>*</span>
+                                    عنوان  الشركة  <span className="required-asterisk">*</span>
                                 </label>
                                 <InputFiled name="company" placeholder={"عنوان الشركة"} />
                             </div>

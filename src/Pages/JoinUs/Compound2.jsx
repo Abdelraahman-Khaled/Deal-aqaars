@@ -148,7 +148,7 @@ const Compound1 = ({ formData, setFormData }) => {
                     {/* Name */}
                     <div className="mb-4 ">
                         <label className="b-12 mb-3">
-                            أنواع الوحدات داخل المشروع <span>*</span>
+                            أنواع الوحدات داخل المشروع <span className="required-asterisk">*</span>
                         </label>
                         <div className='d-flex flex-wrap space-6 align-items-center mb-4'>
                             {
@@ -164,7 +164,7 @@ const Compound1 = ({ formData, setFormData }) => {
                         {/* space */}
                         <div className="w-50 pe-2">
                             <label className="b-12 mb-2">
-                                المساحات<span>*</span>
+                                المساحات<span className="required-asterisk">*</span>
                             </label>
                             <div onClick={() => setRotateBudget(!rotateBudget)}>
                                 <BudgetDropdown
@@ -179,7 +179,7 @@ const Compound1 = ({ formData, setFormData }) => {
                         {/* price */}
                         <div className="w-50 ps-2">
                             <label className="b-12 mb-2">
-                                الاسعار <span>*</span>
+                                الاسعار <span className="required-asterisk">*</span>
                             </label>
                             <div onClick={() => setRotateBudget(!rotateBudget)}>
                                 <BudgetDropdown
@@ -198,7 +198,7 @@ const Compound1 = ({ formData, setFormData }) => {
                         {/* type of project */}
                         <div>
                             <label className="b-12 mb-2">
-                                طريقة الدفع <span>*</span>
+                                طريقة الدفع <span className="required-asterisk">*</span>
                             </label>
                             <Select
                                 options={paymentOptions}
@@ -209,7 +209,7 @@ const Compound1 = ({ formData, setFormData }) => {
                         {/* type of project */}
                         <div>
                             <label className="b-12 mb-2">
-                                نوع العقار ف السوق  <span>*</span>
+                                نوع العقار ف السوق  <span className="required-asterisk">*</span>
                             </label>
                             <Select
                                 options={typeOfPropertyOptions}
@@ -220,7 +220,7 @@ const Compound1 = ({ formData, setFormData }) => {
                         {/* type of project */}
                         <div>
                             <label className="b-12 mb-2">
-                                حالة المشروع <span>*</span>
+                                حالة المشروع <span className="required-asterisk">*</span>
                             </label>
                             <Select
                                 options={projectStatusOptions}
@@ -231,7 +231,7 @@ const Compound1 = ({ formData, setFormData }) => {
                         {/* type of project */}
                         <div>
                             <label className="b-12 mb-2">
-                                سنة التسليم <span>*</span>
+                                سنة التسليم <span className="required-asterisk">*</span>
                             </label>
                             <Select
                                 options={yearOfDeliveryOptions}
@@ -242,7 +242,7 @@ const Compound1 = ({ formData, setFormData }) => {
                         {/* type of project */}
                         <div>
                             <label className="b-12 mb-2">
-                                نوع التطشيب <span>*</span>
+                                نوع التطشيب <span className="required-asterisk">*</span>
                             </label>
                             <Select
                                 options={finishingTypeOptions}
@@ -257,7 +257,7 @@ const Compound1 = ({ formData, setFormData }) => {
                     <div className="mb-4 lg-w-30">
                         <label className="b-12 mb-2" style={{ minWidth: "150px" }}>
                             رقم الموبايل
-                            <span>*</span></label>
+                            <span className="required-asterisk">*</span></label>
                         <PhoneNumber name="mobile" type="text" placeholder={"اكتب رقمك"} />
                     </div>
 

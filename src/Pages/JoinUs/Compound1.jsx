@@ -58,7 +58,7 @@ const Compound1 = ({ formData, setFormData }) => {
                     {/* Name */}
                     <div className="mb-4 ">
                         <label className="b-12 mb-2">
-                            اسم الكمباوند  <span>*</span>
+                            اسم الكمباوند  <span className="required-asterisk">*</span>
                         </label>
                         <InputFiled name="name" placeholder={"مثال: كمباوند الماسة – العاصمة الإدارية"}
                             value={formData.name}
@@ -69,7 +69,7 @@ const Compound1 = ({ formData, setFormData }) => {
                     {/* type of project */}
                     <div className='mb-4 '>
                         <label className="b-12 mb-2">
-                            نوع المشروع <span>*</span>
+                            نوع المشروع <span className="required-asterisk">*</span>
                         </label>
                         <Select
                             options={options}
@@ -85,7 +85,7 @@ const Compound1 = ({ formData, setFormData }) => {
                     {/* location */}
                     <div className="mb-4 ">
                         <label className="b-12 mb-2">
-                            عنوان الاعلان  <span>*</span>
+                            عنوان الاعلان  <span className="required-asterisk">*</span>
                         </label>
                         <InputFiled name="location" placeholder={"عنوان الاعلان"} />
                     </div>
@@ -93,7 +93,7 @@ const Compound1 = ({ formData, setFormData }) => {
                     {/* Company */}
                     <div className="mb-4 ">
                         <label className="b-12 ">
-                            تفاصيل الاعلان <span>*</span>
+                            تفاصيل الاعلان <span className="required-asterisk">*</span>
                         </label>
                         <TextArea name="location-details" placeholder={"عنوان الاعلان"} />
                     </div>
@@ -101,7 +101,7 @@ const Compound1 = ({ formData, setFormData }) => {
                     {/* location english  */}
                     <div className="mb-4 ">
                         <label className="b-12 mb-2">
-                            عنوان الاعلان بالانجليزي <span>*</span>
+                            عنوان الاعلان بالانجليزي <span className="required-asterisk">*</span>
                         </label>
                         <InputFiled name="location-en" placeholder={"عنوان الاعلان بالانجليزي"} />
                     </div>
@@ -109,7 +109,7 @@ const Compound1 = ({ formData, setFormData }) => {
                     {/* Company */}
                     <div className="mb-4 ">
                         <label className="b-12 ">
-                            تفاصيل الاعلان بالانجليزي<span>*</span>
+                            تفاصيل الاعلان بالانجليزي<span className="required-asterisk">*</span>
                         </label>
                         <TextArea name="location-details-en" placeholder={"عنوان الاعلان بالانجليزي"} />
                     </div>
@@ -127,7 +127,7 @@ const Compound1 = ({ formData, setFormData }) => {
                     {/* Company location */}
                     <div className="mb-4 ">
                         <label className="b-12 mb-2">
-                            عنوان تفصيلي <span>*</span>
+                            عنوان تفصيلي <span className="required-asterisk">*</span>
                         </label>
                         <InputFiled name="company" placeholder={"اكتب العنوان او حدده من الخريطة"} />
                     </div>

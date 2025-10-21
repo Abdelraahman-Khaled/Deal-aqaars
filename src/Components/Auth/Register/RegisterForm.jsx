@@ -219,7 +219,7 @@ const RegisterForm = ({ setFormType }) => {
                                                 {/* input email */}
                                                 <div className="row g-3">
                                                     <div className="col-12 col-md-6">
-                                                        <p className="b-11 pb-2">{content.emailLabel[currentLanguage]} <span>*</span></p>
+                                                        <p className="b-11 pb-2">{content.emailLabel[currentLanguage]} <span className="required-asterisk">*</span></p>
                                                         <InputFiled
                                                             name="name"
                                                             type="text"
@@ -228,7 +228,7 @@ const RegisterForm = ({ setFormType }) => {
                                                         />
                                                     </div>
                                                     <div className="col-12 col-md-6">
-                                                        <p className="b-11 pb-2">{content.phone[currentLanguage]} <span>*</span></p>
+                                                        <p className="b-11 pb-2">{content.phone[currentLanguage]} <span className="required-asterisk">*</span></p>
                                                         <InputFiled
                                                             name="mobile"
                                                             type="text"
@@ -238,7 +238,7 @@ const RegisterForm = ({ setFormType }) => {
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <p className="b-11 pb-2">{content.email[currentLanguage]} <span>*</span></p>
+                                                    <p className="b-11 pb-2">{content.email[currentLanguage]} <span className="required-asterisk">*</span></p>
                                                     <InputFiled
                                                         name="email"
                                                         type="text"
@@ -256,7 +256,7 @@ const RegisterForm = ({ setFormType }) => {
                                                 <div>
                                                     <div className="row g-3">
                                                         <div className="col-12 col-md-6">
-                                                            <p className="b-11 pb-2">{content.passwordLabel[currentLanguage]} <span>*</span></p>
+                                                            <p className="b-11 pb-2">{content.passwordLabel[currentLanguage]} <span className="required-asterisk">*</span></p>
 
                                                             <Password name="password" value={value}
                                                                 onChange={(e) => {
@@ -267,7 +267,7 @@ const RegisterForm = ({ setFormType }) => {
 
                                                         </div>
                                                         <div className="col-12 col-md-6">
-                                                            <p className="b-11 pb-2">{content.passwordConfirmLabel[currentLanguage]} <span>*</span></p>
+                                                            <p className="b-11 pb-2">{content.passwordConfirmLabel[currentLanguage]} <span className="required-asterisk">*</span></p>
 
                                                             <Password name="confirmPassword" value={confirmPassword}
                                                                 onChange={(e) => {
@@ -292,7 +292,7 @@ const RegisterForm = ({ setFormType }) => {
                                             createWay === "phone" &&
                                             <>
                                                 <div>
-                                                    <p className="b-11 pb-2">{content.phoneLabel[currentLanguage]} <span>*</span></p>
+                                                    <p className="b-11 pb-2">{content.phoneLabel[currentLanguage]} <span className="required-asterisk">*</span></p>
                                                     <PhoneNumber
                                                         name="phone"
                                                         type="text"

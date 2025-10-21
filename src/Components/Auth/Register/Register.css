@@ -63,7 +63,7 @@ a {
 }
 
 .form-control {
-  padding: 12px 8px 12px 12px;
+    padding: 8px 10px;
   border-radius: var(--border-radius-4);
 }
 .btn-submit {

@@ -409,6 +409,10 @@ height: fit-content;
   color: var(--primary);
   fill: var(--primary);
 }
+.modal-announcement:hover .commercial  path{
+  fill: none !important;
+  stroke: var(--primary);
+}
 .modal-grid {
   display: flex;
   flex-wrap: wrap;

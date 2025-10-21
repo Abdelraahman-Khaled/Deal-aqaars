@@ -115,7 +115,7 @@ export const PersonJoin = ({ setShowPerson, setShowProgress }) => {
                 {/* Name */}
                 <div className="mb-4 ">
                     <label className="b-15 mb-2">
-                        الاسم <span>*</span>
+                        الاسم <span className="required-asterisk">*</span>
                     </label>
                     <InputFiled name="name" placeholder="الاسم بالكامل" />
                 </div>
@@ -123,7 +123,7 @@ export const PersonJoin = ({ setShowPerson, setShowProgress }) => {
                 {/* National ID */}
                 <div className="mb-4 ">
                     <label className="b-15 mb-2">
-                        رقم البطاقة <span>*</span>
+                        رقم البطاقة <span className="required-asterisk">*</span>
                     </label>
                     <InputFiled name="nationalId" placeholder="الرقم القومي" />
                 </div>
@@ -131,7 +131,7 @@ export const PersonJoin = ({ setShowPerson, setShowProgress }) => {
                 {/* Address */}
                 <div className="mb-4 ">
                     <label className="b-15 mb-2">
-                        العنوان بالتفصيل <span>*</span>
+                        العنوان بالتفصيل <span className="required-asterisk">*</span>
                     </label>
                     <InputFiled name="address" placeholder="العنوان" />
                 </div>
@@ -139,7 +139,7 @@ export const PersonJoin = ({ setShowPerson, setShowProgress }) => {
                 {/* Mobile */}
                 <div className="mb-4 ">
                     <label className="b-15 mb-2 w-100">
-                        رقم الموبايل <span>*</span>
+                        رقم الموبايل <span className="required-asterisk">*</span>
                     </label>
                     <PhoneNumber name="mobile" placeholder="اكتب رقمك" />
                 </div>

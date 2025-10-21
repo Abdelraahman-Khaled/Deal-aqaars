@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Formik, Form } from 'formik';
 import InputFiled from '../../Forms/InputField';
 import FormField from '../../Forms/FormField';
 import PhoneNumber from '../../Forms/PhoneNumber';
@@ -8,8 +7,7 @@ import Switch from '../../Forms/Switch';
 import * as Yup from 'yup';
 import './PersonJoin.css';
 import { useLanguage } from '../../Languages/LanguageContext';
-import CustomModal from '../../CustomModal/CustomModal';
-import RequestProgress from './RequestProgress';
+import CompanyAPI from '../../../api/companyApi';
 
 const content = {
     title: {
@@ -86,25 +84,42 @@ const content = {
 export const PersonJoin = ({ setShowPerson, setShowProgress }) => {
 
     const { currentLanguage } = useLanguage();
+    const [isLoading, setIsLoading] = useState(false);
+
     const initialValues = {
-        name: '',
+        role: "vendor",
+        fullName: '',
         nationalId: '',
-        address: '',
-        mobile: '',
+        detailedLocation: '',
+        phoneNumber: '',
         hasWhatsApp: false,
     };
 
     const validationSchema = Yup.object({
-        name: Yup.string().required('الاسم مطلوب'),
+        fullName: Yup.string().required('الاسم مطلوب'),
         nationalId: Yup.string().required('رقم البطاقة مطلوب'),
-        address: Yup.string().required('العنوان مطلوب'),
-        mobile: Yup.string().required('رقم الموبايل مطلوب'),
+        detailedLocation: Yup.string().required('العنوان مطلوب'),
+        phoneNumber: Yup.string().required('رقم الموبايل مطلوب'),
     });
 
-    const handleSubmit = (values) => {
-        console.log('Form submitted:', values);
-    };
+    const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+        try {
+            setIsLoading(true);
+            console.log('Form data to submit:', values);
+            const response = await CompanyAPI.beingVendor(values);
+            console.log('API Response:', response);
 
+            // Show success and proceed to next step
+            setShowProgress(true);
+            setShowPerson(false);
+            resetForm();
+        } catch (error) {
+            console.error('Error submitting form:', error);
+        } finally {
+            setIsLoading(false);
+            setSubmitting(false);
+        }
+    };
     return (
         <div className='person-join'>
             <FormField
@@ -117,7 +132,7 @@ export const PersonJoin = ({ setShowPerson, setShowProgress }) => {
                     <label className="b-15 mb-2">
                         الاسم <span className="required-asterisk">*</span>
                     </label>
-                    <InputFiled name="name" placeholder="الاسم بالكامل" />
+                    <InputFiled name="fullName" placeholder="الاسم بالكامل" />
                 </div>
 
                 {/* National ID */}
@@ -133,7 +148,7 @@ export const PersonJoin = ({ setShowPerson, setShowProgress }) => {
                     <label className="b-15 mb-2">
                         العنوان بالتفصيل <span className="required-asterisk">*</span>
                     </label>
-                    <InputFiled name="address" placeholder="العنوان" />
+                    <InputFiled name="detailedLocation" placeholder="العنوان" />
                 </div>
 
                 {/* Mobile */}
@@ -141,7 +156,7 @@ export const PersonJoin = ({ setShowPerson, setShowProgress }) => {
                     <label className="b-15 mb-2 w-100">
                         رقم الموبايل <span className="required-asterisk">*</span>
                     </label>
-                    <PhoneNumber name="mobile" placeholder="اكتب رقمك" />
+                    <PhoneNumber name="phoneNumber" placeholder="اكتب رقمك" />
                 </div>
 
                 {/* WhatsApp Switch */}
@@ -157,7 +172,6 @@ export const PersonJoin = ({ setShowPerson, setShowProgress }) => {
 
                 <div className="d-flex space-3">
                     <button
-                        onClick={() => { setShowProgress(true); setShowPerson(false) }}
                         className="btn-main w-50" type="submit">
                         ابعت الطلب
                     </button>

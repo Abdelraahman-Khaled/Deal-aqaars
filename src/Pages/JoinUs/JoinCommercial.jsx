@@ -24,22 +24,20 @@ import "./JoinUs.css";
 import SearchToggle from "../../Components/Ui/SearchComponents/SearchToggle ";
 import { Field } from "formik";
 import PhoneNumberValidation from "../../Components/Forms/PhoneNumberInput";
-
+import data from "../../data/cities.json";
+import AdministrativeAPI from "../../api/administrativeApi";
 
 const JoinCommercial = () => {
-    
-    const [isHouse,setIsHouse] = useState(false);
-    const { currentLanguage } = useLanguage(); // Get the current language
+  const [isHouse, setIsHouse] = useState(false);
+  const { currentLanguage } = useLanguage(); // Get the current language
   const [toggle, setToggle] = useState("sale");
-
   const [showModal, setShowModal] = useState(false);
 
   const [selectType, setSelectType] = useState("");
   const [selectVeiw, setSelectView] = useState(
     translations[currentLanguage].chooseView
   );
-  
- 
+
   const [paymentWay, setPaymentWay] = useState(
     translations[currentLanguage].paymentWay
   );
@@ -52,43 +50,19 @@ const JoinCommercial = () => {
 
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
+  const [locationDetails, setLocationDetails] = useState("");
+  const [city, setCity] = useState("");
+
   const [isItemLoading, setIsItemLoading] = useState(false);
-
-
-  const [selectedGov, setSelectedGov] = useState("");
-  const [selectedTown, setSelectedTown] = useState("");
 
   const tabs = [
     { value: "sale", label: translations[currentLanguage].forSale },
     { value: "rent", label: translations[currentLanguage].forRent },
   ];
 
-  const egyptLocations = {
-    Cairo: {
-      "Nasr City": ["1st District", "6th District"],
-      Heliopolis: ["Korba", "El-Montaza"],
-    },
-    Giza: {
-      Dokki: ["Tahrir Street", "Mosadak"],
-      "6th October": ["El Motamayez", "Sheikh Zayed"],
-    },
-    Alexandria: {
-      Smouha: ["Green Plaza", "Sporting"],
-      Stanley: ["Bridge Area", "Beach Area"],
-    },
-  };
-
-  const governorates = Object.keys(egyptLocations);
-  const towns = selectedGov ? Object.keys(egyptLocations[selectedGov]) : [];
-  const cities =
-    selectedGov && selectedTown
-      ? egyptLocations[selectedGov][selectedTown]
-      : [];
-
-
   const initialValues = {
-    type: "", // apartment
-    category: "", // rent ,sale
+    type: selectType, // apartment
+    division: toggle, // rent ,sale
     titleAr: "",
     titleEn: "",
     descriptionAr: "",
@@ -108,17 +82,18 @@ const JoinCommercial = () => {
     images: [],
   };
 
-  useEffect(()=>{
-      selectType === "house" ? setIsHouse(true) : setIsHouse(false);
-  },[selectType])
-
+  useEffect(() => {
+    selectType === "shop" ? setIsHouse(true) : setIsHouse(false);
+  }, [selectType]);
 
   const handleSubmit = async (values, { resetForm }) => {
     const formData = new FormData();
 
-    // whatIHave
-    formData.append("type", values.type);
-    formData.append("details[propertyType]", values.propertyType);
+    // division
+    formData.append("division", toggle);
+
+    // type
+    formData.append("type", selectType);
 
     // titles
     formData.append("title[ar]", values.titleAr);
@@ -128,28 +103,30 @@ const JoinCommercial = () => {
     formData.append("description[ar]", values.descriptionAr);
     formData.append("description[en]", values.descriptionEn);
 
-    // category
-    formData.append("category", values.category);
+    // contact
+    formData.append("advertiserPhoneNumber", values.phone);
+    formData.append("haveWhatsapp", values.whatsapp);
 
     // lat long
-    formData.append("location[type]", "Point");
+    formData.append("location[city]", city);
+    formData.append("location[detailedLocation]", locationDetails);
     formData.append("location[coordinates][]", longitude);
     formData.append("location[coordinates][]", latitude);
 
     // Details
     formData.append("details[space]", values.space);
     formData.append("details[view]", values.view);
+    formData.append("details[finishingType]", values.finishing);
+    formData.append("details[paymentMethods]", values.paymentMethods);
+    formData.append("details[propertyType]", values.propertyType);
     formData.append("details[price]", values.price);
-    formData.append("details[paymentMethods][]", values.paymentMethods);
-    formData.append("details[rooms]", values.rooms);
-    formData.append("details[floor]", values.floor);
     formData.append("details[bathrooms]", values.bathrooms);
-    formData.append("details[handoverDate]", values.handoverDate);
-    formData.append("details[finishing]", values.finishing);
-
-    // contact
-    formData.append("advertiser[phone]", values.phone);
-    formData.append("advertiser[whatsapp]", values.whatsapp);
+    formData.append("details[buildingYear]", values.buildingYear);
+    formData.append("details[handoverYear]", values.handoverYear);
+    {
+      !isHouse && formData.append("details[rooms]", values.rooms);
+      formData.append("details[floor]", values.floor);
+    }
 
     // images
     if (values.images && values.images.length > 0) {
@@ -161,10 +138,14 @@ const JoinCommercial = () => {
     }
 
     setIsItemLoading(true);
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
     try {
-      const response = await PropertyAPI.createProperty(formData);
-      setShowModal(true);
-      resetForm();
+        const response = await AdministrativeAPI.createAdministrative(formData);
+        console.log(response);
+        setShowModal(true);
+        resetForm();
     } catch (err) {
       console.error(err);
     } finally {
@@ -176,7 +157,7 @@ const JoinCommercial = () => {
     <>
       <HelmetInfo
         titlePage={
-          currentLanguage === "ar" ? "أعلن عن عقارك" : "Advertise your property"
+          currentLanguage === "ar" ? "أعلن عن وحدة تجارية" : "Advertise your property"
         }
       />
 
@@ -195,7 +176,11 @@ const JoinCommercial = () => {
                   />
                 </div>
 
-                <p className="b-1 mb-2 pb-3 ">أعلن عن عقارك</p>
+                <p className="b-1 mb-2 pb-3 ">اعلن عن وحدة تجارية</p>
+                  <label className="b-12 mb-2">
+                  القسم
+                  <span className="required-asterisk"> *</span>
+                </label>
                 <div className="select-type join tabs-home justify-content-center mb-4">
                   <SearchToggle
                     toggleState={toggle}
@@ -207,17 +192,16 @@ const JoinCommercial = () => {
                 <Row className=" gx-4 mb-4">
                   <Col xs={12} md={12}>
                     <label className="b-12 mb-2">
-                      نوع العقار
+                      نوع الوحدة
                       <span className="required-asterisk"> *</span>
                     </label>
-
                     <Dropdown
                       value={selectType}
                       onChange={(e) => {
                         setSelectType(e.value); // القيمة الانجليزية
                         setFieldValue("type", e.value); // القيمة الانجليزية
                       }}
-                      options={translations[currentLanguage].aqarType}
+                      options={translations[currentLanguage].administrativeType}
                       optionLabel="label" // هيعرض اللي في label
                       optionValue="value" // هيخزن value (انجليزي)
                       name="type"
@@ -248,7 +232,7 @@ const JoinCommercial = () => {
                 {/* <NestedDropdownAccordion data={nestedLocationData} title="عنوان العقار" placeholder="اختر المكان" /> */}
 
                 {/* Details */}
-                <SectionHeader text={"تفاصيل العقار"} />
+                <SectionHeader text={"تفاصيل الوحدة"} />
                 {/* location */}
 
                 <div className="mb-4 ">
@@ -338,12 +322,12 @@ const JoinCommercial = () => {
                 </div>
 
                 {/* Aqar description */}
-                <SectionHeader text={" وصف العقار"} />
+                <SectionHeader text={" وصف الوحدة"} />
 
                 {/* Row 1 */}
                 {/* size */}
-                <Row className="g-3 mb-4">
-                  <Col xs={12} md={2}>
+              <Row className="g-3 mb-4">
+                  <Col xs={12} md={4}>
                     <label className="b-12 mb-2">
                       المساحة (بالمتر){" "}
                       <span className="required-asterisk"> *</span>
@@ -351,7 +335,7 @@ const JoinCommercial = () => {
                     <InputFiled name="space" placeholder={"2م"} />
                   </Col>
                   {/* front of house */}
-                  <Col xs={12} md={3}>
+                  <Col xs={12} md={4}>
                     <label className="b-12 mb-2">
                       تطل على<span className="required-asterisk"> *</span>
                     </label>
@@ -371,7 +355,7 @@ const JoinCommercial = () => {
                   </Col>
 
                   {/* Finishing */}
-                  <Col xs={12} md={2}>
+                  <Col xs={12} md={4}>
                     <label className="b-12 mb-2">
                       نوع التطشيب <span className="required-asterisk"> *</span>
                     </label>
@@ -391,7 +375,7 @@ const JoinCommercial = () => {
                   </Col>
 
                   {/* payment */}
-                  <Col xs={12} md={2}>
+                  <Col xs={12} md={4}>
                     <label className="b-12 mb-2">
                       طريقة الدفع<span className="required-asterisk"> *</span>
                     </label>
@@ -399,11 +383,11 @@ const JoinCommercial = () => {
                       value={paymentWay}
                       onChange={(e) => {
                         setPaymentWay(e.value);
-                        setFieldValue("paymentMethods", e.value);
+                        setFieldValue("paymentMethod", e.value);
                       }}
                       options={translations[currentLanguage].paymentWayDetails}
                       placeholder={translations[currentLanguage].paymentWay}
-                      name="paymentMethods"
+                      name="paymentMethod"
                       className="hide-scrollbar"
                       optionValue="value" // هيخزن value (انجليزي)
                       optionLabel="label" // هيعرض اللي في label
@@ -411,7 +395,7 @@ const JoinCommercial = () => {
                   </Col>
 
                   {/* aqar souq */}
-                  <Col xs={12} md={3}>
+                  <Col xs={12} md={4}>
                     <label className="b-12 mb-2">
                       نوع العقار ف السوق{" "}
                       <span className="required-asterisk"> *</span>
@@ -420,76 +404,73 @@ const JoinCommercial = () => {
                       value={aqarSouq}
                       onChange={(e) => {
                         setAqarSouq(e.value);
-                        setFieldValue("souq", e.value);
+                        setFieldValue("propertyType", e.value);
                       }}
                       options={translations[currentLanguage].aqarSouqDetails}
                       placeholder={translations[currentLanguage].aqarSouq}
-                      name="souq"
+                      name="propertyType"
                       optionValue="value" // هيخزن value (انجليزي)
                       optionLabel="label" // هيعرض اللي في label
                     ></Dropdown>
                   </Col>
-                </Row>
+
+                    {!isHouse && (
+                    <>
+                      {/* rooms number */}
+                      <Col xs={12} md={4}>
+                        <label className="b-12 mb-2">
+                          عدد الغرف{" "}
+                          <span className="required-asterisk"> *</span>
+                        </label>
+                        <InputFiled name="rooms" placeholder={"عدد الغرف"} />
+                      </Col>
+
+                      {/* no.floor */}
+                      <Col xs={12} md={4}>
+                        <label className="b-12 mb-2">
+                          الدور <span className="required-asterisk"> *</span>
+                        </label>
+                        <InputFiled name="floor" placeholder={" رقم الدور "} />
+                      </Col>
+
+                      {/* no.Bathroom */}
+                      <Col xs={12} md={4}>
+                        <label className="b-12 mb-2">
+                          الحمامات <span className="required-asterisk"> *</span>
+                        </label>
+                        <InputFiled
+                          name="bathrooms"
+                          placeholder={" عدد الحمامات "}
+                        />
+                      </Col>
+                    </>
+                  )}
 
                 {/* Row 2 */}
-
-                <Row className="g-3 mb-4">
-
-             {
-                !isHouse &&  
-                <>
-                {/* rooms number */}
-                  <Col xs={12} md={2}>
-                    <label className="b-12 mb-2">
-                      عدد الغرف <span className="required-asterisk"> *</span>
-                    </label>
-                    <InputFiled name="rooms" placeholder={"عدد الغرف"} />
-                  </Col>
-
-                  {/* no.floor */}
-                  <Col xs={12} md={2}>
-                    <label className="b-12 mb-2">
-                      الدور <span className="required-asterisk"> *</span>
-                    </label>
-                    <InputFiled name="floor" placeholder={" رقم الدور "} />
-                  </Col>
-
-                  {/* no.Bathroom */}
-                  <Col xs={12} md={2}>
-                    <label className="b-12 mb-2">
-                      الحمامات <span className="required-asterisk"> *</span>
-                    </label>
-                    <InputFiled
-                      name="bathrooms"
-                      placeholder={" عدد الحمامات "}
-                    />
-                  </Col>
-                </>
-             }
-
+                
                   {/* no.build */}
-                  <Col xs={12} md={3}>
+                  <Col xs={12} md={4}>
                     <label className="b-12 mb-2">
-                     سنة البناء<span className="required-asterisk"> *</span>
+                      سنة البناء<span className="required-asterisk"> *</span>
                     </label>
                     <InputFiled
-                      name="handoverDate"
+                      name="buildingYear"
                       placeholder={"حدد سنة البناء"}
                     />
                   </Col>
 
                   {/* no.Year */}
-                  <Col xs={12} md={3}>
+                  <Col xs={12} md={4}>
                     <label className="b-12 mb-2">
                       سنة التسليم <span className="required-asterisk"> *</span>
                     </label>
                     <InputFiled
-                      name="handoverDate"
+                      name="handoverYear"
                       placeholder={"حدد سنة التسليم "}
                     />
                   </Col>
-                      {/* price */}
-                  <Col xs={12} md={2}>
+                  {/* price */}
+                  <Col xs={12} md={4}>
                     <label className="b-12 mb-2">
                       السعر <span className="required-asterisk"> *</span>
                     </label>
@@ -497,16 +478,40 @@ const JoinCommercial = () => {
                   </Col>
                 </Row>
 
-              
 
                 {/* Location of the property */}
-                <SectionHeader text={"عنوان العقار"} />
+                <SectionHeader text={"عنوان الوحدة"} />
 
                 {/* location */}
 
-                <div className="mb-4 ">
+                <div className="mb-4">
+                  <div className="mb-4">
+                    <label className="b-12 mb-2">
+                      عنوان الوحدة <span className="required-asterisk"> *</span>
+                    </label>
+                    <Dropdown
+                      value={city}
+                      onChange={(e) => {
+                        setCity(e.value);
+                        setFieldValue("view", e.value);
+                      }}
+                      editable
+                      options={data.map((item) => ({
+                        value: item.city_name_en,
+                        label:
+                          currentLanguage === "ar"
+                            ? item.city_name_ar
+                            : item.city_name_en,
+                      }))}
+                      placeholder={translations[currentLanguage].city}
+                      name="city"
+                      className="hide-scrollbar"
+                      optionValue="value" // هيخزن value (انجليزي)
+                      optionLabel="label" // هيعرض اللي في label
+                    ></Dropdown>
+                  </div>
                   <label className="b-12 mb-2">
-                    عنوان العقار <span className="required-asterisk">*</span>
+                    عنوان الوحدة <span className="required-asterisk">*</span>
                   </label>
 
                   <div className="mb-5">
@@ -516,12 +521,13 @@ const JoinCommercial = () => {
                       isItemLoading={isItemLoading}
                       longitude={longitude}
                       latitude={latitude}
+                      setLocationDetails={setLocationDetails}
                     />
                   </div>
                 </div>
 
                 {/* photos */}
-                <SectionHeader text={"صور المشروع"} />
+                <SectionHeader text={"صور الوحدة"} />
 
                 <div className="mb-4">
                   <ImageUploadGrid name="images" />

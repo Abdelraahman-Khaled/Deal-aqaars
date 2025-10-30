@@ -75,7 +75,6 @@ const NavbarMenu = () => {
     const userType = useSelector((state) => state.userType.userType);
     const dispatch = useDispatch();
 
-    console.log(user);
 
     if (user?.role === "user") {
         dispatch(setUserType("user"));

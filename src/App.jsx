@@ -43,6 +43,7 @@ import UpdateAqar from './Pages/Update/UpdateAqar';
 import UpdateFinish from './Pages/Update/UpdateFinish';
 import JoinLand from './Pages/JoinUs/JoinLand';
 import JoinCommercial from './Pages/JoinUs/JoinCommercial';
+import JoinIndustrial from './Pages/JoinUs/JoinIndustrial';
 
 const App = () => {
   return (
@@ -99,6 +100,7 @@ const App = () => {
                         <Route path="/join-aqar" element={<JoinAqar />} />
                         <Route path="/joinLand" element={<JoinLand />} />
                         <Route path="/joinCommercial" element={<JoinCommercial />} />
+                        <Route path="/joinIndustrial" element={<JoinIndustrial />} />
                         <Route path="/join-company" element={<JoinCompany />} />
                         <Route path="/join-trade" element={<JoinTrade />} />
                         <Route path="/join-finish" element={<JoinFinish />} />

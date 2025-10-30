@@ -25,10 +25,9 @@ import SearchToggle from "../../Components/Ui/SearchComponents/SearchToggle ";
 import { Field } from "formik";
 import PhoneNumberValidation from "../../Components/Forms/PhoneNumberInput";
 import data from "../../data/cities.json";
-import LandAPI from "../../api/LandApi";
+import FactoryAPI from "../../api/factoryApi";
 
-const JoinLand = () => {
-  const [isHouse, setIsHouse] = useState(false);
+const JoinIndustrial = () => {
   const { currentLanguage } = useLanguage(); // Get the current language
   const [toggle, setToggle] = useState("sale");
   const [showModal, setShowModal] = useState(false);
@@ -55,15 +54,13 @@ const JoinLand = () => {
 
   const [isItemLoading, setIsItemLoading] = useState(false);
 
- 
-
   const tabs = [
     { value: "sale", label: translations[currentLanguage].forSale },
     { value: "rent", label: translations[currentLanguage].forRent },
   ];
 
   const initialValues = {
-    type: selectType, // سكني / تجاري / صناعي
+    type: "", // apartment
     division: toggle, // rent ,sale
     titleAr: "",
     titleEn: "",
@@ -73,7 +70,7 @@ const JoinLand = () => {
     space: "",
     view: "",
     price: "",
-    paymentMethod: "",
+    paymentMethods: "",
     rooms: "",
     floor: "",
     bathrooms: "",
@@ -84,18 +81,16 @@ const JoinLand = () => {
     images: [],
   };
 
-  useEffect(() => {
-    selectType === "house" ? setIsHouse(true) : setIsHouse(false);
-  }, [selectType]);
+
 
   const handleSubmit = async (values, { resetForm }) => {
     const formData = new FormData();
 
     // division
     formData.append("division", toggle);
-
+    
     // type
-    formData.append("type", selectType);
+    formData.append("type", "industrial");
 
     // titles
     formData.append("title[ar]", values.titleAr);
@@ -118,9 +113,14 @@ const JoinLand = () => {
     // Details
     formData.append("details[space]", values.space);
     formData.append("details[view]", values.view);
-    formData.append("details[paymentMethod]", values.paymentMethod);
-    formData.append("details[type]", values.type);
+    formData.append("details[finishingType]", values.finishing);
+    formData.append("details[paymentMethods]", values.paymentMethods);
+    formData.append("details[propertyType]", values.propertyType);
     formData.append("details[price]", values.price);
+    formData.append("details[bathrooms]", values.bathrooms);
+    formData.append("details[buildingYear]", values.buildingYear);
+    formData.append("details[handoverYear]", values.handoverYear);
+
 
     // images
     if (values.images && values.images.length > 0) {
@@ -131,25 +131,20 @@ const JoinLand = () => {
       console.log("No images to send");
     }
 
-    console.log("Data sent to backend:", Object.fromEntries(formData.entries()));
-
     setIsItemLoading(true);
+      for (let [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
     try {
-      const response = await LandAPI.createLand(formData);
-      console.log(response);
-      setShowModal(true);
-      resetForm();
+     
+        const response = await FactoryAPI.createFactory(formData);
+        console.log(response);
+        setShowModal(true);
+        resetForm();
     } catch (err) {
       console.error(err);
     } finally {
       setIsItemLoading(false);
-      setSelectType("");
-      setSelectView(translations[currentLanguage].chooseView);
-      setPaymentWay(translations[currentLanguage].paymentWay);
-      setAqarSouq(translations[currentLanguage].aqarSouq);
-      setFinishing(translations[currentLanguage].finishing);
-      setCity("");
-      setLocationDetails("");
     }
   };
 
@@ -157,7 +152,7 @@ const JoinLand = () => {
     <>
       <HelmetInfo
         titlePage={
-          currentLanguage === "ar" ? "أعلن عن أرض" : "Advertise your property"
+          currentLanguage === "ar" ? "أعلن عن وحدة تجارية" : "Advertise your property"
         }
       />
 
@@ -169,15 +164,15 @@ const JoinLand = () => {
                 <div className="pb-4">
                   <BreadcrumbsPage
                     newClassBreadHeader={"biography-bread breadcrumb-page-2"}
-                    mainTitle={"أعلن عن عقارك"}
+                    mainTitle={"أعلن عن  عقارك"}
                     routeTitleTwoBread={false}
                     titleTwoBread={false}
                     secondArrow={false}
                   />
                 </div>
 
-                <p className="b-1 mb-2 pb-3 ">أعلن عن أرض</p>
-                <label className="b-12 mb-2">
+                <p className="b-1 mb-2 pb-3 ">اعلن عن وحدة صناعية</p>
+                  <label className="b-12 mb-2">
                   القسم
                   <span className="required-asterisk"> *</span>
                 </label>
@@ -192,7 +187,7 @@ const JoinLand = () => {
                 <Row className=" gx-4 mb-4">
                   <Col xs={12} md={12}>
                     <label className="b-12 mb-2">
-                      نوع الأرض
+                      نوع الوحدة
                       <span className="required-asterisk"> *</span>
                     </label>
                     <Dropdown
@@ -201,38 +196,17 @@ const JoinLand = () => {
                         setSelectType(e.value); // القيمة الانجليزية
                         setFieldValue("type", e.value); // القيمة الانجليزية
                       }}
-                      options={translations[currentLanguage].landType}
+                      options={translations[currentLanguage].factoryType}
                       optionLabel="label" // هيعرض اللي في label
                       optionValue="value" // هيخزن value (انجليزي)
                       name="type"
-                      placeholder={translations[currentLanguage].land}
+                      placeholder={translations[currentLanguage].aqar}
                     />
                   </Col>
-                  {/* <Col xs={12} md={4}>
-                    <label className="b-12 mb-2">
-                      نوع العقار في السوق
-                      <span className="required-asterisk"> *</span>
-                    </label>
-                    <div onClick={() => setRotate2(!rotate2)}>
-                      <div onClick={() => setRotatePlace(!rotatePlace)}>
-                        <PlaceTypeDropdown
-                          placeType={placeType}
-                          placeTypeDetails={placeTypeDetails}
-                          tabsKind={tabsKind}
-                          rotate={rotatePlace}
-                          onChange={(value) => {
-                            setSelectType(value);
-                            setFieldValue("type", value);
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </Col> */}
                 </Row>
-                {/* <NestedDropdownAccordion data={nestedLocationData} title="عنوان العقار" placeholder="اختر المكان" /> */}
 
                 {/* Details */}
-                <SectionHeader text={"تفاصيل الأرض"} />
+                <SectionHeader text={"تفاصيل الوحدة"} />
                 {/* location */}
 
                 <div className="mb-4 ">
@@ -322,20 +296,22 @@ const JoinLand = () => {
                 </div>
 
                 {/* Aqar description */}
-                <SectionHeader text={" وصف الأرض"} />
+                <SectionHeader text={" وصف الوحدة"} />
 
                 {/* Row 1 */}
                 {/* size */}
                 <Row className="g-3 mb-4">
-                  <Col xs={12} md={4}>
+
+                  <Col xs={6} md={4}>
                     <label className="b-12 mb-2">
                       المساحة (بالمتر){" "}
                       <span className="required-asterisk"> *</span>
                     </label>
                     <InputFiled name="space" placeholder={"2م"} />
                   </Col>
+
                   {/* front of house */}
-                  <Col xs={12} md={4}>
+                  <Col xs={6} md={4}>
                     <label className="b-12 mb-2">
                       تطل على<span className="required-asterisk"> *</span>
                     </label>
@@ -364,26 +340,43 @@ const JoinLand = () => {
                       value={aqarSouq}
                       onChange={(e) => {
                         setAqarSouq(e.value);
-                        setFieldValue("type", e.value);
+                        setFieldValue("souq", e.value);
                       }}
                       options={translations[currentLanguage].aqarSouqDetails}
                       placeholder={translations[currentLanguage].aqarSouq}
-                      name="type"
+                      name="souq"
                       optionValue="value" // هيخزن value (انجليزي)
                       optionLabel="label" // هيعرض اللي في label
                     ></Dropdown>
                   </Col>
 
-
-                  <Col xs={12} md={6}>
+                </Row>
+                <Row className="g-3 mb-4">
+            
+               {/* no.build */}
+                  <Col xs={6} md={4}>
                     <label className="b-12 mb-2">
-                      السعر <span className="required-asterisk"> *</span>
+                      سنة البناء<span className="required-asterisk"> *</span>
                     </label>
-                    <InputFiled name="price" placeholder={"السعر"} />
+                    <InputFiled
+                      name="buildingYear"
+                      placeholder={"حدد سنة البناء"}
+                    />
                   </Col>
-                  
+
+                  {/* no.Year */}
+                  <Col xs={6} md={4}>
+                    <label className="b-12 mb-2">
+                      سنة التسليم <span className="required-asterisk"> *</span>
+                    </label>
+                    <InputFiled
+                      name="handoverYear"
+                      placeholder={"حدد سنة التسليم "}
+                    />
+                  </Col>
+
                   {/* payment */}
-                  <Col xs={12} md={6}>
+                  <Col xs={12} md={4}>
                     <label className="b-12 mb-2">
                       طريقة الدفع<span className="required-asterisk"> *</span>
                     </label>
@@ -391,11 +384,11 @@ const JoinLand = () => {
                       value={paymentWay}
                       onChange={(e) => {
                         setPaymentWay(e.value);
-                        setFieldValue("paymentMethod", e.value);
+                        setFieldValue("paymentMethods", e.value);
                       }}
                       options={translations[currentLanguage].paymentWayDetails}
                       placeholder={translations[currentLanguage].paymentWay}
-                      name="paymentMethod"
+                      name="paymentMethods"
                       className="hide-scrollbar"
                       optionValue="value" // هيخزن value (انجليزي)
                       optionLabel="label" // هيعرض اللي في label
@@ -404,25 +397,32 @@ const JoinLand = () => {
 
                 </Row>
 
-                {/* Row 2 */}
-
-                <Row className="g-3 mb-4">{/* price */}</Row>
+                {/* Row 3*/}
+                <Row className="g-3 mb-4">
+                  {/* price */}
+                  <Col xs={6} md={4}>
+                    <label className="b-12 mb-2">
+                      السعر <span className="required-asterisk"> *</span>
+                    </label>
+                    <InputFiled name="price" placeholder={"السعر"} />
+                  </Col>
+                </Row>
 
                 {/* Location of the property */}
-                <SectionHeader text={"عنوان الأرض"} />
+                <SectionHeader text={"عنوان الوحدة"} />
 
                 {/* location */}
 
                 <div className="mb-4">
                   <div className="mb-4">
                     <label className="b-12 mb-2">
-                      عنوان الأرض <span className="required-asterisk"> *</span>
+                      عنوان الوحدة <span className="required-asterisk"> *</span>
                     </label>
                     <Dropdown
                       value={city}
                       onChange={(e) => {
                         setCity(e.value);
-                        setFieldValue("city", e.value);
+                        setFieldValue("view", e.value);
                       }}
                       editable
                       options={data.map((item) => ({
@@ -440,7 +440,7 @@ const JoinLand = () => {
                     ></Dropdown>
                   </div>
                   <label className="b-12 mb-2">
-                    عنوان الأرض <span className="required-asterisk">*</span>
+                    عنوان الوحدة <span className="required-asterisk">*</span>
                   </label>
 
                   <div className="mb-5">
@@ -451,13 +451,12 @@ const JoinLand = () => {
                       longitude={longitude}
                       latitude={latitude}
                       setLocationDetails={setLocationDetails}
-                      locationDetails={locationDetails}
                     />
                   </div>
                 </div>
 
                 {/* photos */}
-                <SectionHeader text={"صور الأرض"} />
+                <SectionHeader text={"صور الوحدة"} />
 
                 <div className="mb-4">
                   <ImageUploadGrid name="images" />
@@ -517,4 +516,4 @@ const JoinLand = () => {
   );
 };
 
-export default JoinLand;
+export default JoinIndustrial;

@@ -14,13 +14,20 @@ export const translations = {
       { label: "apartment", value: "apartment" },
       { label: "house", value: "house" },
     ],
-     landType: [
-      { label: "Residential Building Land", value: "residential_land" },
-      { label: "Administrative Land", value: "administrative_land" },
-      { label: "Commercial Land", value: "commercial_land" },
+    landType: [
+      { label: "Residential Building Land", value: "residential" },
+      { label: "Administrative Land", value: "administrative" },
+      { label: "Commercial Land", value: "commercial" },
       { label: "Penthouse", value: "penthouse" },
-      { label: "Agricultural Land", value: "agricultural_land" },
-      { label: "Industrial Land", value: "industrial_land" },
+      { label: "Agricultural Land", value: "agricultural" },
+      { label: "Industrial Land", value: "industrial" },
+    ],
+    administrativeType: [
+      { label: "Shop", value: "shop" },
+      { label: "Administrative", value: "unit" },
+    ],
+    factoryType: [
+      { label: "factory", value: "industrial" },
     ],
     aqarCategory: [
       { label: "sale", value: "sale" },
@@ -53,9 +60,9 @@ export const translations = {
     aqarSouqDetails: [
       {
         label: " From Developer (Primary)",
-        value: "first_residence",
+        value: "first_buyer",
       },
-      { label: "From Owner (Resale)", value: "from_owner" },
+      { label: "From Owner (Resale)", value: "reseller" },
     ],
     finishing: "Choose type of finishing",
     finishingDetails: [
@@ -69,6 +76,7 @@ export const translations = {
     phoneLabel: "Phone number",
     phonePlaceholder: "Enter your number",
     whatsappText: "WhatsApp available on this number",
+    city: "choose city",
   },
   ar: {
     forSale: "للبيع",
@@ -76,21 +84,30 @@ export const translations = {
     aqar: "اختار نوع العقار",
     land: "اختار نوع الأرض",
     type: "اختار القسم",
-     aqarType: [
+    city: "اختر المدينة",
+    aqarType: [
       { label: "فلل", value: "villa" },
       { label: "شاليهات", value: "chalet" },
       { label: "توين هاوس", value: "twin_house" },
       { label: "بنت هاوس", value: "penthouse" },
       { label: "مكتب تجاري", value: "commercial_office" },
       { label: "شقة", value: "apartment" },
+      { label: "عمارة", value: "house" },
     ],
     landType: [
-      { label: "أرض مباني سكنية", value: "residential_land" },
-      { label: "أرض إدارية", value: "administrative_land" },
-      { label: "أرض تجارية", value: "commercial_land" },
+      { label: "أرض مباني سكنية", value: "residential" },
+      { label: "أرض إدارية", value: "administrative" },
+      { label: "أرض تجارية", value: "commercial" },
       { label: "بنت هاوس", value: "penthouse" },
-      { label: " أرض زراعية", value: "agricultural_land" },
-      { label: "أرض صناعية", value: "industrial_land" },
+      { label: " أرض زراعية", value: "agricultural" },
+      { label: "أرض صناعية", value: "industrial" },
+    ],
+     administrativeType: [
+      { label: "متجر", value: "shop" },
+      { label: "إداري", value: "unit" },
+    ],
+    factoryType: [
+      { label: "مصنع", value: "industrial" },
     ],
     aqarCategory: [
       { label: "للبيع", value: "sale" },

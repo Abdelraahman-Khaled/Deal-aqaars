@@ -1,7 +1,8 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const API_BASE_URL = "https://deal-two.vercel.app/api/";
+const API_BASE_URL = "https://deal-1sdx.vercel.app/api/";
+// const API_BASE_URL = "https://deal-two.vercel.app/api/";
 
 const axiosInstance = axios.create({
     baseURL: API_BASE_URL,

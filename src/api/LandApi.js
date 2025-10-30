@@ -5,23 +5,23 @@ const getCurrentLanguage = () => localStorage.getItem("language") || "en";
 
 const getToastMessages = () => ({
   createSuccess: {
-    ar: "تم إنشاء العقار بنجاح",
+    ar: "تم إنشاء الأرض بنجاح",
     en: "Property created successfully",
   },
   updateSuccess: {
-    ar: "تم تحديث بيانات العقار بنجاح",
+    ar: "تم تحديث بيانات الأرض بنجاح",
     en: "Property updated successfully",
   },
   deleteSuccess: {
-    ar: "تم حذف العقار بنجاح",
+    ar: "تم حذف الأرض بنجاح",
     en: "Property deleted successfully",
   },
   favoriteAdded: {
-    ar: "تم إضافة العقار إلى المفضلة",
+    ar: "تم إضافة الأرض إلى المفضلة",   
     en: "Property added to favorites",
   },
   favoriteRemoved: {
-    ar: "تم إزالة العقار من المفضلة",
+    ar: "تم إزالة الأرض من المفضلة",
     en: "Property removed from favorites",
   },
   genericError: {
@@ -41,7 +41,7 @@ const handleError = (error) => {
   }
 };
 
-const PropertyAPI = {
+const LandAPI = {
   // Get all properties with optional filters
   getAllProperties: async (filters = {}) => {
     try {
@@ -136,11 +136,11 @@ const PropertyAPI = {
       throw error;
     }
   },
-  // Create new house
-  createBuilding: async (formData) => {
+  // Create new land
+  createLand: async (formData) => {
     try {
       // The formData is already prepared in JoinTrade.jsx, so we just need to send it
-      const response = await axiosInstance.post("/building", formData, {
+      const response = await axiosInstance.post("/land", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -148,17 +148,16 @@ const PropertyAPI = {
       return response.data;
     } catch (error) {
       console.error(
-        "Error creating property:",
+        "Error creating land:",
         error.response || error.message
       );
       throw error;
     }
   },
-
-  // Update property
-  updateProperty: async (id, formData) => {
+  // Update land
+  updateLand: async (id, formData) => {
     try {
-      const response = await axiosInstance.put(`/property/${id}`, formData, {
+      const response = await axiosInstance.put(`/land/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -167,7 +166,7 @@ const PropertyAPI = {
       return response.data;
     } catch (error) {
       console.error(
-        `Error updating property with ID ${id}:`,
+        `Error updating land with ID ${id}:`,
         error.response || error.message
       );
       handleError(error);
@@ -175,15 +174,15 @@ const PropertyAPI = {
     }
   },
 
-  // Delete property
-  deleteProperty: async (id) => {
+  // Delete land
+  deleteLand: async (id) => {
     try {
-      const response = await axiosInstance.delete(`/property/${id}`);
+      const response = await axiosInstance.delete(`/land/${id}`);
       toast.success(getToastMessages().deleteSuccess[getCurrentLanguage()]);
       return response.data;
     } catch (error) {
       console.error(
-        `Error deleting property with ID ${id}:`,
+        `Error deleting land with ID ${id}:`,
         error.response || error.message
       );
       handleError(error);
@@ -326,4 +325,4 @@ const PropertyAPI = {
   },
 };
 
-export default PropertyAPI;
+export default LandAPI;

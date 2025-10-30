@@ -5,23 +5,23 @@ const getCurrentLanguage = () => localStorage.getItem("language") || "en";
 
 const getToastMessages = () => ({
   createSuccess: {
-    ar: "تم إنشاء العقار بنجاح",
+    ar: "تم إنشاء الوحدة بنجاح",
     en: "Property created successfully",
   },
   updateSuccess: {
-    ar: "تم تحديث بيانات العقار بنجاح",
+    ar: "تم تحديث بيانات الوحدة بنجاح",
     en: "Property updated successfully",
   },
   deleteSuccess: {
-    ar: "تم حذف العقار بنجاح",
+    ar: "تم حذف الوحدة بنجاح",
     en: "Property deleted successfully",
   },
   favoriteAdded: {
-    ar: "تم إضافة العقار إلى المفضلة",
+    ar: "تم إضافة الوحدة إلى المفضلة",   
     en: "Property added to favorites",
   },
   favoriteRemoved: {
-    ar: "تم إزالة العقار من المفضلة",
+    ar: "تم إزالة الوحدة من المفضلة",
     en: "Property removed from favorites",
   },
   genericError: {
@@ -41,9 +41,9 @@ const handleError = (error) => {
   }
 };
 
-const PropertyAPI = {
+const AdministrativeAPI = {
   // Get all properties with optional filters
-  getAllProperties: async (filters = {}) => {
+  getAllAdministrative: async (filters = {}) => {
     try {
       const queryParams = new URLSearchParams();
 
@@ -59,13 +59,13 @@ const PropertyAPI = {
       });
 
       const queryString = queryParams.toString();
-      const url = queryString ? `/property?${queryString}` : "/property";
+      const url = queryString ? `/administrative?${queryString}` : "/administrative";
 
       const response = await axiosInstance.get(url);
       return response.data;
     } catch (error) {
       console.error(
-        "Error fetching properties:",
+        "Error fetching administrative:",
         error.response || error.message
       );
       handleError(error);
@@ -74,13 +74,13 @@ const PropertyAPI = {
   },
 
   // Get property by ID
-  getPropertyById: async (id) => {
+  getAdministrativeById: async (id) => {
     try {
-      const response = await axiosInstance.get(`/property/${id}`);
+      const response = await axiosInstance.get(`/administrative/${id}`);
       return response.data;
     } catch (error) {
       console.error(
-        `Error fetching property with ID ${id}:`,
+        `Error fetching administrative with ID ${id}:`,
         error.response || error.message
       );
       handleError(error);
@@ -89,13 +89,13 @@ const PropertyAPI = {
   },
 
   // Get properties by user ID
-  getPropertiesByUserId: async (userId) => {
+  getAdministrativeByUserId: async (userId) => {
     try {
-      const response = await axiosInstance.get(`/property/user/${userId}`);
+      const response = await axiosInstance.get(`/administrative/user/${userId}`);
       return response.data;
     } catch (error) {
       console.error(
-        `Error fetching properties for user ${userId}:`,
+        `Error fetching administrative for user ${userId}:`,
         error.response || error.message
       );
       handleError(error);
@@ -104,13 +104,13 @@ const PropertyAPI = {
   },
 
   // Get current user's properties
-  getMyProperties: async () => {
+  getMyAdministrative: async () => {
     try {
-      const response = await axiosInstance.get("/property/me");
+      const response = await axiosInstance.get("/administrative/me");
       return response.data;
     } catch (error) {
       console.error(
-        "Error fetching user properties:",
+        "Error fetching user administrative:",
         error.response || error.message
       );
       handleError(error);
@@ -119,10 +119,10 @@ const PropertyAPI = {
   },
 
   // Create new property
-  createProperty: async (formData) => {
+  createAdministrative: async (formData) => {
     try {
       // The formData is already prepared in JoinTrade.jsx, so we just need to send it
-      const response = await axiosInstance.post("/property", formData, {
+      const response = await axiosInstance.post("/administrative", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -130,17 +130,17 @@ const PropertyAPI = {
       return response.data;
     } catch (error) {
       console.error(
-        "Error creating property:",
+        "Error creating administrative:",
         error.response || error.message
       );
       throw error;
     }
   },
-  // Create new house
-  createBuilding: async (formData) => {
+  // Create new land
+  createAdministrative: async (formData) => {
     try {
       // The formData is already prepared in JoinTrade.jsx, so we just need to send it
-      const response = await axiosInstance.post("/building", formData, {
+      const response = await axiosInstance.post("/administrative", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -148,17 +148,16 @@ const PropertyAPI = {
       return response.data;
     } catch (error) {
       console.error(
-        "Error creating property:",
+        "Error creating administrative:",
         error.response || error.message
       );
       throw error;
     }
   },
-
-  // Update property
-  updateProperty: async (id, formData) => {
+  // Update land
+  updateAdministrative: async (id, formData) => {
     try {
-      const response = await axiosInstance.put(`/property/${id}`, formData, {
+      const response = await axiosInstance.put(`/administrative/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -167,7 +166,7 @@ const PropertyAPI = {
       return response.data;
     } catch (error) {
       console.error(
-        `Error updating property with ID ${id}:`,
+        `Error updating administrative with ID ${id}:`,
         error.response || error.message
       );
       handleError(error);
@@ -175,15 +174,15 @@ const PropertyAPI = {
     }
   },
 
-  // Delete property
-  deleteProperty: async (id) => {
+  // Delete land
+  deleteAdministrative: async (id) => {
     try {
-      const response = await axiosInstance.delete(`/property/${id}`);
+      const response = await axiosInstance.delete(`/administrative/${id}`);
       toast.success(getToastMessages().deleteSuccess[getCurrentLanguage()]);
       return response.data;
     } catch (error) {
       console.error(
-        `Error deleting property with ID ${id}:`,
+        `Error deleting administrative with ID ${id}:`,
         error.response || error.message
       );
       handleError(error);
@@ -192,7 +191,7 @@ const PropertyAPI = {
   },
 
   // Search properties
-  searchProperties: async (searchQuery, filters = {}) => {
+  searchAdministrative: async (searchQuery, filters = {}) => {
     try {
       const queryParams = new URLSearchParams();
 
@@ -212,12 +211,12 @@ const PropertyAPI = {
       });
 
       const response = await axiosInstance.get(
-        `/property/search?${queryParams.toString()}`
+        `/administrative/search?${queryParams.toString()}`
       );
       return response.data;
     } catch (error) {
       console.error(
-        "Error searching properties:",
+        "Error searching administrative:",
         error.response || error.message
       );
       handleError(error);
@@ -226,13 +225,13 @@ const PropertyAPI = {
   },
 
   // Get favorite properties
-  getFavoriteProperties: async () => {
+  getFavoriteAdministrative: async () => {
     try {
-      const response = await axiosInstance.get("/property/favorites");
+      const response = await axiosInstance.get("/administrative/favorites");
       return response.data;
     } catch (error) {
       console.error(
-        "Error fetching favorite properties:",
+        "Error fetching favorite administrative:",
         error.response || error.message
       );
       handleError(error);
@@ -241,16 +240,16 @@ const PropertyAPI = {
   },
 
   // Add property to favorites
-  addToFavorites: async (propertyId) => {
+  addToFavorites: async (administrativeId) => {
     try {
       const response = await axiosInstance.post(
-        `/property/${propertyId}/favorite`
+        `/administrative/${administrativeId}/favorite`
       );
       toast.success(getToastMessages().favoriteAdded[getCurrentLanguage()]);
       return response.data;
     } catch (error) {
       console.error(
-        `Error adding property ${propertyId} to favorites:`,
+        `Error adding administrative ${administrativeId} to favorites:`,
         error.response || error.message
       );
       handleError(error);
@@ -259,16 +258,16 @@ const PropertyAPI = {
   },
 
   // Remove property from favorites
-  removeFromFavorites: async (propertyId) => {
+  removeFromFavorites: async (administrativeId) => {
     try {
       const response = await axiosInstance.delete(
-        `/property/${propertyId}/favorite`
+        `/administrative/${administrativeId}/favorite`      
       );
       toast.success(getToastMessages().favoriteRemoved[getCurrentLanguage()]);
       return response.data;
     } catch (error) {
       console.error(
-        `Error removing property ${propertyId} from favorites:`,
+        `Error removing administrative ${administrativeId} from favorites:`,
         error.response || error.message
       );
       handleError(error);
@@ -276,14 +275,14 @@ const PropertyAPI = {
     }
   },
 
-  // Get property statistics
-  getPropertyStats: async () => {
+  // Get administrative statistics
+  getAdministrativeStats: async () => {
     try {
-      const response = await axiosInstance.get("/property/stats");
+      const response = await axiosInstance.get("/administrative/stats");  
       return response.data;
     } catch (error) {
       console.error(
-        "Error fetching property statistics:",
+        "Error fetching administrative statistics:",
         error.response || error.message
       );
       handleError(error);
@@ -292,15 +291,15 @@ const PropertyAPI = {
   },
 
   // Get properties by category
-  getPropertiesByCategory: async (category) => {
+  getAdministrativeByCategory: async (category) => {
     try {
       const response = await axiosInstance.get(
-        `/property/category/${category}`
+        `/administrative/category/${category}`
       );
       return response.data;
     } catch (error) {
       console.error(
-        `Error fetching properties for category ${category}:`,
+        `Error fetching administrative for category ${category}:`,
         error.response || error.message
       );
       handleError(error);
@@ -309,15 +308,15 @@ const PropertyAPI = {
   },
 
   // Get properties by location
-  getPropertiesByLocation: async (location) => {
+  getAdministrativeByLocation: async (location) => {
     try {
       const response = await axiosInstance.get(
-        `/property/location/${location}`
+        `/administrative/location/${location}`
       );
       return response.data;
     } catch (error) {
       console.error(
-        `Error fetching properties for location ${location}:`,
+        `Error fetching administrative for location ${location}:`,
         error.response || error.message
       );
       handleError(error);
@@ -326,4 +325,4 @@ const PropertyAPI = {
   },
 };
 
-export default PropertyAPI;
+export default AdministrativeAPI;

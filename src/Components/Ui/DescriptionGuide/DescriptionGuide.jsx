@@ -42,13 +42,13 @@ const DescriptionGuide = ({ title, location, price, description, aqar = false, r
                     {
                         aqar &&
                         <div className='d-flex space-6 flex-wrap'>
-                            {rooms && (
+                            {rooms > 0 && (
                                 <p className='d-flex align-items-center gap-2 b-11'>
                                     <Bed />
                                     {rooms}
                                 </p>
                             )}
-                            {bath && (
+                            {bath > 0 && (
                                 <p className='d-flex align-items-center gap-2 b-11'>
                                     <BathIcon />
                                     {bath}

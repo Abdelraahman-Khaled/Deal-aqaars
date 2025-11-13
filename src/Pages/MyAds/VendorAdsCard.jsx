@@ -14,20 +14,13 @@ import DeleteModal from '../../Components/DeleteButton/DeleteModal'
 import TradeIcon from '../../assets/Icons/TradeIcon'
 import SimpleImageSlider from '../../Components/Ui/SimpleImageSlider/SimpleImageSlider'
 import FavIcon from '../../Components/Ui/FavIcon/FavIcon'
-import LocationDisplay from '../../Components/Ui/LocationDisplay/LocationDisplay'
-import UpdatePropertyModal from './UpdatePropertyModal'
 
-const VendorAdsCard = ({ propertyData, id,type,model , price, numAds, seen,  title, tradeItem, likes, calls, date, rooms, bath, space, details, location, img, company = false, wrapperClass, isFav, isSwiping = false, trade = false, onDelete }) => {
+const VendorAdsCard = ({id,type,model , price, numAds, seen,  title, tradeItem, likes, calls, date, rooms, bath, space, details, location, img, company = false, wrapperClass, isFav, isSwiping = false, trade = false, onDelete }) => {
     const { currentLanguage } = useLanguage()
     const [showProgress, setShowProgress] = useState(false);
-    const [showUpdateModal, setShowUpdateModal] = useState(false);
 
 
-    const sliceWords = (text) => {
-        const words = text.split(" ");
-        return words.slice(0, 8).join(" ") + (words.length > 8 ? "..." : "");
-    };
-
+    
 
     const handleClick = (e) => {
         if (isSwiping) e.preventDefault();
@@ -36,7 +29,7 @@ const VendorAdsCard = ({ propertyData, id,type,model , price, numAds, seen,  tit
 
     return (
         <div className={`compound-card space-4 d-flex ${wrapperClass} mb-4  `} style={company & wrapperClass === "flex-wrap" ? { width: "49%" } : { width: "100%" }} dir={currentLanguage === "ar" ? "rtl" : "ltr"}>
-            <Link to={ model ==="property" ? `/aqar-guide/${id}` : model === "building" ? `/building-guide/${id}` : model === "land" ? `/land-guide/${id}` : `/factory-guide/${id}` }
+            <Link to={ model ==="property" ? `/aqar-guide/${id}` : model === "building" ? `/building-guide/${id}` : model === "land" ? `/land-guide/${id}` : model === "administrative" ? `/adminstrative-guide/${id}` : `/factory-guide/${id}` }
                 className={`  ${wrapperClass ? "w-100" : "w-50"}`}
                 onClick={handleClick}
             >

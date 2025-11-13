@@ -1,19 +1,16 @@
 import React from "react";
 import LocationIcon from "../../../assets/Icons/LocationIcon";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import FavIcon from "../FavIcon/FavIcon";
 import Bed from "../../../assets/Icons/Bed";
 import BathIcon from "../../../assets/Icons/BathIcon";
 import AreaIcon from "../../../assets/Icons/AreaIcon";
-import MoneyIcon from "../../../assets/Icons/MoneyIcon";
 import { useLanguage } from "../../Languages/LanguageContext";
 import WhatsIcon from "../../../assets/Icons/WhatsIcon";
 import CallIcon from "../../../assets/Icons/CallIcon";
-import LocationDisplay from "../LocationDisplay/LocationDisplay";
 import SimpleImageSlider from "../SimpleImageSlider/SimpleImageSlider";
-import "./RealstateCard.css";
 
-const RealStateCard = ({
+const AdminstrativeCard = ({
   id,
   price,
   rooms,
@@ -23,14 +20,13 @@ const RealStateCard = ({
   location,
   img,
   company = false,
-  connections = false,
   wrapperClass,
   isFav,
   isSwiping = false,
-  category,
   type,
   phone,
   haveWhatsapp,
+  division,
 }) => {
   const { currentLanguage } = useLanguage();
 
@@ -54,7 +50,7 @@ const RealStateCard = ({
       dir={currentLanguage === "ar" ? "rtl" : "ltr"}
     >
       <Link
-        to={`/aqar-guide/${id}`}
+        to={`/adminstrative-guide/${id}`}
         className={`   ${wrapperClass ? "w-100" : "w-50"}`}
         onClick={handleClick}
       >
@@ -69,19 +65,28 @@ const RealStateCard = ({
         <div className="d-flex justify-content-between w-100">
           <p className="b-3 min-w-max">{price} ج.م</p>
           <div className="d-flex gap-2 flex-wrap justify-content-end">
-            <p className="b-11 available">{type === "sale" ? "للبيع":"للايجار"}</p>
+            <p className="b-11 available">
+              {type === "sale" ? "للبيع" : "للايجار"}
+            </p>
+            <p className="b-11 available">
+              {division ==="unit" ? "إداري":"محل"}
+            </p>
           </div>
         </div>
         {/* specifications */}
         <div className="d-flex gap-2">
-          <p className="d-flex align-items-center gap-2 b-11">
-            <Bed />
-            {rooms}
-          </p>
-          <p className="d-flex align-items-center gap-2 b-11">
-            <BathIcon />
-            {bath}
-          </p>
+          {rooms > 0 && (
+            <p className="d-flex align-items-center gap-2 b-11">
+              <Bed />
+              {rooms}
+            </p>
+          )}
+          {bath > 0 && (
+            <p className="d-flex align-items-center gap-2 b-11">
+              <BathIcon />
+              {bath}
+            </p>
+          )}
           <p className="d-flex align-items-center gap-2 b-11">
             <AreaIcon />
             {space} متر مربع
@@ -91,23 +96,13 @@ const RealStateCard = ({
         <p className="b-12">{sliceWords(details)}</p>
         {/* locations */}
         <div className="b-11 d-flex">
-          <LocationIcon/> 
-          {location 
-          ||
+          <LocationIcon />
+          {location ||
             (currentLanguage === "ar"
               ? "موقع غير محدد"
               : "Location not specified")}
         </div>
-        {/* offer */}
-        {/* {
-                    category != "cash" &&
-                    <div className='w-100 d-flex'>
-                        <div className='b-11 available d-flex gap-1' style={{ color: "var(--yellow-100)", width: "fit-content" }}>
-                            <MoneyIcon />
-                            مقدم {offer}{offer == 0 ? "%" : " ج.م"}
-                        </div>
-                    </div>
-                    } */}
+
         <div className="connections d-flex justify-content-between w-100 pt-4 space-2 ">
           {/* whats */}
           {haveWhatsapp && phone && (
@@ -137,4 +132,4 @@ const RealStateCard = ({
   );
 };
 
-export default RealStateCard;
+export default AdminstrativeCard;

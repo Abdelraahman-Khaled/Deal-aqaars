@@ -51,6 +51,8 @@ import LandDetails from "./Pages/Land/LandDetails";
 import Land from "./Pages/Land/Land";
 import Factory from "./Pages/Factory/Factory";
 import FactoryDetails from "./Pages/Factory/FactoryDetails";
+import Adminstrative from "./Pages/Adminstrative/Adminstrative";
+import AdminstrativeDetails from "./Pages/Adminstrative/AdminstrativeDetails";
 
 const App = () => {
   return (
@@ -116,6 +118,13 @@ const App = () => {
                           <Route
                             path="/factory-guide/:id"
                             element={<FactoryDetails />}
+                          />
+
+                          {/* اداري */}
+                          <Route path="/adminstrative" element={<Adminstrative />} />
+                          <Route
+                            path="/adminstrative-guide/:id"
+                            element={<AdminstrativeDetails />}
                           />
 
 

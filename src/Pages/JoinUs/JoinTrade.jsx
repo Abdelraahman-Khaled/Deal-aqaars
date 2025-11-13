@@ -64,8 +64,7 @@ const JoinTrade = () => {
     formData.append("location[detailedLocation]", locationDetails);
     formData.append("location[coordinates][0]", longitude);
     formData.append("location[coordinates][1]", latitude);
-    // locationLabel
-    formData.append("locationLabel", values.locationLabel);
+   
 
     // images
     if (values.images && values.images.length > 0) {
@@ -77,7 +76,9 @@ const JoinTrade = () => {
       console.log("No images to send");
     }
     setIsItemLoading(true);
-
+  for (let [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
     try {
       setIsSubmitting(true);
 
@@ -176,12 +177,7 @@ const JoinTrade = () => {
                   رقم الموبايل
                   <span className="required-asterisk">*</span>
                 </label>
-                {/* <PhoneNumber
-                                               name="phone"
-                                               type="text"
-                                               placeholder={"اكتب رقمك"}
-                                             /> */}
-                <Field name="phone" component={PhoneNumberValidation} />
+                <Field name="phoneNumber" component={PhoneNumberValidation} />
               </div>
 
               <div className="b-15 mb-4 d-flex justify-content-between align-items-center lg-w-30">

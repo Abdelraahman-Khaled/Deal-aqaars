@@ -16,6 +16,7 @@ import FormField from "../../Components/Forms/FormField";
 import InputFiled from "../../Components/Forms/InputField";
 import SearchIcon from "../../assets/Icons/SearchIcon";
 import PropertyAPI from "../../api/propertyApi";
+import AdministrativeAPI from "../../api/administrativeApi";
 import SwapAPI from "../../api/swapApi";
 import Loader from "../../Components/Loader/Loader";
 
@@ -68,6 +69,11 @@ const VendorAds = () => {
     myFactoriesLoaded: contextMyFactoriesLoaded,
     setMyFactories: setContextMyFactories,
   } = useFactory();
+
+  const [administrative, setAdministrative] = useState([]);
+  const [administrativeLoading, setAdministrativeLoading] = useState(true);
+  const [administrativeError, setAdministrativeError] = useState(null);
+  const [administrativeLoaded, setAdministrativeLoaded] = useState(false);
 
   
   // Fetch user's properties
@@ -126,6 +132,24 @@ const VendorAds = () => {
     }
   }, [contextMyFactoriesLoaded, fetchMyFactoriesFromContext]);
 
+  const fetchMyAdministrative = async () => {
+    try {
+      setAdministrativeLoading(true);
+      const response = await AdministrativeAPI.getMyAdministrative();
+      setAdministrative(response.data);
+      setAdministrativeError(null);
+    } catch (err) {
+      console.error("Error fetching administrative:", err);
+      const errorMessage = err.message || "Failed to fetch administrative";
+      setAdministrativeError(errorMessage);
+      setAdministrative([]);
+      toast.error(errorMessage);
+    } finally {
+      setAdministrativeLoading(false);
+      setAdministrativeLoaded(true);
+    }
+  };
+
   useEffect(() => {
     if (toggle === "finishing") {
       console.log(
@@ -136,6 +160,18 @@ const VendorAds = () => {
       console.log("Current finishingError:", finishingError);
       if (!myFinishingServicesLoaded) {
         fetchMyFinishingServices();
+      }
+    } else if (toggle === "factory") {
+      fetchMyFactories();
+    } else if (toggle === "administrative") {
+      if (!administrativeLoaded) {
+        fetchMyAdministrative();
+      }
+    } else if (toggle === "factory") {
+      fetchMyFactories();
+    } else if (toggle === "administrative") {
+      if (!administrativeLoaded) {
+        fetchMyAdministrative();
       }
     } else if (toggle === "swaps") {
       if (!swapsLoaded) {
@@ -201,6 +237,9 @@ const VendorAds = () => {
   const handleDeleteFactory = async () => {
     fetchMyFactoriesFromContext();
   }
+  const handleDeleteAdministrative = async () => {
+    fetchMyAdministrative();
+  }
 
   const user = useSelector((state) => state.auth.user);
   const tabs = [
@@ -209,6 +248,8 @@ const VendorAds = () => {
     { value: "building", label: translations[currentLanguage].building },
     { value: "land", label: translations[currentLanguage].land },
     { value: "factory", label: translations[currentLanguage].factory },
+    { value: "administrative", label: translations[currentLanguage].administrative },
+
   ];
 
   const tabsCompany = [
@@ -453,7 +494,7 @@ const VendorAds = () => {
                         title={swap.whatIHave?.propertyType}
                         trade={true}
                         location={swap.locationLabel}
-                        images={swap.images}
+                        img={swap.images}
                         listedBy={swap.listedBy}
                         phoneNumber={swap.contact?.phoneNumber}
                         hasWhatsapp={swap.contact?.hasWhatsapp}
@@ -535,7 +576,65 @@ const VendorAds = () => {
                     </p>
                   </div>
                 )
-              ) : toggle === "land" ? (
+              ) 
+               : toggle === "administrative" ? (
+                administrativeLoading ? (
+                  <div className="col-12 text-center py-5">
+                    <Loader />
+                    <p className="mt-2">جاري تحميل إعلانات التجاري...</p>
+                  </div>
+                ) : administrativeError ? (
+                  <div className="col-12 text-center py-5">
+                    <p className="text-danger">
+                      حدث خطأ في تحميل إعلانات التجاري:{" "}
+                      {administrativeError}
+                    </p>
+                    <button
+                      className="btn btn-primary mt-2"
+                      onClick={() => window.location.reload()}
+                    >
+                      إعادة المحاولة
+                    </button>
+                  </div>
+                ) : administrative && administrative.length > 0 ? (
+                  administrative.map((building, index) => (
+                    <div
+                      key={building.id || index}
+                      className="related-slider col-12 col-sm-6 col-lg-4  mt-0"
+                    >
+                      <VendorAdsCard
+                        id={building._id}
+                        key={index}
+                        numAds={index + 1}
+                        date={building.createdAt}
+                        title={building.title[currentLanguage]}
+                        lat={building.location.coordinates.coordinates[0]}
+                        lon={building.location.coordinates.coordinates[1]}
+                        location={building.location.city}
+                        details={building.description[currentLanguage]}
+                        price={building.details.price}
+                        space={building.details.space}
+                        img={building.images}
+                        slider={true}
+                        wrapperClass="flex-wrap"
+                        seen={"1"}
+                        likes={"2"}
+                        calls={"3"}
+                        onDelete={handleDeleteAdministrative}
+                        model={"administrative"}
+                      />
+                    </div>
+                  ))
+                ) : (
+                  <div className="d-flex flex-column justify-content-center align-items-center gap-4">
+                    <AddannouncementIcon />
+                    <p className="b-12 w-25 text-center">
+                      لا توجد إعلانات مباني خاصة بك.
+                    </p>
+                  </div>
+                )
+              ) 
+              : toggle === "land" ? (
                 contextMyLandsLoading ? (
                   <div className="col-12 text-center py-5">
                     <Loader />
@@ -567,8 +666,6 @@ const VendorAds = () => {
                         numAds={index + 1}
                         date={land.createdAt}
                         title={land.title[currentLanguage]}
-                        lat={land.location.coordinates.coordinates[0]}
-                        lon={land.location.coordinates.coordinates[1]}
                         location={land.location.city}
                         details={land.description[currentLanguage]}
                         price={land.details.price}
@@ -684,7 +781,7 @@ const VendorAds = () => {
                         space={property.details.space}
                         title={property.title[currentLanguage]}
                         location={property.location.detailedLocation}
-                        images={property.images}
+                        img={property.images}
                         listedBy={property.listedBy}
                         phoneNumber={property.contact?.phoneNumber}
                         hasWhatsapp={property.contact?.hasWhatsapp}

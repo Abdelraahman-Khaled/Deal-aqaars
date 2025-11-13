@@ -62,6 +62,7 @@ export const translations = {
     building:"مباني",
     land:"اراضي",
     factory:"مصانع",
+    administrative:"تجاري",
     trade: "تبديل",
     swaps: "تبديل",
     project: " مشروع عقاري",

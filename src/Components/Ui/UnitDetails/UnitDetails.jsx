@@ -52,8 +52,14 @@ const UnitDetails = ({ data }) => {
                       <p className="b-10">{unit.space} متر مربع</p>
                     </div>
                   )}
+                  {unit.handingOverYear && (
+                    <div className="w-100  d-flex flex-row justify-content-between">
+                      <p className="b-12">تاريخ التسليم</p>
+                      <p className="b-10">{unit.handingOverYear}</p>
+                    </div>
+                  )}
 
-                  {unit.numRooms && (
+                  {unit.numRooms  && (
                     <div className=" w-100 d-flex flex-row justify-content-between">
                       <p className="b-12">عدد الأوض</p>
                       <p className="b-10">{unit.numRooms}</p>

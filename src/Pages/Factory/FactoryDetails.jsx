@@ -1,55 +1,61 @@
-import React, { useEffect } from 'react'
-import HelmetInfo from '../../../Components/Helmetinfo/HelmetInfo';
-import { useLanguage } from '../../../Components/Languages/LanguageContext';
-import { useProperty } from '../../../contexts/PropertyContext';
-import BreadcrumbsPage from '../../../Components/Ui/BreadcrumbsPage/BreadcrumbsPage';
-import DescriptionGuide from '../../../Components/Ui/DescriptionGuide/DescriptionGuide';
-import AdsDescription from '../../../Components/Ui/AdsDescription/AdsDescription';
-import Map from '../../../Components/Ui/Map/Map';
-import CompanyCard from '../../../Components/Ui/CompanyCard/CompanyCard';
-import ContainerMedia from '../../../Components/ContainerMedia/ContainerMedia';
-import UnitDetails from '../../../Components/Ui/UnitDetails/UnitDetails';
-import RealatedSlider from '../../../Components/Ui/RealatedSlider/RealatedSlider';
-import RealStateCard from '../../../Components/Ui/RealStateCard/RealStateCard';
-
-import compoundImg from "../../../assets/images/compounds/compound.png";
-import compoundImg1 from "../../../assets/images/compounds/compound1.png";
-import compoundImg2 from "../../../assets/images/compounds/compound2.png";
-import TwoAds from '../../../Components/Ui/TwoAds/TwoAds';
+import React, { useEffect, useState } from 'react'
+import { useLanguage } from '../../Components/Languages/LanguageContext';
 import { useParams } from 'react-router-dom';
+import factoryApi from '../../api/factoryApi';
+import compoundImg from "../../assets/images/compounds/compound.png";
+import compoundImg1 from "../../assets/images/compounds/compound1.png";
+import compoundImg2 from "../../assets/images/compounds/compound2.png";
+import ContainerMedia from '../../Components/ContainerMedia/ContainerMedia';
+import BreadcrumbsPage from '../../Components/Ui/BreadcrumbsPage/BreadcrumbsPage';
+import PropertyShowcaseExample from '../../Components/Ui/PropertyShowcase/PropertyShowcaseExample';
+import DescriptionGuide from '../../Components/Ui/DescriptionGuide/DescriptionGuide';
+import UnitDetails from '../../Components/Ui/UnitDetails/UnitDetails';
+import AdsDescription from '../../Components/Ui/AdsDescription/AdsDescription';
+import RealatedSlider from '../../Components/Ui/RealatedSlider/RealatedSlider';
+import TwoAds from '../../Components/Ui/TwoAds/TwoAds';
+import Loader from '../../Components/Loader/Loader';
+import HelmetInfo from '../../Components/Helmetinfo/HelmetInfo';
 import { translations } from './translations';
-import PropertyShowcaseExample from '../../../Components/Ui/PropertyShowcase/PropertyShowcaseExample';
-import Loader from '../../../Components/Loader/Loader';
+import RealStateCard from '../../Components/Ui/RealStateCard/RealStateCard';
+import Map from '../../Components/Ui/Map/Map';
 
-const AqarGuide = () => {
+const FactoryDetails = () => {
     const { currentLanguage } = useLanguage(); // Get the current language
     const { id } = useParams();
-    const { property, loading, error, fetchProperty, clearProperty } = useProperty();
-    // Fetch property when component mounts or id changes
+    const [factory, setFactory] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    // Fetch factory when component mounts or id changes
     useEffect(() => {
+        const fetchFactory = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                const response = await factoryApi.getFactoryById(id);
+                setFactory(response.data);
+            } catch (err) {
+                setError(err.message || 'Failed to fetch factory details');
+            } finally {
+                setLoading(false);
+            }
+        };
         if (id) {
-            fetchProperty(id);
+            fetchFactory();
         }
-        return () => clearProperty(); // cleanup on unmount
-    }, [id, fetchProperty, clearProperty]);
+        return () => setFactory(null); // cleanup on unmount
+    }, [id]);
 
-    console.log("property:", property);
-
+    console.log("factory:", factory);
 
 
     const unitDetails = [
         {
-            space: property?.details.space,
-            floor: property?.details.floor,
-            front: property?.details.view,
-            numOfAds: "",
-            paymentWay: property?.details.paymentMethod,
-            numRooms: property?.details.rooms,
-            finishingType: property?.details.finishingType,
-            yearDelivary: property?.details.handoverDate,
-            buildingYear: property?.details.buildingYear,
-            meterPrice: (property?.details.price/property?.details.space).toFixed(0),
-            AdsType: property?.details.propertyType,
+            meterPrice:factory?.details.price / factory?.details.space ,
+            space: factory?.details.space,
+            front: factory?.details.view,
+            paymentWay: false,
+            paymentLand:factory?.details.paymentMethod,
+            AdsType: factory?.details.type,
         }
     ]
 
@@ -118,14 +124,14 @@ const AqarGuide = () => {
         );
     }
 
-    // Show not found message if no property data
-    if (!property && !loading) {
+    // Show not found message if no factory data
+    if (!factory && !loading) {
         return (
             <div className="py-4">
                 <ContainerMedia>
                     <div className="text-center py-5">
-                        <h3 className="mb-3">{currentLanguage === "ar" ? "العقار غير موجود" : "Property Not Found"}</h3>
-                        <p className="text-muted">{currentLanguage === "ar" ? "لم يتم العثور على العقار المطلوب" : "The requested property could not be found"}</p>
+                        <h3 className="mb-3">{currentLanguage === "ar" ? "المصنع غير موجود" : "Factory Not Found"}</h3>
+                        <p className="text-muted">{currentLanguage === "ar" ? "لم يتم العثور على المصنع المطلوب" : "The requested factory could not be found"}</p>
                     </div>
                 </ContainerMedia>
             </div>
@@ -134,41 +140,39 @@ const AqarGuide = () => {
 
     return (
         <>
-            <HelmetInfo titlePage={currentLanguage === "ar" ? "دليل الكومباوندات" : "Compounds Guide"} />
+            <HelmetInfo titlePage={currentLanguage === "ar" ? "تفاصيل المصنع" : "Factory Details"} />
             <div className="py-4">
                 <ContainerMedia>
                     <header className='pb-4'>
                         <BreadcrumbsPage
                             newClassBreadHeader={"biography-bread breadcrumb-page-2"}
-                            mainTitle={property?.division === "rent" ? translations[currentLanguage].rent : translations[currentLanguage].sale}
+                            mainTitle={factory?.division === "rent" ? translations[currentLanguage].rent : translations[currentLanguage].sale}
                             mainRoute={"/realestate"}
                             routeTitleTwoBread={false}
                             titleTwoBread={false}
-                            textBreadActive={property?.title[currentLanguage]}
+                            textBreadActive={factory?.title[currentLanguage]}
                         />
                     </header>
                     <main>
-                        <PropertyShowcaseExample images={property.images.map((item) => item.url)} location={property.location.city} />
+                        <PropertyShowcaseExample images={factory.images.map((item) => item.url)} location={factory.location.city} />
                         <div className="row gy-4">
                             <div className="col-12 col-xl-9 d-flex flex-column space-8">
                                 <DescriptionGuide
-                                    title={property?.details.price + " " + "ج.م"}
-                                    lat={property.location.coordinates[0]}
-                                    lon={property.location.coordinates[1]}
+                                    title={factory?.details.price + " " + "ج.م"}
+                                    lat={factory.location.coordinates[0]}
+                                    lon={factory.location.coordinates[1]}
                                     aqar={true}
-                                    rooms={property.details.rooms}
-                                    bath={property.details.bathrooms}
-                                    space={property.details.space}
-                                    description={property.description[currentLanguage]}
-                                    location={property.location.detailedLocation}
+                                    description={factory.description[currentLanguage]}
+                                    location={factory.location.detailedLocation}
+                                    space={factory.details.space}
                                 />
                                 <UnitDetails data={unitDetails} />
-                               
-                                <AdsDescription title={"وصف الاعلان"} description={property.description[currentLanguage]} />
+                                
+                                <AdsDescription title={"وصف الاعلان"} description={factory.description[currentLanguage]} />
                                 <Map
-                                    lon={property.location.coordinates.coordinates[0]}
-                                    lat={property.location.coordinates.coordinates[1]}
-                                    locationName={property.title[currentLanguage]}
+                                    lon={factory?.location.coordinates[0]}
+                                    lat={factory?.location.coordinates[1]}
+                                    locationName={factory.title[currentLanguage]}
                                 />
 
                                 {/* related slider */}
@@ -193,14 +197,14 @@ const AqarGuide = () => {
 
                             </div>
                             <div className="left-col col-12 col-xl-3 d-flex flex-column space-6">
-                                <CompanyCard
+                                {/* <CompanyCard
                                     name={"تطوير مصر للتطوير العقاري"}
                                     since={"2014"}
                                     numberProjects={"8"}
                                     inhouse={"2"}
                                     notFinished={"1"}
                                     underDevelopment={"2"}
-                                />
+                                /> */}
 
                                 <TwoAds />
                             </div>
@@ -211,4 +215,4 @@ const AqarGuide = () => {
         </>)
 }
 
-export default AqarGuide
+export default FactoryDetails

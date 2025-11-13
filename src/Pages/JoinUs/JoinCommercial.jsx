@@ -71,7 +71,7 @@ const JoinCommercial = () => {
     space: "",
     view: "",
     price: "",
-    paymentMethods: "",
+    paymentMethod: "",
     rooms: "",
     floor: "",
     bathrooms: "",
@@ -105,7 +105,7 @@ const JoinCommercial = () => {
 
     // contact
     formData.append("advertiserPhoneNumber", values.phone);
-    formData.append("haveWhatsapp", values.whatsapp);
+    formData.append("hasWhatsapp", values.whatsapp);
 
     // lat long
     formData.append("location[city]", city);
@@ -116,13 +116,13 @@ const JoinCommercial = () => {
     // Details
     formData.append("details[space]", values.space);
     formData.append("details[view]", values.view);
-    formData.append("details[finishingType]", values.finishing);
-    formData.append("details[paymentMethods]", values.paymentMethods);
+    formData.append("details[finishing]", values.finishing);
+    formData.append("details[paymentMethod]", values.paymentMethod);
     formData.append("details[propertyType]", values.propertyType);
     formData.append("details[price]", values.price);
     formData.append("details[bathrooms]", values.bathrooms);
     formData.append("details[buildingYear]", values.buildingYear);
-    formData.append("details[handoverYear]", values.handoverYear);
+    formData.append("details[handingOverYear]", values.handingOverYear);
     {
       !isHouse && formData.append("details[rooms]", values.rooms);
       formData.append("details[floor]", values.floor);
@@ -257,7 +257,7 @@ const JoinCommercial = () => {
 
                 {/* location in English*/}
 
-                <div className="mb-4 ">
+                {/* <div className="mb-4 ">
                   <label className="b-12 mb-2">
                     عنوان الاعلان بالانجليزي{" "}
                     <span className="required-asterisk">*</span>
@@ -266,11 +266,11 @@ const JoinCommercial = () => {
                     name="titleEn"
                     placeholder={"عنوان الاعلان بالانجليزي"}
                   />
-                </div>
+                </div> */}
 
                 {/* announcment details in English*/}
 
-                <div className="mb-4 flex-wrap d-flex align-items-center justify-content-between ">
+                {/* <div className="mb-4 flex-wrap d-flex align-items-center justify-content-between ">
                   <label className="b-12 ">
                     تفاصيل الاعلان بالانجليزي{" "}
                     <span className="required-asterisk">*</span>
@@ -280,7 +280,7 @@ const JoinCommercial = () => {
                     maxLength="700"
                     placeholder={" تفاصيل الاعلان بالانجليزي"}
                   />
-                </div>
+                </div> */}
 
                 {/* announcmenter infomation*/}
                 <SectionHeader text={"بيانات المعلن"} />
@@ -465,7 +465,7 @@ const JoinCommercial = () => {
                       سنة التسليم <span className="required-asterisk"> *</span>
                     </label>
                     <InputFiled
-                      name="handoverYear"
+                      name="handingOverYear"
                       placeholder={"حدد سنة التسليم "}
                     />
                   </Col>
@@ -493,7 +493,7 @@ const JoinCommercial = () => {
                       value={city}
                       onChange={(e) => {
                         setCity(e.value);
-                        setFieldValue("view", e.value);
+                        setFieldValue("city", e.value);
                       }}
                       editable
                       options={data.map((item) => ({
@@ -522,6 +522,7 @@ const JoinCommercial = () => {
                       longitude={longitude}
                       latitude={latitude}
                       setLocationDetails={setLocationDetails}
+                       locationDetails={locationDetails}
                     />
                   </div>
                 </div>
@@ -566,7 +567,7 @@ const JoinCommercial = () => {
                     </div>
                     <h6>💡 طلبك وصل!</h6>
                     <p className="b-15" style={{ color: "var(--netural-700)" }}>
-                      تمام، تسجيلك كتاجر في التشطيبات وصل بنجاح! ✨ هنراجع
+                      تمام،تم إنشاء الاعلان بنجاح، في انتظار الموافقة! ✨ هنراجع
                       بياناتك وهنكلمك قريب عشان نكمل باقي الخطوات. خليك متابع
                       تنبيهاتك لأي جديد! 🚀
                     </p>

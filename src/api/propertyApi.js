@@ -72,6 +72,35 @@ const PropertyAPI = {
       throw error;
     }
   },
+  getAllBuildings: async (filters = {}) => {
+    try {
+      const queryParams = new URLSearchParams();
+
+      // Add filters to query params
+      Object.keys(filters).forEach((key) => {
+        if (
+          filters[key] !== undefined &&
+          filters[key] !== null &&
+          filters[key] !== ""
+        ) {
+          queryParams.append(key, filters[key]);
+        }
+      });
+
+      const queryString = queryParams.toString();
+      const url = queryString ? `/building?${queryString}` : "/building";
+
+      const response = await axiosInstance.get(url);
+      return response.data;
+    } catch (error) {
+      console.error(
+        "Error fetching buildings:",
+        error.response || error.message
+      );
+      handleError(error);
+      throw error;
+    }
+  },
 
   // Get property by ID
   getPropertyById: async (id) => {
@@ -156,6 +185,25 @@ const PropertyAPI = {
   },
 
   // Update property
+  updateBuilding: async (id, formData) => {
+    try {
+      const response = await axiosInstance.put(`/building/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      toast.success(getToastMessages().updateSuccess[getCurrentLanguage()]);
+      return response.data;
+    } catch (error) {
+      console.error(
+        `Error updating property with ID ${id}:`,
+        error.response || error.message
+      );
+      handleError(error);
+      throw error;
+    }
+  },
+  // Update property
   updateProperty: async (id, formData) => {
     try {
       const response = await axiosInstance.put(`/property/${id}`, formData, {
@@ -179,6 +227,7 @@ const PropertyAPI = {
   deleteProperty: async (id) => {
     try {
       const response = await axiosInstance.delete(`/property/${id}`);
+      console.log("PropertyAPI.deleteProperty: Showing success toast");
       toast.success(getToastMessages().deleteSuccess[getCurrentLanguage()]);
       return response.data;
     } catch (error) {

@@ -1,33 +1,25 @@
-import React from "react";
 import LocationIcon from "../../../assets/Icons/LocationIcon";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import FavIcon from "../FavIcon/FavIcon";
 import Bed from "../../../assets/Icons/Bed";
 import BathIcon from "../../../assets/Icons/BathIcon";
 import AreaIcon from "../../../assets/Icons/AreaIcon";
-import MoneyIcon from "../../../assets/Icons/MoneyIcon";
 import { useLanguage } from "../../Languages/LanguageContext";
 import WhatsIcon from "../../../assets/Icons/WhatsIcon";
 import CallIcon from "../../../assets/Icons/CallIcon";
-import LocationDisplay from "../LocationDisplay/LocationDisplay";
 import SimpleImageSlider from "../SimpleImageSlider/SimpleImageSlider";
-import "./RealstateCard.css";
 
-const RealStateCard = ({
+const LandCard = ({
   id,
   price,
-  rooms,
-  bath,
   space,
   details,
   location,
   img,
   company = false,
-  connections = false,
   wrapperClass,
   isFav,
   isSwiping = false,
-  category,
   type,
   phone,
   haveWhatsapp,
@@ -54,7 +46,7 @@ const RealStateCard = ({
       dir={currentLanguage === "ar" ? "rtl" : "ltr"}
     >
       <Link
-        to={`/aqar-guide/${id}`}
+        to={`/land-guide/${id}`}
         className={`   ${wrapperClass ? "w-100" : "w-50"}`}
         onClick={handleClick}
       >
@@ -75,14 +67,6 @@ const RealStateCard = ({
         {/* specifications */}
         <div className="d-flex gap-2">
           <p className="d-flex align-items-center gap-2 b-11">
-            <Bed />
-            {rooms}
-          </p>
-          <p className="d-flex align-items-center gap-2 b-11">
-            <BathIcon />
-            {bath}
-          </p>
-          <p className="d-flex align-items-center gap-2 b-11">
             <AreaIcon />
             {space} متر مربع
           </p>
@@ -98,16 +82,6 @@ const RealStateCard = ({
               ? "موقع غير محدد"
               : "Location not specified")}
         </div>
-        {/* offer */}
-        {/* {
-                    category != "cash" &&
-                    <div className='w-100 d-flex'>
-                        <div className='b-11 available d-flex gap-1' style={{ color: "var(--yellow-100)", width: "fit-content" }}>
-                            <MoneyIcon />
-                            مقدم {offer}{offer == 0 ? "%" : " ج.م"}
-                        </div>
-                    </div>
-                    } */}
         <div className="connections d-flex justify-content-between w-100 pt-4 space-2 ">
           {/* whats */}
           {haveWhatsapp && phone && (
@@ -137,5 +111,4 @@ const RealStateCard = ({
   );
 };
 
-export default RealStateCard;
-export { RealStateCard };
+export default LandCard;

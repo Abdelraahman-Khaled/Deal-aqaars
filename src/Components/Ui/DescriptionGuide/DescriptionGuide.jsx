@@ -10,6 +10,22 @@ import Eye from '../../../assets/Icons/Eye'
 import ListIcon from '../../../assets/Icons/ListIcon'
 import LocationDisplay from '../LocationDisplay/LocationDisplay'
 const DescriptionGuide = ({ title, location, price, description, aqar = false, rooms, bath, space, view, floor, lat, lon }) => {
+    const handleShare = async () => {
+        try {
+            if (navigator.share) {
+                await navigator.share({
+                    title: document.title,
+                    url: window.location.href,
+                });
+            } else {
+                await navigator.clipboard.writeText(window.location.href);
+                alert('Link copied to clipboard!');
+            }
+        } catch (error) {
+            console.error('Error sharing:', error);
+        }
+    };
+
     return (
         <>
             <div className='d-flex justify-content-between py-4 space-3 flex-wrap'>
@@ -20,20 +36,24 @@ const DescriptionGuide = ({ title, location, price, description, aqar = false, r
                         <p className='b-11'>{description}</p>
                     }
                     <p className='b-11'>
-                        <LocationDisplay lat={lat} lon={lon} />
+                     {location}
                     </p>
                     {price && <p className='b-11'>تبدأ من {price} ج.م</p>}
                     {
                         aqar &&
                         <div className='d-flex space-6 flex-wrap'>
-                            <p className='d-flex align-items-center gap-2 b-11'>
-                                <Bed />
-                                {rooms}
-                            </p>
-                            <p className='d-flex align-items-center gap-2 b-11'>
-                                <BathIcon />
-                                {bath}
-                            </p>
+                            {rooms && (
+                                <p className='d-flex align-items-center gap-2 b-11'>
+                                    <Bed />
+                                    {rooms}
+                                </p>
+                            )}
+                            {bath && (
+                                <p className='d-flex align-items-center gap-2 b-11'>
+                                    <BathIcon />
+                                    {bath}
+                                </p>
+                            )}
                             <p className='d-flex align-items-center gap-2 b-11'>
                                 <AreaIcon />
                                 {space} متر مربع
@@ -59,7 +79,7 @@ const DescriptionGuide = ({ title, location, price, description, aqar = false, r
                         <span className='pe-2'><HeartIcon color={"var(--primary)"} /></span>
                         سيبه عندي
                     </button>
-                    <button className='leave-button b-11'>
+                    <button className='leave-button b-11' onClick={handleShare}>
                         <span className='pe-2'><ShareIcon /></span>
                         ابعته لحد
                     </button>

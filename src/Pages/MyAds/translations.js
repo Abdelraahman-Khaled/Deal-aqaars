@@ -59,6 +59,9 @@ export const translations = {
   },
   ar: {
     realestate: "عقارات",
+    building:"مباني",
+    land:"اراضي",
+    factory:"مصانع",
     trade: "تبديل",
     swaps: "تبديل",
     project: " مشروع عقاري",

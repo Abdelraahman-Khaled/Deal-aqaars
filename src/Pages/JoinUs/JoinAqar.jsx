@@ -90,6 +90,7 @@ const JoinAqar = () => {
 
     // division
     formData.append("division", toggle);
+    formData.append("type", "apartment");
 
     // titles
     formData.append("title[ar]", values.titleAr);
@@ -106,8 +107,8 @@ const JoinAqar = () => {
     // lat long
     formData.append("location[city]", city);
     formData.append("location[detailedLocation]", locationDetails);
-    formData.append("location[coordinates][]", longitude);
-    formData.append("location[coordinates][]", latitude);
+    formData.append("location[coordinates][0]", longitude);
+    formData.append("location[coordinates][1]", latitude);
 
     // Details
     formData.append("details[space]", values.space);
@@ -118,7 +119,7 @@ const JoinAqar = () => {
     formData.append("details[price]", values.price);
     formData.append("details[bathrooms]", values.bathrooms);
     formData.append("details[buildingYear]", values.buildingYear);
-    formData.append("details[handoverYear]", values.handoverYear);
+    formData.append("details[handoverDate]", values.handoverYear);
 
     {
       !isHouse && formData.append("details[rooms]", values.rooms);
@@ -135,6 +136,9 @@ const JoinAqar = () => {
     }
 
     setIsItemLoading(true);
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
     try {
       if (isHouse) {
         const response = await PropertyAPI.createBuilding(formData);
@@ -265,7 +269,7 @@ const JoinAqar = () => {
 
                 {/* location in English*/}
 
-                <div className="mb-4 ">
+                {/* <div className="mb-4 ">
                   <label className="b-12 mb-2">
                     عنوان الاعلان بالانجليزي{" "}
                     <span className="required-asterisk">*</span>
@@ -274,11 +278,11 @@ const JoinAqar = () => {
                     name="titleEn"
                     placeholder={"عنوان الاعلان بالانجليزي"}
                   />
-                </div>
+                </div> */}
 
                 {/* announcment details in English*/}
 
-                <div className="mb-4 flex-wrap d-flex align-items-center justify-content-between ">
+                {/* <div className="mb-4 flex-wrap d-flex align-items-center justify-content-between ">
                   <label className="b-12 ">
                     تفاصيل الاعلان بالانجليزي{" "}
                     <span className="required-asterisk">*</span>
@@ -288,7 +292,7 @@ const JoinAqar = () => {
                     maxLength="700"
                     placeholder={" تفاصيل الاعلان بالانجليزي"}
                   />
-                </div>
+                </div> */}
 
                 {/* announcmenter infomation*/}
                 <SectionHeader text={"بيانات المعلن"} />
@@ -574,7 +578,7 @@ const JoinAqar = () => {
                     </div>
                     <h6>💡 طلبك وصل!</h6>
                     <p className="b-15" style={{ color: "var(--netural-700)" }}>
-                      تمام، تسجيلك كتاجر في التشطيبات وصل بنجاح! ✨ هنراجع
+                      تمام،تم إنشاء الاعلان بنجاح، في انتظار الموافقة! ✨ هنراجع
                       بياناتك وهنكلمك قريب عشان نكمل باقي الخطوات. خليك متابع
                       تنبيهاتك لأي جديد! 🚀
                     </p>

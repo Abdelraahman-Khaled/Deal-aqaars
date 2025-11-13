@@ -42,7 +42,7 @@ const UserDropMenu = () => {
         {
             label: { ar: "إعلاناتي", en: "My ads" },
             icon: <FolderAds />,
-            to: "/vendor-ads",
+            to: "/my-ads",
         },
         {
             label: { ar: "المساعدة", en: "Help" },

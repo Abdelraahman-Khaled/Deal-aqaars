@@ -19,7 +19,7 @@ const LocationDisplay = ({ lat, lon, showIcon = true, className = '' }) => {
 
             // Using OpenStreetMap Nominatim API for reverse geocoding (free)
             const response = await fetch(
-                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=${currentLanguage}`
+                `https://nominatim.openstreetmap.org/reverse?format=json&lon=${longitude}&lat=${latitude}&accept-language=${currentLanguage}`
             );
 
             if (!response.ok) {

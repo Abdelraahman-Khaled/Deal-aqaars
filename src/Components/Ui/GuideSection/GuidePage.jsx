@@ -26,7 +26,6 @@ const GuidePage = ({ title, compound = true }) => {
     const [pagenation, setPagenation] = useState({});
 
 
-    console.log("pagenation", pagenation);
 
     // pagenation
     const [currentPage, setCurrentPage] = useState(1);
@@ -57,7 +56,6 @@ const GuidePage = ({ title, compound = true }) => {
         try {
             setLoading(true);
             const response = await PropertyAPI.getAllProperties(page); // pass page
-            console.log(response.data);
             if (response && response.data) {
                 setProperties(response.data);               // only that page’s properties
                 setPagenation(response.pagination);         // use API pagination object
@@ -186,8 +184,8 @@ const GuidePage = ({ title, compound = true }) => {
                             key={property._id || index}
                             id={property._id}
                             title={property.title ? property.title[currentLanguage] : 'Property'}
-                            lat={property.location.coordinates[0]}
-                            lon={property.location.coordinates[1]}
+                            lon={property.location.coordinates.coordinates[0]}
+                            lat={property.location.coordinates.coordinates[1]}
                             details={property.description ? property.description[currentLanguage] : ''}
                             price={formatPrice(property.details?.price)}
                             img={property.images?.length > 0 ? property.images : '/aqar01.jpg'}
@@ -198,9 +196,11 @@ const GuidePage = ({ title, compound = true }) => {
                             bath={property.details?.bathrooms || 0}
                             space={property.details?.space || 0}
                             offer={formatPrice(property.details?.price)}
-                            type={property.type}
+                            type={property.division}
                             category={property.category}
-                            advertiser={property.advertiser}
+                            phone={property.advertiserPhoneNumber}
+                            haveWhatsapp={property.haveWhatsapp}
+                            location={property.location.detailedLocation}
                         />
                     ))}
 

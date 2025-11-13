@@ -59,13 +59,13 @@ const FactoryAPI = {
       });
 
       const queryString = queryParams.toString();
-      const url = queryString ? `/administrative?${queryString}` : "/administrative";
+      const url = queryString ? `/factory?${queryString}` : "/factory";
 
       const response = await axiosInstance.get(url);
       return response.data;
     } catch (error) {
       console.error(
-        "Error fetching administrative:",
+        "Error fetching factory:",
         error.response || error.message
       );
       handleError(error);

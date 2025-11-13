@@ -8,6 +8,12 @@
   background: #f8f9fa;
   flex-direction: row-reverse;
 }
+.modal-thumbnail .modal-dialog {
+max-width: 90vw !important;
+}
+.modal-backdrop{
+  opacity: 0.2 !important;
+}
 
 /* Thumbnail Gallery - Left Side */
 .thumbnail-gallery {
@@ -44,7 +50,7 @@
 
 .thumbnail-item:hover {
   transform: scale(1.02);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
 .thumbnail-item.active {

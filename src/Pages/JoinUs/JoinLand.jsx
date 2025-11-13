@@ -257,7 +257,7 @@ const JoinLand = () => {
 
                 {/* location in English*/}
 
-                <div className="mb-4 ">
+                {/* <div className="mb-4 ">
                   <label className="b-12 mb-2">
                     عنوان الاعلان بالانجليزي{" "}
                     <span className="required-asterisk">*</span>
@@ -266,11 +266,11 @@ const JoinLand = () => {
                     name="titleEn"
                     placeholder={"عنوان الاعلان بالانجليزي"}
                   />
-                </div>
+                </div> */}
 
                 {/* announcment details in English*/}
 
-                <div className="mb-4 flex-wrap d-flex align-items-center justify-content-between ">
+                {/* <div className="mb-4 flex-wrap d-flex align-items-center justify-content-between ">
                   <label className="b-12 ">
                     تفاصيل الاعلان بالانجليزي{" "}
                     <span className="required-asterisk">*</span>
@@ -280,7 +280,7 @@ const JoinLand = () => {
                     maxLength="700"
                     placeholder={" تفاصيل الاعلان بالانجليزي"}
                   />
-                </div>
+                </div> */}
 
                 {/* announcmenter infomation*/}
                 <SectionHeader text={"بيانات المعلن"} />
@@ -496,7 +496,7 @@ const JoinLand = () => {
                     </div>
                     <h6>💡 طلبك وصل!</h6>
                     <p className="b-15" style={{ color: "var(--netural-700)" }}>
-                      تمام، تسجيلك كتاجر في التشطيبات وصل بنجاح! ✨ هنراجع
+                      تمام،تم إنشاء الاعلان بنجاح، في انتظار الموافقة! ✨ هنراجع
                       بياناتك وهنكلمك قريب عشان نكمل باقي الخطوات. خليك متابع
                       تنبيهاتك لأي جديد! 🚀
                     </p>

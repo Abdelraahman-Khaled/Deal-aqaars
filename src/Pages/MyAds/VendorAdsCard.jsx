@@ -17,7 +17,7 @@ import FavIcon from '../../Components/Ui/FavIcon/FavIcon'
 import LocationDisplay from '../../Components/Ui/LocationDisplay/LocationDisplay'
 import UpdatePropertyModal from './UpdatePropertyModal'
 
-const VendorAdsCard = ({ propertyData, id, price, numAds, seen, lat, lon, title, tradeItem, likes, calls, date, rooms, bath, space, details, location, img, company = false, wrapperClass, isFav, isSwiping = false, trade = false, onDelete }) => {
+const VendorAdsCard = ({ propertyData, id,type,model , price, numAds, seen,  title, tradeItem, likes, calls, date, rooms, bath, space, details, location, img, company = false, wrapperClass, isFav, isSwiping = false, trade = false, onDelete }) => {
     const { currentLanguage } = useLanguage()
     const [showProgress, setShowProgress] = useState(false);
     const [showUpdateModal, setShowUpdateModal] = useState(false);
@@ -36,7 +36,7 @@ const VendorAdsCard = ({ propertyData, id, price, numAds, seen, lat, lon, title,
 
     return (
         <div className={`compound-card space-4 d-flex ${wrapperClass} mb-4  `} style={company & wrapperClass === "flex-wrap" ? { width: "49%" } : { width: "100%" }} dir={currentLanguage === "ar" ? "rtl" : "ltr"}>
-            <Link to={`/aqar-guide/${id}`}
+            <Link to={ model ==="property" ? `/aqar-guide/${id}` : model === "building" ? `/building-guide/${id}` : model === "land" ? `/land-guide/${id}` : `/factory-guide/${id}` }
                 className={`  ${wrapperClass ? "w-100" : "w-50"}`}
                 onClick={handleClick}
             >
@@ -50,38 +50,34 @@ const VendorAdsCard = ({ propertyData, id, price, numAds, seen, lat, lon, title,
             <div className='d-flex flex-column space-4 w-100'>
                 <div className='d-flex justify-content-between w-100'>
                     <p className='b-11 min-w-max' style={{ color: "var(--primary)" }}>
-                        رقم الاعلان:{numAds}
+                        رقم الاعلان: {numAds}
                     </p>
                     <div className='d-flex gap-2 flex-wrap justify-content-end'>
+                        <p className='b-16 available'>
+                            {type === "sale"? "للبيع":"للايجار"}
+                        </p>
                         <p className='b-16 available'>
                             {date ? date.split('T')[0] : ''}
                         </p>
                     </div>
                 </div>
                 {trade && <p className="b-9">{title}</p>}
-                {trade && lat > 0 && lon > 0 &&
-                    <p className='b-12'>
-
-                        <LocationDisplay lat={lat} lon={lon} />
-                    </p>
-                }
-                {trade && location &&
-                    <p className='b-12'>
-                        {location}
-                    </p>
-                }
                 {!trade &&
                     <>
                         <p className="b-9">{price} ج.م</p>
                         <div className='d-flex gap-2'>
-                            <p className='d-flex align-items-center gap-2 b-12'>
-                                <Bed />
-                                {rooms}
-                            </p>
-                            <p className='d-flex align-items-center gap-2 b-12'>
-                                <BathIcon />
-                                {bath}
-                            </p>
+                            {rooms && (
+                                <p className='d-flex align-items-center gap-2 b-12'>
+                                    <Bed />
+                                    {rooms}
+                                </p>
+                            )}
+                            {bath && (
+                                <p className='d-flex align-items-center gap-2 b-12'>
+                                    <BathIcon />
+                                    {bath}
+                                </p>
+                            )}
                             <p className='d-flex align-items-center gap-2 b-12'>
                                 <AreaIcon />
                                 {space} متر مربع
@@ -101,7 +97,9 @@ const VendorAdsCard = ({ propertyData, id, price, numAds, seen, lat, lon, title,
                         {/* locations */}
 
                         <p className='b-12'>
-                            <LocationDisplay lat={lat} lon={lon} />
+                            <LocationIcon/>
+                            {" "}
+                            {location}
                         </p>
                     </>
                 }
@@ -157,7 +155,7 @@ const VendorAdsCard = ({ propertyData, id, price, numAds, seen, lat, lon, title,
                         setShowProgress={setShowProgress}
                         propertyId={id}
                         onDelete={onDelete}
-                        type={trade ? "swap" : "property"}
+                        type={model}
                     />
                 </div>
             </CustomModal>

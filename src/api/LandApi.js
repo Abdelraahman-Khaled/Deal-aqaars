@@ -43,7 +43,7 @@ const handleError = (error) => {
 
 const LandAPI = {
   // Get all properties with optional filters
-  getAllProperties: async (filters = {}) => {
+  getAllLands: async (filters = {}) => {
     try {
       const queryParams = new URLSearchParams();
 
@@ -59,7 +59,7 @@ const LandAPI = {
       });
 
       const queryString = queryParams.toString();
-      const url = queryString ? `/property?${queryString}` : "/property";
+      const url = queryString ? `/land?${queryString}` : "/land";
 
       const response = await axiosInstance.get(url);
       return response.data;
@@ -74,13 +74,13 @@ const LandAPI = {
   },
 
   // Get property by ID
-  getPropertyById: async (id) => {
+  getLandById: async (id) => {
     try {
-      const response = await axiosInstance.get(`/property/${id}`);
+      const response = await axiosInstance.get(`/land/${id}`);
       return response.data;
     } catch (error) {
       console.error(
-        `Error fetching property with ID ${id}:`,
+        `Error fetching land with ID ${id}:`,
         error.response || error.message
       );
       handleError(error);
@@ -89,13 +89,13 @@ const LandAPI = {
   },
 
   // Get properties by user ID
-  getPropertiesByUserId: async (userId) => {
+  getLandsByUserId: async (userId) => { 
     try {
-      const response = await axiosInstance.get(`/property/user/${userId}`);
+      const response = await axiosInstance.get(`/land/user/${userId}`);
       return response.data;
     } catch (error) {
       console.error(
-        `Error fetching properties for user ${userId}:`,
+        `Error fetching lands for user ${userId}:`,
         error.response || error.message
       );
       handleError(error);
@@ -103,14 +103,14 @@ const LandAPI = {
     }
   },
 
-  // Get current user's properties
-  getMyProperties: async () => {
+  // Get current user's lands
+  getMyLands: async () => {
     try {
-      const response = await axiosInstance.get("/property/me");
+      const response = await axiosInstance.get("/land/me");
       return response.data;
     } catch (error) {
       console.error(
-        "Error fetching user properties:",
+        "Error fetching user lands:",
         error.response || error.message
       );
       handleError(error);
@@ -118,11 +118,11 @@ const LandAPI = {
     }
   },
 
-  // Create new property
-  createProperty: async (formData) => {
+  // Create new land
+  createLand: async (formData) => {
     try {
       // The formData is already prepared in JoinTrade.jsx, so we just need to send it
-      const response = await axiosInstance.post("/property", formData, {
+      const response = await axiosInstance.post("/land", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -130,7 +130,7 @@ const LandAPI = {
       return response.data;
     } catch (error) {
       console.error(
-        "Error creating property:",
+        "Error creating land:",
         error.response || error.message
       );
       throw error;

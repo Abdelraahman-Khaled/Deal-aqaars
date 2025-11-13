@@ -70,7 +70,7 @@ const JoinIndustrial = () => {
     space: "",
     view: "",
     price: "",
-    paymentMethods: "",
+    paymentMethod: "",
     rooms: "",
     floor: "",
     bathrooms: "",
@@ -81,14 +81,12 @@ const JoinIndustrial = () => {
     images: [],
   };
 
-
-
   const handleSubmit = async (values, { resetForm }) => {
     const formData = new FormData();
 
     // division
     formData.append("division", toggle);
-    
+
     // type
     formData.append("type", "industrial");
 
@@ -102,7 +100,7 @@ const JoinIndustrial = () => {
 
     // contact
     formData.append("advertiserPhoneNumber", values.phone);
-    formData.append("haveWhatsapp", values.whatsapp);
+    formData.append("hasWhatsapp", values.whatsapp);
 
     // lat long
     formData.append("location[city]", city);
@@ -113,14 +111,13 @@ const JoinIndustrial = () => {
     // Details
     formData.append("details[space]", values.space);
     formData.append("details[view]", values.view);
-    formData.append("details[finishingType]", values.finishing);
-    formData.append("details[paymentMethods]", values.paymentMethods);
+    formData.append("details[finishing]", values.finishing);
+    formData.append("details[paymentMethod]", values.paymentMethod);
     formData.append("details[propertyType]", values.propertyType);
     formData.append("details[price]", values.price);
     formData.append("details[bathrooms]", values.bathrooms);
     formData.append("details[buildingYear]", values.buildingYear);
-    formData.append("details[handoverYear]", values.handoverYear);
-
+    formData.append("details[handingOverYear]", values.handingOverYear);
 
     // images
     if (values.images && values.images.length > 0) {
@@ -132,15 +129,14 @@ const JoinIndustrial = () => {
     }
 
     setIsItemLoading(true);
-      for (let [key, value] of formData.entries()) {
+    for (let [key, value] of formData.entries()) {
       console.log(`${key}: ${value}`);
     }
     try {
-     
-        const response = await FactoryAPI.createFactory(formData);
-        console.log(response);
-        setShowModal(true);
-        resetForm();
+      const response = await FactoryAPI.createFactory(formData);
+      console.log(response);
+      setShowModal(true);
+      resetForm();
     } catch (err) {
       console.error(err);
     } finally {
@@ -152,7 +148,9 @@ const JoinIndustrial = () => {
     <>
       <HelmetInfo
         titlePage={
-          currentLanguage === "ar" ? "أعلن عن وحدة تجارية" : "Advertise your property"
+          currentLanguage === "ar"
+            ? "أعلن عن وحدة تجارية"
+            : "Advertise your property"
         }
       />
 
@@ -172,7 +170,7 @@ const JoinIndustrial = () => {
                 </div>
 
                 <p className="b-1 mb-2 pb-3 ">اعلن عن وحدة صناعية</p>
-                  <label className="b-12 mb-2">
+                <label className="b-12 mb-2">
                   القسم
                   <span className="required-asterisk"> *</span>
                 </label>
@@ -231,7 +229,7 @@ const JoinIndustrial = () => {
 
                 {/* location in English*/}
 
-                <div className="mb-4 ">
+                {/* <div className="mb-4 ">
                   <label className="b-12 mb-2">
                     عنوان الاعلان بالانجليزي{" "}
                     <span className="required-asterisk">*</span>
@@ -240,11 +238,11 @@ const JoinIndustrial = () => {
                     name="titleEn"
                     placeholder={"عنوان الاعلان بالانجليزي"}
                   />
-                </div>
+                </div> */}
 
                 {/* announcment details in English*/}
 
-                <div className="mb-4 flex-wrap d-flex align-items-center justify-content-between ">
+                {/* <div className="mb-4 flex-wrap d-flex align-items-center justify-content-between ">
                   <label className="b-12 ">
                     تفاصيل الاعلان بالانجليزي{" "}
                     <span className="required-asterisk">*</span>
@@ -254,7 +252,7 @@ const JoinIndustrial = () => {
                     maxLength="700"
                     placeholder={" تفاصيل الاعلان بالانجليزي"}
                   />
-                </div>
+                </div> */}
 
                 {/* announcmenter infomation*/}
                 <SectionHeader text={"بيانات المعلن"} />
@@ -301,7 +299,6 @@ const JoinIndustrial = () => {
                 {/* Row 1 */}
                 {/* size */}
                 <Row className="g-3 mb-4">
-
                   <Col xs={6} md={4}>
                     <label className="b-12 mb-2">
                       المساحة (بالمتر){" "}
@@ -349,11 +346,9 @@ const JoinIndustrial = () => {
                       optionLabel="label" // هيعرض اللي في label
                     ></Dropdown>
                   </Col>
-
                 </Row>
                 <Row className="g-3 mb-4">
-            
-               {/* no.build */}
+                  {/* no.build */}
                   <Col xs={6} md={4}>
                     <label className="b-12 mb-2">
                       سنة البناء<span className="required-asterisk"> *</span>
@@ -370,7 +365,7 @@ const JoinIndustrial = () => {
                       سنة التسليم <span className="required-asterisk"> *</span>
                     </label>
                     <InputFiled
-                      name="handoverYear"
+                      name="handingOverYear"
                       placeholder={"حدد سنة التسليم "}
                     />
                   </Col>
@@ -384,17 +379,16 @@ const JoinIndustrial = () => {
                       value={paymentWay}
                       onChange={(e) => {
                         setPaymentWay(e.value);
-                        setFieldValue("paymentMethods", e.value);
+                        setFieldValue("paymentMethod", e.value);
                       }}
                       options={translations[currentLanguage].paymentWayDetails}
                       placeholder={translations[currentLanguage].paymentWay}
-                      name="paymentMethods"
+                      name="paymentMethod"
                       className="hide-scrollbar"
                       optionValue="value" // هيخزن value (انجليزي)
                       optionLabel="label" // هيعرض اللي في label
                     ></Dropdown>
                   </Col>
-
                 </Row>
 
                 {/* Row 3*/}
@@ -451,6 +445,7 @@ const JoinIndustrial = () => {
                       longitude={longitude}
                       latitude={latitude}
                       setLocationDetails={setLocationDetails}
+                      locationDetails={locationDetails}
                     />
                   </div>
                 </div>
@@ -495,7 +490,7 @@ const JoinIndustrial = () => {
                     </div>
                     <h6>💡 طلبك وصل!</h6>
                     <p className="b-15" style={{ color: "var(--netural-700)" }}>
-                      تمام، تسجيلك كتاجر في التشطيبات وصل بنجاح! ✨ هنراجع
+                      تمام،تم إنشاء الاعلان بنجاح، في انتظار الموافقة! ✨ هنراجع
                       بياناتك وهنكلمك قريب عشان نكمل باقي الخطوات. خليك متابع
                       تنبيهاتك لأي جديد! 🚀
                     </p>

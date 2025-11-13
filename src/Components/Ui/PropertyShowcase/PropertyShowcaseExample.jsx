@@ -1,6 +1,6 @@
 import PropertyShowcase from './PropertyShowcase';
 
-const PropertyShowcaseExample = ({ images, lat, lon }) => {
+const PropertyShowcaseExample = ({ images, lat, lon , location }) => {
     // Sample property images - More images to demonstrate drag scroll and modal functionality
     const sampleImages = [
         'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&h=600&fit=crop',
@@ -10,7 +10,6 @@ const PropertyShowcaseExample = ({ images, lat, lon }) => {
         'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&h=600&fit=crop',
     ];
 
-    const sampleLocation = 'الخبيرة';
     const totalImageCount = 12;
 
     return (
@@ -18,10 +17,10 @@ const PropertyShowcaseExample = ({ images, lat, lon }) => {
             <div style={{ marginBottom: '40px' }}>
                 <PropertyShowcase
                     images={images.length > 1 ? images : sampleImages}
-                    location={sampleLocation}
                     totalImages={totalImageCount}
                     lat={lat}
                     lon={lon}
+                    location={location}
                 />
             </div>
 

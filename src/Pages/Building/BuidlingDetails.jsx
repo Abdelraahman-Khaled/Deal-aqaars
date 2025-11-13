@@ -1,55 +1,55 @@
 import React, { useEffect } from 'react'
-import HelmetInfo from '../../../Components/Helmetinfo/HelmetInfo';
-import { useLanguage } from '../../../Components/Languages/LanguageContext';
-import { useProperty } from '../../../contexts/PropertyContext';
-import BreadcrumbsPage from '../../../Components/Ui/BreadcrumbsPage/BreadcrumbsPage';
-import DescriptionGuide from '../../../Components/Ui/DescriptionGuide/DescriptionGuide';
-import AdsDescription from '../../../Components/Ui/AdsDescription/AdsDescription';
-import Map from '../../../Components/Ui/Map/Map';
-import CompanyCard from '../../../Components/Ui/CompanyCard/CompanyCard';
-import ContainerMedia from '../../../Components/ContainerMedia/ContainerMedia';
-import UnitDetails from '../../../Components/Ui/UnitDetails/UnitDetails';
-import RealatedSlider from '../../../Components/Ui/RealatedSlider/RealatedSlider';
-import RealStateCard from '../../../Components/Ui/RealStateCard/RealStateCard';
-
-import compoundImg from "../../../assets/images/compounds/compound.png";
-import compoundImg1 from "../../../assets/images/compounds/compound1.png";
-import compoundImg2 from "../../../assets/images/compounds/compound2.png";
-import TwoAds from '../../../Components/Ui/TwoAds/TwoAds';
+import { useLanguage } from '../../Components/Languages/LanguageContext';
 import { useParams } from 'react-router-dom';
-import { translations } from './translations';
-import PropertyShowcaseExample from '../../../Components/Ui/PropertyShowcase/PropertyShowcaseExample';
-import Loader from '../../../Components/Loader/Loader';
+import { useBuilding } from '../../contexts/BuildingContext';
 
-const AqarGuide = () => {
+import compoundImg from "../../assets/images/compounds/compound.png";
+import compoundImg1 from "../../assets/images/compounds/compound1.png";
+import compoundImg2 from "../../assets/images/compounds/compound2.png";
+import ContainerMedia from '../../Components/ContainerMedia/ContainerMedia';
+import BreadcrumbsPage from '../../Components/Ui/BreadcrumbsPage/BreadcrumbsPage';
+import PropertyShowcaseExample from '../../Components/Ui/PropertyShowcase/PropertyShowcaseExample';
+import DescriptionGuide from '../../Components/Ui/DescriptionGuide/DescriptionGuide';
+import UnitDetails from '../../Components/Ui/UnitDetails/UnitDetails';
+import AdsDescription from '../../Components/Ui/AdsDescription/AdsDescription';
+import RealatedSlider from '../../Components/Ui/RealatedSlider/RealatedSlider';
+import CompanyCard from '../../Components/Ui/CompanyCard/CompanyCard';
+import TwoAds from '../../Components/Ui/TwoAds/TwoAds';
+import Loader from '../../Components/Loader/Loader';
+import HelmetInfo from '../../Components/Helmetinfo/HelmetInfo';
+import { translations } from './translations';
+import RealStateCard from '../../Components/Ui/RealStateCard/RealStateCard';
+import Map from '../../Components/Ui/Map/Map';
+
+const BuildingDetails = () => {
     const { currentLanguage } = useLanguage(); // Get the current language
     const { id } = useParams();
-    const { property, loading, error, fetchProperty, clearProperty } = useProperty();
-    // Fetch property when component mounts or id changes
+    const { building, loading, error, fetchBuilding, clearBuilding } = useBuilding();
+    // Fetch building when component mounts or id changes
     useEffect(() => {
         if (id) {
-            fetchProperty(id);
+            fetchBuilding(id);
         }
-        return () => clearProperty(); // cleanup on unmount
-    }, [id, fetchProperty, clearProperty]);
+        return () => clearBuilding(); // cleanup on unmount
+    }, [id, fetchBuilding, clearBuilding]);
 
-    console.log("property:", property);
+    console.log("building:", building);
 
 
 
     const unitDetails = [
         {
-            space: property?.details.space,
-            floor: property?.details.floor,
-            front: property?.details.view,
+            space: building?.details.space,
+            floor: building?.details.floor,
+            front: building?.details.view,
             numOfAds: "",
-            paymentWay: property?.details.paymentMethod,
-            numRooms: property?.details.rooms,
-            finishingType: property?.details.finishingType,
-            yearDelivary: property?.details.handoverDate,
-            buildingYear: property?.details.buildingYear,
-            meterPrice: (property?.details.price/property?.details.space).toFixed(0),
-            AdsType: property?.details.propertyType,
+            paymentWay: building?.details.paymentMethod,
+            numRooms: building?.details.rooms,
+            finishingType: building?.details.finishingType,
+            yearDelivary: building?.details.handoverDate,
+            buildingYear: building?.details.buildingYear,
+            meterPrice: (building?.details.price/building?.details.space).toFixed(0),
+            AdsType: building?.details.propertyType,
         }
     ]
 
@@ -118,14 +118,14 @@ const AqarGuide = () => {
         );
     }
 
-    // Show not found message if no property data
-    if (!property && !loading) {
+    // Show not found message if no building data
+    if (!building && !loading) {
         return (
             <div className="py-4">
                 <ContainerMedia>
                     <div className="text-center py-5">
-                        <h3 className="mb-3">{currentLanguage === "ar" ? "العقار غير موجود" : "Property Not Found"}</h3>
-                        <p className="text-muted">{currentLanguage === "ar" ? "لم يتم العثور على العقار المطلوب" : "The requested property could not be found"}</p>
+                        <h3 className="mb-3">{currentLanguage === "ar" ? "العقار غير موجود" : "building Not Found"}</h3>
+                        <p className="text-muted">{currentLanguage === "ar" ? "لم يتم العثور على العقار المطلوب" : "The requested building could not be found"}</p>
                     </div>
                 </ContainerMedia>
             </div>
@@ -134,41 +134,41 @@ const AqarGuide = () => {
 
     return (
         <>
-            <HelmetInfo titlePage={currentLanguage === "ar" ? "دليل الكومباوندات" : "Compounds Guide"} />
+            <HelmetInfo titlePage={currentLanguage === "ar" ? "تفاصيل المبنى" : "Building Details"} />
             <div className="py-4">
                 <ContainerMedia>
                     <header className='pb-4'>
                         <BreadcrumbsPage
                             newClassBreadHeader={"biography-bread breadcrumb-page-2"}
-                            mainTitle={property?.division === "rent" ? translations[currentLanguage].rent : translations[currentLanguage].sale}
+                            mainTitle={building?.division === "rent" ? translations[currentLanguage].rent : translations[currentLanguage].sale}
                             mainRoute={"/realestate"}
                             routeTitleTwoBread={false}
                             titleTwoBread={false}
-                            textBreadActive={property?.title[currentLanguage]}
+                            textBreadActive={building?.title[currentLanguage]}
                         />
                     </header>
                     <main>
-                        <PropertyShowcaseExample images={property.images.map((item) => item.url)} location={property.location.city} />
+                        <PropertyShowcaseExample images={building.images.map((item) => item.url)} location={building.location.city} />
                         <div className="row gy-4">
                             <div className="col-12 col-xl-9 d-flex flex-column space-8">
                                 <DescriptionGuide
-                                    title={property?.details.price + " " + "ج.م"}
-                                    lat={property.location.coordinates[0]}
-                                    lon={property.location.coordinates[1]}
+                                    title={building?.details.price + " " + "ج.م"}
+                                    lat={building.location.coordinates[0]}
+                                    lon={building.location.coordinates[1]}
                                     aqar={true}
-                                    rooms={property.details.rooms}
-                                    bath={property.details.bathrooms}
-                                    space={property.details.space}
-                                    description={property.description[currentLanguage]}
-                                    location={property.location.detailedLocation}
+                                    rooms={building.details.rooms}
+                                    bath={building.details.bathrooms}
+                                    space={building.details.space}
+                                    description={building.description[currentLanguage]}
+                                    location={building.location.detailedLocation}
                                 />
                                 <UnitDetails data={unitDetails} />
                                
-                                <AdsDescription title={"وصف الاعلان"} description={property.description[currentLanguage]} />
+                                <AdsDescription title={"وصف الاعلان"} description={building.description[currentLanguage]} />
                                 <Map
-                                    lon={property.location.coordinates.coordinates[0]}
-                                    lat={property.location.coordinates.coordinates[1]}
-                                    locationName={property.title[currentLanguage]}
+                                    lon={building.location.coordinates.coordinates[0]}
+                                    lat={building.location.coordinates.coordinates[1]}
+                                    locationName={building.title[currentLanguage]}
                                 />
 
                                 {/* related slider */}
@@ -193,14 +193,14 @@ const AqarGuide = () => {
 
                             </div>
                             <div className="left-col col-12 col-xl-3 d-flex flex-column space-6">
-                                <CompanyCard
+                                {/* <CompanyCard
                                     name={"تطوير مصر للتطوير العقاري"}
                                     since={"2014"}
                                     numberProjects={"8"}
                                     inhouse={"2"}
                                     notFinished={"1"}
                                     underDevelopment={"2"}
-                                />
+                                /> */}
 
                                 <TwoAds />
                             </div>
@@ -211,4 +211,4 @@ const AqarGuide = () => {
         </>)
 }
 
-export default AqarGuide
+export default BuildingDetails

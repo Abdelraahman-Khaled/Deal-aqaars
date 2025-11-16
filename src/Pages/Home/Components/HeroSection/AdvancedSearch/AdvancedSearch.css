@@ -191,6 +191,10 @@
   background-color: var(--netural-300) !important;
 }
 
+.tabs-home .search-filter {
+  padding: 0px;
+}
+
 /* @media screen and (min-width: 1600px) {
     .home-hero .tab-content{
         width:65%;
@@ -213,3 +217,5 @@
     width: 450px;
   }
 }
+
+

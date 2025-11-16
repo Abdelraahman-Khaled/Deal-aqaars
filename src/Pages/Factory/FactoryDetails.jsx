@@ -56,6 +56,10 @@ const FactoryDetails = () => {
             paymentWay: false,
             paymentLand:factory?.details.paymentMethod,
             AdsType: factory?.details.type,
+            paymentMethod: factory?.details.paymentMethod,
+            type: factory?.division,
+            buildingYear: factory?.details.buildingYear,
+            handingOverYear: factory?.details.handingOverYear,
         }
     ]
 

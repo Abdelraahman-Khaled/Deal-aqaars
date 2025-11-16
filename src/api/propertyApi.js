@@ -59,7 +59,9 @@ const PropertyAPI = {
       });
 
       const queryString = queryParams.toString();
-      const url = queryString ? `/property?${queryString}` : "/property";
+      console.log("queryString",queryString);
+      
+      const url = queryString ? `/property/filter?${queryString}` : "/property/filter";
 
       const response = await axiosInstance.get(url);
       return response.data;

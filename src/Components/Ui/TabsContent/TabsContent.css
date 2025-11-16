@@ -65,9 +65,9 @@ html[lang="en"] .tabs-home ul::before {
 .tabs-home .tab-content{
  width: 75%;
 }
+.place-kind .tab-content{
+ width:100%;
+}
 .p-multiselect:not(.p-disabled).p-focus{
     box-shadow: 0px 0px 0px 2px var(--primary);
-}
-.p-multiselect .p-multiselect-label{
-    padding: 1rem 0.75rem;
 }

@@ -31,7 +31,13 @@
 }
 .finishing .form-control,
 .finishing .dropdown {
-  padding: 8px 10px;
+  padding: 10px 10px;
+  border-radius: var(--border-radius-4);
+  border: 1px solid var(--netural-200);
+  background-color: var(--netural-100);
+}
+.finishing .type-finishing  {
+  padding: 12px 10px;
   border-radius: var(--border-radius-4);
   border: 1px solid var(--netural-200);
   background-color: var(--netural-100);
@@ -87,6 +93,9 @@
   transform: translate(-50%, 30px) !important;
   min-width: 450px;
 }
+.finishing .type-finishing .dropdown-menu.show {
+  min-width:max-content;
+}
 /* نوع المكان  place kind */
 .finishing .place-kind {
   gap: 24px;
@@ -119,6 +128,7 @@
   cursor: pointer;
   justify-content: right;
   min-width: max-content;
+  justify-content: center;
 }
 .finishing .pick:hover {
   color: var(--netural-1000);

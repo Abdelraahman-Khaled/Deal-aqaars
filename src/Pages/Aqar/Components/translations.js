@@ -39,6 +39,7 @@ export const translations = {
         searchPlaceholder: "دور علي اللي محتاجه",
         rooms: "عدد الغرف",
         baths: "عدد الحمامات",
+        actualBath: "حمام",
         reset: "رجّع كل حاجة",
         confirm: "تمام",
         searchButton: "دور علي اللي محتاجه",

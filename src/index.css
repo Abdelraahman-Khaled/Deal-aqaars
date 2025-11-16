@@ -439,6 +439,42 @@ html[dir="ltr"] .dropdown-item:hover {
     line-height: 1.5rem !important;
   }
 }
+/* multi select */
+.p-multiselect-select-all{
+  opacity:0;
+  z-index: -999;
+}
+.p-checkbox.p-highlight .p-checkbox-box{
+  border-color: var(--primary) !important;
+  background: var(--primary) !important;
+}
+.p-checkbox:not(.p-disabled):has(.p-checkbox-input:hover) .p-checkbox-box{
+  border-color: var(--primary);
+}
+
+.p-checkbox-box svg path{
+  fill: white;
+}
+.p-multiselect-token{
+  background-color: rgba(23, 55, 148, 0.1);
+  border-radius: var(--border-radius-2);
+  padding: 4px;
+  gap:10px;
+  font-weight: 400;
+  font-size: 16px;
+  margin-left:4px;
+}
+.p-inputtext:enabled:focus{
+  box-shadow: var(--primary);
+  border: 1px solid var(--primary);
+}
+.p-multiselect-item{
+  gap: 4px;
+}
+.p-multiselect-panel .p-multiselect-items .p-multiselect-item.p-highlight{
+  background: var(--white-03-color) !important;
+}
+/* end of mutli select */
 .bg-primary {
   background-color: var(--primary) !important;
 }
@@ -571,6 +607,9 @@ span.required-asterisk {
 
 .place-kind  .tab-content{
     width: 100%;
+}
+.rooms .tab-content{
+    width: 100% !important; 
 }
 /* joins */
 .select-type.join ul{

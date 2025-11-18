@@ -35,9 +35,28 @@ const handleError = (error) => {
 
 const FinishingAPI = {
   // Get all finishing services
-  getAllFinishingServices: async () => {
+  getAllFinishingServices: async (filters = {}) => {
+    console.log("f", filters);
     try {
-      const response = await axiosInstance.get("/finish");
+      const queryParams = new URLSearchParams();
+
+      // Add filters to query params
+      Object.keys(filters).forEach((key) => {
+        if (
+          filters[key] !== undefined &&
+          filters[key] !== null &&
+          filters[key] !== ""
+        ) {
+          queryParams.append(key, filters[key]);
+        }
+      });
+
+      const queryString = queryParams.toString();
+      console.log("queryString", queryString);
+
+      const url = queryString ? `/finish/filter?${queryString}` : "/finish";
+
+      const response = await axiosInstance.get(url);
       return response.data;
     } catch (error) {
       console.error(

@@ -8,7 +8,7 @@ import { translations } from "./translations"; // Import translations
 import MenuArrow from "../../../../../assets/Icons/MenuArrow";
 import { MultiSelect } from "primereact/multiselect";
 import data from "../../../../../data/cities.json"
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const FinishingSearch = () => {
   const { currentLanguage } = useLanguage(); // Get the current language
@@ -19,7 +19,7 @@ const FinishingSearch = () => {
 
   const cities = data?.map((item) => ({
     name: item.city_name_ar,
-    value:item.city_name_en,
+    value: item.city_name_en,
   }));
 
   // arrow
@@ -53,15 +53,16 @@ const FinishingSearch = () => {
   ];
 
   const handleSearch = () => {
-  const query = new URLSearchParams({
-    division: toggle1,
-    city: selectedCities
-      ? selectedCities.join(",")
-      : "",
-  }).toString();
+    const query = new URLSearchParams({
+      division: toggle1,
+      city: selectedCities
+        ? selectedCities.join(",")
+        : "",
+      servicesOffered: home
+    }).toString();
 
-  navigate(`/finish?${query}`);
-};
+    navigate(`/finish?${query}`);
+  };
 
   return (
     <div className="advanced-search finishing d-flex space-3 flex-column mb-4">
@@ -111,7 +112,7 @@ const FinishingSearch = () => {
           className="d-flex flex-row space-3 p-0 min-w-max"
         >
           <Col onClick={() => setRotate(!rotate)}>
-          
+
             <Dropdown className="d-flex h-100 type-finishing">
               <Dropdown.Toggle variant="light" className="w-100 text-end">
                 {home}

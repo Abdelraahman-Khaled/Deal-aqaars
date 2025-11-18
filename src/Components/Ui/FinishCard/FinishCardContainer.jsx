@@ -7,12 +7,8 @@ import ErrorNotFoundSvg from '../../../assets/images/error-not-found.svg';
 import { useFinishing } from '../../../contexts/FinishingContext';
 import { useLanguage } from '../../Languages/LanguageContext';
 
-const FinishCardContainer = () => {
-    const { finishingServices, loading, error, fetchFinishingServices } = useFinishing();
+const FinishCardContainer = ({ finishingServices ,loading,error }) => {
 
-    useEffect(() => {
-        fetchFinishingServices();
-    }, [fetchFinishingServices]);
     const { currentLanguage } = useLanguage()
     // Use the API data directly without fallback to static data
     const cardData = finishingServices;

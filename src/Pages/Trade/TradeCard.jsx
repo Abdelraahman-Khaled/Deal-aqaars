@@ -74,8 +74,9 @@ const TradeCard = ({ title, rooms, bath, space, location, trade, since, phoneNum
 
 
                 {/* locations */}
-                <p className='b-11 overflow-hidden'>
-                    <LocationDisplay lat={lat} lon={lon} />
+                <p className='b-11 overflow-hidden d-flex'>
+                    <LocationIcon />
+                    {location}
                 </p>
 
 

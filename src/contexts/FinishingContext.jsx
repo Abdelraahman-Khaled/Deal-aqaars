@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
+import React, { createContext, useState, useContext, useCallback, useEffect } from 'react';
 import FinishingAPI from '../api/finishingApi';
 
 const FinishingContext = createContext();
@@ -14,10 +14,10 @@ export const FinishingProvider = ({ children }) => {
     const [error, setError] = useState(null);
     const [myFinishingServicesLoaded, setMyFinishingServicesLoaded] = useState(false);
 
-    const fetchFinishingServices = useCallback(async () => {
+    const fetchFinishingServices = useCallback(async (currentFilters) => {
         try {
             setLoading(true);
-            const response = await FinishingAPI.getAllFinishingServices();
+            const response = await FinishingAPI.getAllFinishingServices(currentFilters);
             setFinishingServices(response.data);
             setError(null);
         } catch (err) {
@@ -27,6 +27,7 @@ export const FinishingProvider = ({ children }) => {
             setLoading(false);
         }
     }, []);
+
 
     const fetchMyFinishingServices = useCallback(async () => {
         try {

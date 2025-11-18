@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Col, Dropdown } from "react-bootstrap";
 import SearchToggle from "../../../Components/Ui/SearchComponents/SearchToggle ";
 import { translations } from "./translations";
@@ -10,47 +10,32 @@ import PlaceTypeDropdown from "../../../Components/Ui/SearchComponents/PlaceType
 import TabsContent from "../../../Components/Ui/TabsContent/TabsContent";
 import GreenRight from "../../../assets/Icons/GreenRight";
 import { MultiSelect } from "primereact/multiselect";
-import data from "../../../data/cities.json"
+import data from "../../../data/cities.json";
 import { useSearchParams } from "react-router-dom";
 
 const AqarDetails = () => {
+  const [params, setSearchParams] = useSearchParams();
+  const { currentLanguage } = useLanguage();
 
-     const [params] = useSearchParams();
-
-  const filters = {
-    type:params.get("type")|| "",
-    division: params.get("division") || "",
-    city: params.get("city") || "",
-    minPrice: params.get("minPrice") || "",
-    maxPrice: params.get("maxPrice") || "",
-    bedrooms: params.get("bedrooms") || "",
-    baths: params.get("baths") || ""
-  };
-console.log("fit",filters);
-
-
-  const { currentLanguage } = useLanguage(); // Get the current language
-  const [finishing, setFinishing] = useState(
-    translations[currentLanguage].Want
+  const [toggle1, setToggle1] = useState(params.get("division") || "sale");
+  const [selectedCities, setSelectedCities] = useState(
+    params.get("city") ? params.get("city").split(",") : []
   );
-  const [delivary, setDelivary] = useState(
-    translations[currentLanguage].WantDelivary
+  const [toggle2, setToggle2] = useState(params.get("progress") || "all");
+  const [budget, setBudget] = useState([
+    params.get("minPrice") || 1000000,
+    params.get("maxPrice") || 50000000,
+  ]);
+  const [placeType, setPlaceType] = useState(params.get("type") || "نوع المكان");
+  const [placeTypeDetails, setPlaceTypeDetails] = useState(
+    params.get("typeDetails") || ""
   );
-  const [toggle1, setToggle1] = useState(filters.division || "sale");
-  const [selectedCities, setSelectedCities] = useState(null);
-  const [toggle2, setToggle2] = useState("all");
+  const [rooms, setRooms] = useState(params.get("bedrooms") || "");
+  const [baths, setBaths] = useState(params.get("baths") || "");
+
   const [rotate, setRotate] = useState(false);
   const [rotateBudget, setRotateBudget] = useState(false);
-  const [budget, setBudget] = useState(
-    filters.minPrice && filters.maxPrice
-      ? [filters.minPrice, filters.maxPrice]
-      : [1000000, 50000000]
-  );
   const [rotatePlace, setRotatePlace] = useState(false);
-  const [placeType, setPlaceType] = useState(filters.type || "نوع المكان");
-  const [placeTypeDetails, setPlaceTypeDetails] = useState("");
-  const [rooms, setRooms] = useState(filters.bedrooms || "");
-  const [baths, setBaths] = useState(filters.baths||"");
 
   const tabs = [
     { value: "sale", label: translations[currentLanguage].sale },
@@ -96,7 +81,6 @@ console.log("fit",filters);
         { id: 20, name: "توين فيلا" },
       ],
     },
-
     {
       key: "tab2",
       ar: "تجاري",
@@ -106,7 +90,6 @@ console.log("fit",filters);
         { id: 2, name: "إداري" },
       ],
     },
-
     {
       key: "tab3",
       ar: "زراعي",
@@ -119,7 +102,6 @@ console.log("fit",filters);
         { id: 5, name: "ارض صناعية" },
       ],
     },
-
     {
       key: "tab4",
       ar: "صناعي",
@@ -134,7 +116,6 @@ console.log("fit",filters);
 
   const tabsKind = placeTypesTabs.map((tab) => ({
     eventKey: tab.key,
-
     title: (
       <div
         onClick={() => setPlaceType(currentLanguage === "ar" ? tab.ar : tab.en)}
@@ -142,7 +123,6 @@ console.log("fit",filters);
         {currentLanguage === "ar" ? tab.ar : tab.en}
       </div>
     ),
-
     content: (
       <>
         <div className="d-flex space-4 flex-wrap">
@@ -150,14 +130,13 @@ console.log("fit",filters);
             <p
               key={item.id}
               className="b-12 pick bg-light-gray"
-              style={{ width: "45%" }} // 👈 يخلي اتنين جنب بعض
+              style={{ width: "45%" }}
               onClick={() => setPlaceTypeDetails(item.name)}
             >
               {item.name}
             </p>
           ))}
         </div>
-
         <div className="d-flex flex-row space-4 mt-3">
           <button
             className="btn-main submit-btn btn-reset btn-confirm w-100"
@@ -174,7 +153,6 @@ console.log("fit",filters);
     ),
   }));
 
-  // rooms
   const tabsrooms = [
     {
       eventKey: "tab1",
@@ -187,9 +165,8 @@ console.log("fit",filters);
               (item, index) => (
                 <p
                   key={index}
-                  className={`b-12 pick bg-light-gray d-flex space-2 max-w-max ${
-                    rooms === item ? "picked" : ""
-                  }`}
+                  className={`b-12 pick bg-light-gray d-flex space-2 max-w-max ${rooms === item ? "picked" : ""
+                    }`}
                   onClick={() => setRooms(item)}
                 >
                   {rooms === item && <GreenRight />}
@@ -203,9 +180,8 @@ console.log("fit",filters);
             {["1", "2", "3", "4", "5", "6+"].map((item, index) => (
               <p
                 key={index}
-                className={`b-12 pick bg-light-gray d-flex space-2 max-w-max ${
-                  baths === item ? "picked" : ""
-                }`}
+                className={`b-12 pick bg-light-gray d-flex space-2 max-w-max ${baths === item ? "picked" : ""
+                  }`}
                 onClick={() => setBaths(item)}
               >
                 {baths === item && <GreenRight />}
@@ -233,8 +209,34 @@ console.log("fit",filters);
     },
   ];
 
+  // 🌟 حدث الـ URL params كل مرة تتغير الفلاتر
+  useEffect(() => {
+    const newParams = {};
+    if (toggle1) newParams.division = toggle1;
+    if (selectedCities && selectedCities.length > 0)
+      newParams.city = selectedCities.join(",");
+    if (toggle2) newParams.progress = toggle2;
+    if (budget) {
+      newParams.minPrice = budget[0];
+      newParams.maxPrice = budget[1];
+    }
+    if (placeType && placeType !== "نوع المكان") newParams.type = placeType;
+    if (placeTypeDetails) newParams.typeDetails = placeTypeDetails;
+    if (rooms) newParams.bedrooms = rooms;
+    if (baths) newParams.baths = baths;
 
-
+    setSearchParams(newParams);
+  }, [
+    toggle1,
+    selectedCities,
+    toggle2,
+    budget,
+    placeType,
+    placeTypeDetails,
+    rooms,
+    baths,
+    setSearchParams,
+  ]);
 
   return (
     <div className="advanced-search compound d-flex flex-column p-0">
@@ -260,7 +262,7 @@ console.log("fit",filters);
               optionLabel="name"
               optionValue="value"
               display="chip"
-              placeholder={filters.city || "جميع المحافظات"}
+              placeholder="جميع المحافظات"
               maxSelectedLabels={3}
               filter
               className="h-100 form-control w-100  search-input d-flex align-items-center p-1"
@@ -294,8 +296,8 @@ console.log("fit",filters);
               {rooms === "" && baths === ""
                 ? `${translations[currentLanguage].rooms} & ${translations[currentLanguage].baths}`
                 : rooms === "استوديو"
-                ? rooms + " / " + baths + " حمام"
-                : `${translations[currentLanguage].rooms} ${rooms} / ${baths} ${translations[currentLanguage].actualBath}`}
+                  ? rooms + " / " + baths + " حمام"
+                  : `${translations[currentLanguage].rooms} ${rooms} / ${baths} ${translations[currentLanguage].actualBath}`}
               <MenuArrow rotate={rotate} />
             </Dropdown.Toggle>
             <Dropdown.Menu className="w-100">

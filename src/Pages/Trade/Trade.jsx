@@ -45,6 +45,8 @@ const Trade = () => {
                 // return forceErrorState();
 
                 const response = await SwapAPI.getAllSwaps();
+                console.log(response.swaps);
+
                 // Check if response contains the swaps array
                 if (response && response.swaps && Array.isArray(response.swaps)) {
                     setTrades(response.swaps);
@@ -165,8 +167,7 @@ const Trade = () => {
                                                 rooms={card.rooms}
                                                 bath={card.bath}
                                                 space={card.space}
-                                                lat={card.location?.coordinates[0]}
-                                                lon={card.location?.coordinates[1]}
+                                                location={card.location?.detailedLocation}
                                                 trade={card.whatIWant?.propertyType}
                                                 since={card.createdAt}
                                                 phoneNumber={currentPageData && card.contact ? card.contact.phoneNumber : null}

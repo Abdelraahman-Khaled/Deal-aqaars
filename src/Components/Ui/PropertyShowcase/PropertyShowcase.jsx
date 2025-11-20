@@ -147,7 +147,7 @@ const PropertyShowcase = ({
           {/* Location Overlay */}
           {location && (
             <div className="location-overlay">
-              <span className="d-flex">
+              <span className="d-flex align-items-center">
                 <LocationIcon />
                 {location}
               </span>

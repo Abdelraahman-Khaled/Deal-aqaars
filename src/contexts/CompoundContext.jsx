@@ -27,7 +27,7 @@ export const CompoundProvider = ({ children }) => {
 
     try {
       const compoundData = await CompoundAPI.getCompoundById(id);
-      setCompound(compoundData);
+      setCompound(compoundData.data);
       return compoundData;
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to fetch compound');

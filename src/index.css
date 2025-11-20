@@ -466,7 +466,6 @@ html[dir="ltr"] .dropdown-item:hover {
 }
 .p-inputtext:enabled:focus{
   box-shadow: var(--primary);
-  border: 1px solid var(--primary);
 }
 .p-multiselect-item{
   gap: 4px;

@@ -23,23 +23,79 @@ const JoinCompany = () => {
         projectType: '',
         location: '',
         locationDetails: '',
-        locationEn: '',
-        locationDetailsEn: '',
-        companyAddress: '',
-        nestedLocation: null, // لو هتاخد من NestedDropdownAccordion
-        // وأي حاجات تانية من Compound2 وCompound3
+        city: '',
+        latitude: '',
+        longitude: '',
+        // Add fields from Compound2 and Compound3 here later
+        units: [], // For Compound3
+        services: [], // For Compound2 checkboxes
+        phone: '',
+        whatsapp: false,
+        images: [], // For Compound2 ImageUploadGrid
     });
 
 
+    const validateStep1 = () => {
+        // if (!formData.name) {
+        //     alert("Please enter the compound name.");
+        //     return false;
+        // }
+        // if (!formData.projectType) {
+        //     alert("Please select a project type.");
+        //     return false;
+        // }
+        // if (!formData.location) {
+        //     alert("Please enter the ad location.");
+        //     return false;
+        // }
+        // if (!formData.locationDetails) {
+        //     alert("Please enter the ad details.");
+        //     return false;
+        // }
+        // if (!formData.city) {
+        //     alert("Please select a city.");
+        //     return false;
+        // }
+        // if (!formData.latitude || !formData.longitude) {
+        //     alert("Please select a location on the map.");
+        //     return false;
+        // }
+        return true;
+    };
+
+    const validateStep2 = () => {
+        // if (formData.services.length === 0) {
+        //     alert("Please select at least one service.");
+        //     return false;
+        // }
+        // if (!formData.phone) {
+        //     alert("Please enter a phone number.");
+        //     return false;
+        // }
+        // if (formData.images.length === 0) {
+        //     alert("Please upload at least one image.");
+        //     return false;
+        // }
+        return true;
+    };
+
+    const validateStep3 = () => {
+        if (formData.units.length === 0) {
+            alert("Please add at least one unit.");
+            return false;
+        }
+        return true;
+    };
+
     const handleNext = () => {
         let isValid = true;
-        // if (step === 1) {
-        //     isValid = validateStep1(); // function you will define
-        // } else if (step === 2) {
-        //     isValid = validateStep2();
-        // } else if (step === 3) {
-        //     isValid = validateStep3();
-        // }
+        if (step === 1) {
+            isValid = validateStep1();
+        } else if (step === 2) {
+            isValid = validateStep2();
+        } else if (step === 3) {
+            isValid = validateStep3();
+        }
 
         if (isValid) setStep(prev => prev + 1);
     };

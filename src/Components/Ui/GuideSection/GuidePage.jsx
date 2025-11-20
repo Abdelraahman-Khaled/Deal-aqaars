@@ -164,16 +164,14 @@ const GuidePage = ({ title, compound = true }) => {
           {compound &&
             !loading &&
             compounds.map((compound, index) => {
-              const locationCoords = formatLocation(compound.detailedLocation);
               return (
                 <CompoundCard
                   id={compound._id}
                   key={index}
-                  title={compound.title[currentLanguage]}
-                  lat={compound.announcementLocation?.coordinates[1]}
-                  lon={compound.announcementLocation?.coordinates[0]}
-                  details={compound.details}
-                  price={compound.unitData.prices[0]}
+                  title={compound.name}
+                  details={compound.details.ar}
+                  location={compound.announcementLocation}
+                  price={compound.units[0]?.aqarDetails?.price}
                   img={compound.compoundImages}
                   company={true}
                   connections={true}

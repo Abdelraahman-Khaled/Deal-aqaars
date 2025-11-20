@@ -88,7 +88,7 @@ const App = () => {
                             element={<CompoundDetailsPage />}
                           />
                           <Route
-                            path="/compound-details/:id"
+                            path="/compound-details/:id/:index"
                             element={<CompoundAqarDetails />}
                           />
 
@@ -163,7 +163,7 @@ const App = () => {
                             element={<JoinIndustrial />}
                           />
                           <Route
-                            path="/join-company"
+                            path="/join-compound"
                             element={<JoinCompany />}
                           />
                           <Route path="/join-trade" element={<JoinTrade />} />

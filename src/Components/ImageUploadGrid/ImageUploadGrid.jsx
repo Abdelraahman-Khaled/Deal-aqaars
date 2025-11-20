@@ -76,7 +76,7 @@ const ImageUploadGrid = ({ name }) => {
                                     src={uploadedImages[index]}
                                     alt={`Upload ${index + 1}`}
                                     className="img-fluid rounded border"
-                                    style={{ height: '96px', objectFit: 'cover', width: '100%' }}
+                                    style={{ height: '130px', objectFit: 'cover', width: '100%' }}
                                 />
                                 <button
                                     onClick={() => removeImage(index)}
@@ -90,7 +90,7 @@ const ImageUploadGrid = ({ name }) => {
                         ) : index === uploadedImages.length && index < 9 ? (
                             <label
                                 className="d-flex align-items-center justify-content-center border rounded"
-                                style={{ height: '96px', cursor: 'pointer', background: 'rgba(23, 55, 148, 0.1)' }}
+                                style={{ height: '130px', cursor: 'pointer', background: 'rgba(23, 55, 148, 0.1)' }}
                             >
                                 <PlusIcon />
                                 <input
@@ -104,7 +104,7 @@ const ImageUploadGrid = ({ name }) => {
                         ) : (
                             <div
                                 className="d-flex align-items-center justify-content-center border rounded bg-white"
-                                style={{ height: '96px' }}
+                                style={{ height: '130px' }}
                             >
                                 <CameraUploadImg />
                             </div>

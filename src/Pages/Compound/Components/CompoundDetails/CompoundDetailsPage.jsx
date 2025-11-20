@@ -28,9 +28,8 @@ const CompoundDetailsPage = () => {
         return () => clearCompound(); // cleanup on unmount
     }, [id, fetchCompound, clearCompound]);
 
-    console.log(compound);
 
- 
+
     const data = [
         {
             companies: ["عقارات مصر", "مشاريع جديدة", "كمباوندات العين السخنة"],
@@ -58,7 +57,7 @@ const CompoundDetailsPage = () => {
         );
     }
     // Show not found message if no property data
-    if (!compound && !loading) {
+    if (compound == null && !loading) {
         return (
             <div className="py-4">
                 <ContainerMedia>
@@ -71,6 +70,7 @@ const CompoundDetailsPage = () => {
         );
     }
 
+    
     return (
         <>
             <HelmetInfo titlePage={currentLanguage === "ar" ? "دليل الكومباوندات" : "Compounds Guide"} />
@@ -83,27 +83,27 @@ const CompoundDetailsPage = () => {
                             mainRoute={"/compounds"}
                             routeTitleTwoBread={false}
                             titleTwoBread={false}
-                            textBreadActive={compound.title[currentLanguage]}
+                            textBreadActive={compound.title.ar}
                         />
                     </header>
                     <main>
                         <PropertyShowcaseExample
-                            images={compound.compoundImages.map((item) => item.url)}
-                            lat={compound.detailedLocation.coordinates[0]}
-                            lon={compound.detailedLocation.coordinates[1]} />
+                            images={compound?.compoundImages?.map((item) => item.url) || []}
+                            lat={compound?.location?.coordinates?.coordinates?.[0]}
+                            lon={compound?.location?.coordinates?.coordinates?.[1]} />
                         <div className="row gy-4">
                             <div className="col-12 col-xl-9 d-flex flex-column space-8">
                                 <DescriptionGuide
-                                    title={compound?.title[currentLanguage] || ""}
-                                    location={compound?.compoundLocation || ""}
-                                    price={compound?.unitData?.prices?.[0] || ""}
+                                    title={compound?.name || ""}
+                                    location={compound?.location?.detailedLocation || ""}
+                                    price={compound?.units?.[0]?.aqarDetails?.price || ""}
                                 />
-                                <CompoundTaps unitData={compound?.unitData} />
+                                <CompoundTaps unitData={compound} />
                                 <AdsDescription />
                                 <Map
-                                    lat={29.6000}
-                                    lon={32.3500}
-                                    locationName={"IL Monte Galala - إل مونت جلاله"}
+                                    lat={compound?.location?.coordinates?.coordinates?.[0]}
+                                    lon={compound?.location?.coordinates?.coordinates?.[1]}
+                                    locationName={compound?.compoundLocation}
                                 />
                                 <CompanyToSee data={data} />
                             </div>

@@ -12,6 +12,7 @@ import RealStateCard from "../RealStateCard/RealStateCard";
 import CompoundAPI from "../../../api/compoundApi";
 import PaginationPage from "../../Pagenation/Pagination";
 import Loader from "../../Loader/Loader";
+import CompoundSkeleton from "../CompoundCard/CompoundSkeleton";
 import { useSearchParams } from "react-router-dom";
 
 const GuidePage = ({ title, compound = true }) => {
@@ -44,9 +45,9 @@ const GuidePage = ({ title, compound = true }) => {
   const organizing = ["الاكثر مشاهدة", "الاجدد", "الاقل سعر", "اعلي سعر"];
 
   const [params] = useSearchParams();
-  
+
   const filters = {
-    type:params.get("type")|| "",
+    type: params.get("type") || "",
     division: params.get("division") || "",
     city: params.get("city") || "",
     minPrice: params.get("minPrice") || "",
@@ -55,9 +56,9 @@ const GuidePage = ({ title, compound = true }) => {
   };
 
   useEffect(() => {
-  fetchProperties()
+    fetchProperties()
   }, [params]);
-  
+
 
   // Fetch properties from API
   const fetchProperties = async (page = 1) => {
@@ -103,6 +104,7 @@ const GuidePage = ({ title, compound = true }) => {
     }
   }, [compound]);
 
+
   return (
     <div className=" guide compound d-flex flex-wrap  flex-md-row  justify-content-between">
       <div className="d-flex space-6 flex-column col-12  col-lg-8 ">
@@ -143,13 +145,12 @@ const GuidePage = ({ title, compound = true }) => {
         </div>
         <div className="d-flex flex-wrap  flex-row justify-content-between">
           {compound && loading && (
-            <div className="loading-container">
-              <p>
-                {currentLanguage === "ar"
-                  ? "جاري تحميل كموندات..."
-                  : "Loading compounds..."}
-              </p>
-              <Loader />
+            <div className="loading-container w-100">
+              <div className="d-flex flex-wrap justify-content-between w-100">
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <CompoundSkeleton key={index} wrapperClass={toggle1 === "nest" ? "flex-wrap" : ""} />
+                ))}
+              </div>
             </div>
           )}
           {compound && !loading && compounds.length === 0 && (
@@ -181,13 +182,12 @@ const GuidePage = ({ title, compound = true }) => {
               );
             })}
           {!compound && loading && (
-            <div className="loading-container">
-              <p>
-                {currentLanguage === "ar"
-                  ? "جاري تحميل العقارات..."
-                  : "Loading properties..."}
-              </p>
-              <Loader />
+            <div className="loading-container w-100">
+              <div className="d-flex flex-wrap justify-content-between w-100">
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <CompoundSkeleton key={index} wrapperClass={toggle1 === "nest" ? "flex-wrap" : ""} />
+                ))}
+              </div>
             </div>
           )}
           {!compound && !loading && properties.length === 0 && (
@@ -227,7 +227,7 @@ const GuidePage = ({ title, compound = true }) => {
                 bath={property.details?.bathrooms || 0}
                 space={property.details?.space || 0}
                 offer={formatPrice(property.details?.price)}
-                type={property.division}
+                division={property.division}
                 category={property.category}
                 phone={property.advertiserPhoneNumber}
                 haveWhatsapp={property.haveWhatsapp}

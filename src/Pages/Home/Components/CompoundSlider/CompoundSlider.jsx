@@ -43,6 +43,11 @@ const CompoundSlider = () => {
           img={card.compoundImages}
           slider={true}
           wrapperClass="flex-wrap"
+          advertiser={{
+            phoneNumber: card.contact.phoneNumber,
+            hasWhatsapp: card.contact.hasWhatsapp
+          }}
+          connections={true}
         />
       ))}
     </Slidercontainer>

@@ -59,7 +59,7 @@ const LandAPI = {
       });
 
       const queryString = queryParams.toString();
-      const url = queryString ? `/land?${queryString}` : "/land";
+      const url = queryString ? `/land/filter?${queryString}` : "/land";
 
       const response = await axiosInstance.get(url);
       return response.data;

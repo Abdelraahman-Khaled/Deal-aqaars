@@ -116,7 +116,10 @@ const CompoundDetailsPage = () => {
                                     notFinished={"1"}
                                     underDevelopment={"2"}
                                 />
-                                <CompoundsAds />
+                                <CompoundsAds
+                                    city={compound?.location?.city}
+                                    currentCompoundId={compound?._id}
+                                />
                             </div>
                         </div>
                     </main>

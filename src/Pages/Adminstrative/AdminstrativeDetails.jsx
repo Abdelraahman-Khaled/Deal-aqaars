@@ -3,8 +3,6 @@ import { useLanguage } from '../../Components/Languages/LanguageContext';
 import { useParams } from 'react-router-dom';
 import AdministrativeAPI from '../../api/administrativeApi';
 import compoundImg from "../../assets/images/compounds/compound.png";
-import compoundImg1 from "../../assets/images/compounds/compound1.png";
-import compoundImg2 from "../../assets/images/compounds/compound2.png";
 import ContainerMedia from '../../Components/ContainerMedia/ContainerMedia';
 import BreadcrumbsPage from '../../Components/Ui/BreadcrumbsPage/BreadcrumbsPage';
 import PropertyShowcaseExample from '../../Components/Ui/PropertyShowcase/PropertyShowcaseExample';
@@ -18,6 +16,7 @@ import HelmetInfo from '../../Components/Helmetinfo/HelmetInfo';
 import { translations } from './translations';
 import RealStateCard from '../../Components/Ui/RealStateCard/RealStateCard';
 import Map from '../../Components/Ui/Map/Map';
+import AdminstrativeCard from '../../Components/Ui/Adminstrative/AdminstrativeCard';
 
 const AdminstrativeDetails = () => {
     const { currentLanguage } = useLanguage(); // Get the current language
@@ -25,6 +24,8 @@ const AdminstrativeDetails = () => {
     const [administrative, setAdministrative] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [relatedAdministrative, setRelatedAdministrative] = useState([]);
+
     // Fetch administrative when component mounts or id changes
     useEffect(() => {
         const fetchAdministrative = async () => {
@@ -45,67 +46,56 @@ const AdminstrativeDetails = () => {
         return () => setAdministrative(null); // cleanup on unmount
     }, [id]);
 
-    console.log("administrative:", administrative);
+    // Fetch related administrative properties
+    useEffect(() => {
+        const fetchRelatedAdministrative = async () => {
+            if (administrative) {
+                try {
+                    const filters = {
+                        city: administrative.location?.city,
+                        rooms: administrative.details?.rooms,
+                        bathrooms: administrative.details?.bathrooms
+                    };
+                    const response = await AdministrativeAPI.getAllAdministrative(filters);
+
+                    let administrativeList = [];
+                    if (response.data && Array.isArray(response.data)) {
+                        administrativeList = response.data;
+                    } else if (Array.isArray(response)) {
+                        administrativeList = response;
+                    }
+
+                    // Filter out current administrative
+                    const filtered = administrativeList.filter(a => {
+                        const isSame = (a._id && a._id.toString() === administrative._id?.toString()) ||
+                            (a.id && a.id.toString() === administrative.id?.toString());
+                        return !isSame;
+                    });
+                    setRelatedAdministrative(filtered);
+                } catch (err) {
+                    console.error("Error fetching related administrative:", err);
+                }
+            }
+        };
+        fetchRelatedAdministrative();
+    }, [administrative]);
 
 
     const unitDetails = [
         {
-            meterPrice:administrative?.details.price / administrative?.details.space ,
+            meterPrice: administrative?.details.price / administrative?.details.space,
             space: administrative?.details.space,
             front: administrative?.details.view,
             paymentWay: false,
-            paymentLand:administrative?.details.paymentMethod,
+            paymentLand: administrative?.details.paymentMethod,
             AdsType: administrative?.details.type,
-            floor:administrative?.details.floor,
-            finishingType:administrative?.details.finishing,
-            buildingYear:administrative?.details.buildingYear,
-            handingOverYear:administrative?.details.handingOverYear,
-            
+            floor: administrative?.details.floor,
+            finishingType: administrative?.details.finishing,
+            buildingYear: administrative?.details.buildingYear,
+            handingOverYear: administrative?.details.handingOverYear,
+
         }
     ]
-
-    const data = [
-        {
-            id: 1,
-            rooms: 2,
-            bath: 1,
-            space: 95,
-            details: "شقة للبيع في الشيخ زايد متشطبة بالكامل باقل مق",
-            location: "الجيزة - الشيخ زايد - روضة زايد",
-            price: "3,500,000",
-            offer: "450,000",
-            img: compoundImg,
-            phone:"01121323475",
-            haveWhatsapp:true,
-        },
-        {
-            id: 2,
-            rooms: 2,
-            bath: 1,
-            space: 95,
-            details: "شقة للبيع في الشيخ زايد متشطبة بالكامل باقل مق...",
-            location: "الجيزة - الشيخ زايد - روضة زايد",
-            price: "5,484,000",
-            offer: 0,
-            img: compoundImg1,phone:"01121323475",
-            haveWhatsapp:true,
-        },
-        {
-            id: 3,
-            rooms: 2,
-            bath: 1,
-            space: 95,
-            details: "شقة للبيع في الشيخ زايد متشطبة بالكامل باقل مق...",
-            location: "الجيزة - الشيخ زايد - روضة زايد",
-            price: "10,874,000",
-            offer: "750,000",
-            img: compoundImg2,phone:"01121323475",
-            haveWhatsapp:true,
-        },
-    ];
-
-
-
 
     // Show loading state
     if (loading) {
@@ -174,7 +164,7 @@ const AdminstrativeDetails = () => {
                                     bath={administrative.details.bathrooms}
                                 />
                                 <UnitDetails data={unitDetails} />
-                                
+
                                 <AdsDescription title={"وصف الاعلان"} description={administrative.description[currentLanguage]} />
                                 <Map
                                     lon={administrative?.location.coordinates[0]}
@@ -183,36 +173,31 @@ const AdminstrativeDetails = () => {
                                 />
 
                                 {/* related slider */}
-                                <RealatedSlider title={"المشاريع المتشابهة"}>
-                                    {data.map((card, index) => (
-                                        <div key={index} className="slider-card-wrapper w-100">
-                                            <RealStateCard
-                                                price={card.price}
-                                                rooms={card.rooms}
-                                                bath={card.bath}
-                                                space={card.space}
-                                                details={card.details}
-                                                location={card.location}
-                                                offer={card.offer}
-                                                img={card.img}
-                                                phone={card.phone}
-                                                haveWhatsapp={card.haveWhatsapp}
-                                            />
-                                        </div>
-                                    ))}
-                                </RealatedSlider>
+                                {relatedAdministrative.length > 0 && (
+                                    <RealatedSlider title={"المشاريع المتشابهة"}>
+                                        {relatedAdministrative.map((adminItem, index) => (
+                                            <div key={adminItem._id || index} className="slider-card-wrapper w-100">
+                                                <AdminstrativeCard
+                                                    id={adminItem._id}
+                                                    price={adminItem.details?.price}
+                                                    rooms={adminItem.details?.rooms}
+                                                    bath={adminItem.details?.bathrooms}
+                                                    space={adminItem.details?.space}
+                                                    details={adminItem.description?.[currentLanguage]}
+                                                    location={adminItem.location?.detailedLocation}
+                                                    offer={adminItem.offer}
+                                                    img={adminItem.images && adminItem.images.length > 0 ? adminItem.images[0].url : compoundImg}
+                                                    phone={adminItem.advertiserPhoneNumber}
+                                                    haveWhatsapp={adminItem.hasWhatsapp}
+                                                    division={adminItem.division}
+                                                />
+                                            </div>
+                                        ))}
+                                    </RealatedSlider>
+                                )}
 
                             </div>
                             <div className="left-col col-12 col-xl-3 d-flex flex-column space-6">
-                                {/* <CompanyCard
-                                    name={"تطوير مصر للتطوير العقاري"}
-                                    since={"2014"}
-                                    numberProjects={"8"}
-                                    inhouse={"2"}
-                                    notFinished={"1"}
-                                    underDevelopment={"2"}
-                                /> */}
-
                                 <TwoAds />
                             </div>
                         </div>

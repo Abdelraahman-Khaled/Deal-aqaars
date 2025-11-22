@@ -28,7 +28,7 @@ const AqarDetails = () => {
   ]);
   const [placeType, setPlaceType] = useState(params.get("type") || "نوع المكان");
   const [placeTypeDetails, setPlaceTypeDetails] = useState(
-    params.get("typeDetails") || ""
+    params.get("type") || ""
   );
   const [rooms, setRooms] = useState(params.get("bedrooms") || "");
   const [baths, setBaths] = useState(params.get("baths") || "");
@@ -221,7 +221,7 @@ const AqarDetails = () => {
       newParams.maxPrice = budget[1];
     }
     if (placeType && placeType !== "نوع المكان") newParams.type = placeType;
-    if (placeTypeDetails) newParams.typeDetails = placeTypeDetails;
+    if (placeTypeDetails) newParams.type = placeTypeDetails;
     if (rooms) newParams.bedrooms = rooms;
     if (baths) newParams.baths = baths;
 

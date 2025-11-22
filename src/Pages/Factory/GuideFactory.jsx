@@ -9,6 +9,7 @@ import PaginationPage from "../../Components/Pagenation/Pagination";
 import Loader from "../../Components/Loader/Loader";
 import FactoryAPI from "../../api/factoryApi";
 import FactoryCard from "../../Components/Ui/Factory/FactoryCard";
+import FactorySkeleton from "../../Components/Ui/Factory/FactorySkeleton";
 
 const GuideFactory = ({ title }) => {
   const { currentLanguage } = useLanguage(); // Get the current language
@@ -30,7 +31,6 @@ const GuideFactory = ({ title }) => {
     try {
       setLoading(true);
       const response = await FactoryAPI.getAllFactory(page);
-      console.log(response);
 
       if (response && response.data) {
         setFactories(response.data); // only that page’s factories
@@ -83,12 +83,12 @@ const GuideFactory = ({ title }) => {
         <div className="d-flex flex-wrap  flex-row justify-content-between">
           {loading && (
             <div className="loading-container">
-              <p>
-                {currentLanguage === "ar"
-                  ? "جاري تحميل المصانع..."
-                  : "Loading factories..."}
-              </p>
-              <Loader />
+
+              <div className="w-100 d-flex flex-wrap justify-content-between">
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <FactorySkeleton key={index} wrapperClass={toggle1 === "nest" ? "flex-wrap" : "width-full"} />
+                ))}
+              </div>
             </div>
           )}
           {!loading && factories.length === 0 && (

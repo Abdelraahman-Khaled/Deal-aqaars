@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import HelmetInfo from '../../../Components/Helmetinfo/HelmetInfo';
 import { useLanguage } from '../../../Components/Languages/LanguageContext';
 import { useProperty } from '../../../contexts/PropertyContext';
@@ -13,18 +13,20 @@ import RealatedSlider from '../../../Components/Ui/RealatedSlider/RealatedSlider
 import RealStateCard from '../../../Components/Ui/RealStateCard/RealStateCard';
 
 import compoundImg from "../../../assets/images/compounds/compound.png";
-import compoundImg1 from "../../../assets/images/compounds/compound1.png";
-import compoundImg2 from "../../../assets/images/compounds/compound2.png";
 import TwoAds from '../../../Components/Ui/TwoAds/TwoAds';
 import { useParams } from 'react-router-dom';
 import { translations } from './translations';
 import PropertyShowcaseExample from '../../../Components/Ui/PropertyShowcase/PropertyShowcaseExample';
 import Loader from '../../../Components/Loader/Loader';
+import PropertyAPI from '../../../api/propertyApi';
 
 const AqarGuide = () => {
     const { currentLanguage } = useLanguage(); // Get the current language
     const { id } = useParams();
     const { property, loading, error, fetchProperty, clearProperty } = useProperty();
+    const [relatedProperties, setRelatedProperties] = useState([]);
+    console.log(relatedProperties, "relatedProperties");
+
     // Fetch property when component mounts or id changes
     useEffect(() => {
         if (id) {
@@ -33,9 +35,37 @@ const AqarGuide = () => {
         return () => clearProperty(); // cleanup on unmount
     }, [id, fetchProperty, clearProperty]);
 
+    // Fetch related properties
+    useEffect(() => {
+        const fetchRelated = async () => {
+            if (property) {
+                try {
+                    const filters = {
+                        city: property.location?.city,
+                        rooms: property.details?.rooms,
+                        bathrooms: property.details?.bathrooms
+                    };
+                    const response = await PropertyAPI.getAllProperties(filters);
+
+                    let properties = [];
+                    if (Array.isArray(response)) {
+                        properties = response;
+                    } else if (response.data && Array.isArray(response.data)) {
+                        properties = response.data;
+                    }
+
+                    // Filter out current property
+                    const filtered = properties.filter(p => p._id !== property._id && p.id !== property.id);
+                    setRelatedProperties(filtered);
+                } catch (err) {
+                    console.error("Error fetching related properties:", err);
+                }
+            }
+        };
+        fetchRelated();
+    }, [property]);
+
     console.log("property:", property);
-
-
 
     const unitDetails = [
         {
@@ -48,53 +78,10 @@ const AqarGuide = () => {
             finishingType: property?.details.finishingType,
             yearDelivary: property?.details.handoverDate,
             buildingYear: property?.details.buildingYear,
-            meterPrice: (property?.details.price/property?.details.space).toFixed(0),
+            meterPrice: (property?.details.price / property?.details.space).toFixed(0),
             AdsType: property?.details.propertyType,
         }
     ]
-
-    const data = [
-        {
-            id: 1,
-            rooms: 2,
-            bath: 1,
-            space: 95,
-            details: "شقة للبيع في الشيخ زايد متشطبة بالكامل باقل مق",
-            location: "الجيزة - الشيخ زايد - روضة زايد",
-            price: "3,500,000",
-            offer: "450,000",
-            img: compoundImg,
-            phone:"01121323475",
-            haveWhatsapp:true,
-        },
-        {
-            id: 2,
-            rooms: 2,
-            bath: 1,
-            space: 95,
-            details: "شقة للبيع في الشيخ زايد متشطبة بالكامل باقل مق...",
-            location: "الجيزة - الشيخ زايد - روضة زايد",
-            price: "5,484,000",
-            offer: 0,
-            img: compoundImg1,phone:"01121323475",
-            haveWhatsapp:true,
-        },
-        {
-            id: 3,
-            rooms: 2,
-            bath: 1,
-            space: 95,
-            details: "شقة للبيع في الشيخ زايد متشطبة بالكامل باقل مق...",
-            location: "الجيزة - الشيخ زايد - روضة زايد",
-            price: "10,874,000",
-            offer: "750,000",
-            img: compoundImg2,phone:"01121323475",
-            haveWhatsapp:true,
-        },
-    ];
-
-
-
 
     // Show loading state
     if (loading) {
@@ -163,7 +150,7 @@ const AqarGuide = () => {
                                     location={property.location.detailedLocation}
                                 />
                                 <UnitDetails data={unitDetails} />
-                               
+
                                 <AdsDescription title={"وصف الاعلان"} description={property.description[currentLanguage]} />
                                 <Map
                                     lon={property.location.coordinates.coordinates[0]}
@@ -172,24 +159,27 @@ const AqarGuide = () => {
                                 />
 
                                 {/* related slider */}
-                                <RealatedSlider title={"المشاريع المتشابهة"}>
-                                    {data.map((card, index) => (
-                                        <div key={index} className="slider-card-wrapper w-100">
-                                            <RealStateCard
-                                                price={card.price}
-                                                rooms={card.rooms}
-                                                bath={card.bath}
-                                                space={card.space}
-                                                details={card.details}
-                                                location={card.location}
-                                                offer={card.offer}
-                                                img={card.img}
-                                                phone={card.phone}
-                                                haveWhatsapp={card.haveWhatsapp}
-                                            />
-                                        </div>
-                                    ))}
-                                </RealatedSlider>
+                                {relatedProperties.length > 0 && (
+                                    <RealatedSlider title={"المشاريع المتشابهة"}>
+                                        {relatedProperties.map((card, index) => (
+                                            <div key={index} className="slider-card-wrapper w-100">
+                                                <RealStateCard
+                                                    id={card._id}
+                                                    price={card.details?.price}
+                                                    rooms={card.details?.rooms}
+                                                    bath={card.details?.bathrooms}
+                                                    space={card.details?.space}
+                                                    details={card.description?.[currentLanguage]}
+                                                    location={card.location?.detailedLocation}
+                                                    offer={card.offer}
+                                                    img={card.images && card.images.length > 0 ? card.images[0].url : compoundImg}
+                                                    phone={card.advertiserPhoneNumber}
+                                                    haveWhatsapp={card.haveWhatsapp}
+                                                />
+                                            </div>
+                                        ))}
+                                    </RealatedSlider>
+                                )}
 
                             </div>
                             <div className="left-col col-12 col-xl-3 d-flex flex-column space-6">

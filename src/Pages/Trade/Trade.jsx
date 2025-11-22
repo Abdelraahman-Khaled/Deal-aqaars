@@ -11,18 +11,15 @@ import PaginationPage from '../../Components/Pagenation/Pagination';
 import { Link } from 'react-router-dom';
 import SwapAPI from '../../api/swapApi';
 import { toast } from 'react-toastify';
-import Loader from '../../Components/Loader/Loader';
 import ErrorNotFoundSvg from '../../assets/images/error-not-found.svg';
-
-
-
-
+import TradeSkeleton from './TradeSkeleton';
 
 const Trade = () => {
     const { currentLanguage } = useLanguage();
     const [trades, setTrades] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [searchQuery, setSearchQuery] = useState("");
 
     // Function to force error state for testing
     const forceErrorState = () => {
@@ -34,47 +31,47 @@ const Trade = () => {
         setIsLoading(false);
     };
 
-    // Fetch all trades on component mount
-    useEffect(() => {
-        const fetchTrades = async () => {
-            try {
-                setIsLoading(true);
-                setError(null); // Reset error state before fetching
+    // Fetch all trades on component mount or search
+    const fetchTrades = async (query = "") => {
+        try {
+            setIsLoading(true);
+            setError(null); // Reset error state before fetching
 
-                // Uncomment the line below to test error state
-                // return forceErrorState();
+            // Uncomment the line below to test error state
+            // return forceErrorState();
 
-                const response = await SwapAPI.getAllSwaps();
-                console.log(response.swaps);
+            const response = await SwapAPI.getAllSwaps(query);
 
-                // Check if response contains the swaps array
-                if (response && response.swaps && Array.isArray(response.swaps)) {
-                    setTrades(response.swaps);
-                } else {
-                    throw new Error("Invalid response format");
-                }
-            } catch (error) {
-                console.error("Error fetching trades:", error);
-                const errorMessage = currentLanguage === "ar" ?
-                    "فشل تحميل إعلانات البدل. يرجى المحاولة مرة أخرى لاحقاً." :
-                    "Failed to load trades. Please try again later.";
-                setTrades([]); // Clear trades on error
-                setError(errorMessage);
-                toast.error(errorMessage);
-            } finally {
-                setIsLoading(false);
+            // Check if response contains the swaps array
+            if (response && response.data && Array.isArray(response.data)) {
+                setTrades(response.data);
+            } else {
+                throw new Error("Invalid response format");
             }
-        };
-
-        fetchTrades();
-    }, [currentLanguage]); // Add currentLanguage as dependency
-
-    const initialValues = {
-        search: "",
+        } catch (error) {
+            console.error("Error fetching trades:", error);
+            const errorMessage = currentLanguage === "ar" ?
+                "فشل تحميل إعلانات البدل. يرجى المحاولة مرة أخرى لاحقاً." :
+                "Failed to load trades. Please try again later.";
+            setTrades([]); // Clear trades on error
+            setError(errorMessage);
+            toast.error(errorMessage);
+        } finally {
+            setIsLoading(false);
+        }
     };
-    const handleSubmit = (values) => {
-        console.log("Search form values:", values);
-        // Implement search functionality here
+
+    // Debounce search
+    useEffect(() => {
+        const delayDebounceFn = setTimeout(() => {
+            fetchTrades(searchQuery);
+        }, 500); // 500ms delay
+
+        return () => clearTimeout(delayDebounceFn);
+    }, [searchQuery, currentLanguage]);
+
+    const handleSearchChange = (e) => {
+        setSearchQuery(e.target.value);
     };
 
     // pagenation
@@ -97,17 +94,15 @@ const Trade = () => {
                 <div className='py-4'>
                     <div className='d-flex flex-row flex-wrap align-items-center justify-content-between space-3 py-3 pb-5'>
                         <div className='position-relative max-w-max' style={{ width: "100%" }}>
-                            <FormField
-                                initialValues={initialValues}
-                                onSubmit={handleSubmit}
-                                id="edit-profile-form"
-                            >
-                                <InputFiled
+                            <div className="form-group input-field-info d-flex flex-column position-relative form-one">
+                                <input
                                     name="search"
                                     type="text"
+                                    value={searchQuery}
+                                    onChange={handleSearchChange}
                                     placeholder={currentLanguage === "ar" ? "دور على اللى محتاجه" : "Search for what you need"}
-                                    success
-                                    style={{ paddingRight: "40px", width: "max-content" }} // Ensure enough space for the icon
+                                    className="input-field form-control relative active-border"
+                                    style={{ paddingRight: "40px", width: "max-content" }}
                                 />
                                 <span
                                     className="position-absolute"
@@ -120,7 +115,7 @@ const Trade = () => {
                                 >
                                     <SearchIcon />
                                 </span>
-                            </FormField>
+                            </div>
                         </div>
                         <Link to={"/join-trade"} className="btn-main min-w-max">
                             <AddIcon />
@@ -131,7 +126,15 @@ const Trade = () => {
                     <div className='d-flex flex-row flex-wrap space-6'>
                         {isLoading ? (
                             <div className="w-100 text-center py-5">
-                                <Loader size="large" color="primary" />
+                                <div className="loading-container w-100">
+                                    <div className="d-flex flex-wrap justify-content-between w-100">
+                                        {Array.from({ length: 6 }).map((_, index) => (
+                                            <div key={index} className='card-item'>
+                                                <TradeSkeleton />
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
                                 <p className="mt-3">{currentLanguage === "ar" ? "جاري تحميل البيانات..." : "Loading data..."}</p>
                             </div>
                         ) : error ? (
@@ -148,7 +151,7 @@ const Trade = () => {
                             </div>
                         ) : currentPageData.length === 0 ? (
                             // Empty state display
-                            <div className="w-100 text-center py-5" style={{ backgroundColor: '#f8f9fa', borderRadius: '8px', padding: '30px', boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}>
+                            <div className="w-100 text-center py-5" style={{ borderRadius: '8px', padding: '30px', }}>
                                 <img
                                     src={ErrorNotFoundSvg}
                                     alt="Not Found"
@@ -157,18 +160,20 @@ const Trade = () => {
                                 <p>{currentLanguage === "ar" ? "لا توجد إعلانات للبدل حالياً" : "No trade ads available at the moment"}</p>
                             </div>
                         ) : (
-                            <div className='card-container '>
+                            <div className='card-container flex-wrap '>
                                 {currentPageData?.map((card, index) => {
                                     return (
                                         <div key={card._id || card.id || index} className='card-item'>
                                             <TradeCard
                                                 key={card._id || card.id || index}
                                                 title={card.whatIHave?.propertyType}
+                                                details={card.whatIHave?.description}
                                                 rooms={card.rooms}
                                                 bath={card.bath}
                                                 space={card.space}
                                                 location={card.location?.detailedLocation}
                                                 trade={card.whatIWant?.propertyType}
+                                                tradeDetails={card.whatIWant?.description}
                                                 since={card.createdAt}
                                                 phoneNumber={currentPageData && card.contact ? card.contact.phoneNumber : null}
                                                 hasWhatsapp={currentPageData && card.contact ? card.contact.hasWhatsapp : undefined}

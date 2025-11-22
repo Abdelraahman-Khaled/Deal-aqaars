@@ -21,13 +21,15 @@ axiosInstance.interceptors.request.use((config) => {
     const token = localStorage.getItem("token");
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
+    } else {
+        config.headers.actor = "guest";
     }
-    
+
     // If sending FormData, let the browser set the correct Content-Type with boundary
     if (config.data instanceof FormData) {
         delete config.headers["Content-Type"];
     }
-    
+
     return config;
 });
 

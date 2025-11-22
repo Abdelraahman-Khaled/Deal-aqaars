@@ -17,7 +17,7 @@ const GuideLand = ({ title }) => {
   const [lands, setLands] = useState([]);
   const [loading, setLoading] = useState(false);
   const [pagenation, setPagenation] = useState({});
-    const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const ShowType = [
     { value: "nest", label: translations[currentLanguage].nest },
@@ -29,7 +29,7 @@ const GuideLand = ({ title }) => {
   const fetchProperties = async (page) => {
     try {
       setLoading(true);
-      const response = await LandAPI.getLands(page);
+      const response = await LandAPI.getAllLands(page);
 
       if (response && response.data) {
         setLands(response.data); // only that page’s building
@@ -53,14 +53,14 @@ const GuideLand = ({ title }) => {
   };
 
   useEffect(() => {
-      fetchProperties(currentPage);
-    }, [currentPage]);
+    fetchProperties(currentPage);
+  }, [currentPage]);
 
   return (
     <div className=" guide compound d-flex flex-wrap  flex-md-row  justify-content-between">
       <div className="d-flex space-6 flex-column col-12  col-lg-8 ">
         <div className="d-flex flex-wrap space-3 justify-content-between align-items-center">
-        <h6>{title}</h6>
+          <h6>{title}</h6>
           <div className="d-flex space-3 flex-wrap">
             {/* Drop Down */}
             <DropDown

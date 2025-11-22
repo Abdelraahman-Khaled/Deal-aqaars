@@ -36,7 +36,7 @@ const CompoundCard = ({ id, title, location, details, price, img, company = fals
                     </p>
                     {
                         slider && <p className='b-11 available ' >
-                            {currentLanguage === "ar" ? status || "بقي متاح" : status || "Available"}
+                            {status === "approved" ? "بقي متاح" : "غير متاح"}
                         </p>
                     }
                 </div>
@@ -54,10 +54,10 @@ const CompoundCard = ({ id, title, location, details, price, img, company = fals
                 </p>
                 {/* price */}
                 {
-                    price && 
-                <p className='b-11 w-100'>
-                    تبدأ من  {price} ج.م
-                </p>
+                    price &&
+                    <p className='b-11 w-100'>
+                        تبدأ من  {price} ج.م
+                    </p>
                 }
 
                 {/* Compnay */}

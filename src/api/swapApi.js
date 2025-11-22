@@ -14,9 +14,10 @@ const SwapAPI = {
   },
 
   // Get all swaps
-  getAllSwaps: async () => {
+  getAllSwaps: async (query = "") => {
     try {
-      const response = await axiosInstance.get("/swap");
+      const url = query ? `/swap/filter?q=${query}` : "/swap/filter";
+      const response = await axiosInstance.get(url);
       return response.data;
     } catch (error) {
       console.error("Error fetching swaps:", error.response || error.message);

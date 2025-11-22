@@ -74,7 +74,7 @@ const RealStateCard = ({
           <p className="b-3 min-w-max">{price} ج.م</p>
           <div className="d-flex gap-2 flex-wrap justify-content-end">
             <p className="b-11 available">
-              {division === "sale" ? "للبيع" : "للايجار"}
+              {division == "sale" ? "للبيع" : "للايجار"}
             </p>
           </div>
         </div>
@@ -143,13 +143,13 @@ const RealStateCard = ({
         {
           deleteItem &&
           <button
-          type="button"
-          className="btn-main second-btn  btn-delete "
-          onClick={() => remove(id)}
+            type="button"
+            className="btn-main second-btn  btn-delete "
+            onClick={() => remove(id)}
           >
             حذف الوحدة
           </button>
-          }
+        }
       </div>
     </div>
   );

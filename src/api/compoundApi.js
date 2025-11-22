@@ -35,13 +35,30 @@ const handleError = (error) => {
 
 const CompoundAPI = {
   // Get all companies
-  getAllCompounds: async () => {
+  // Get all compounds with optional filters
+  getAllCompounds: async (filters = {}) => {
     try {
-      const response = await axiosInstance.get("/compound");
+      const queryParams = new URLSearchParams();
+
+      // Add filters to query params
+      Object.keys(filters).forEach((key) => {
+        if (
+          filters[key] !== undefined &&
+          filters[key] !== null &&
+          filters[key] !== ""
+        ) {
+          queryParams.append(key, filters[key]);
+        }
+      });
+
+      const queryString = queryParams.toString();
+      const url = queryString ? `/compound?${queryString}` : "/compound";
+
+      const response = await axiosInstance.get(url);
       return response.data;
     } catch (error) {
       console.error(
-        "Error fetching companies:",
+        "Error fetching compounds:",
         error.response || error.message
       );
       handleError(error);

@@ -7,13 +7,11 @@ import MoneyIcon from '../../assets/Icons/MoneyIcon'
 import WhatsIcon from '../../assets/Icons/WhatsIcon'
 import CallIcon from '../../assets/Icons/CallIcon'
 import LocationIcon from '../../assets/Icons/LocationIcon'
-import { Link } from 'react-router-dom'
 import TradeIcon from '../../assets/Icons/TradeIcon'
 import SimpleImageSlider from '../../Components/Ui/SimpleImageSlider/SimpleImageSlider'
 import { useLanguage } from '../../Components/Languages/LanguageContext'
-import LocationDisplay from '../../Components/Ui/LocationDisplay/LocationDisplay'
 
-const TradeCard = ({ title, rooms, bath, space, location, trade, since, phoneNumber, hasWhatsapp, images, lat, lon }) => {
+const TradeCard = ({ title, details, tradeDetails, rooms, bath, space, location, trade, since, phoneNumber, hasWhatsapp, images, lat, lon }) => {
     const { currentLanguage } = useLanguage()
 
 
@@ -65,13 +63,16 @@ const TradeCard = ({ title, rooms, bath, space, location, trade, since, phoneNum
                     <p className='b-5 '>
                         {title}
                     </p>
+
                     <div className='d-flex gap-2'>
                         <p className='b-11 available'>
                             {timeSince}
                         </p>
                     </div>
                 </div>
-
+                <p className='b-5 '>
+                    {details}
+                </p>
 
                 {/* locations */}
                 <p className='b-11 overflow-hidden d-flex'>
@@ -108,6 +109,7 @@ const TradeCard = ({ title, rooms, bath, space, location, trade, since, phoneNum
                 <div className='trade-details space-2 d-flex flex-column justify-content-center align-items-center'>
                     <p className="b-11">مطلوب في التبديل</p>
                     <p className="b-12">{trade}</p>
+                    <p className="b-12">{tradeDetails}</p>
                 </div>
                 <div className='connections d-flex justify-content-between w-100 pt-4 space-2 '>
                     {/* WhatsApp button - only show if hasWhatsapp is true or not specified */}

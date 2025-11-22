@@ -17,7 +17,7 @@ const getToastMessages = () => ({
     en: "Property deleted successfully",
   },
   favoriteAdded: {
-    ar: "تم إضافة الأرض إلى المفضلة",   
+    ar: "تم إضافة الأرض إلى المفضلة",
     en: "Property added to favorites",
   },
   favoriteRemoved: {
@@ -89,7 +89,7 @@ const LandAPI = {
   },
 
   // Get properties by user ID
-  getLandsByUserId: async (userId) => { 
+  getLandsByUserId: async (userId) => {
     try {
       const response = await axiosInstance.get(`/land/user/${userId}`);
       return response.data;
@@ -104,9 +104,10 @@ const LandAPI = {
   },
 
   // Get current user's lands
-  getMyLands: async () => {
+  getMyLands: async (status) => {
     try {
-      const response = await axiosInstance.get("/land/me");
+      const url = status ? `/land/me?status=${status}` : "/land/me";
+      const response = await axiosInstance.get(url);
       return response.data;
     } catch (error) {
       console.error(

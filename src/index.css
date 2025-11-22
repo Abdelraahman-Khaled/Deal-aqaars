@@ -336,6 +336,16 @@ html {
   background: var(--primary) !important;
   color: var(--netural-100);
 }
+.btn-delete{
+  background: inherit !important;
+  border: 1px solid red;
+  color: red;
+  transition: 0.3s ease-in-out;
+}
+.btn-delete:hover{
+  background-color: red !important;
+  color: var(--netural-100) !important;
+}
 .form-control.is-invalid,
 .was-validated .form-control:invalid {
   background-image: none !important;

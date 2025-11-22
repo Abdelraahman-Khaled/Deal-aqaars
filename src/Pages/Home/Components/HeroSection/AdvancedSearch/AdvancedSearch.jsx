@@ -162,9 +162,8 @@ const AdvancedSearch = () => {
               (item, index) => (
                 <p
                   key={index}
-                  className={`b-12 pick bg-light-gray d-flex space-2 max-w-max ${
-                    rooms === item ? "picked" : ""
-                  }`}
+                  className={`b-12 pick bg-light-gray d-flex space-2 max-w-max ${rooms === item ? "picked" : ""
+                    }`}
                   onClick={() => setRooms(item)}
                 >
                   {rooms === item && <GreenRight />}
@@ -178,9 +177,8 @@ const AdvancedSearch = () => {
             {["1", "2", "3", "4", "5", "6+"].map((item, index) => (
               <p
                 key={index}
-                className={`b-12 pick bg-light-gray d-flex space-2 max-w-max ${
-                  baths === item ? "picked" : ""
-                }`}
+                className={`b-12 pick bg-light-gray d-flex space-2 max-w-max ${baths === item ? "picked" : ""
+                  }`}
                 onClick={() => setBaths(item)}
               >
                 {baths === item && <GreenRight />}
@@ -208,21 +206,37 @@ const AdvancedSearch = () => {
     },
   ];
 
- const handleSearch = () => {
-  const query = new URLSearchParams({
-    type :placeTypeDetails ,
-    division: toggle1,
-     city: selectedCities
-      ? selectedCities.join(",")
-      : "",
-    minPrice: budget[0],
-    maxPrice: budget[1],
-    bedrooms: rooms,
-    baths: baths,
-  }).toString();
+  const handleSearch = () => {
+    const query = new URLSearchParams({
+      type: placeTypeDetails,
+      division: toggle1,
+      city: selectedCities
+        ? selectedCities.join(",")
+        : "",
+      minPrice: budget[0],
+      maxPrice: budget[1],
+      bedrooms: rooms,
+      baths: baths,
+    }).toString();
 
-  navigate(`/realestate?${query}`);
-};
+    let route = "/realestate";
+
+    if (placeType === "سكني" || placeType === "Housing") {
+      if (placeTypeDetails === "منزل / بيت") {
+        route = "/building";
+      } else {
+        route = "/realestate";
+      }
+    } else if (placeType === "تجاري" || placeType === "Commercial") {
+      route = "/adminstrative";
+    } else if (placeType === "زراعي" || placeType === "Agricultural") {
+      route = "/land";
+    } else if (placeType === "صناعي" || placeType === "Industrial") {
+      route = "/factory";
+    }
+
+    navigate(`${route}?${query}`);
+  };
 
 
   return (
@@ -304,8 +318,8 @@ const AdvancedSearch = () => {
                         {rooms === "" && baths === ""
                           ? `${translations[currentLanguage].rooms} & ${translations[currentLanguage].baths}`
                           : rooms === "استوديو"
-                          ? rooms + " / " + baths + " حمام"
-                          : `${translations[currentLanguage].rooms} ${rooms} / ${baths} ${translations[currentLanguage].baths}`}
+                            ? rooms + " / " + baths + " حمام"
+                            : `${translations[currentLanguage].rooms} ${rooms} / ${baths} ${translations[currentLanguage].baths}`}
                         <MenuArrow rotate={rotate} />
                       </Dropdown.Toggle>
                       <Dropdown.Menu className="w-100">

@@ -7,7 +7,8 @@ import MenuArrow from '../../../assets/Icons/MenuArrow'
 const SpaceBox = ({ data, realEstate = false }) => {
     const { id } = useParams()
     const [showAllUnits, setShowAllUnits] = useState({});
-    
+
+    data = data || []
     return (
         Object.entries(data)?.map(([aqarType, item], index) => (
             <div key={index} className='d-flex flex-column space-4 pb-4 ' style={{ width: realEstate ? "48%" : "100%" }}>

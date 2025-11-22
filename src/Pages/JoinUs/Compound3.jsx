@@ -2,78 +2,143 @@ import React, { useState } from "react";
 import { translations } from "./translations";
 import { useLanguage } from "../../Components/Languages/LanguageContext";
 import InputFiled from "../../Components/Forms/InputField";
-import FormField from "../../Components/Forms/FormField";
 import { Col, Row } from "react-bootstrap";
-import TabsContent from "../../Components/Ui/TabsContent/TabsContent";
-import MenuArrow from "../../assets/Icons/MenuArrow";
 import SectionHeader from "../../Components/SectionHeader/SectionHeader";
-import TextArea from "../../Components/Forms/TextArea";
 import ImageUploadGrid from "../../Components/ImageUploadGrid/ImageUploadGrid";
 import SearchToggle from "../../Components/Ui/SearchComponents/SearchToggle ";
 import { Dropdown } from "primereact/dropdown";
 import RealStateCard from "../../Components/Ui/RealStateCard/RealStateCard";
+import CloseIcon from "../../assets/Icons/CloseIcon";
+import ImageUploadCompound from "../../Components/ImageUploadGrid/ImageUploadCompound";
+import TextArea from "../../Components/Forms/TextArea";
 
 const Compound3 = ({ formData, setFormData }) => {
+  const { currentLanguage } = useLanguage();
+
   const [currentUnit, setCurrentUnit] = useState({
-    unitDetails: { unitType: "", aqarType: "" },
-    aqarDetails: { space: 0, price: 0 },
+    unitDetails: {
+      unitType: "",
+      aqarType: "",
+      announcementTitle: { ar: "" },
+      announcementDetails: { ar: "" },
+    },
+    aqarDetails: {
+      space: "",
+      price: "",
+      view: "",
+      paymentType: "",
+      type: "",
+      rooms: "",
+      floor: "",
+      bathrooms: "",
+      handingYear: "",
+      finishingType: "",
+    },
+    aqarImages: [],
   });
-  const { currentLanguage } = useLanguage(); // Get the current language
-  const [toggle, setToggle] = useState("sale");
-  const [selectType, setSelectType] = useState("");
 
-  const [selectAqar, setSelectAqar] = useState(
-    translations[currentLanguage].aqar
-  );
-  const [placeType, setPlaceType] = useState("نوع المكان");
-  const [placeTypeDetails, setPlaceTypeDetails] = useState("");
+  const [toggle, setToggle] = useState("sale"); // sale/rent
+  const [selectVeiw, setSelectView] = useState("");
+  const [paymentWay, setPaymentWay] = useState("");
+  const [aqarSouq, setAqarSouq] = useState("");
+  const [finishing, setFinishing] = useState("");
 
-  const [selectVeiw, setSelectView] = useState(
-    translations[currentLanguage].chooseView
-  );
-  const [paymentWay, setPaymentWay] = useState(
-    translations[currentLanguage].paymentWay
-  );
-  const [aqarSouq, setAqarSouq] = useState(
-    translations[currentLanguage].aqarSouq
-  );
-  const [finishing, setFinishing] = useState(
-    translations[currentLanguage].finishing
+  const readFileAsDataURL = (file) =>
+    new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target.result);
+      reader.readAsDataURL(file);
+    });
+
+  // ------------------------------
+  // Add Unit
+  // ------------------------------
+// inside Compound3 component
+const handleAddUnit = async () => {
+  // Normalize images: keep File and preview string for each entry
+  const normalizedImages = await Promise.all(
+    currentUnit.aqarImages.map(async (image) => {
+      // If already an object { file, preview } return as-is
+      if (image && image.file instanceof File) return image;
+
+      // If it's a File, create a preview URL (do not convert to base64 to send)
+      if (image instanceof File) {
+        return {
+          file: image,
+          preview: URL.createObjectURL(image),
+        };
+      }
+
+      // If it's a string (base64 or url), keep it as preview, file=null
+      if (typeof image === "string") {
+        return { file: null, preview: image };
+      }
+
+      // If it's an object with url (from previous code), preserve file if present
+      if (image && image.url) {
+        return { file: image.file || null, preview: image.url };
+      }
+
+      return { file: null, preview: "" };
+    })
   );
 
-  const [rotate, setRotate] = useState(false);
-  const [rotate2, setRotate2] = useState(false);
-  const [rotatePlace, setRotatePlace] = useState(false);
-
-  const [showModal, setShowModal] = useState(false);
-  const [selectCompany, setSelectCompany] = useState(
-    translations[currentLanguage].company
-  );
-
-  const handleAddUnit = () => {
-    if (validateCurrentUnit()) {
-      setFormData((prev) => ({ ...prev, units: [...prev.units, currentUnit] }));
-      setCurrentUnit({
-        unitDetails: { unitType: "", aqarType: "" },
-        aqarDetails: { space: 0, price: 0 },
-      });
-    }
+  const newUnit = {
+    unitDetails: {
+      unitType: toggle,
+      aqarType: currentUnit.unitDetails.unitType,
+      announcementTitle: { ar: currentUnit.unitDetails.announcementTitle.ar },
+      announcementDetails: { ar: currentUnit.unitDetails.announcementDetails.ar },
+    },
+    aqarDetails: {
+      space: currentUnit.aqarDetails.space,
+      price: currentUnit.aqarDetails.price,
+      view: selectVeiw,
+      paymentType: paymentWay,
+      type: aqarSouq,
+      rooms: currentUnit.aqarDetails.rooms,
+      floor: currentUnit.aqarDetails.floor,
+      bathrooms: currentUnit.aqarDetails.bathrooms,
+      handingYear: currentUnit.aqarDetails.handingYear,
+      finishingType: finishing,
+    },
+    // keep normalized objects so you can preview and upload
+    aqarImages: normalizedImages,
   };
 
-  const validateCurrentUnit = () => {
-    // if (!currentUnit.unitDetails.unitType) {
-    //   alert("Please select a Unit Type.");
-    //   return false;
-    // }
-    // if (currentUnit.aqarDetails.space <= 0) {
-    //   alert("Please enter a valid space for the unit.");
-    //   return false;
-    // }
-    // if (currentUnit.aqarDetails.price <= 0) {
-    //   alert("Please enter a valid price for the unit.");
-    //   return false;
-    // }
-    return true;
+  setFormData((prev) => ({
+    ...prev,
+    units: [...prev.units, newUnit],
+  }));
+
+  // Reset and revoke previews from created object URLs
+  normalizedImages.forEach((img) => {
+    if (img && img.preview && img.file instanceof File) {
+      // Optional: revoke object URL later when not needed to avoid memory leaks:
+      // URL.revokeObjectURL(img.preview);
+    }
+  });
+
+  setCurrentUnit({
+    unitDetails: { unitType: "", aqarType: "", announcementTitle: { ar: "" }, announcementDetails: { ar: "" } },
+    aqarDetails: { space: "", price: "", view: "", paymentType: "", type: "", rooms: "", floor: "", bathrooms: "", handingYear: "", finishingType: "" },
+    aqarImages: [],
+  });
+  setSelectView("");
+  setPaymentWay("");
+  setAqarSouq("");
+  setFinishing("");
+};
+
+
+  // ------------------------------
+  // Remove Unit
+  // ------------------------------
+  const handleRemoveUnit = (indexToRemove) => {
+    setFormData((prev) => ({
+      ...prev,
+      units: prev.units.filter((_, index) => index !== indexToRemove),
+    }));
   };
 
   const tabs = [
@@ -82,286 +147,310 @@ const Compound3 = ({ formData, setFormData }) => {
   ];
 
   return (
-    <>
-      <FormField initialValues={formData}>
-        <div className="w-100">
-          {/* company Details */}
-          <SectionHeader text={"وحدات المشروع"} />
-          {formData.units.length > 0 && (
-            <div className="mt-4">
-              <SectionHeader text={"الوحدات المضافة"} />
-              {formData.units.map((unit, index) => (
+    <div className="w-100">
+      <SectionHeader text={"وحدات المشروع"} />
+
+      {/* Render Added Units */}
+      {formData.units.length > 0 && (
+        <div className="mt-4">
+          <SectionHeader text={"الوحدات المضافة"} />
+          <Row className="d-flex flex-wrap ">
+            {formData.units.map((unit, index) => (
+              <div className="col-4 position-relative" key={index}>
                 <RealStateCard
-                  key={index}
+                  id={index}
                   price={unit.aqarDetails.price}
                   space={unit.aqarDetails.space}
-                  company={true}
-                  connections={true}
-                  // You might need to map other unit details to RealStateCard props
-                  // For example, if unitDetails.unitType maps to a 'type' prop in RealStateCard
-                  // type={unit.unitDetails.unitType}
-                  // img={unit.aqarImages} // Assuming you have an array of images in currentUnit
+                  division={unit.unitDetails.unitType}
+                  img={unit.aqarImages.map((img) => img.preview)}
+                  bath={unit.aqarDetails.bathrooms}
+                  rooms={unit.aqarDetails.rooms}
+                  title={unit.unitDetails.announcementTitle.ar}
+                  details={unit.unitDetails.announcementDetails.ar}
+                  deleteItem={true}
+                  remove={handleRemoveUnit}
                   wrapperClass="flex-wrap"
                 />
-              ))}
-            </div>
-          )}
-          <div className="trade-card finishing">
-            <SectionHeader text={"تفاصيل الوحدة"} />
+              </div>
+            ))}
+          </Row>
+        </div>
+      )}
+
+      {/* ADD NEW UNIT */}
+      <div className="trade-card finishing">
+        <SectionHeader text={"تفاصيل الوحدة"} />
+
+        <label className="b-12 mb-2">
+          القسم <span className="required-asterisk">*</span>
+        </label>
+        <div className="select-type join tabs-home justify-content-center mb-4">
+          <SearchToggle
+            toggleState={toggle}
+            setToggleState={setToggle}
+            tabs={tabs}
+          />
+        </div>
+
+        {/* Property Type */}
+        <Row className=" gx-4 mb-4">
+          <Col xs={12} md={12}>
             <label className="b-12 mb-2">
-              القسم
+              نوع الوحدة <span className="required-asterisk">*</span>
+            </label>
+            <Dropdown
+              value={currentUnit.unitDetails.unitType}
+              onChange={(e) =>
+                setCurrentUnit((prev) => ({
+                  ...prev,
+                  unitDetails: { ...prev.unitDetails, unitType: e.value },
+                }))
+              }
+              options={translations[currentLanguage].aqarType}
+              optionLabel="label"
+              optionValue="value"
+              placeholder={translations[currentLanguage].aqar}
+            />
+          </Col>
+        </Row>
+
+        {/* location */}
+        <div className="mb-4 ">
+          <label className="b-12 mb-2">
+            عنوان الاعلان <span className="required-asterisk">*</span>
+          </label>
+          <input
+            name="announcementTitle"
+            className="form-control"
+            placeholder={"عنوان الاعلان"}
+            value={currentUnit.unitDetails.announcementTitle.ar}
+            onChange={(e) =>
+              setCurrentUnit((prev) => ({
+                ...prev,
+                unitDetails: {
+                  ...prev.unitDetails,
+                  announcementTitle: { ar: e.target.value },
+                },
+              }))
+            }
+          />
+        </div>
+
+        {/* Company */}
+        <div className="mb-4 ">
+          <label className="b-12 ">
+            تفاصيل الاعلان <span className="required-asterisk">*</span>
+          </label>
+          <TextArea
+            name="announcementDetails"
+            placeholder="تفاصيل الاعلان"
+            value={currentUnit.unitDetails.announcementDetails.ar}
+            onChange={(e) =>
+              setCurrentUnit((prev) => ({
+                ...prev,
+                unitDetails: {
+                  ...prev.unitDetails,
+                  announcementDetails: { ar: e.target.value },
+                },
+              }))
+            }
+          />
+        </div>
+
+        {/* Aqar Description */}
+        <SectionHeader text={"وصف العقار"} />
+        <Row className="g-3 mb-4">
+          <Col xs={12} md={2}>
+            <label className="b-12 mb-2">
+              المساحة بالمتر
               <span className="required-asterisk"> *</span>
             </label>
+            <input
+              type="number"
+              name="space"
+              placeholder={"2م"}
+              value={currentUnit.aqarDetails.space}
+              onChange={(e) =>
+                setCurrentUnit((prev) => ({
+                  ...prev,
+                  aqarDetails: { ...prev.aqarDetails, space: e.target.value },
+                }))
+              }
+              className="input-field form-control"
+            />
+          </Col>
+          <Col xs={12} md={2}>
+            <label className="b-12 mb-2">
+              تطل على <span className="required-asterisk"> *</span>
+            </label>
+            <Dropdown
+              value={selectVeiw}
+              onChange={(e) => setSelectView(e.value)}
+              options={translations[currentLanguage].view}
+              placeholder={translations[currentLanguage].chooseView}
+              optionValue="value"
+              optionLabel="label"
+            />
+          </Col>
+          <Col xs={12} md={2}>
+            <label className="b-12 mb-2">
+              التشطيب <span className="required-asterisk"> *</span>
+            </label>
+            <Dropdown
+              value={finishing}
+              onChange={(e) => setFinishing(e.value)}
+              options={translations[currentLanguage].finishingDetails}
+              placeholder={translations[currentLanguage].finishing}
+              optionValue="value"
+              optionLabel="label"
+            />
+          </Col>
+          <Col xs={12} md={3}>
+            <label className="b-12 mb-2">
+              طريقة الدفع <span className="required-asterisk"> *</span>
+            </label>
+            <Dropdown
+              value={paymentWay}
+              onChange={(e) => setPaymentWay(e.value)}
+              options={translations[currentLanguage].paymentWayDetails}
+              placeholder={translations[currentLanguage].paymentWay}
+              optionValue="value"
+              optionLabel="label"
+            />
+          </Col>
+          <Col xs={12} md={3}>
+            <label className="b-12 mb-2">
+              نوع العقار في السوق <span className="required-asterisk"> *</span>
+            </label>
+            <Dropdown
+              value={aqarSouq}
+              onChange={(e) => setAqarSouq(e.value)}
+              options={translations[currentLanguage].aqarSouqDetails}
+              placeholder={translations[currentLanguage].aqarSouq}
+              optionValue="value"
+              optionLabel="label"
+            />
+          </Col>
+          {/*  Rooms, Floor, Bathrooms, Year, Price  */}
+          <Col xs={12} md={2}>
+            <label className="b-12 mb-2">
+              عدد الغرف <span className="required-asterisk"> *</span>
+            </label>
+            <input
+              type="number"
+              name="rooms"
+              placeholder={"عدد الغرف"}
+              value={currentUnit.aqarDetails.rooms}
+              onChange={(e) =>
+                setCurrentUnit((prev) => ({
+                  ...prev,
+                  aqarDetails: { ...prev.aqarDetails, rooms: e.target.value },
+                }))
+              }
+              className="input-field form-control"
+            />
+          </Col>
+          <Col xs={12} md={2}>
+            <label className="b-12 mb-2">
+              الدور <span className="required-asterisk"> *</span>
+            </label>
+            <input
+              type="number"
+              name="floor"
+              placeholder={"الدور"}
+              value={currentUnit.aqarDetails.floor}
+              onChange={(e) =>
+                setCurrentUnit((prev) => ({
+                  ...prev,
+                  aqarDetails: { ...prev.aqarDetails, floor: e.target.value },
+                }))
+              }
+              className="input-field form-control"
+            />
+          </Col>
+          <Col xs={12} md={2}>
+            <label className="b-12 mb-2">
+              عدد الحمامات <span className="required-asterisk"> *</span>
+            </label>
+            <input
+              type="number"
+              name="bathrooms"
+              placeholder={"عدد الحمامات"}
+              value={currentUnit.aqarDetails.bathrooms}
+              onChange={(e) =>
+                setCurrentUnit((prev) => ({
+                  ...prev,
+                  aqarDetails: {
+                    ...prev.aqarDetails,
+                    bathrooms: e.target.value,
+                  },
+                }))
+              }
+              className="input-field form-control"
+            />
+          </Col>
+          <Col xs={12} md={3}>
+            <label className="b-12 mb-2">
+              سنة التسليم <span className="required-asterisk"> *</span>
+            </label>
+            <input
+              type="number"
+              name="handingYear"
+              placeholder={"سنة التسليم"}
+              value={currentUnit.aqarDetails.handingYear}
+              onChange={(e) =>
+                setCurrentUnit((prev) => ({
+                  ...prev,
+                  aqarDetails: {
+                    ...prev.aqarDetails,
+                    handingYear: e.target.value,
+                  },
+                }))
+              }
+              className="input-field form-control"
+            />
+          </Col>
+          <Col xs={12} md={3}>
+            <label className="b-12 mb-2">
+              السعر <span className="required-asterisk"> *</span>
+            </label>
+            <input
+              type="number"
+              name="price"
+              placeholder={"السعر"}
+              value={currentUnit.aqarDetails.price}
+              onChange={(e) =>
+                setCurrentUnit((prev) => ({
+                  ...prev,
+                  aqarDetails: { ...prev.aqarDetails, price: e.target.value },
+                }))
+              }
+              className="input-field form-control"
+            />
+          </Col>
+        </Row>
 
-            <div className="select-type join tabs-home justify-content-center mb-4">
-              <SearchToggle
-                toggleState={toggle}
-                setToggleState={setToggle}
-                tabs={tabs}
-              />
-            </div>
-
-            <Row className=" gx-4 mb-4">
-              <Col xs={12} md={12}>
-                <label className="b-12 mb-2">
-                  نوع العقار
-                  <span className="required-asterisk"> *</span>
-                </label>
-                <Dropdown
-                  value={currentUnit.unitDetails.unitType}
-                  onChange={(e) => {
-                    setCurrentUnit((prev) => ({
-                      ...prev,
-                      unitDetails: { ...prev.unitDetails, unitType: e.value },
-                    }));
-                  }}
-                  options={translations[currentLanguage].aqarType}
-                  optionLabel="label" // هيعرض اللي في label
-                  optionValue="value" // هيخزن value (انجليزي)
-                  name="type"
-                  placeholder={translations[currentLanguage].aqar}
-                />
-              </Col>
-            </Row>
-
-            {/* location */}
-            <div className="row">
-              <div className="mb-4 w-100">
-                <label className="b-12 mb-2">
-                  عنوان الاعلان <span className="required-asterisk">*</span>
-                </label>
-                <InputFiled name="location" placeholder={"عنوان الاعلان"} />
-              </div>
-              {/* <div className="mb-4 w-50 ">
-                <label className="b-12 mb-2">
-                  عنوان الاعلان بالانجليزي{" "}
-                  <span className="required-asterisk">*</span>
-                </label>
-                <InputFiled name="location" placeholder={"عنوان الاعلان"} />
-              </div> */}
-            </div>
-
-            {/* Company */}
-            <div className="mb-4 ">
-              <label className="b-12 ">
-                تفاصيل الاعلان <span className="required-asterisk">*</span>
-              </label>
-              <TextArea name="location" placeholder={"عنوان الاعلان"} />
-            </div>
-
-            {/* <div className="mb-4 ">
-              <label className="b-12 ">
-                تفاصيل الاعلان بالانجليزي
-                <span className="required-asterisk">*</span>
-              </label>
-              <TextArea
-                name="location"
-                placeholder={"عنوان الاعلان بالانجليزي"}
-              />
-            </div> */}
-
-            {/* Aqar description */}
-            <SectionHeader text={" وصف العقار"} />
-
-            {/* Row 1 */}
-            {/* size */}
-            <Row className="g-3 mb-4">
-              <Col xs={12} md={2}>
-                <label className="b-12 mb-2">
-                  المساحة (بالمتر) <span className="required-asterisk"> *</span>
-                </label>
-                <InputFiled
-                  name="space"
-                  placeholder={"2م"}
-                  value={currentUnit.aqarDetails.space}
-                  onChange={(e) =>
-                    setCurrentUnit((prev) => ({
-                      ...prev,
-                      aqarDetails: {
-                        ...prev.aqarDetails,
-                        space: e.target.value,
-                      },
-                    }))
-                  }
-                />
-              </Col>
-              {/* front of house */}
-              <Col xs={12} md={2}>
-                <label className="b-12 mb-2">
-                  تطل على<span className="required-asterisk"> *</span>
-                </label>
-                <Dropdown
-                  value={selectVeiw}
-                  onChange={(e) => {
-                    setSelectView(e.value);
-                    setFieldValue("view", e.value);
-                  }}
-                  options={translations[currentLanguage].view}
-                  placeholder={translations[currentLanguage].chooseView}
-                  name="view"
-                  className="hide-scrollbar"
-                  optionValue="value" // هيخزن value (انجليزي)
-                  optionLabel="label" // هيعرض اللي في label
-                ></Dropdown>
-              </Col>
-
-              {/* Finishing */}
-              <Col xs={12} md={2}>
-                <label className="b-12 mb-2">
-                  نوع التطشيب <span className="required-asterisk"> *</span>
-                </label>
-                <Dropdown
-                  value={finishing}
-                  onChange={(e) => {
-                    setFinishing(e.value);
-                    setFieldValue("finishing", e.value);
-                  }}
-                  options={translations[currentLanguage].finishingDetails}
-                  placeholder={translations[currentLanguage].finishing}
-                  name="finishing"
-                >
-                  optionValue="value" // هيخزن value (انجليزي)
-                  optionLabel="label" // هيعرض اللي في label
-                </Dropdown>
-              </Col>
-
-              {/* payment */}
-              <Col xs={12} md={3}>
-                <label className="b-12 mb-2">
-                  طريقة الدفع<span className="required-asterisk"> *</span>
-                </label>
-                <Dropdown
-                  value={paymentWay}
-                  onChange={(e) => {
-                    setPaymentWay(e.value);
-                    setFieldValue("paymentMethod", e.value);
-                  }}
-                  options={translations[currentLanguage].paymentWayDetails}
-                  placeholder={translations[currentLanguage].paymentWay}
-                  name="paymentMethod"
-                  className="hide-scrollbar"
-                  optionValue="value" // هيخزن value (انجليزي)
-                  optionLabel="label" // هيعرض اللي في label
-                ></Dropdown>
-              </Col>
-
-              {/* aqar souq */}
-              <Col xs={12} md={3}>
-                <label className="b-12 mb-2">
-                  نوع العقار ف السوق{" "}
-                  <span className="required-asterisk"> *</span>
-                </label>
-                <Dropdown
-                  value={aqarSouq}
-                  onChange={(e) => {
-                    setAqarSouq(e.value);
-                    setFieldValue("propertyType", e.value);
-                  }}
-                  options={translations[currentLanguage].aqarSouqDetails}
-                  placeholder={translations[currentLanguage].aqarSouq}
-                  name="propertyType"
-                  optionValue="value" // هيخزن value (انجليزي)
-                  optionLabel="label" // هيعرض اللي في label
-                ></Dropdown>
-              </Col>
-
-              {/* rooms number */}
-              <Col xs={12} md={2}>
-                <label className="b-12 mb-2">
-                  عدد الغرف <span className="required-asterisk"> *</span>
-                </label>
-                <InputFiled name="rooms" placeholder={"عدد الغرف"} />
-              </Col>
-
-              {/* no.floor */}
-              <Col xs={12} md={2}>
-                <label className="b-12 mb-2">
-                  الدور <span className="required-asterisk"> *</span>
-                </label>
-                <InputFiled name="floor" placeholder={" رقم الدور "} />
-              </Col>
-
-              {/* no.Bathroom */}
-              <Col xs={12} md={2}>
-                <label className="b-12 mb-2">
-                  الحمامات <span className="required-asterisk"> *</span>
-                </label>
-                <InputFiled name="bathrooms" placeholder={" عدد الحمامات "} />
-              </Col>
-
-              {/* Row 2 */}
-
-              {/* no.Year */}
-              <Col xs={12} md={3}>
-                <label className="b-12 mb-2">
-                  سنة التسليم <span className="required-asterisk"> *</span>
-                </label>
-                <InputFiled
-                  name="handoverYear"
-                  placeholder={"حدد سنة التسليم "}
-                />
-              </Col>
-              {/* price */}
-              <Col xs={12} md={3}>
-                <label className="b-12 mb-2">
-                  السعر <span className="required-asterisk"> *</span>
-                </label>
-                <InputFiled
-                  name="price"
-                  placeholder={"السعر"}
-                  value={currentUnit.aqarDetails.price}
-                  onChange={(e) =>
-                    setCurrentUnit((prev) => ({
-                      ...prev,
-                      aqarDetails: {
-                        ...prev.aqarDetails,
-                        price: e.target.value,
-                      },
-                    }))
-                  }
-                />
-              </Col>
-            </Row>
-
-            <SectionHeader text={"صور المشروع"} />
-            <div className="mb-4">
-              <ImageUploadGrid name={"units[index][aqarImages]"} />
-            </div>
-
-            <button
-              type="button"
-              className="btn-main btn-submit b-11"
-              onClick={(e) => {
-                e.preventDefault();
-                handleAddUnit();
-              }}
-            >
-              إضافة الوحدة
-            </button>
-          </div>
+        {/* IMAGES */}
+        <SectionHeader text={"صور الوحدة"} />
+        <div className="mb-4">
+          <ImageUploadCompound
+            value={currentUnit.aqarImages}
+            onChange={(imgs) =>
+              setCurrentUnit((prev) => ({ ...prev, aqarImages: imgs }))
+            }
+          />
         </div>
-      </FormField>
-    </>
+
+        {/* Add Unit Button */}
+        <button
+          type="button"
+          className="btn-main btn-submit b-11"
+          onClick={handleAddUnit}
+        >
+          إضافة الوحدة
+        </button>
+      </div>
+    </div>
   );
 };
 

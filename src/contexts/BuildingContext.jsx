@@ -55,11 +55,11 @@ export const BuildingProvider = ({ children }) => {
     }
   }, [fetchBuilding]);
 
-  const fetchMyBuildings = useCallback(async () => {
+  const fetchMyBuildings = useCallback(async (status) => {
     setMyBuildingsLoading(true);
     setMyBuildingsError(null);
     try {
-      const response = await BuildingAPI.getMyBuildings();
+      const response = await BuildingAPI.getMyBuildings(status);
       setMyBuildings(response.data);
       setMyBuildingsLoaded(true);
     } catch (err) {

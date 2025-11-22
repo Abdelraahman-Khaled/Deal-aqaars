@@ -5,15 +5,10 @@ import { Skeleton } from 'primereact/skeleton';
 
 const HomePoster = () => {
     const { ads, loading } = useAds();
-
-    if (loading) {
-        return <Skeleton width="100%" height="15.625rem" borderRadius="16px"></Skeleton>
-            ;
-    }
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     const images = loading ? [] : ads[2].images.map((img) => img.url);
 
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -22,6 +17,11 @@ const HomePoster = () => {
 
         return () => clearInterval(interval);
     }, [images.length]);
+
+    if (loading) {
+        return <Skeleton width="100%" height="15.625rem" borderRadius="16px"></Skeleton>
+        ;
+    }
 
     return (
         <div className='home-poster'>

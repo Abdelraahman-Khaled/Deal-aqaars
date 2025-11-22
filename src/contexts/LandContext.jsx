@@ -42,11 +42,11 @@ export const LandProvider = ({ children }) => {
     }
   }, []);
 
-  const fetchMyLands = useCallback(async () => {
+  const fetchMyLands = useCallback(async (status) => {
     setMyLandsLoading(true);
     setMyLandsError(null);
     try {
-      const response = await LandAPI.getMyLands();
+      const response = await LandAPI.getMyLands(status);
       setMyLands(response.data);
       setMyLandsLoaded(true);
     } catch (err) {

@@ -18,6 +18,12 @@ const GuideBuilding = ({ title }) => {
   const [building, setBuilding] = useState([]);
   const [loading, setLoading] = useState(false);
   const [pagenation, setPagenation] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handlePageChange = ({ selected }) => {
+    setCurrentPage(selected + 1);
+    fetchProperties(selected + 1);
+  };
 
   const ShowType = [
     { value: "nest", label: translations[currentLanguage].nest },
@@ -54,7 +60,7 @@ const GuideBuilding = ({ title }) => {
     <div className=" guide compound d-flex flex-wrap  flex-md-row  justify-content-between">
       <div className="d-flex space-6 flex-column col-12  col-lg-8 ">
         <div className="d-flex flex-wrap space-3 justify-content-between align-items-center">
-        <h6>{title}</h6>
+          <h6>{title}</h6>
           <div className="d-flex space-3 flex-wrap">
             {/* Drop Down */}
             <DropDown

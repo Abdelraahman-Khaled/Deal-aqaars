@@ -220,28 +220,8 @@ const JoinAqar = () => {
                       placeholder={translations[currentLanguage].aqar}
                     />
                   </Col>
-                  {/* <Col xs={12} md={4}>
-                    <label className="b-12 mb-2">
-                      نوع العقار في السوق
-                      <span className="required-asterisk"> *</span>
-                    </label>
-                    <div onClick={() => setRotate2(!rotate2)}>
-                      <div onClick={() => setRotatePlace(!rotatePlace)}>
-                        <PlaceTypeDropdown
-                          placeType={placeType}
-                          placeTypeDetails={placeTypeDetails}
-                          tabsKind={tabsKind}
-                          rotate={rotatePlace}
-                          onChange={(value) => {
-                            setSelectType(value);
-                            setFieldValue("propertyType", value);
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </Col> */}
+               
                 </Row>
-                {/* <NestedDropdownAccordion data={nestedLocationData} title="عنوان العقار" placeholder="اختر المكان" /> */}
 
                 {/* Details */}
                 <SectionHeader text={"تفاصيل العقار"} />

@@ -1,54 +1,52 @@
-import React from "react";
 import CompoundCard from "../../../../Components/Ui/CompoundCard/CompoundCard";
-import compoundImg from "../../../../assets/images/compounds/compound.png";
-import compoundImg1 from "../../../../assets/images/compounds/compound1.png";
-import compoundImg2 from "../../../../assets/images/compounds/compound2.png";
 import Slidercontainer from "../../../../Components/Slider/Slidercontainer";
+import { useCompound } from "../../../../contexts/CompoundContext";
+import { useEffect } from "react";
+import { Skeleton } from "primereact/skeleton";
 
 const CompoundSlider = () => {
-    const data = [
-        {
-            id: 1,
-            title: "IL Monte Galala - إل مونت جلاله",
-            location: "العين السخنة - البحر الأحمر",
-            details: "ستوديو ، ستوديو بحديقة ، شقه غرفتين ، ...",
-            price: "7,457,874",
-            img: compoundImg,
-        },
-        {
-            id: 2,
-            title: "IL Monte Galala - إل مونت جلاله",
-            location: "العين السخنة - البحر الأحمر",
-            details: "ستوديو ، ستوديو بحديقة ، شقه غرفتين ، ...",
-            price: "7,457,874",
-            img: compoundImg1,
-        },
-        {
-            id: 3,
-            title: "IL Monte Galala - إل مونت جلاله",
-            location: "العين السخنة - البحر الأحمر",
-            details: "ستوديو ، ستوديو بحديقة ، شقه غرفتين ، ...",
-            price: "7,457,874",
-            img: compoundImg2,
-        },
-    ];
+  const { allCompounds, fetchAllCompounds, loading, error } = useCompound();
 
+  useEffect(() => {
+    fetchAllCompounds()
+  }, [])
+
+  if (loading) {
     return (
-        <Slidercontainer>
-            {data.map((card, index) => (
-                <CompoundCard
-                    key={index}
-                    title={card.title}
-                    location={card.location}
-                    details={card.details}
-                    price={card.price}
-                    img={card.img}
-                    slider={true}
-                    wrapperClass="flex-wrap"
-                />
-            ))}
-        </Slidercontainer>
+      <Slidercontainer>
+        {Array.from({ length: 4 }).map((_, index) => (
+          <div key={index} className="p-2">
+            <Skeleton height="200px" className="mb-3" borderRadius="10px"></Skeleton>
+            <div className="d-flex justify-content-between mb-2">
+              <Skeleton width="30%" height="1rem"></Skeleton>
+              <Skeleton width="20%" height="1rem"></Skeleton>
+            </div>
+            <Skeleton width="80%" height="1rem" className="mb-2"></Skeleton>
+            <Skeleton width="60%" height="1rem" className="mb-2"></Skeleton>
+          </div>
+        ))}
+      </Slidercontainer>
     );
+  }
+
+
+  return (
+    <Slidercontainer>
+      {allCompounds.map((card, index) => (
+        <CompoundCard
+          id={card._id}
+          key={index}
+          title={card.announcementLocation}
+          location={card.location.detailedLocation}
+          details={card.details.ar}
+          price={""}
+          img={card.compoundImages}
+          slider={true}
+          wrapperClass="flex-wrap"
+        />
+      ))}
+    </Slidercontainer>
+  );
 };
 
 export default CompoundSlider;

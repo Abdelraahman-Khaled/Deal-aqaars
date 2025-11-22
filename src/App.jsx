@@ -27,14 +27,12 @@ import Trade from "./Pages/Trade/Trade";
 import NotFound from "./Pages/NotFound/NotFound";
 import ScrollToTop from "./Components/ScrollToTop/ScrollToTop";
 import JoinAqar from "./Pages/JoinUs/JoinAqar";
-import JoinCompany from "./Pages/JoinUs/JoinCompany";
 import JoinTrade from "./Pages/JoinUs/JoinTrade";
 import JoinFinish from "./Pages/JoinUs/JoinFinish";
 import { Provider } from "react-redux";
 import { store } from "./store";
 import VendorAds from "./Pages/MyAds/VendorAds";
 // import { ToastContainer } from "react-toastify";
-import AiBot from "./Components/AiBot/AiBot";
 import { PrimeReactProvider } from "primereact/api";
 import { CompoundProvider } from "./contexts/CompoundContext";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
@@ -53,6 +51,7 @@ import Factory from "./Pages/Factory/Factory";
 import FactoryDetails from "./Pages/Factory/FactoryDetails";
 import Adminstrative from "./Pages/Adminstrative/Adminstrative";
 import AdminstrativeDetails from "./Pages/Adminstrative/AdminstrativeDetails";
+import JoinCompound from "./Pages/JoinUs/JoinCompound";
 
 const App = () => {
   return (
@@ -105,7 +104,7 @@ const App = () => {
                             path="/building-guide/:id"
                             element={<BuildingDetails />}
                           />
-                          
+
                           {/* اراضي */}
                           <Route path="/land" element={<Land />} />
                           <Route
@@ -164,7 +163,7 @@ const App = () => {
                           />
                           <Route
                             path="/join-compound"
-                            element={<JoinCompany />}
+                            element={<JoinCompound />}
                           />
                           <Route path="/join-trade" element={<JoinTrade />} />
                           <Route path="/join-finish" element={<JoinFinish />} />

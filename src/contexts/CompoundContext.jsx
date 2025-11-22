@@ -13,6 +13,7 @@ export const useCompound = () => {
 
 export const CompoundProvider = ({ children }) => {
   const [compound, setCompound] = useState(null);
+  const [allCompounds, setAllCompounds] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -38,6 +39,22 @@ export const CompoundProvider = ({ children }) => {
     }
   }, []);
 
+  const fetchAllCompounds = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const allCompoundsData = await CompoundAPI.getAllCompounds();
+      setAllCompounds(allCompoundsData?.data);
+      return allCompoundsData;
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to fetch all compounds');
+      setAllCompounds([]);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   const clearCompound = useCallback(() => {
     setCompound(null);
     setError(null);
@@ -52,9 +69,11 @@ export const CompoundProvider = ({ children }) => {
 
   const value = {
     compound,
+    allCompounds,
     loading,
     error,
     fetchCompound,
+    fetchAllCompounds,
     clearCompound,
     refreshCompound,
   };

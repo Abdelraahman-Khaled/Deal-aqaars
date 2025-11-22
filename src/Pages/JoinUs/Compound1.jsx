@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { translations } from "./translations";
 import { useLanguage } from "../../Components/Languages/LanguageContext";
 import InputFiled from "../../Components/Forms/InputField";
@@ -13,20 +13,26 @@ import data from "../../data/cities.json";
 
 const Compound1 = ({ formData, setFormData }) => {
   const { currentLanguage } = useLanguage(); // Get the current language
+  const [isItemLoading] = useState(false);
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
-  const [isItemLoading, setIsItemLoading] = useState(false);
   const [locationDetails, setLocationDetails] = useState("");
-  const [city, setCity] = useState("");
 
-  const [showModal, setShowModal] = useState(false);
-  const [selectCompany, setSelectCompany] = useState(
-    translations[currentLanguage].company
-  );
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      location: {
+        ...prev.location,
+        detailedLocation: locationDetails,
+        coordinates: { type: "Point", coordinates: [longitude, latitude] },
+      },
+      announcementLocation:locationDetails,
+    }));
+  }, [locationDetails, latitude, longitude]);
 
   const options = [
-    { value: "compunds", label: "سكني" },
-    { value: "buldings", label: "تجاري" },
+    { value: "residential", label: "سكني" },
+    { value: "commercial", label: "تجاري" },
     { value: "administrative", label: "إداري" },
     { value: "mixed", label: "مختلط" },
   ];
@@ -50,10 +56,11 @@ const Compound1 = ({ formData, setFormData }) => {
       cursor: "pointer",
     }),
   };
+  console.log(formData);
 
   return (
     <>
-      <FormField initialValues={formData}>
+      <FormField>
         <div className="w-100">
           {/* company Details */}
           <SectionHeader text={"بيانات المشروع"} />
@@ -63,13 +70,14 @@ const Compound1 = ({ formData, setFormData }) => {
             <label className="b-12 mb-2">
               اسم الكمباوند <span className="required-asterisk">*</span>
             </label>
-            <InputFiled
+            <input
               name="name"
-              placeholder={"مثال: كمباوند الماسة – العاصمة الإدارية"}
+              className="form-control"
               value={formData.name}
               onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
+                setFormData((prev) => ({ ...prev, name: e.target.value }))
               }
+              placeholder="مثال: كمباوند الماسة – العاصمة الإدارية"
             />
           </div>
 
@@ -82,9 +90,9 @@ const Compound1 = ({ formData, setFormData }) => {
               options={options}
               styles={customStyles}
               placeholder="اختار نوع المشروع"
-              value={options.find(option => option.value === formData.projectType)}
-              onChange={(selectedOption) =>
-                setFormData({ ...formData, projectType: selectedOption ? selectedOption.value : '' })
+              value={options.find((option) => option.value === formData.type)}
+              onChange={(opt) =>
+                setFormData((prev) => ({ ...prev, type: opt ? opt.value : "" }))
               }
             />
           </div>
@@ -96,12 +104,16 @@ const Compound1 = ({ formData, setFormData }) => {
             <label className="b-12 mb-2">
               عنوان الاعلان <span className="required-asterisk">*</span>
             </label>
-            <InputFiled
+            <input
               name="location"
+              className="form-control"
               placeholder={"عنوان الاعلان"}
-              value={formData.location}
+              value={formData.title.ar}
               onChange={(e) =>
-                setFormData({ ...formData, location: e.target.value })
+                setFormData((prev) => ({
+                  ...prev,
+                  title: { ...prev.title, ar: e.target.value },
+                }))
               }
             />
           </div>
@@ -114,36 +126,15 @@ const Compound1 = ({ formData, setFormData }) => {
             <TextArea
               name="location-details"
               placeholder={"عنوان الاعلان"}
-              value={formData.locationDetails}
+              value={formData.details.ar}
               onChange={(e) =>
-                setFormData({ ...formData, locationDetails: e.target.value })
+                setFormData((prev) => ({
+                  ...prev,
+                  details: { ...prev.details, ar: e.target.value },
+                }))
               }
             />
           </div>
-
-          {/* location english  */}
-          {/* <div className="mb-4 ">
-            <label className="b-12 mb-2">
-              عنوان الاعلان بالانجليزي{" "}
-              <span className="required-asterisk">*</span>
-            </label>
-            <InputFiled
-              name="location-en"
-              placeholder={"عنوان الاعلان بالانجليزي"}
-            />
-          </div> */}
-
-          {/* Company */}
-          {/* <div className="mb-4 ">
-            <label className="b-12 ">
-              تفاصيل الاعلان بالانجليزي
-              <span className="required-asterisk">*</span>
-            </label>
-            <TextArea
-              name="location-details-en"
-              placeholder={"عنوان الاعلان بالانجليزي"}
-            />
-          </div> */}
 
           <SectionHeader text={"الموقع"} />
 
@@ -156,9 +147,12 @@ const Compound1 = ({ formData, setFormData }) => {
                 عنوان المشروع <span className="required-asterisk"> *</span>
               </label>
               <Dropdown
-                value={formData.city}
+                value={formData.location.city}
                 onChange={(e) => {
-                  setFormData({ ...formData, city: e.value });
+                  setFormData((prev) => ({
+                    ...prev,
+                    location: { ...prev.location, city: e.value },
+                  }));
                 }}
                 editable
                 options={data.map((item) => ({
@@ -181,13 +175,13 @@ const Compound1 = ({ formData, setFormData }) => {
 
             <div className="mb-5">
               <GoogleSearchBoxWithMap
-                setLatitude={(lat) => setFormData({ ...formData, latitude: lat })}
-                setLongitude={(lng) => setFormData({ ...formData, longitude: lng })}
+                setLatitude={setLatitude}
+                setLongitude={setLongitude}
                 isItemLoading={isItemLoading}
-                longitude={formData.longitude}
-                latitude={formData.latitude}
-                setLocationDetails={(details) => setFormData({ ...formData, locationDetails: details })}
-                locationDetails={formData.locationDetails}
+                longitude={longitude}
+                latitude={latitude}
+                setLocationDetails={setLocationDetails}
+                locationDetails={locationDetails}
               />
             </div>
           </div>

@@ -26,11 +26,13 @@ import { useBuilding } from "../../contexts/BuildingContext";
 import { useLand } from "../../contexts/LandContext";
 import { useFactory } from "../../contexts/FactoryContext";
 
+import CompoundAPI from "../../api/compoundApi";
+
 const VendorAds = () => {
   const { currentLanguage } = useLanguage(); // Get the current language
   const [toggle, setToggle] = useState("realestate");
   const [rotate, setRotate] = useState(false);
-  const [activeTab, setActiveTab] = useState("منشور");
+  const [activeTab, setActiveTab] = useState("approved");
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -38,6 +40,8 @@ const VendorAds = () => {
   const [swaps, setSwaps] = useState([]);
   const [swapsLoaded, setSwapsLoaded] = useState(false);
   const userType = useSelector((state) => state.userType.userType);
+  console.log(userType);
+
   const {
     myFinishingServices,
     fetchMyFinishingServices,
@@ -75,12 +79,17 @@ const VendorAds = () => {
   const [administrativeError, setAdministrativeError] = useState(null);
   const [administrativeLoaded, setAdministrativeLoaded] = useState(false);
 
-  
+  const [compounds, setCompounds] = useState([]);
+  const [compoundsLoading, setCompoundsLoading] = useState(true);
+  const [compoundsError, setCompoundsError] = useState(null);
+  const [compoundsLoaded, setCompoundsLoaded] = useState(false);
+
+
   // Fetch user's properties
-  const fetchMyProperties = async () => {
+  const fetchMyProperties = useCallback(async (status) => {
     try {
       setLoading(true);
-      const response = await PropertyAPI.getMyProperties();
+      const response = await PropertyAPI.getMyProperties(status);
       setProperties(response.data);
       setError(null);
     } catch (err) {
@@ -91,13 +100,32 @@ const VendorAds = () => {
       setLoading(false);
       setPropertiesLoaded(true);
     }
-  };
+  }, []);
+
+  // Fetch user's compounds
+  const fetchMyCompounds = useCallback(async (status) => {
+    try {
+      setCompoundsLoading(true);
+      const response = await CompoundAPI.getMyCompounds(status);
+      console.log("my-c", response.data);
+
+      setCompounds(response.data);
+      setCompoundsError(null);
+    } catch (err) {
+      console.error("Error fetching compounds:", err);
+      setCompoundsError(err.message || "Failed to fetch compounds");
+      setCompounds([]);
+    } finally {
+      setCompoundsLoading(false);
+      setCompoundsLoaded(true);
+    }
+  }, []);
 
   // Fetch user's swaps
-  const fetchMySwaps = async () => {
+  const fetchMySwaps = useCallback(async (status) => {
     try {
       setLoading(true);
-      const response = await SwapAPI.getMySwaps();
+      const response = await SwapAPI.getMySwaps(status);
       setSwaps(response.swaps);
       console.log("My Swaps:", response.swaps);
       setError(null);
@@ -109,33 +137,27 @@ const VendorAds = () => {
       setLoading(false);
       setSwapsLoaded(true);
     }
-  };
+  }, []);
 
   // Fetch user's finishing services
   // This function is now part of FinishingContext and called via useFinishing hook
 
-  const fetchMyBuildings = async () => {
-    if (!contextMyBuildingsLoaded) {
-      fetchMyBuildingsFromContext();
-    }
-  };
+  const fetchMyBuildings = useCallback(async (status) => {
+    fetchMyBuildingsFromContext(status);
+  }, [fetchMyBuildingsFromContext]);
 
-  const fetchMyLands = async () => {
-    if (!contextMyLandsLoaded) {
-      fetchMyLandsFromContext();
-    }
-  };
+  const fetchMyLands = useCallback(async (status) => {
+    fetchMyLandsFromContext(status);
+  }, [fetchMyLandsFromContext]);
 
-  const fetchMyFactories = useCallback(async () => {
-    if (!contextMyFactoriesLoaded) {
-      fetchMyFactoriesFromContext();
-    }
-  }, [contextMyFactoriesLoaded, fetchMyFactoriesFromContext]);
+  const fetchMyFactories = useCallback(async (status) => {
+    fetchMyFactoriesFromContext(status);
+  }, [fetchMyFactoriesFromContext]);
 
-  const fetchMyAdministrative = async () => {
+  const fetchMyAdministrative = useCallback(async (status) => {
     try {
       setAdministrativeLoading(true);
-      const response = await AdministrativeAPI.getMyAdministrative();
+      const response = await AdministrativeAPI.getMyAdministrative(status);
       setAdministrative(response.data);
       setAdministrativeError(null);
     } catch (err) {
@@ -148,67 +170,45 @@ const VendorAds = () => {
       setAdministrativeLoading(false);
       setAdministrativeLoaded(true);
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (toggle === "finishing") {
-      console.log(
-        "Toggle is finishing. myFinishingServicesLoaded:",
-        myFinishingServicesLoaded
-      );
-      console.log("Current myFinishingServices:", myFinishingServices);
-      console.log("Current finishingError:", finishingError);
-      if (!myFinishingServicesLoaded) {
-        fetchMyFinishingServices();
-      }
+      fetchMyFinishingServices(activeTab);
     } else if (toggle === "factory") {
-      fetchMyFactories();
+      fetchMyFactories(activeTab);
     } else if (toggle === "administrative") {
-      if (!administrativeLoaded) {
-        fetchMyAdministrative();
-      }
-    } else if (toggle === "factory") {
-      fetchMyFactories();
-    } else if (toggle === "administrative") {
-      if (!administrativeLoaded) {
-        fetchMyAdministrative();
-      }
+      fetchMyAdministrative(activeTab);
+    } else if (toggle === "project") {
+      fetchMyCompounds(activeTab);
     } else if (toggle === "swaps") {
-      if (!swapsLoaded) {
-        fetchMySwaps();
-      }
+      fetchMySwaps(activeTab);
     } else if (toggle === "building") {
-      fetchMyBuildings();
+      fetchMyBuildings(activeTab);
     } else if (toggle === "land") {
-      fetchMyLands();
-    } else if (toggle === "factory") {
-      fetchMyFactories();
+      fetchMyLands(activeTab);
     } else if (
       toggle !== "finishing" &&
       toggle !== "swaps" &&
       toggle !== "building" &&
       toggle !== "land" &&
       toggle !== "factory" &&
-      !propertiesLoaded
+      toggle !== "project" &&
+      toggle !== "administrative"
     ) {
-      fetchMyProperties();
+      fetchMyProperties(activeTab);
     }
   }, [
     toggle,
+    activeTab,
     fetchMyFinishingServices,
     fetchMySwaps,
     fetchMyBuildings,
     fetchMyLands,
     fetchMyFactories,
     fetchMyProperties,
-    propertiesLoaded,
-    myFinishingServicesLoaded,
-    myFinishingServices,
-    finishingError,
-    swapsLoaded,
-    contextMyBuildingsLoaded,
-    contextMyLandsLoaded,
-    contextMyFactoriesLoaded,
+    fetchMyCompounds,
+    fetchMyAdministrative
   ]);
 
   // Handle property deletion
@@ -228,7 +228,7 @@ const VendorAds = () => {
 
   const handleDeleteBuilding = async () => {
     fetchMyBuildingsFromContext();
-    }
+  }
 
   const handleDeleteLand = async () => {
     fetchMyLandsFromContext();
@@ -239,6 +239,10 @@ const VendorAds = () => {
   }
   const handleDeleteAdministrative = async () => {
     fetchMyAdministrative();
+  }
+
+  const handleDeleteCompound = async () => {
+    fetchMyCompounds();
   }
 
   const user = useSelector((state) => state.auth.user);
@@ -255,11 +259,7 @@ const VendorAds = () => {
   const tabsCompany = [
     { value: "realestate", label: translations[currentLanguage].realestate },
     { value: "project", label: translations[currentLanguage].project },
-    ...(user?.companyId
-      ? [{ value: "finishing", label: translations[currentLanguage].finishing }]
-      : []),
-    { value: "land", label: translations[currentLanguage].land },
-    { value: "factory", label: translations[currentLanguage].factory },
+    { value: "finishing", label: translations[currentLanguage].finishing },
   ];
 
   const organizing = ["الاكثر مشاهدة", "الاجدد", "الاقل سعر", "اعلي سعر"];
@@ -283,11 +283,11 @@ const VendorAds = () => {
 
   // status tabs
   const propertyTabs = [
-    { label: "منشور", active: true },
-    { label: "منتهي", active: false },
-    { label: "مرفوض", active: false },
-    { label: "قيد المراجعة", active: false },
-    { label: "محذوف", active: false },
+    { label: "منشور", value: "approved", active: true },
+    { label: "منتهي", value: "ended", active: false },
+    { label: "مرفوض", value: "rejected", active: false },
+    { label: "قيد المراجعة", value: "pending", active: false },
+    { label: "محذوف", value: "deleted", active: false },
   ];
 
   return (
@@ -394,10 +394,9 @@ const VendorAds = () => {
                 .map((tab, index) => (
                   <button
                     key={index}
-                    onClick={() => setActiveTab(tab.label)}
-                    className={`status ${
-                      activeTab === tab.label ? "clicked" : ""
-                    }`}
+                    onClick={() => setActiveTab(tab.value)}
+                    className={`status ${activeTab === tab.value ? "clicked" : ""
+                      }`}
                   >
                     {tab.label}
                   </button>
@@ -435,8 +434,8 @@ const VendorAds = () => {
                         subtitles={
                           service.servicesOffered
                             ? service.servicesOffered.map(
-                                (service) => service[currentLanguage]
-                              )
+                              (service) => service[currentLanguage]
+                            )
                             : service.services || service.subtitles
                         }
                         exprince={
@@ -520,6 +519,57 @@ const VendorAds = () => {
                   </div>
                 )
 
+              ) : toggle === "project" ? (
+                compoundsLoading ? (
+                  <div className="col-12 text-center py-5">
+                    <Loader />
+                    <p className="mt-2">جاري تحميل الكمبوندات...</p>
+                  </div>
+                ) : compoundsError ? (
+                  <div className="col-12 text-center py-5">
+                    <p className="text-danger">
+                      حدث خطأ في تحميل الكمبوندات: {compoundsError}
+                    </p>
+                    <button
+                      className="btn btn-primary mt-2"
+                      onClick={() => window.location.reload()}
+                    >
+                      إعادة المحاولة
+                    </button>
+                  </div>
+                ) : compounds && compounds.length > 0 ? (
+                  compounds.map((compound, index) => (
+                    <div
+                      key={compound._id || index}
+                      className="related-slider col-12 col-sm-6 col-lg-4  mt-0"
+                    >
+                      <CompanyProjectCard
+                        key={index}
+                        id={compound._id}
+                        title={compound.title[currentLanguage]}
+                        lat={compound.location.coordinates.coordinates[0]}
+                        lon={compound.location.coordinates.coordinates[1]}
+                        details={compound.details[currentLanguage]}
+                        location={compound.location.detailedLocation}
+                        price={compound.units?.[0]?.aqarDetails?.price || "N/A"} // Fallback price from first unit
+                        img={compound.compoundImages}
+                        slider={true}
+                        wrapperClass="flex-wrap"
+                        seen={"1"}
+                        likes={"2"}
+                        calls={"3"}
+                        onDelete={handleDeleteCompound}
+                      />
+                    </div>
+                  ))
+                ) : (
+                  <div className="d-flex flex-column justify-content-center align-items-center gap-4">
+                    <AddannouncementIcon />
+                    <p className="b-12 w-25 text-center">
+                      لا توجد كمبوندات خاصة بك.
+                    </p>
+                  </div>
+                )
               ) : toggle === "building" ? (
                 contextMyBuildingsLoading ? (
                   <div className="col-12 text-center py-5">
@@ -576,250 +626,250 @@ const VendorAds = () => {
                     </p>
                   </div>
                 )
-              ) 
-               : toggle === "administrative" ? (
-                administrativeLoading ? (
-                  <div className="col-12 text-center py-5">
-                    <Loader />
-                    <p className="mt-2">جاري تحميل إعلانات التجاري...</p>
-                  </div>
-                ) : administrativeError ? (
-                  <div className="col-12 text-center py-5">
-                    <p className="text-danger">
-                      حدث خطأ في تحميل إعلانات التجاري:{" "}
-                      {administrativeError}
-                    </p>
-                    <button
-                      className="btn btn-primary mt-2"
-                      onClick={() => window.location.reload()}
-                    >
-                      إعادة المحاولة
-                    </button>
-                  </div>
-                ) : administrative && administrative.length > 0 ? (
-                  administrative.map((building, index) => (
-                    <div
-                      key={building.id || index}
-                      className="related-slider col-12 col-sm-6 col-lg-4  mt-0"
-                    >
-                      <VendorAdsCard
-                        id={building._id}
-                        key={index}
-                        numAds={index + 1}
-                        date={building.createdAt}
-                        title={building.title[currentLanguage]}
-                        lat={building.location.coordinates.coordinates[0]}
-                        lon={building.location.coordinates.coordinates[1]}
-                        location={building.location.city}
-                        details={building.description[currentLanguage]}
-                        price={building.details.price}
-                        space={building.details.space}
-                        img={building.images}
-                        slider={true}
-                        wrapperClass="flex-wrap"
-                        seen={"1"}
-                        likes={"2"}
-                        calls={"3"}
-                        onDelete={handleDeleteAdministrative}
-                        model={"administrative"}
-                      />
+              )
+                : toggle === "administrative" ? (
+                  administrativeLoading ? (
+                    <div className="col-12 text-center py-5">
+                      <Loader />
+                      <p className="mt-2">جاري تحميل إعلانات التجاري...</p>
                     </div>
-                  ))
-                ) : (
-                  <div className="d-flex flex-column justify-content-center align-items-center gap-4">
-                    <AddannouncementIcon />
-                    <p className="b-12 w-25 text-center">
-                      لا توجد إعلانات مباني خاصة بك.
-                    </p>
-                  </div>
-                )
-              ) 
-              : toggle === "land" ? (
-                contextMyLandsLoading ? (
-                  <div className="col-12 text-center py-5">
-                    <Loader />
-                    <p className="mt-2">جاري تحميل إعلانات الأراضي...</p>
-                  </div>
-                ) : contextMyLandsError ? (
-                  <div className="col-12 text-center py-5">
-                    <p className="text-danger">
-                      حدث خطأ في تحميل إعلانات الأراضي: {
-                        contextMyLandsError
-                      }
-                    </p>
-                    <button
-                      className="btn btn-primary mt-2"
-                      onClick={() => window.location.reload()}
-                    >
-                      إعادة المحاولة
-                    </button>
-                  </div>
-                ) : myLands && myLands.length > 0 ? (
-                  myLands.map((land, index) => (
-                    <div
-                      key={land.id || index}
-                      className="related-slider col-12 col-sm-6 col-lg-4  mt-0"
-                    >
-                      <VendorAdsCard
-                        id={land._id}
-                        key={index}
-                        numAds={index + 1}
-                        date={land.createdAt}
-                        title={land.title[currentLanguage]}
-                        location={land.location.city}
-                        details={land.description[currentLanguage]}
-                        price={land.details.price}
-                        space={land.details.space}
-                        img={land.images}
-                        slider={true}
-                        wrapperClass="flex-wrap"
-                        seen={"1"}
-                        likes={"2"}
-                        calls={"3"}
-                        onDelete={handleDeleteLand}
-                        model={"land"}
-                      />
+                  ) : administrativeError ? (
+                    <div className="col-12 text-center py-5">
+                      <p className="text-danger">
+                        حدث خطأ في تحميل إعلانات التجاري:{" "}
+                        {administrativeError}
+                      </p>
+                      <button
+                        className="btn btn-primary mt-2"
+                        onClick={() => window.location.reload()}
+                      >
+                        إعادة المحاولة
+                      </button>
                     </div>
-                  ))
-                ) : (
-                  <div className="d-flex flex-column justify-content-center align-items-center gap-4">
-                    <AddannouncementIcon />
-                    <p className="b-12 w-25 text-center">
-                      لا توجد إعلانات أراضي خاصة بك.
-                    </p>
-                  </div>
-                )
-              ) : toggle === "factory" ? (
-                contextMyFactoriesLoading ? (
-                  <div className="col-12 text-center py-5">
-                    <Loader />
-                    <p className="mt-2">جاري تحميل إعلانات المصانع...</p>
-                  </div>
-                ) : contextMyFactoriesError ? (
-                  <div className="col-12 text-center py-5">
-                    <p className="text-danger">
-                      حدث خطأ في تحميل إعلانات المصانع: {
-                        contextMyFactoriesError
-                      }
-                    </p>
-                    <button
-                      className="btn btn-primary mt-2"
-                      onClick={() => window.location.reload()}
-                    >
-                      إعادة المحاولة
-                    </button>
-                  </div>
-                ) : myFactories && myFactories.length > 0 ? (
-                  myFactories.map((factory, index) => (
-                    <div
-                      key={factory.id || index}
-                      className="related-slider col-12 col-sm-6 col-lg-4  mt-0"
-                    >
-                      <VendorAdsCard
-                        id={factory._id}
-                        key={index}
-                        numAds={index + 1}
-                        date={factory.createdAt}
-                        title={factory.title[currentLanguage]}
-                        lat={factory.location.coordinates.coordinates[0]}
-                        lon={factory.location.coordinates.coordinates[1]}
-                        location={factory.location.city}
-                        details={factory.description[currentLanguage]}
-                        price={factory.details.price}
-                        space={factory.details.space}
-                        img={factory.images}
-                        slider={true}
-                        wrapperClass="flex-wrap"
-                        seen={"1"}
-                        likes={"2"}
-                        calls={"3"}
-                        onDelete={handleDeleteFactory}
-                        model={"factory"}
-                      />
+                  ) : administrative && administrative.length > 0 ? (
+                    administrative.map((building, index) => (
+                      <div
+                        key={building.id || index}
+                        className="related-slider col-12 col-sm-6 col-lg-4  mt-0"
+                      >
+                        <VendorAdsCard
+                          id={building._id}
+                          key={index}
+                          numAds={index + 1}
+                          date={building.createdAt}
+                          title={building.title[currentLanguage]}
+                          lat={building.location.coordinates.coordinates[0]}
+                          lon={building.location.coordinates.coordinates[1]}
+                          location={building.location.city}
+                          details={building.description[currentLanguage]}
+                          price={building.details.price}
+                          space={building.details.space}
+                          img={building.images}
+                          slider={true}
+                          wrapperClass="flex-wrap"
+                          seen={"1"}
+                          likes={"2"}
+                          calls={"3"}
+                          onDelete={handleDeleteAdministrative}
+                          model={"administrative"}
+                        />
+                      </div>
+                    ))
+                  ) : (
+                    <div className="d-flex flex-column justify-content-center align-items-center gap-4">
+                      <AddannouncementIcon />
+                      <p className="b-12 w-25 text-center">
+                        لا توجد إعلانات مباني خاصة بك.
+                      </p>
                     </div>
-                  ))
-                ) : (
-                  <div className="d-flex flex-column justify-content-center align-items-center gap-4">
-                    <AddannouncementIcon />
-                    <p className="b-12 w-25 text-center">
-                      لا توجد إعلانات مصانع خاصة بك.
-                    </p>
-                  </div>
+                  )
                 )
-              ) : loading ? (
-                <div className="col-12 text-center py-5">
-                  <Loader />
-                  <p className="mt-2">جاري تحميل الإعلانات...</p>
-                </div>
-              ) : error ? (
-                <div className="col-12 text-center py-5">
-                  <p className="text-danger">
-                    حدث خطأ في تحميل الإعلانات: {error}
-                  </p>
-                  <button
-                    className="btn btn-primary mt-2"
-                    onClick={() => window.location.reload()}
-                  >
-                    إعادة المحاولة
-                  </button>
-                </div>
-              ) : properties.length > 0 ? (
-                properties.map((property, index) => (
-                  <div
-                    key={property.id || index}
-                    className="related-slider col-12 col-sm-6 col-lg-4  mt-0"
-                  >
-                    {toggle === "realestate" ? (
-                      <VendorAdsCard
-                        numAds={index + 1}
-                        type={property.division}
-                        key={index}
-                        id={property._id}
-                        price={property.details.price}
-                        rooms={property.details.rooms}
-                        bath={property.details.bathrooms}
-                        space={property.details.space}
-                        title={property.title[currentLanguage]}
-                        location={property.location.detailedLocation}
-                        img={property.images}
-                        listedBy={property.listedBy}
-                        phoneNumber={property.contact?.phoneNumber}
-                        hasWhatsapp={property.contact?.hasWhatsapp}
-                        since={property.createdAt}
-                        seen={"1"}
-                        likes={"1"}
-                        calls={"1"}
-                        date={property.createdAt}
-                        onDelete={handleDeleteProperty}
-                        propertyData={property}
-                        model={"property"}
-                      />
-                    ) : toggle === "project" ? (
-                      <CompanyProjectCard
-                        key={index}
-                        title={property.title[currentLanguage]}
-                        lat={property.location.coordinates[0]}
-                        lon={property.location.coordinates[1]}
-                        details={property.description[currentLanguage]}
-                        price={property.details.price}
-                        img={property.images}
-                        slider={true}
-                        wrapperClass="flex-wrap"
-                        seen={"1"}
-                        likes={"2"}
-                        calls={"3"}
-                      />
-                    ) : null}
-                  </div>
-                ))
-              ) : (
-                <div className="d-flex flex-column justify-content-center align-items-center gap-4">
-                  <AddannouncementIcon />
-                  <p className="b-12 w-25 text-center">
-                    لا توجد إعلانات عقارية خاصة بك.
-                  </p>
-                </div>
-              )}
+                  : toggle === "land" ? (
+                    contextMyLandsLoading ? (
+                      <div className="col-12 text-center py-5">
+                        <Loader />
+                        <p className="mt-2">جاري تحميل إعلانات الأراضي...</p>
+                      </div>
+                    ) : contextMyLandsError ? (
+                      <div className="col-12 text-center py-5">
+                        <p className="text-danger">
+                          حدث خطأ في تحميل إعلانات الأراضي: {
+                            contextMyLandsError
+                          }
+                        </p>
+                        <button
+                          className="btn btn-primary mt-2"
+                          onClick={() => window.location.reload()}
+                        >
+                          إعادة المحاولة
+                        </button>
+                      </div>
+                    ) : myLands && myLands.length > 0 ? (
+                      myLands.map((land, index) => (
+                        <div
+                          key={land.id || index}
+                          className="related-slider col-12 col-sm-6 col-lg-4  mt-0"
+                        >
+                          <VendorAdsCard
+                            id={land._id}
+                            key={index}
+                            numAds={index + 1}
+                            date={land.createdAt}
+                            title={land.title[currentLanguage]}
+                            location={land.location.city}
+                            details={land.description[currentLanguage]}
+                            price={land.details.price}
+                            space={land.details.space}
+                            img={land.images}
+                            slider={true}
+                            wrapperClass="flex-wrap"
+                            seen={"1"}
+                            likes={"2"}
+                            calls={"3"}
+                            onDelete={handleDeleteLand}
+                            model={"land"}
+                          />
+                        </div>
+                      ))
+                    ) : (
+                      <div className="d-flex flex-column justify-content-center align-items-center gap-4">
+                        <AddannouncementIcon />
+                        <p className="b-12 w-25 text-center">
+                          لا توجد إعلانات أراضي خاصة بك.
+                        </p>
+                      </div>
+                    )
+                  ) : toggle === "factory" ? (
+                    contextMyFactoriesLoading ? (
+                      <div className="col-12 text-center py-5">
+                        <Loader />
+                        <p className="mt-2">جاري تحميل إعلانات المصانع...</p>
+                      </div>
+                    ) : contextMyFactoriesError ? (
+                      <div className="col-12 text-center py-5">
+                        <p className="text-danger">
+                          حدث خطأ في تحميل إعلانات المصانع: {
+                            contextMyFactoriesError
+                          }
+                        </p>
+                        <button
+                          className="btn btn-primary mt-2"
+                          onClick={() => window.location.reload()}
+                        >
+                          إعادة المحاولة
+                        </button>
+                      </div>
+                    ) : myFactories && myFactories.length > 0 ? (
+                      myFactories.map((factory, index) => (
+                        <div
+                          key={factory.id || index}
+                          className="related-slider col-12 col-sm-6 col-lg-4  mt-0"
+                        >
+                          <VendorAdsCard
+                            id={factory._id}
+                            key={index}
+                            numAds={index + 1}
+                            date={factory.createdAt}
+                            title={factory.title[currentLanguage]}
+                            lat={factory.location.coordinates.coordinates[0]}
+                            lon={factory.location.coordinates.coordinates[1]}
+                            location={factory.location.city}
+                            details={factory.description[currentLanguage]}
+                            price={factory.details.price}
+                            space={factory.details.space}
+                            img={factory.images}
+                            slider={true}
+                            wrapperClass="flex-wrap"
+                            seen={"1"}
+                            likes={"2"}
+                            calls={"3"}
+                            onDelete={handleDeleteFactory}
+                            model={"factory"}
+                          />
+                        </div>
+                      ))
+                    ) : (
+                      <div className="d-flex flex-column justify-content-center align-items-center gap-4">
+                        <AddannouncementIcon />
+                        <p className="b-12 w-25 text-center">
+                          لا توجد إعلانات مصانع خاصة بك.
+                        </p>
+                      </div>
+                    )
+                  ) : loading ? (
+                    <div className="col-12 text-center py-5">
+                      <Loader />
+                      <p className="mt-2">جاري تحميل الإعلانات...</p>
+                    </div>
+                  ) : error ? (
+                    <div className="col-12 text-center py-5">
+                      <p className="text-danger">
+                        حدث خطأ في تحميل الإعلانات: {error}
+                      </p>
+                      <button
+                        className="btn btn-primary mt-2"
+                        onClick={() => window.location.reload()}
+                      >
+                        إعادة المحاولة
+                      </button>
+                    </div>
+                  ) : properties.length > 0 ? (
+                    properties.map((property, index) => (
+                      <div
+                        key={property.id || index}
+                        className="related-slider col-12 col-sm-6 col-lg-4  mt-0"
+                      >
+                        {toggle === "realestate" ? (
+                          <VendorAdsCard
+                            numAds={index + 1}
+                            type={property.division}
+                            key={index}
+                            id={property._id}
+                            price={property.details.price}
+                            rooms={property.details.rooms}
+                            bath={property.details.bathrooms}
+                            space={property.details.space}
+                            title={property.title[currentLanguage]}
+                            location={property.location.detailedLocation}
+                            img={property.images}
+                            listedBy={property.listedBy}
+                            phoneNumber={property.contact?.phoneNumber}
+                            hasWhatsapp={property.contact?.hasWhatsapp}
+                            since={property.createdAt}
+                            seen={"1"}
+                            likes={"1"}
+                            calls={"1"}
+                            date={property.createdAt}
+                            onDelete={handleDeleteProperty}
+                            propertyData={property}
+                            model={"property"}
+                          />
+                        ) : toggle === "project" ? (
+                          <CompanyProjectCard
+                            key={index}
+                            title={property.title[currentLanguage]}
+                            lat={property.location.coordinates[0]}
+                            lon={property.location.coordinates[1]}
+                            details={property.description[currentLanguage]}
+                            price={property.details.price}
+                            img={property.images}
+                            slider={true}
+                            wrapperClass="flex-wrap"
+                            seen={"1"}
+                            likes={"2"}
+                            calls={"3"}
+                          />
+                        ) : null}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="d-flex flex-column justify-content-center align-items-center gap-4">
+                      <AddannouncementIcon />
+                      <p className="b-12 w-25 text-center">
+                        لا توجد إعلانات عقارية خاصة بك.
+                      </p>
+                    </div>
+                  )}
             </div>
           </div>
         </div>

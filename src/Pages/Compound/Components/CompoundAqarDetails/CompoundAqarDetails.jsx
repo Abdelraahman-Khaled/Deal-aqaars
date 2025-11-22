@@ -124,6 +124,7 @@ const CompoundAqarDetails = () => {
       </div>
     );
   }
+
   return (
     <>
       <HelmetInfo
@@ -146,7 +147,7 @@ const CompoundAqarDetails = () => {
                 selectedUnit?.unitDetails.aqarType +
                 "  " +
                 selectedUnit?.aqarDetails.space +
-                " "+
+                " " +
                 "متر مربع"
               }
             />
@@ -154,11 +155,7 @@ const CompoundAqarDetails = () => {
 
           <main>
             <PropertyShowcaseExample
-              images={
-                compounds?.compoundImages?.length > 0
-                  ? compounds?.compoundImages.map((item) => item.url)
-                  : []
-              }
+              images={selectedUnit?.aqarImages?.map((item) => item.url) || []}
               location={compound?.location?.detailedLocation}
               lat={compound?.location?.coordinates.coordinates[0]}
               lon={compound?.location?.coordinates.coordinates[1]}
@@ -175,7 +172,7 @@ const CompoundAqarDetails = () => {
                   description={compound?.details[currentLanguage]}
                 />
                 <UnitDetails data={unitDetails} />
-                <AdsDescription title={"وصف الاعلان"}  description={selectedUnit?.unitDetails?.announcementDetails.ar}/>
+                <AdsDescription title={"وصف الاعلان"} description={selectedUnit?.unitDetails?.announcementDetails.ar} />
                 <Map
                   lat={compound?.location?.coordinates.coordinates[0]}
                   lon={compound?.location?.coordinates.coordinates[1]}

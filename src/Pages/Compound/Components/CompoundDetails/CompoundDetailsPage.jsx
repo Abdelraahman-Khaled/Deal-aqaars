@@ -70,7 +70,7 @@ const CompoundDetailsPage = () => {
         );
     }
 
-    
+
     return (
         <>
             <HelmetInfo titlePage={currentLanguage === "ar" ? "دليل الكومباوندات" : "Compounds Guide"} />

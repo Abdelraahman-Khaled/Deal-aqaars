@@ -66,7 +66,7 @@ export const translations = {
     ],
     finishing: "Choose type of finishing",
     finishingDetails: [
-      { label: "extra super lux", value: "extraSuperLux" },
+      // { label: "extra super lux", value: "extraSuperLux" },
       { label: "super lux", value: "superLux" },
       { label: "lux", value: "lux" },
       { label: "semi-finished", value: "semiFinished" },
@@ -143,7 +143,7 @@ export const translations = {
     ],
     finishing: "التشطيب عامل إزاي",
     finishingDetails: [
-      { label: "اكسترا سوبر لوكس", value: "extraSuperLux" },
+      // { label: "اكسترا سوبر لوكس", value: "extraSuperLux" },
       { label: "سوبر لوكس", value: "superLux" },
       { label: "لوكس", value: "lux" },
       { label: "نص تشطيب", value: "semiFinished" },

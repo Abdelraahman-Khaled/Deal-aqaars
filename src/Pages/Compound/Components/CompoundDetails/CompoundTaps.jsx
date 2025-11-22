@@ -4,9 +4,9 @@ import SpaceBox from '../../../../Components/Ui/SpaceBox/SpaceBox';
 
 const CompoundTaps = ({ unitData }) => {
 
-    const saleUnits = unitData.unitsByType.sale 
+    const saleUnits = unitData.unitsByType.sale
     const rentUnits = unitData.unitsByType.rent
-     
+
 
     const tabs = [
         {
@@ -18,7 +18,7 @@ const CompoundTaps = ({ unitData }) => {
             ),
             content: (
                 <>
-                    <SpaceBox data={saleUnits} />
+                    <SpaceBox data={saleUnits || []} />
                 </>
             )
         },
@@ -31,7 +31,7 @@ const CompoundTaps = ({ unitData }) => {
             ),
             content: (
                 <>
-                    <SpaceBox data={rentUnits} />
+                    <SpaceBox data={rentUnits || []} />
                 </>
             )
         },

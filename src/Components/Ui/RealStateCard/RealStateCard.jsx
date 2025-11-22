@@ -31,6 +31,10 @@ const RealStateCard = ({
   type,
   phone,
   haveWhatsapp,
+  division,
+  title,
+  deleteItem = false,
+  remove
 }) => {
   const { currentLanguage } = useLanguage();
 
@@ -69,7 +73,9 @@ const RealStateCard = ({
         <div className="d-flex justify-content-between w-100">
           <p className="b-3 min-w-max">{price} ج.م</p>
           <div className="d-flex gap-2 flex-wrap justify-content-end">
-            <p className="b-11 available">{type === "sale" ? "للبيع":"للايجار"}</p>
+            <p className="b-11 available">
+              {division === "sale" ? "للبيع" : "للايجار"}
+            </p>
           </div>
         </div>
         {/* specifications */}
@@ -88,16 +94,18 @@ const RealStateCard = ({
           </p>
         </div>
         {/* details */}
+        {title && <p className="b-12">{title}</p>}
         <p className="b-12">{sliceWords(details)}</p>
         {/* locations */}
-        <div className="b-11 d-flex">
-          <LocationIcon/> 
-          {location 
-          ||
-            (currentLanguage === "ar"
-              ? "موقع غير محدد"
-              : "Location not specified")}
-        </div>
+        {location && (
+          <div className="b-11 d-flex">
+            <LocationIcon />
+            {location ||
+              (currentLanguage === "ar"
+                ? "موقع غير محدد"
+                : "Location not specified")}
+          </div>
+        )}
         {/* offer */}
         {/* {
                     category != "cash" &&
@@ -108,7 +116,7 @@ const RealStateCard = ({
                         </div>
                     </div>
                     } */}
-        <div className="connections d-flex justify-content-between w-100 pt-4 space-2 ">
+        <div className="connections d-flex justify-content-between w-100 pt-2 space-2 ">
           {/* whats */}
           {haveWhatsapp && phone && (
             <a
@@ -132,6 +140,16 @@ const RealStateCard = ({
             </a>
           )}
         </div>
+        {
+          deleteItem &&
+          <button
+          type="button"
+          className="btn-main second-btn  btn-delete "
+          onClick={() => remove(id)}
+          >
+            حذف الوحدة
+          </button>
+          }
       </div>
     </div>
   );

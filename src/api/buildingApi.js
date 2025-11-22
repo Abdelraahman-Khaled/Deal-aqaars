@@ -45,9 +45,10 @@ const BuildingAPI = {
       throw error;
     }
   },
-  getMyBuildings: async () => {
+  getMyBuildings: async (status) => {
     try {
-      const response = await axiosInstance.get("/building/me");
+      const url = status ? `/building/me?status=${status}` : "/building/me";
+      const response = await axiosInstance.get(url);
       return response.data;
     } catch (error) {
       throw error;

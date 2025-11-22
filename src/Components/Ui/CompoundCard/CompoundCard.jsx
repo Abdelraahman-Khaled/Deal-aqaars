@@ -53,9 +53,12 @@ const CompoundCard = ({ id, title, location, details, price, img, company = fals
                     {details}
                 </p>
                 {/* price */}
+                {
+                    price && 
                 <p className='b-11 w-100'>
                     تبدأ من  {price} ج.م
                 </p>
+                }
 
                 {/* Compnay */}
                 {/* {

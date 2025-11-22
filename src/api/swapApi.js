@@ -2,9 +2,10 @@ import axiosInstance from "./axiosInstance";
 
 const SwapAPI = {
   // Get user's swaps
-  getMySwaps: async () => {
+  getMySwaps: async (status) => {
     try {
-      const response = await axiosInstance.get("/swap/my");
+      const url = status ? `/swap/me?status=${status}` : "/swap/me";
+      const response = await axiosInstance.get(url);
       return response.data;
     } catch (error) {
       console.error("Error fetching user's swaps:", error.response || error.message);

@@ -29,10 +29,10 @@ export const FinishingProvider = ({ children }) => {
     }, []);
 
 
-    const fetchMyFinishingServices = useCallback(async () => {
+    const fetchMyFinishingServices = useCallback(async (status) => {
         try {
             setLoading(true);
-            const response = await FinishingAPI.getMyFinishingServices(); // Assuming this API call exists
+            const response = await FinishingAPI.getMyFinishingServices(status); // Assuming this API call exists
             setMyFinishingServices(response.data);
             setError(null);
         } catch (err) {

@@ -59,8 +59,8 @@ const PropertyAPI = {
       });
 
       const queryString = queryParams.toString();
-      console.log("queryString",queryString);
-      
+      console.log("queryString", queryString);
+
       const url = queryString ? `/property/filter?${queryString}` : "/property/filter";
 
       const response = await axiosInstance.get(url);
@@ -135,9 +135,10 @@ const PropertyAPI = {
   },
 
   // Get current user's properties
-  getMyProperties: async () => {
+  getMyProperties: async (status) => {
     try {
-      const response = await axiosInstance.get("/property/me");
+      const url = status ? `/property/me?status=${status}` : "/property/me";
+      const response = await axiosInstance.get(url);
       return response.data;
     } catch (error) {
       console.error(

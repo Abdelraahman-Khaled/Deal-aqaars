@@ -8,6 +8,7 @@ import BuildingAPI from "../../api/buildingApi";
 import LandAPI from "../../api/LandApi";
 import FactoryAPI from "../../api/factoryApi";
 import AdministrativeAPI from "../../api/administrativeApi";
+import CompoundAPI from "../../api/compoundApi";
 
 const DeleteModal = ({
   setShowProgress,
@@ -37,6 +38,9 @@ const DeleteModal = ({
     } else if (type === "administrative" && !propertyId) {
       console.error("administrative ID is required for deletion");
       return;
+    } else if (type === "project" && !propertyId) {
+      console.error("Project ID is required for deletion");
+      return;
     }
 
     try {
@@ -58,6 +62,9 @@ const DeleteModal = ({
         }
       } else if (type === "building") {
         await BuildingAPI.deleteBuilding(propertyId);
+        if (onDelete) {
+          onDelete(propertyId);
+        }
       } else if (type === "land") {
         await LandAPI.deleteLand(propertyId);
         if (onDelete) {
@@ -70,6 +77,11 @@ const DeleteModal = ({
         }
       } else if (type === "administrative") {
         await AdministrativeAPI.deleteAdministrative(propertyId);
+        if (onDelete) {
+          onDelete(propertyId);
+        }
+      } else if (type === "project") {
+        await CompoundAPI.deleteCompound(propertyId);
         if (onDelete) {
           onDelete(propertyId);
         }
@@ -96,16 +108,18 @@ const DeleteModal = ({
           {type === "property"
             ? "عقار"
             : type === "finishing"
-            ? "تشطيب"
-            : type === "swap"
-            ? "مبادلة"
-            : type === "building"
-            ? "مبنى"
-            : type === "land"
-            ? "أرض"
-            : type === "administrative"
-            ? "تجاري"
-            : "مصنع"}
+              ? "تشطيب"
+              : type === "swap"
+                ? "مبادلة"
+                : type === "building"
+                  ? "مبنى"
+                  : type === "land"
+                    ? "أرض"
+                    : type === "administrative"
+                      ? "تجاري"
+                      : type === "project"
+                        ? "مشروع"
+                        : "مصنع"}
           ؟
         </p>
         <p className="b-15">
@@ -113,16 +127,18 @@ const DeleteModal = ({
           {type === "property"
             ? "عقار"
             : type === "finishing"
-            ? "تشطيب"
-            : type === "swap"
-            ? "مبادلة"
-            : type === "building"
-            ? "مبنى"
-            : type === "land"
-            ? "أرض"
-            : type === "administrative"
-            ? "تجاري"
-            : "مصنع"}
+              ? "تشطيب"
+              : type === "swap"
+                ? "مبادلة"
+                : type === "building"
+                  ? "مبنى"
+                  : type === "land"
+                    ? "أرض"
+                    : type === "administrative"
+                      ? "تجاري"
+                      : type === "project"
+                        ? "مشروع"
+                        : "مصنع"}
           ، مش هتقدر ترجعه تاني. تأكيدك مهم علشان نكمل.
         </p>
         <div className=" d-flex justify-content-between w-100 pt-4 space-2 ">
@@ -132,21 +148,22 @@ const DeleteModal = ({
               text={
                 isDeleting
                   ? "جاري الحذف..."
-                  : `احذف ال${
-                      type === "property"
-                        ? "عقار"
-                        : type === "finishing"
-                        ? "تشطيب"
-                        : type === "swap"
+                  : `احذف ال${type === "property"
+                    ? "عقار"
+                    : type === "finishing"
+                      ? "تشطيب"
+                      : type === "swap"
                         ? "مبادلة"
                         : type === "building"
-                        ? "مبنى"
-                        : type === "land"
-                        ? "أرض"
-                        : type === "administrative"
-                        ? "تجاري"
-                        : "مصنع"
-                    }`
+                          ? "مبنى"
+                          : type === "land"
+                            ? "أرض"
+                            : type === "administrative"
+                              ? "تجاري"
+                              : type === "project"
+                                ? "مشروع"
+                                : "مصنع"
+                  }`
               }
               newClass="w-100"
               disabled={isDeleting}

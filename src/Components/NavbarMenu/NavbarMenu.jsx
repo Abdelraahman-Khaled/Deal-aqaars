@@ -50,7 +50,7 @@ const announcementPerson = [
 ];
 const announcementCompany = [
     { id: 1, text: "اعلن عن عقار", icon: <HouseSimpleIcon />, link: "join-aqar" },
-    { id: 2, text: "اعلن عن مشروع عقاري", icon: <BuildingIcon />, link: "join-company" },
+    { id: 2, text: "اعلن عن مشروع عقاري", icon: <BuildingIcon />, link: "join-compound" },
     { id: 3, text: "اعلن عن خدمات التشطيب", icon: <PaintBrushIcon />, link: "join-finish" },
 ];
 

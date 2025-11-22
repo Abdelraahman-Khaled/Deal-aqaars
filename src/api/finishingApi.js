@@ -101,9 +101,10 @@ const FinishingAPI = {
   },
 
   // Get my finishing services
-  getMyFinishingServices: async () => {
+  getMyFinishingServices: async (status) => {
     try {
-      const response = await axiosInstance.get("/finish/me");
+      const url = status ? `/finish/me?status=${status}` : "/finish/me";
+      const response = await axiosInstance.get(url);
       return response.data;
     } catch (error) {
       console.error(

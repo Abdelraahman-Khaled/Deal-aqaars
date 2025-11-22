@@ -104,8 +104,8 @@ useEffect(() => {
         setLocation({ lat, lng });
         setLatitude(lat);
         setLongitude(lng);
-        setLocationDetails(searchResult.gm_accessors_.place.eu?.formattedPrediction);
-        setInputValue(searchResult.gm_accessors_.place.eu?.formattedPrediction);
+        setLocationDetails(place.formatted_address);
+        setInputValue(place.formatted_address);
       }
     } else {
       alert("Please enter text");

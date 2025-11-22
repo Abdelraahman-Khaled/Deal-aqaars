@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import Garag from '../../assets/Icons/Garag'
 import AddToFavIcon from '../../assets/Icons/AddToFavIcon'
 import WhatsIcon from '../../assets/Icons/WhatsIcon'
@@ -15,8 +14,9 @@ import { useState } from 'react'
 import FavIcon from '../Ui/FavIcon/FavIcon'
 import SimpleImageSlider from '../Ui/SimpleImageSlider/SimpleImageSlider'
 import LocationDisplay from '../Ui/LocationDisplay/LocationDisplay'
+import { Link } from 'react-router-dom'
 
-const CompanyProjectCard = ({ id, lat, lon, calls, likes, seen, title, location, details, price, img, company = false, connections = false, slider = false, wrapperClass, status, isSwiping = false, isFav }) => {
+const CompanyProjectCard = ({ id, lat, lon, calls, likes, seen, title, location, details, price, img, company = false, connections = false, slider = false, wrapperClass, status, isSwiping = false, isFav, onDelete }) => {
 
     const { currentLanguage } = useLanguage()
     const [showProgress, setShowProgress] = useState(false);
@@ -27,7 +27,7 @@ const CompanyProjectCard = ({ id, lat, lon, calls, likes, seen, title, location,
     };
     return (
         <div className={`compound-card space-4 d-flex ${wrapperClass} mb-4`} style={company & wrapperClass === "flex-wrap" ? { width: "49%" } : { width: "100%" }} dir={currentLanguage === "ar" ? "rtl" : "ltr"}>
-            <Link to={"/compounds-guide"}
+            <Link to={"/compounds-guide/" + id}
                 className={`  ${wrapperClass ? "w-100" : "w-50"}`}
                 onClick={handleClick}>
                 <div className='compound-img'>
@@ -60,7 +60,8 @@ const CompanyProjectCard = ({ id, lat, lon, calls, likes, seen, title, location,
                 </div>
                 {/* locations */}
                 <p className='b-12'>
-                    <LocationDisplay lat={lat} lon={lon} />
+                    <LocationIcon />
+                    {location}
                 </p>
                 {/* details */}
                 <p className='b-12'>
@@ -69,9 +70,12 @@ const CompanyProjectCard = ({ id, lat, lon, calls, likes, seen, title, location,
                     {details}
                 </p>
                 {/* price */}
-                <p className='b-9 w-100'>
-                    تبدأ من  {price} ج.م
-                </p>
+                {
+                    price &&
+                    <p className='b-9 w-100'>
+                        تبدأ من  {price} ج.م
+                    </p>
+                }
 
                 <div className='connections d-flex justify-content-between w-100 pt-4 space-2 '>
                     {/* delete */}
@@ -121,7 +125,7 @@ const CompanyProjectCard = ({ id, lat, lon, calls, likes, seen, title, location,
                 newClass={"progress-modal"}
             >
                 <div>
-                    <DeleteModal setShowProgress={setShowProgress} />
+                    <DeleteModal setShowProgress={setShowProgress} propertyId={id} type="project" onDelete={onDelete} />
                 </div>
             </CustomModal>
         </div>

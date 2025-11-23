@@ -17,7 +17,7 @@ import { useSearchParams } from "react-router-dom";
 
 const GuidePage = ({ title, compound = true }) => {
   const { currentLanguage } = useLanguage(); // Get the current language
-  const [toggle, setToggle] = useState("inprogress");
+  const [toggle, setToggle] = useState("all");
   const [toggle1, setToggle1] = useState("nest");
   const [rotate, setRotate] = useState(false);
   const [properties, setProperties] = useState([]);
@@ -79,13 +79,20 @@ const GuidePage = ({ title, compound = true }) => {
   const fetchCompounds = async () => {
     try {
       setLoading(true);
-      const response = await CompoundAPI.getAllCompounds();
+      const filters = {};
+
+      // Add status filter based on toggle state
+      if (toggle !== "all") {
+        filters.status = toggle;
+      }
+
+      const response = await CompoundAPI.getAllCompounds(filters);
       if (response && response.data) {
         setCompounds(response.data);
         console.log("compoundsdata", response.data);
       }
     } catch (error) {
-      console.error("Error fetching properties:", error);
+      console.error("Error fetching compounds:", error);
     } finally {
       setLoading(false);
     }
@@ -102,9 +109,12 @@ const GuidePage = ({ title, compound = true }) => {
     } else {
       fetchCompounds();
     }
-  }, [compound]);
+  }, [compound, toggle]);
 
   console.log("properties", properties);
+  console.log("compounds", compounds);
+  console.log("compound prop", compound);
+  console.log("toggle state", toggle);
 
   return (
     <div className=" guide compound d-flex flex-wrap  flex-md-row  justify-content-between">

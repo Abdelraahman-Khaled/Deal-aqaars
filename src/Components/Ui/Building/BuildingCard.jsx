@@ -46,7 +46,7 @@ const LandCard = ({
       dir={currentLanguage === "ar" ? "rtl" : "ltr"}
     >
       <Link
-        to={`/land-guide/${id}`}
+        to={`/building-guide/${id}`}
         className={`   ${wrapperClass ? "w-100" : "w-50"}`}
         onClick={handleClick}
       >
@@ -61,7 +61,7 @@ const LandCard = ({
         <div className="d-flex justify-content-between w-100">
           <p className="b-3 min-w-max">{price} ج.م</p>
           <div className="d-flex gap-2 flex-wrap justify-content-end">
-            <p className="b-11 available">{type === "sale" ? "للبيع":"للايجار"}</p>
+            <p className="b-11 available">{type === "sale" ? "للبيع" : "للايجار"}</p>
           </div>
         </div>
         {/* specifications */}
@@ -75,9 +75,9 @@ const LandCard = ({
         <p className="b-12">{sliceWords(details)}</p>
         {/* locations */}
         <div className="b-11 d-flex">
-          <LocationIcon/> 
-          {location 
-          ||
+          <LocationIcon />
+          {location
+            ||
             (currentLanguage === "ar"
               ? "موقع غير محدد"
               : "Location not specified")}

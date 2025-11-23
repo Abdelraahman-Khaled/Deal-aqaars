@@ -4,15 +4,17 @@ import 'react-phone-input-2/lib/style.css'
 import './PhoneNumberValidation.css'
 import { isValidPhoneNumber } from 'libphonenumber-js';
 
-function PhoneNumberValidation({ field, form ,placeholder ,onChangeExtra }) {
+function PhoneNumberValidation({ field, form, placeholder, onChangeExtra }) {
   const [valid, setValid] = useState(true);
   const [countryCode, setCountryCode] = useState("eg"); // Default country code
 
-    const handleChange = (value, country) => {
+  const handleChange = (value, country) => {
     form.setFieldValue(field.name, value); // ✅ Update Formik value
     setCountryCode(country.countryCode);
     setValid(isValidPhoneNumber(value, country.countryCode.toUpperCase()));
-    onChangeExtra(value);
+    if (onChangeExtra && typeof onChangeExtra === 'function') {
+      onChangeExtra(value);
+    }
   };
 
   return (

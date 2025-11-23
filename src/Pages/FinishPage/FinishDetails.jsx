@@ -134,7 +134,7 @@ const FinishDetails = () => {
             <>
                 <HelmetInfo titlePage={"Loading Finish Details"} />
                 <ContainerMedia>
-                    <div className="d-flex justify-content-center align-items-center min-h-400">
+                    <div className='d-flex justify-content-center align-items-center min-vh-100'>
                         <Loader />
                     </div>
                 </ContainerMedia>

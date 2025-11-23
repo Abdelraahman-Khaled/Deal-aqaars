@@ -5,16 +5,16 @@ const getCurrentLanguage = () => localStorage.getItem("language") || "en";
 
 const getToastMessages = () => ({
   createSuccess: {
-    ar: "تم إنشاء خدمة التشطيب بنجاح",
-    en: "Finishing service created successfully",
+    ar: "تم إنشاء شركتك بنجاح",
+    en: "Company created successfully",
   },
   updateSuccess: {
-    ar: "تم تحديث خدمة التشطيب بنجاح",
-    en: "Finishing service updated successfully",
+    ar: "تم تحديث شركتك بنجاح",
+    en: "Company updated successfully",
   },
   deleteSuccess: {
-    ar: "تم حذف خدمة التشطيب بنجاح",
-    en: "Finishing service deleted successfully",
+    ar: "تم حذف شركتك بنجاح",
+    en: "Company deleted successfully",
   },
   genericError: {
     ar: "حدث خطأ ما. يرجى المحاولة مرة أخرى.",

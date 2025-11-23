@@ -2,13 +2,10 @@ import React, { useState } from "react";
 import ContainerMedia from "../../Components/ContainerMedia/ContainerMedia";
 import { translations } from "./translations";
 import { useLanguage } from "../../Components/Languages/LanguageContext";
-import InputFiled from "../../Components/Forms/InputField";
 import FormField from "../../Components/Forms/FormField";
-import PhoneNumber from "../../Components/Forms/PhoneNumber";
 import HelmetInfo from "../../Components/Helmetinfo/HelmetInfo";
 import WhatsIcon from "../../assets/Icons/WhatsIcon";
 import Switch from "../../Components/Forms/Switch";
-import Map from "../../Components/Ui/Map/Map";
 import CustomModal from "../../Components/CustomModal/CustomModal";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Link } from "react-router-dom";
@@ -100,7 +97,7 @@ const JoinFinish = () => {
     // address
     // formData.append("detailedAddress[en]", values.detailedAddress.en);
 
- // lat long
+    // lat long
     formData.append("location[city]", city);
     formData.append("detailedAddress[ar]", locationDetails);
     formData.append("location[coordinates][0]", longitude);
@@ -304,7 +301,7 @@ const JoinFinish = () => {
 
                 {/* location description */}
                 <SectionHeader text={"العنوان بالتفصيل"} />
-              
+
                 {/* <div className="mb-4 ">
                   <label className="b-12 mb-2">
                     العنوان بالتفصيل بالانجليزي{" "}

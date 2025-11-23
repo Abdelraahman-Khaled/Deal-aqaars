@@ -56,6 +56,8 @@ const GuideBuilding = ({ title }) => {
     fetchProperties();
   }, []);
 
+  console.log(building);
+
   return (
     <div className=" guide compound d-flex flex-wrap  flex-md-row  justify-content-between">
       <div className="d-flex space-6 flex-column col-12  col-lg-8 ">
@@ -128,7 +130,7 @@ const GuideBuilding = ({ title }) => {
                 offer={formatPrice(property.details?.price)}
                 type={property.division}
                 category={property.category}
-                phone={property.phoneNumber}
+                phone={property.advertiserPhoneNumber}
                 haveWhatsapp={property.haveWhatsapp}
                 location={property.location.detailedLocation}
               />

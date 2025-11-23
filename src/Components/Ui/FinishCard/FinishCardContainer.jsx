@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import FininshCard from './FinishCard';
 import './FinishCard.css'; // Make sure to import your CSS file
 import PaginationPage from '../../Pagenation/Pagination';
-import Loader from '../../Loader/Loader';
 import ErrorNotFoundSvg from '../../../assets/images/error-not-found.svg';
 import FinishSkeleton from './FinishSkeleton';
-import { useFinishing } from '../../../contexts/FinishingContext';
 import { useLanguage } from '../../Languages/LanguageContext';
 
 const FinishCardContainer = ({ finishingServices, loading, error }) => {
@@ -20,6 +18,7 @@ const FinishCardContainer = ({ finishingServices, loading, error }) => {
     const pageCount = Math.ceil(cardData?.length / perPage) || 0;
     const offset = currentPage * perPage;
     const currentPageData = cardData?.slice(offset, offset + perPage) || [];
+    console.log(finishingServices);
 
 
     const handlePageChange = ({ selected }) => {
@@ -63,7 +62,7 @@ const FinishCardContainer = ({ finishingServices, loading, error }) => {
                             <div key={index} className='card-item'>
                                 <FininshCard
                                     id={item._id || index} // Use item.id if available, otherwise use index as fallback
-                                    img={item.images && item.images.length > 0 ? item.images[0] : item.img || "./home.jpg"}
+                                    img={item.images && item.images.length > 0 ? item.images : ["./home.jpg"]}
                                     subtitles={item.servicesOffered ?
                                         item.servicesOffered.map(service => service.ar || service) :
                                         item.services || item.subtitles}

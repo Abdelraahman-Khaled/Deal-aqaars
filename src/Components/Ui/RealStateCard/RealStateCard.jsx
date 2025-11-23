@@ -67,7 +67,7 @@ const RealStateCard = ({
           {/* favIcon */}
         </div>
       </Link>
-      <FavIcon isFav={isFav} id={id} type="property" />
+      <FavIcon isFav={isFav} id={id} type="Property" />
       {/* price */}
       <div className="d-flex flex-column space-4 w-100">
         <div className="d-flex justify-content-between w-100">

@@ -18,7 +18,7 @@ const CompoundList = () => {
     const [rotate, setRotate] = useState(false);
     const [rotateDelivary, setRotatedelivary] = useState(false);
     const [rotateBudget, setRotateBudget] = useState(false);
-    const [budget, setBudget] = useState([1000000, 50000000]);
+    const [budget, setBudget] = useState([100000, 100000000]);
     const [rotatePlace, setRotatePlace] = useState(false);
     const [placeType, setPlaceType] = useState("نوع المكان");
     const [placeTypeDetails, setPlaceTypeDetails] = useState("");
@@ -88,7 +88,7 @@ const CompoundList = () => {
         {
             eventKey: "tab1",
             title: (
-                <div onClick={() => setPlaceType(`${currentLanguage === "ar" ? "سكني" : "Housing"}`)}>
+                <div className='p-2' onClick={() => setPlaceType(`${currentLanguage === "ar" ? "سكني" : "Housing"}`)}>
                     {currentLanguage === "ar" ? "سكني" : "Housing"}
                 </div >
             ),

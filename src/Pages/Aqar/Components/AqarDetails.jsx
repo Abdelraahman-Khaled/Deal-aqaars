@@ -17,21 +17,14 @@ const AqarDetails = () => {
   const [params, setSearchParams] = useSearchParams();
   const { currentLanguage } = useLanguage();
 
-  const [toggle1, setToggle1] = useState(params.get("division") || "sale");
-  const [selectedCities, setSelectedCities] = useState(
-    params.get("city") ? params.get("city").split(",") : []
-  );
-  const [toggle2, setToggle2] = useState(params.get("progress") || "all");
-  const [budget, setBudget] = useState([
-    params.get("minPrice") || 1000000,
-    params.get("maxPrice") || 50000000,
-  ]);
-  const [placeType, setPlaceType] = useState(params.get("type") || "نوع المكان");
-  const [placeTypeDetails, setPlaceTypeDetails] = useState(
-    params.get("type") || ""
-  );
-  const [rooms, setRooms] = useState(params.get("bedrooms") || "");
-  const [baths, setBaths] = useState(params.get("baths") || "");
+  const [toggle1, setToggle1] = useState("sale");
+  const [selectedCities, setSelectedCities] = useState([]);
+  const [toggle2, setToggle2] = useState("all");
+  const [budget, setBudget] = useState([100000, 100000000]);
+  const [placeType, setPlaceType] = useState("نوع المكان");
+  const [placeTypeDetails, setPlaceTypeDetails] = useState("");
+  const [rooms, setRooms] = useState("");
+  const [baths, setBaths] = useState("");
 
   const [rotate, setRotate] = useState(false);
   const [rotateBudget, setRotateBudget] = useState(false);
@@ -118,6 +111,7 @@ const AqarDetails = () => {
     eventKey: tab.key,
     title: (
       <div
+        className="p-2"
         onClick={() => setPlaceType(currentLanguage === "ar" ? tab.ar : tab.en)}
       >
         {currentLanguage === "ar" ? tab.ar : tab.en}
@@ -131,7 +125,10 @@ const AqarDetails = () => {
               key={item.id}
               className="b-12 pick bg-light-gray"
               style={{ width: "45%" }}
-              onClick={() => setPlaceTypeDetails(item.name)}
+              onClick={() => {
+                setPlaceTypeDetails(item.name);
+                setPlaceType(tab.ar);
+              }}
             >
               {item.name}
             </p>
@@ -212,14 +209,19 @@ const AqarDetails = () => {
   // 🌟 حدث الـ URL params كل مرة تتغير الفلاتر
   useEffect(() => {
     const newParams = {};
-    if (toggle1) newParams.division = toggle1;
+
+    // Only add params if they differ from default values
+    if (toggle1 && toggle1 !== "sale") newParams.division = toggle1;
     if (selectedCities && selectedCities.length > 0)
       newParams.city = selectedCities.join(",");
-    if (toggle2) newParams.progress = toggle2;
-    if (budget) {
+    if (toggle2 && toggle2 !== "all") newParams.progress = toggle2;
+
+    // Only add budget if it's different from default
+    if (budget && (budget[0] !== 100000 || budget[1] !== 100000000)) {
       newParams.minPrice = budget[0];
       newParams.maxPrice = budget[1];
     }
+
     if (placeType && placeType !== "نوع المكان") newParams.type = placeType;
     if (placeTypeDetails) newParams.type = placeTypeDetails;
     if (rooms) newParams.bedrooms = rooms;

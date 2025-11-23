@@ -114,6 +114,7 @@ const AdvancedSearch = () => {
     title: (
       <div
         onClick={() => setPlaceType(currentLanguage === "ar" ? tab.ar : tab.en)}
+        className="p-3"
       >
         {currentLanguage === "ar" ? tab.ar : tab.en}
       </div>
@@ -127,7 +128,10 @@ const AdvancedSearch = () => {
               key={item.id}
               className="b-12 pick bg-light-gray"
               style={{ width: "47%" }} // 👈 يخلي اتنين جنب بعض
-              onClick={() => setPlaceTypeDetails(item.name)}
+              onClick={() => {
+                setPlaceTypeDetails(item.name);
+                setPlaceType(tab.ar);
+              }}
             >
               {item.name}
             </p>

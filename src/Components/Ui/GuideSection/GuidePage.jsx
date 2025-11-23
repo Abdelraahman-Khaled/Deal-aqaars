@@ -104,6 +104,7 @@ const GuidePage = ({ title, compound = true }) => {
     }
   }, [compound]);
 
+  console.log("properties", properties);
 
   return (
     <div className=" guide compound d-flex flex-wrap  flex-md-row  justify-content-between">
@@ -232,6 +233,7 @@ const GuidePage = ({ title, compound = true }) => {
                 phone={property.advertiserPhoneNumber}
                 haveWhatsapp={property.haveWhatsapp}
                 location={property.location.detailedLocation}
+                isFav={property.isFavorite}
               />
             ))}
         </div>

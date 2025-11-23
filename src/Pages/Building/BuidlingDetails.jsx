@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLanguage } from '../../Components/Languages/LanguageContext';
 import { useParams } from 'react-router-dom';
 import { useBuilding } from '../../contexts/BuildingContext';
+import BuildingAPI from '../../api/buildingApi';
 
 import compoundImg from "../../assets/images/compounds/compound.png";
 import compoundImg1 from "../../assets/images/compounds/compound1.png";
@@ -20,11 +21,14 @@ import HelmetInfo from '../../Components/Helmetinfo/HelmetInfo';
 import { translations } from './translations';
 import RealStateCard from '../../Components/Ui/RealStateCard/RealStateCard';
 import Map from '../../Components/Ui/Map/Map';
+import BuildingCard from '../../Components/Ui/Building/BuildingCard';
 
 const BuildingDetails = () => {
     const { currentLanguage } = useLanguage(); // Get the current language
     const { id } = useParams();
     const { building, loading, error, fetchBuilding, clearBuilding } = useBuilding();
+    const [relatedBuildings, setRelatedBuildings] = useState([]);
+
     // Fetch building when component mounts or id changes
     useEffect(() => {
         if (id) {
@@ -33,9 +37,25 @@ const BuildingDetails = () => {
         return () => clearBuilding(); // cleanup on unmount
     }, [id, fetchBuilding, clearBuilding]);
 
-    console.log("building:", building);
-
-
+    useEffect(() => {
+        const fetchRelated = async () => {
+            if (building && building.location?.city && building.details?.space) {
+                try {
+                    const params = {
+                        city: building.location.city,
+                        space: building.details.space
+                    };
+                    const response = await BuildingAPI.filterBuildings(params);
+                    if (response && response.data) {
+                        setRelatedBuildings(response.data);
+                    }
+                } catch (error) {
+                    console.error("Error fetching related buildings:", error);
+                }
+            }
+        };
+        fetchRelated();
+    }, [building]);
 
     const unitDetails = [
         {
@@ -48,53 +68,10 @@ const BuildingDetails = () => {
             finishingType: building?.details.finishingType,
             yearDelivary: building?.details.handoverDate,
             buildingYear: building?.details.buildingYear,
-            meterPrice: (building?.details.price/building?.details.space).toFixed(0),
+            meterPrice: building?.details.space ? (building?.details.price / building?.details.space).toFixed(0) : 0,
             AdsType: building?.details.propertyType,
         }
     ]
-
-    const data = [
-        {
-            id: 1,
-            rooms: 2,
-            bath: 1,
-            space: 95,
-            details: "شقة للبيع في الشيخ زايد متشطبة بالكامل باقل مق",
-            location: "الجيزة - الشيخ زايد - روضة زايد",
-            price: "3,500,000",
-            offer: "450,000",
-            img: compoundImg,
-            phone:"01121323475",
-            haveWhatsapp:true,
-        },
-        {
-            id: 2,
-            rooms: 2,
-            bath: 1,
-            space: 95,
-            details: "شقة للبيع في الشيخ زايد متشطبة بالكامل باقل مق...",
-            location: "الجيزة - الشيخ زايد - روضة زايد",
-            price: "5,484,000",
-            offer: 0,
-            img: compoundImg1,phone:"01121323475",
-            haveWhatsapp:true,
-        },
-        {
-            id: 3,
-            rooms: 2,
-            bath: 1,
-            space: 95,
-            details: "شقة للبيع في الشيخ زايد متشطبة بالكامل باقل مق...",
-            location: "الجيزة - الشيخ زايد - روضة زايد",
-            price: "10,874,000",
-            offer: "750,000",
-            img: compoundImg2,phone:"01121323475",
-            haveWhatsapp:true,
-        },
-    ];
-
-
-
 
     // Show loading state
     if (loading) {
@@ -163,7 +140,7 @@ const BuildingDetails = () => {
                                     location={building.location.detailedLocation}
                                 />
                                 <UnitDetails data={unitDetails} />
-                               
+
                                 <AdsDescription title={"وصف الاعلان"} description={building.description[currentLanguage]} />
                                 <Map
                                     lon={building.location.coordinates.coordinates[0]}
@@ -172,36 +149,30 @@ const BuildingDetails = () => {
                                 />
 
                                 {/* related slider */}
-                                <RealatedSlider title={"المشاريع المتشابهة"}>
-                                    {data.map((card, index) => (
-                                        <div key={index} className="slider-card-wrapper w-100">
-                                            <RealStateCard
-                                                price={card.price}
-                                                rooms={card.rooms}
-                                                bath={card.bath}
-                                                space={card.space}
-                                                details={card.details}
-                                                location={card.location}
-                                                offer={card.offer}
-                                                img={card.img}
-                                                phone={card.phone}
-                                                haveWhatsapp={card.haveWhatsapp}
-                                            />
-                                        </div>
-                                    ))}
-                                </RealatedSlider>
+                                {relatedBuildings.length > 0 && (
+                                    <RealatedSlider title={"المشاريع المتشابهة"}>
+                                        {relatedBuildings.map((card, index) => (
+                                            <div key={index} className="slider-card-wrapper w-100">
+                                                <BuildingCard
+                                                    id={card._id}
+                                                    price={card.details?.price}
+                                                    rooms={card.details?.rooms}
+                                                    bath={card.details?.bathrooms}
+                                                    space={card.details?.space}
+                                                    details={card.description?.[currentLanguage]}
+                                                    location={card.location?.detailedLocation}
+                                                    offer={card.details?.price}
+                                                    img={card.images?.[0]?.url || compoundImg}
+                                                    phone={card.advertiserPhoneNumber}
+                                                    haveWhatsapp={card.haveWhatsapp}
+                                                />
+                                            </div>
+                                        ))}
+                                    </RealatedSlider>
+                                )}
 
                             </div>
                             <div className="left-col col-12 col-xl-3 d-flex flex-column space-6">
-                                {/* <CompanyCard
-                                    name={"تطوير مصر للتطوير العقاري"}
-                                    since={"2014"}
-                                    numberProjects={"8"}
-                                    inhouse={"2"}
-                                    notFinished={"1"}
-                                    underDevelopment={"2"}
-                                /> */}
-
                                 <TwoAds />
                             </div>
                         </div>

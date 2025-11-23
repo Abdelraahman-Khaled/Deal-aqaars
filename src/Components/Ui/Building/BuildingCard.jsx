@@ -9,7 +9,7 @@ import WhatsIcon from "../../../assets/Icons/WhatsIcon";
 import CallIcon from "../../../assets/Icons/CallIcon";
 import SimpleImageSlider from "../SimpleImageSlider/SimpleImageSlider";
 
-const LandCard = ({
+const BuildingCard = ({
   id,
   price,
   space,
@@ -111,4 +111,4 @@ const LandCard = ({
   );
 };
 
-export default LandCard;
+export default BuildingCard;

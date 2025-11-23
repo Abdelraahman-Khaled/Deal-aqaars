@@ -8,7 +8,7 @@ import Ads from "../../Components/Auth/Ads/Ads";
 import PropertyAPI from "../../api/propertyApi";
 import RealStateCard from "../../Components/Ui/RealStateCard/RealStateCard";
 import PaginationPage from "../../Components/Pagenation/Pagination";
-import Loader from "../../Components/Loader/Loader";
+import CompoundSkeleton from "../../Components/Ui/CompoundCard/CompoundSkeleton";
 import BuildingCard from "../../Components/Ui/Building/BuildingCard";
 
 const GuideBuilding = ({ title }) => {
@@ -83,13 +83,15 @@ const GuideBuilding = ({ title }) => {
         </div>
         <div className="d-flex flex-wrap  flex-row justify-content-between">
           {loading && (
-            <div className="loading-container">
-              <p>
-                {currentLanguage === "ar"
-                  ? "جاري تحميل المباني..."
-                  : "Loading building..."}
-              </p>
-              <Loader />
+            <div className="loading-container w-100">
+              <div className="d-flex flex-wrap justify-content-between w-100">
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <CompoundSkeleton
+                    key={index}
+                    wrapperClass={toggle1 === "nest" ? "flex-wrap" : ""}
+                  />
+                ))}
+              </div>
             </div>
           )}
           {!loading && building.length === 0 && (

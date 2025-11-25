@@ -18,6 +18,18 @@ const Compound1 = ({ formData, setFormData }) => {
   const [longitude, setLongitude] = useState("");
   const [locationDetails, setLocationDetails] = useState("");
 
+  // Initialize location state from formData (for UpdateCompound)
+  useEffect(() => {
+    if (formData.location?.detailedLocation && !locationDetails) {
+      setLocationDetails(formData.location.detailedLocation);
+    }
+    if (formData.location?.coordinates?.coordinates) {
+      const coords = formData.location.coordinates.coordinates;
+      if (coords[0] && !longitude) setLongitude(coords[0]);
+      if (coords[1] && !latitude) setLatitude(coords[1]);
+    }
+  }, []);
+
   useEffect(() => {
     setFormData((prev) => ({
       ...prev,
@@ -26,7 +38,7 @@ const Compound1 = ({ formData, setFormData }) => {
         detailedLocation: locationDetails,
         coordinates: { type: "Point", coordinates: [longitude, latitude] },
       },
-      announcementLocation:locationDetails,
+      announcementLocation: locationDetails,
     }));
   }, [locationDetails, latitude, longitude]);
 

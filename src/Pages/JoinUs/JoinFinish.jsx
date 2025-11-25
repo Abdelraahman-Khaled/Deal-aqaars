@@ -295,6 +295,7 @@ const JoinFinish = () => {
                 </div>
 
                 <Checkbox
+                  name="allowEmailContact"
                   text={"تواصل معي عن طريق الايميل"}
                   newClass={"mb-4"}
                 />

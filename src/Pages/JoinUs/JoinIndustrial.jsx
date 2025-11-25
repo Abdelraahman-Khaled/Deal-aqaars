@@ -43,9 +43,6 @@ const JoinIndustrial = () => {
   const [aqarSouq, setAqarSouq] = useState(
     translations[currentLanguage].aqarSouq
   );
-  const [finishing, setFinishing] = useState(
-    translations[currentLanguage].finishing
-  );
 
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
@@ -73,9 +70,7 @@ const JoinIndustrial = () => {
     paymentMethod: "",
     rooms: "",
     floor: "",
-    bathrooms: "",
     handoverDate: "",
-    finishing: "",
     phone: "",
     whatsapp: false,
     images: [],
@@ -111,11 +106,9 @@ const JoinIndustrial = () => {
     // Details
     formData.append("details[space]", values.space);
     formData.append("details[view]", values.view);
-    formData.append("details[finishing]", values.finishing);
+    formData.append("details[type]", aqarSouq); // نوع العقار ف السوق
     formData.append("details[paymentMethod]", values.paymentMethod);
-    formData.append("details[propertyType]", values.propertyType);
     formData.append("details[price]", values.price);
-    formData.append("details[bathrooms]", values.bathrooms);
     formData.append("details[buildingYear]", values.buildingYear);
     formData.append("details[handingOverYear]", values.handingOverYear);
 
@@ -282,9 +275,8 @@ const JoinIndustrial = () => {
 
                 <div className="mb-4 b-15 d-flex align-items-center space-2">
                   <input
-                    className={`form-check-input ${
-                      currentLanguage === "en" && "mx-0"
-                    }`}
+                    className={`form-check-input ${currentLanguage === "en" && "mx-0"
+                      }`}
                     type="checkbox"
                     id="flexCheckChecked"
                     defaultChecked
@@ -400,6 +392,9 @@ const JoinIndustrial = () => {
                     </label>
                     <InputFiled name="price" placeholder={"السعر"} />
                   </Col>
+
+
+
                 </Row>
 
                 {/* Location of the property */}
@@ -416,7 +411,7 @@ const JoinIndustrial = () => {
                       value={city}
                       onChange={(e) => {
                         setCity(e.value);
-                        setFieldValue("view", e.value);
+                        setFieldValue("city", e.value);
                       }}
                       editable
                       options={data.map((item) => ({

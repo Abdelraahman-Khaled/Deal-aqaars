@@ -15,12 +15,12 @@ import TradeIcon from '../../assets/Icons/TradeIcon'
 import SimpleImageSlider from '../../Components/Ui/SimpleImageSlider/SimpleImageSlider'
 import FavIcon from '../../Components/Ui/FavIcon/FavIcon'
 
-const VendorAdsCard = ({id,type,model , price, numAds, seen,  title, tradeItem, likes, calls, date, rooms, bath, space, details, location, img, company = false, wrapperClass, isFav, isSwiping = false, trade = false, onDelete }) => {
+const VendorAdsCard = ({ id, type, model, price, numAds, seen, title, tradeItem, likes, calls, date, rooms, bath, space, details, location, img, company = false, wrapperClass, isFav, isSwiping = false, trade = false, onDelete }) => {
     const { currentLanguage } = useLanguage()
     const [showProgress, setShowProgress] = useState(false);
 
 
-    
+
 
     const handleClick = (e) => {
         if (isSwiping) e.preventDefault();
@@ -29,7 +29,7 @@ const VendorAdsCard = ({id,type,model , price, numAds, seen,  title, tradeItem, 
 
     return (
         <div className={`compound-card space-4 d-flex ${wrapperClass} mb-4  `} style={company & wrapperClass === "flex-wrap" ? { width: "49%" } : { width: "100%" }} dir={currentLanguage === "ar" ? "rtl" : "ltr"}>
-            <Link to={ model ==="property" ? `/aqar-guide/${id}` : model === "building" ? `/building-guide/${id}` : model === "land" ? `/land-guide/${id}` : model === "administrative" ? `/adminstrative-guide/${id}` : `/factory-guide/${id}` }
+            <Link to={model === "property" ? `/aqar-guide/${id}` : model === "building" ? `/building-guide/${id}` : model === "land" ? `/land-guide/${id}` : model === "administrative" ? `/adminstrative-guide/${id}` : model === "swap" ? null : `/factory-guide/${id}`}
                 className={`  ${wrapperClass ? "w-100" : "w-50"}`}
                 onClick={handleClick}
             >
@@ -47,7 +47,7 @@ const VendorAdsCard = ({id,type,model , price, numAds, seen,  title, tradeItem, 
                     </p>
                     <div className='d-flex gap-2 flex-wrap justify-content-end'>
                         <p className='b-16 available'>
-                            {type === "sale"? "للبيع":"للايجار"}
+                            {type === "sale" ? "للبيع" : "للايجار"}
                         </p>
                         <p className='b-16 available'>
                             {date ? date.split('T')[0] : ''}
@@ -87,10 +87,10 @@ const VendorAdsCard = ({id,type,model , price, numAds, seen,  title, tradeItem, 
                         <p className='b-12'>
                             {details}
                         </p>
-                        {/* locations */}
+                        {/* locations */}1
 
                         <p className='b-12'>
-                            <LocationIcon/>
+                            <LocationIcon />
                             {" "}
                             {location}
                         </p>
@@ -130,7 +130,7 @@ const VendorAdsCard = ({id,type,model , price, numAds, seen,  title, tradeItem, 
 
                     {/* edit */}
                     <button className='btn-main w-50'>
-                        <Link to={`/update-aqar/${id}`} className='text-white'>
+                        <Link to={`/update-${model}/${id}`} className='text-white'>
                             عدل على الاعلان
                         </Link>
                     </button>

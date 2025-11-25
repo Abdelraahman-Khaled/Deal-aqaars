@@ -55,7 +55,7 @@ const JoinLand = () => {
 
   const [isItemLoading, setIsItemLoading] = useState(false);
 
- 
+
 
   const tabs = [
     { value: "sale", label: translations[currentLanguage].forSale },
@@ -107,7 +107,7 @@ const JoinLand = () => {
 
     // contact
     formData.append("advertiserPhoneNumber", values.phone);
-    formData.append("haveWhatsapp", values.whatsapp);
+    formData.append("hasWhatsapp", values.whatsapp);
 
     // lat long
     formData.append("location[city]", city);
@@ -310,9 +310,8 @@ const JoinLand = () => {
 
                 <div className="mb-4 b-15 d-flex align-items-center space-2">
                   <input
-                    className={`form-check-input ${
-                      currentLanguage === "en" && "mx-0"
-                    }`}
+                    className={`form-check-input ${currentLanguage === "en" && "mx-0"
+                      }`}
                     type="checkbox"
                     id="flexCheckChecked"
                     defaultChecked
@@ -381,7 +380,7 @@ const JoinLand = () => {
                     </label>
                     <InputFiled name="price" placeholder={"السعر"} />
                   </Col>
-                  
+
                   {/* payment */}
                   <Col xs={12} md={6}>
                     <label className="b-12 mb-2">

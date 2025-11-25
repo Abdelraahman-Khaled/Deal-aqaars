@@ -88,6 +88,16 @@ const AdministrativeAPI = {
     }
   },
 
+
+  getMyAdministrative: async (status) => {
+    try {
+      const url = status ? `/administrative/me?status=${status}` : "/administrative/me";
+      const response = await axiosInstance.get(url);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
   // Get properties by user ID
   getAdministrativeByUserId: async (userId) => {
     try {

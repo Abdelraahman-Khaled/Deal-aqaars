@@ -3,7 +3,7 @@ import CloseIcon from "../../assets/Icons/CloseIcon";
 import PlusIcon from "../../assets/Icons/PlusIcon";
 import CameraUploadImg from "../../assets/Icons/CameraUploadImg";
 
-const ImageUploadCompound = ({ value = [], onChange }) => {
+const ImageUploadCompound = ({ value = [], onChange, onRemove }) => {
   const [uploadedImages, setUploadedImages] = useState([]);
 
   useEffect(() => {
@@ -13,7 +13,11 @@ const ImageUploadCompound = ({ value = [], onChange }) => {
       for (const file of value) {
         if (file instanceof File) {
           previews.push(await readFileAsDataURL(file));
+        } else if (typeof file === 'object' && file.url) {
+          // Handle image object from backend with URL
+          previews.push(file.url);
         } else {
+          // Fallback for string URLs
           previews.push(file);
         }
       }
@@ -43,6 +47,20 @@ const ImageUploadCompound = ({ value = [], onChange }) => {
   };
 
   const removeImage = (index) => {
+    const fileToRemove = value[index];
+
+    // Call onRemove callback if provided and it's an existing image
+    if (onRemove && fileToRemove) {
+      if (fileToRemove.name && !(fileToRemove instanceof File)) {
+        onRemove(fileToRemove.name);
+      } else if (typeof fileToRemove === 'string') {
+        const imageName = fileToRemove.split('/').pop();
+        if (imageName) {
+          onRemove(imageName);
+        }
+      }
+    }
+
     const updated = value.filter((_, i) => i !== index);
     onChange(updated);
   };

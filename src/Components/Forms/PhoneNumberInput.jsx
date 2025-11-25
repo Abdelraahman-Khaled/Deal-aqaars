@@ -28,7 +28,7 @@ function PhoneNumberValidation({ field, form, placeholder, onChangeExtra }) {
         }}
         placeholder={"+201121323475" || placeholder}
       />
-      {!valid && <p className="error fs-8">Please enter a valid phone number</p>}
+      {!valid && <p className="error fs-8 text-start">هذا الرقم غير صحيح</p>}
     </div>
   );
 }

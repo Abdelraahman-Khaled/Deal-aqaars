@@ -10,7 +10,7 @@ import "./GoogleSearchBox.css";
 const libraries = ["places"];
 
 export default function GoogleSearchBoxWithMap(props) {
-  const { setLatitude, setLongitude, latitude, longitude ,setLocationDetails, locationDetails} = props;
+  const { setLatitude, setLongitude, latitude, longitude, setLocationDetails, locationDetails } = props;
   const [searchResult, setSearchResult] = useState(null);
   const [map, setMap] = useState(null);
   const [inputValue, setInputValue] = useState("");
@@ -31,34 +31,37 @@ export default function GoogleSearchBoxWithMap(props) {
     lng: Number(longitude) || 31.2357,
   });
 
-useEffect(() => {
-  if (!isLoaded || !map) return;
+  useEffect(() => {
+    if (!isLoaded || !map) return;
 
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
+    // If we already have a location (from props), don't overwrite it with current location
+    if (latitude && longitude) return;
 
-        const newLocation = { lat, lng };
-        setLocation(newLocation);
-        setLatitude(lat);
-        setLongitude(lng);
-        map.setCenter(newLocation);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
 
-        const geocoder = new google.maps.Geocoder();
-        geocoder.geocode({ location: newLocation }, (results, status) => {
-          if (status === "OK" && results?.[0]) {
-            setLocationDetails(results[0].formatted_address);
-          } else {
-            setLocationDetails(`${lat}, ${lng}`);
-          }
-        });
-      },
-      (error) => console.error("Error getting current location:", error)
-    );
-  }
-}, [isLoaded, map]);
+          const newLocation = { lat, lng };
+          setLocation(newLocation);
+          setLatitude(lat);
+          setLongitude(lng);
+          map.setCenter(newLocation);
+
+          const geocoder = new google.maps.Geocoder();
+          geocoder.geocode({ location: newLocation }, (results, status) => {
+            if (status === "OK" && results?.[0]) {
+              setLocationDetails(results[0].formatted_address);
+            } else {
+              setLocationDetails(`${lat}, ${lng}`);
+            }
+          });
+        },
+        (error) => console.error("Error getting current location:", error)
+      );
+    }
+  }, [isLoaded, map, latitude, longitude]);
 
 
   const onLoad = useCallback((map) => {

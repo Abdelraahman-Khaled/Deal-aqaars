@@ -115,6 +115,7 @@ const JoinCommercial = () => {
 
     // Details
     formData.append("details[space]", values.space);
+    formData.append("details[type]", aqarSouq);
     formData.append("details[view]", values.view);
     formData.append("details[finishing]", values.finishing);
     formData.append("details[paymentMethod]", values.paymentMethod);
@@ -142,10 +143,10 @@ const JoinCommercial = () => {
       console.log(`${key}: ${value}`);
     }
     try {
-        const response = await AdministrativeAPI.createAdministrative(formData);
-        console.log(response);
-        setShowModal(true);
-        resetForm();
+      const response = await AdministrativeAPI.createAdministrative(formData);
+      console.log(response);
+      setShowModal(true);
+      resetForm();
     } catch (err) {
       console.error(err);
     } finally {
@@ -177,7 +178,7 @@ const JoinCommercial = () => {
                 </div>
 
                 <p className="b-1 mb-2 pb-3 ">اعلن عن وحدة تجارية</p>
-                  <label className="b-12 mb-2">
+                <label className="b-12 mb-2">
                   القسم
                   <span className="required-asterisk"> *</span>
                 </label>
@@ -310,9 +311,8 @@ const JoinCommercial = () => {
 
                 <div className="mb-4 b-15 d-flex align-items-center space-2">
                   <input
-                    className={`form-check-input ${
-                      currentLanguage === "en" && "mx-0"
-                    }`}
+                    className={`form-check-input ${currentLanguage === "en" && "mx-0"
+                      }`}
                     type="checkbox"
                     id="flexCheckChecked"
                     defaultChecked
@@ -326,7 +326,7 @@ const JoinCommercial = () => {
 
                 {/* Row 1 */}
                 {/* size */}
-              <Row className="g-3 mb-4">
+                <Row className="g-3 mb-4">
                   <Col xs={12} md={4}>
                     <label className="b-12 mb-2">
                       المساحة (بالمتر){" "}
@@ -414,7 +414,7 @@ const JoinCommercial = () => {
                     ></Dropdown>
                   </Col>
 
-                    {!isHouse && (
+                  {!isHouse && (
                     <>
                       {/* rooms number */}
                       <Col xs={12} md={4}>
@@ -446,8 +446,8 @@ const JoinCommercial = () => {
                     </>
                   )}
 
-                {/* Row 2 */}
-                
+                  {/* Row 2 */}
+
                   {/* no.build */}
                   <Col xs={12} md={4}>
                     <label className="b-12 mb-2">
@@ -522,7 +522,7 @@ const JoinCommercial = () => {
                       longitude={longitude}
                       latitude={latitude}
                       setLocationDetails={setLocationDetails}
-                       locationDetails={locationDetails}
+                      locationDetails={locationDetails}
                     />
                   </div>
                 </div>

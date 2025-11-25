@@ -118,6 +118,62 @@ const PropertyAPI = {
       throw error;
     }
   },
+  // Get property by ID
+  getBuildingById: async (id) => {
+    try {
+      const response = await axiosInstance.get(`/building/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(
+        `Error fetching property with ID ${id}:`,
+        error.response || error.message
+      );
+      handleError(error);
+      throw error;
+    }
+  },
+  // Get land by ID
+  getLandById: async (id) => {
+    try {
+      const response = await axiosInstance.get(`/land/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(
+        `Error fetching land with ID ${id}:`,
+        error.response || error.message
+      );
+      handleError(error);
+      throw error;
+    }
+  },
+  // Get factory by ID
+  getFactoryById: async (id) => {
+    try {
+      const response = await axiosInstance.get(`/factory/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(
+        `Error fetching factory with ID ${id}:`,
+        error.response || error.message
+      );
+      handleError(error);
+      throw error;
+    }
+  },
+  // Get administrative by ID
+  getAdministrativeById: async (id) => {
+    try {
+      const response = await axiosInstance.get(`/administrative/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(
+        `Error fetching administrative with ID ${id}:`,
+        error.response || error.message
+      );
+      handleError(error);
+      throw error;
+    }
+  },
 
   // Get properties by user ID
   getPropertiesByUserId: async (userId) => {
@@ -219,6 +275,63 @@ const PropertyAPI = {
     } catch (error) {
       console.error(
         `Error updating property with ID ${id}:`,
+        error.response || error.message
+      );
+      handleError(error);
+      throw error;
+    }
+  },
+  // Update land
+  updateLand: async (id, formData) => {
+    try {
+      const response = await axiosInstance.put(`/land/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      toast.success(getToastMessages().updateSuccess[getCurrentLanguage()]);
+      return response.data;
+    } catch (error) {
+      console.error(
+        `Error updating land with ID ${id}:`,
+        error.response || error.message
+      );
+      handleError(error);
+      throw error;
+    }
+  },
+  // Update factory
+  updateFactory: async (id, formData) => {
+    try {
+      const response = await axiosInstance.put(`/factory/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      toast.success(getToastMessages().updateSuccess[getCurrentLanguage()]);
+      return response.data;
+    } catch (error) {
+      console.error(
+        `Error updating factory with ID ${id}:`,
+        error.response || error.message
+      );
+      handleError(error);
+      throw error;
+    }
+  },
+  // Update administrative
+  updateAdministrative: async (id, formData) => {
+    try {
+      const response = await axiosInstance.put(`/administrative/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      toast.success(getToastMessages().updateSuccess[getCurrentLanguage()]);
+      return response.data;
+    } catch (error) {
+      console.error(
+        `Error updating administrative with ID ${id}:`,
         error.response || error.message
       );
       handleError(error);

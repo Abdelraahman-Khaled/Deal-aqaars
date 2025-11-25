@@ -40,7 +40,6 @@ const VendorAds = () => {
   const [swaps, setSwaps] = useState([]);
   const [swapsLoaded, setSwapsLoaded] = useState(false);
   const userType = useSelector((state) => state.userType.userType);
-  console.log(userType);
 
   const {
     myFinishingServices,
@@ -189,8 +188,8 @@ const VendorAds = () => {
       fetchMyLands(activeTab);
     } else if (
       toggle !== "finishing" &&
-      toggle !== "swaps" &&
       toggle !== "building" &&
+      toggle !== "swaps" &&
       toggle !== "land" &&
       toggle !== "factory" &&
       toggle !== "project" &&
@@ -248,11 +247,11 @@ const VendorAds = () => {
   const user = useSelector((state) => state.auth.user);
   const tabs = [
     { value: "realestate", label: translations[currentLanguage].realestate },
-    { value: "swaps", label: translations[currentLanguage].swaps },
     { value: "building", label: translations[currentLanguage].building },
     { value: "land", label: translations[currentLanguage].land },
     { value: "factory", label: translations[currentLanguage].factory },
     { value: "administrative", label: translations[currentLanguage].administrative },
+    { value: "swaps", label: translations[currentLanguage].swaps },
 
   ];
 
@@ -289,6 +288,8 @@ const VendorAds = () => {
     { label: "قيد المراجعة", value: "pending", active: false },
     { label: "محذوف", value: "deleted", active: false },
   ];
+
+  console.log(myBuildings);
 
   return (
     <>
@@ -491,6 +492,7 @@ const VendorAds = () => {
                         numAds={index + 1}
                         id={swap._id}
                         title={swap.whatIHave?.propertyType}
+                        details={swap.whatIHave?.description}
                         trade={true}
                         location={swap.locationLabel}
                         img={swap.images}
@@ -603,7 +605,7 @@ const VendorAds = () => {
                         title={building.title[currentLanguage]}
                         lat={building.location.coordinates.coordinates[0]}
                         lon={building.location.coordinates.coordinates[1]}
-                        location={building.location.city}
+                        location={building.location.detailedLocation}
                         details={building.description[currentLanguage]}
                         price={building.details.price}
                         space={building.details.space}

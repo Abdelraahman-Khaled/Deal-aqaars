@@ -38,7 +38,13 @@ import { CompoundProvider } from "./contexts/CompoundContext";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import "./styles/PrimeReact.css";
 import UpdateAqar from "./Pages/Update/UpdateAqar";
+import UpdateBuilding from "./Pages/Update/UpdateBuilding";
+import UpdateLand from "./Pages/Update/UpdateLand";
+import UpdateFactory from "./Pages/Update/UpdateFactory";
+import UpdateAdministrative from "./Pages/Update/UpdateAdministrative";
 import UpdateFinish from "./Pages/Update/UpdateFinish";
+import UpdateSwap from "./Pages/Update/UpdateSwap";
+import UpdateCompound from "./Pages/Update/UpdateCompound";
 import JoinLand from "./Pages/JoinUs/JoinLand";
 import JoinCommercial from "./Pages/JoinUs/JoinCommercial";
 import JoinIndustrial from "./Pages/JoinUs/JoinIndustrial";
@@ -173,8 +179,32 @@ const App = () => {
                             element={<UpdateAqar />}
                           />
                           <Route
+                            path="/update-building/:id"
+                            element={<UpdateBuilding />}
+                          />
+                          <Route
+                            path="/update-land/:id"
+                            element={<UpdateLand />}
+                          />
+                          <Route
+                            path="/update-factory/:id"
+                            element={<UpdateFactory />}
+                          />
+                          <Route
+                            path="/update-administrative/:id"
+                            element={<UpdateAdministrative />}
+                          />
+                          <Route
                             path="/update-finish/:id"
                             element={<UpdateFinish />}
+                          />
+                          <Route
+                            path="/update-swap/:id"
+                            element={<UpdateSwap />}
+                          />
+                          <Route
+                            path="/update-compound/:id"
+                            element={<UpdateCompound />}
                           />
 
                           {/* ads */}

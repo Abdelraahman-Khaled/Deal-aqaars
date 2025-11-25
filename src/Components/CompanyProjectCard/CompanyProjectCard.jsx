@@ -85,7 +85,9 @@ const CompanyProjectCard = ({ id, lat, lon, calls, likes, seen, title, location,
 
                     {/* edit */}
                     <button className='btn-main w-50'>
-                        عدل على الاعلان
+                        <Link to={"/update-compound/" + id} className='text-white'>
+                            عدل على الاعلان
+                        </Link>
                     </button>
                 </div>
 

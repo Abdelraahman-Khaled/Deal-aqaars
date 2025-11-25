@@ -53,82 +53,82 @@ const Compound3 = ({ formData, setFormData }) => {
   // ------------------------------
   // Add Unit
   // ------------------------------
-// inside Compound3 component
-const handleAddUnit = async () => {
-  // Normalize images: keep File and preview string for each entry
-  const normalizedImages = await Promise.all(
-    currentUnit.aqarImages.map(async (image) => {
-      // If already an object { file, preview } return as-is
-      if (image && image.file instanceof File) return image;
+  // inside Compound3 component
+  const handleAddUnit = async () => {
+    // Normalize images: keep File and preview string for each entry
+    const normalizedImages = await Promise.all(
+      currentUnit.aqarImages.map(async (image) => {
+        // If already an object { file, preview } return as-is
+        if (image && image.file instanceof File) return image;
 
-      // If it's a File, create a preview URL (do not convert to base64 to send)
-      if (image instanceof File) {
-        return {
-          file: image,
-          preview: URL.createObjectURL(image),
-        };
+        // If it's a File, create a preview URL (do not convert to base64 to send)
+        if (image instanceof File) {
+          return {
+            file: image,
+            preview: URL.createObjectURL(image),
+          };
+        }
+
+        // If it's a string (base64 or url), keep it as preview, file=null
+        if (typeof image === "string") {
+          return { file: null, preview: image };
+        }
+
+        // If it's an object with url (from previous code), preserve file if present
+        if (image && image.url) {
+          return { file: image.file || null, preview: image.url };
+        }
+
+        return { file: null, preview: "" };
+      })
+    );
+
+    const newUnit = {
+      unitDetails: {
+        unitType: toggle,
+        aqarType: currentUnit.unitDetails.unitType,
+        announcementTitle: { ar: currentUnit.unitDetails.announcementTitle.ar },
+        announcementDetails: { ar: currentUnit.unitDetails.announcementDetails.ar },
+      },
+      aqarDetails: {
+        space: currentUnit.aqarDetails.space,
+        price: currentUnit.aqarDetails.price,
+        view: selectVeiw,
+        paymentType: paymentWay,
+        type: aqarSouq,
+        rooms: currentUnit.aqarDetails.rooms,
+        floor: currentUnit.aqarDetails.floor,
+        bathrooms: currentUnit.aqarDetails.bathrooms,
+        handingYear: currentUnit.aqarDetails.handingYear,
+        finishingType: finishing,
+      },
+      // keep normalized objects so you can preview and upload
+      aqarImages: normalizedImages,
+    };
+
+    setFormData((prev) => ({
+      ...prev,
+      units: [...prev.units, newUnit],
+    }));
+
+    // Reset and revoke previews from created object URLs
+    normalizedImages.forEach((img) => {
+      if (img && img.preview && img.file instanceof File) {
+        // Optional: revoke object URL later when not needed to avoid memory leaks:
+        // URL.revokeObjectURL(img.preview);
       }
+    });
 
-      // If it's a string (base64 or url), keep it as preview, file=null
-      if (typeof image === "string") {
-        return { file: null, preview: image };
-      }
-
-      // If it's an object with url (from previous code), preserve file if present
-      if (image && image.url) {
-        return { file: image.file || null, preview: image.url };
-      }
-
-      return { file: null, preview: "" };
-    })
-  );
-
-  const newUnit = {
-    unitDetails: {
-      unitType: toggle,
-      aqarType: currentUnit.unitDetails.unitType,
-      announcementTitle: { ar: currentUnit.unitDetails.announcementTitle.ar },
-      announcementDetails: { ar: currentUnit.unitDetails.announcementDetails.ar },
-    },
-    aqarDetails: {
-      space: currentUnit.aqarDetails.space,
-      price: currentUnit.aqarDetails.price,
-      view: selectVeiw,
-      paymentType: paymentWay,
-      type: aqarSouq,
-      rooms: currentUnit.aqarDetails.rooms,
-      floor: currentUnit.aqarDetails.floor,
-      bathrooms: currentUnit.aqarDetails.bathrooms,
-      handingYear: currentUnit.aqarDetails.handingYear,
-      finishingType: finishing,
-    },
-    // keep normalized objects so you can preview and upload
-    aqarImages: normalizedImages,
+    setCurrentUnit({
+      unitDetails: { unitType: "", aqarType: "", announcementTitle: { ar: "" }, announcementDetails: { ar: "" } },
+      aqarDetails: { space: "", price: "", view: "", paymentType: "", type: "", rooms: "", floor: "", bathrooms: "", handingYear: "", finishingType: "" },
+      aqarImages: [],
+    });
+    setSelectView("");
+    setPaymentWay("");
+    setAqarSouq("");
+    setFinishing("");
   };
-
-  setFormData((prev) => ({
-    ...prev,
-    units: [...prev.units, newUnit],
-  }));
-
-  // Reset and revoke previews from created object URLs
-  normalizedImages.forEach((img) => {
-    if (img && img.preview && img.file instanceof File) {
-      // Optional: revoke object URL later when not needed to avoid memory leaks:
-      // URL.revokeObjectURL(img.preview);
-    }
-  });
-
-  setCurrentUnit({
-    unitDetails: { unitType: "", aqarType: "", announcementTitle: { ar: "" }, announcementDetails: { ar: "" } },
-    aqarDetails: { space: "", price: "", view: "", paymentType: "", type: "", rooms: "", floor: "", bathrooms: "", handingYear: "", finishingType: "" },
-    aqarImages: [],
-  });
-  setSelectView("");
-  setPaymentWay("");
-  setAqarSouq("");
-  setFinishing("");
-};
 
 
   // ------------------------------
@@ -162,11 +162,11 @@ const handleAddUnit = async () => {
                   price={unit.aqarDetails.price}
                   space={unit.aqarDetails.space}
                   division={unit.unitDetails.unitType}
-                  img={unit.aqarImages.map((img) => img.preview)}
+                  img={unit.aqarImages.map((img) => img.preview || img.url || img)}
                   bath={unit.aqarDetails.bathrooms}
                   rooms={unit.aqarDetails.rooms}
-                  title={unit.unitDetails.announcementTitle.ar}
-                  details={unit.unitDetails.announcementDetails.ar}
+                  title={unit.unitDetails?.announcementTitle?.ar}
+                  details={unit.unitDetails?.announcementDetails?.ar}
                   deleteItem={true}
                   remove={handleRemoveUnit}
                   wrapperClass="flex-wrap"

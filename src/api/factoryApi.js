@@ -103,6 +103,22 @@ const FactoryAPI = {
     }
   },
 
+  // Get current user's factories
+  getMyFactory: async (status) => {
+    try {
+      const url = status ? `/factory/me?status=${status}` : "/factory/me";
+      const response = await axiosInstance.get(url);
+      return response.data;
+    } catch (error) {
+      console.error(
+        "Error fetching user factories:",
+        error.response || error.message
+      );
+      handleError(error);
+      throw error;
+    }
+  },
+
   // Create new property
   createFactory: async (formData) => {
     try {

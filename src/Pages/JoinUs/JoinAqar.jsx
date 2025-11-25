@@ -62,6 +62,7 @@ const JoinAqar = () => {
   const initialValues = {
     // type: "", // apartment
     division: toggle, // rent ,sale
+    type: "", // apartment
     titleAr: "",
     titleEn: "",
     descriptionAr: "",
@@ -82,7 +83,7 @@ const JoinAqar = () => {
   };
 
   useEffect(() => {
-    selectType === "house" ? setIsHouse(true) : setIsHouse(false);
+    selectType === "عمارة" ? setIsHouse(true) : setIsHouse(false);
   }, [selectType]);
 
   const handleSubmit = async (values, { resetForm }) => {
@@ -90,7 +91,7 @@ const JoinAqar = () => {
 
     // division
     formData.append("division", toggle);
-    formData.append("type", "apartment");
+    formData.append("type", selectType);
 
     // titles
     formData.append("title[ar]", values.titleAr);
@@ -117,13 +118,15 @@ const JoinAqar = () => {
     formData.append("details[paymentMethod]", values.paymentMethod);
     formData.append("details[propertyType]", values.propertyType);
     formData.append("details[price]", values.price);
-    formData.append("details[bathrooms]", values.bathrooms);
     formData.append("details[buildingYear]", values.buildingYear);
     formData.append("details[handoverDate]", values.handoverYear);
 
     {
-      !isHouse && formData.append("details[rooms]", values.rooms);
+      !isHouse &&
+        formData.append("details[rooms]", values.rooms);
       formData.append("details[floor]", values.floor);
+      formData.append("details[bathrooms]", values.bathrooms);
+
     }
 
     // images
@@ -215,12 +218,12 @@ const JoinAqar = () => {
                       }}
                       options={translations[currentLanguage].aqarType}
                       optionLabel="label" // هيعرض اللي في label
-                      optionValue="value" // هيخزن value (انجليزي)
+                      optionValue="label" // هيخزن value (انجليزي)
                       name="type"
                       placeholder={translations[currentLanguage].aqar}
                     />
                   </Col>
-               
+
                 </Row>
 
                 {/* Details */}
@@ -302,9 +305,8 @@ const JoinAqar = () => {
 
                 <div className="mb-4 b-15 d-flex align-items-center space-2">
                   <input
-                    className={`form-check-input ${
-                      currentLanguage === "en" && "mx-0"
-                    }`}
+                    className={`form-check-input ${currentLanguage === "en" && "mx-0"
+                      }`}
                     type="checkbox"
                     id="flexCheckChecked"
                     defaultChecked
@@ -406,7 +408,7 @@ const JoinAqar = () => {
                     ></Dropdown>
                   </Col>
 
-                    {!isHouse && (
+                  {!isHouse && (
                     <>
                       {/* rooms number */}
                       <Col xs={12} md={4}>
@@ -438,8 +440,8 @@ const JoinAqar = () => {
                     </>
                   )}
 
-                {/* Row 2 */}
-                
+                  {/* Row 2 */}
+
                   {/* no.build */}
                   <Col xs={12} md={4}>
                     <label className="b-12 mb-2">

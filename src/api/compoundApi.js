@@ -126,6 +126,35 @@ const CompoundAPI = {
     }
   },
 
+  // Update compound by ID
+  updateCompound: async (id, formData) => {
+    for (const [key, value] of Object.entries(formData)) {
+      if (value instanceof File || (Array.isArray(value) && value.every(v => v instanceof File))) {
+        // Keep files as-is
+        continue;
+      } else if (typeof value === 'object' && value !== null && !(value instanceof File)) {
+        // Convert nested objects to JSON strings
+        formData.set(key, JSON.stringify(value));
+      }
+    }
+    try {
+      const response = await axiosInstance.put(`/compound/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      toast.success(getToastMessages().updateSuccess[getCurrentLanguage()]);
+      return response.data;
+    } catch (error) {
+      console.error(
+        `Error updating compound with ID ${id}:`,
+        error.response || error.message
+      );
+      handleError(error);
+      throw error;
+    }
+  },
+
   // Delete compound by ID
   deleteCompound: async (id) => {
     try {

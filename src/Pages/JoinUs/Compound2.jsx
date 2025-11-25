@@ -14,7 +14,7 @@ import { Field } from "formik";
 import PhoneNumberValidation from "../../Components/Forms/PhoneNumberInput";
 import ImageUploadCompound from "../../Components/ImageUploadGrid/ImageUploadCompound";
 
-const Compound1 = ({ formData, setFormData }) => {
+const Compound1 = ({ formData, setFormData, setRemovedImages }) => {
   const checkboxs = [
     "أمن 24 ساعة",
     "كاميرات مراقبة",
@@ -131,6 +131,11 @@ const Compound1 = ({ formData, setFormData }) => {
                   images: imgs,
                 }))
               }
+              onRemove={(imageName) => {
+                if (setRemovedImages) {
+                  setRemovedImages((prev) => [...prev, imageName]);
+                }
+              }}
             />
           </div>
         </div>

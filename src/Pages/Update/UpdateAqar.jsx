@@ -25,14 +25,17 @@ import SearchToggle from "../../Components/Ui/SearchComponents/SearchToggle ";
 import { Field } from "formik";
 import PhoneNumberValidation from "../../Components/Forms/PhoneNumberInput";
 import data from "../../data/cities.json";
+import Loader from "../../Components/Loader/Loader";
 
 const UpdateAqar = () => {
-  const {id} = useParams()
+  const { id } = useParams()
   const [isHouse, setIsHouse] = useState(false);
   const { currentLanguage } = useLanguage(); // Get the current language
   const [toggle, setToggle] = useState("sale");
   const [showModal, setShowModal] = useState(false);
   const [propertyData, setPropertyData] = useState(null);
+  const [removedImages, setRemovedImages] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [selectType, setSelectType] = useState("");
   const [selectVeiw, setSelectView] = useState(
@@ -62,7 +65,7 @@ const UpdateAqar = () => {
   ];
 
   const initialValues = {
-    // type: "", // apartment
+    type: propertyData?.type, // apartment
     division: toggle, // rent ,sale
     titleAr: propertyData?.title?.ar || "",
     titleEn: propertyData?.title?.en || "",
@@ -76,20 +79,32 @@ const UpdateAqar = () => {
     rooms: propertyData?.details?.rooms || "",
     floor: propertyData?.details?.floor || "",
     bathrooms: propertyData?.details?.bathrooms || "",
-    handoverDate: propertyData?.details?.handoverDate || "",
+    handoverDate: propertyData?.details?.handoverDate
+      ? new Date(propertyData.details.handoverDate).getFullYear()
+      : "",
     finishing: propertyData?.details?.finishingType || "",
     phone: propertyData?.advertiserPhoneNumber || "",
     whatsapp: propertyData?.haveWhatsapp || false,
     images: propertyData?.images || [],
+    buildingYear: propertyData?.details?.buildingYear || "",
   };
 
   useEffect(() => {
     const fetchProperty = async () => {
+      setIsLoading(true);
       try {
         const response = await PropertyAPI.getPropertyById(id);
         setPropertyData(response.data);
         setToggle(response.data.division);
-        setSelectType(response.data.details.propertyType);
+
+        // Normalize propertyType
+        const rawType = response.data.details.propertyType?.trim();
+        const typeOption =
+          translations.ar.aqarType.find((t) => t.label === rawType) ||
+          translations.en.aqarType.find((t) => t.label === rawType) ||
+          translations.en.aqarType.find((t) => t.value === rawType);
+        setSelectType(typeOption ? typeOption.value : rawType);
+
         setSelectView(response.data.details.view);
         setPaymentWay(response.data.details.paymentMethod[0]);
         setAqarSouq(response.data.details.propertyType);
@@ -100,6 +115,8 @@ const UpdateAqar = () => {
         setCity(response.data.location.city);
       } catch (error) {
         console.error("Error fetching property:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchProperty();
@@ -140,13 +157,17 @@ const UpdateAqar = () => {
     formData.append("details[paymentMethod]", values.paymentMethod);
     formData.append("details[propertyType]", values.propertyType);
     formData.append("details[price]", values.price);
-    formData.append("details[bathrooms]", values.bathrooms);
     formData.append("details[buildingYear]", values.buildingYear);
-    formData.append("details[handoverDate]", values.handoverYear);
+    // Ensure handoverDate is sent as a full date string if it was just a year
+    const formattedHandoverDate = values.handoverDate.toString().length === 4
+      ? `${values.handoverDate}-01-01`
+      : values.handoverDate;
+    formData.append("details[handoverDate]", formattedHandoverDate);
 
-    {
-      !isHouse && formData.append("details[rooms]", values.rooms);
+    if (!isHouse) {
+      formData.append("details[rooms]", values.rooms);
       formData.append("details[floor]", values.floor);
+      formData.append("details[bathrooms]", values.bathrooms);
     }
 
     // images
@@ -158,19 +179,30 @@ const UpdateAqar = () => {
       console.log("No images to send");
     }
 
-    setIsItemLoading(true);
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
+    // removed images
+    if (removedImages.length > 0) {
+      removedImages.forEach((imageName) => {
+        formData.append("removeImages", imageName);
+      });
     }
+
+    setIsItemLoading(true);
+
+    console.log("--- Submitting Update Form Data ---");
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}:`, value);
+    }
+    console.log("-----------------------------------");
+
     try {
       if (isHouse) {
-        const response = await PropertyAPI.updateBuilding(id,formData);
-        console.log(response);
+        const response = await PropertyAPI.updateBuilding(id, formData);
+        console.log("Update Response:", response);
         setShowModal(true);
         resetForm();
       } else {
-        const response = await PropertyAPI.updateProperty(id,formData);
-        console.log(response);
+        const response = await PropertyAPI.updateProperty(id, formData);
+        console.log("Update Response:", response);
         setShowModal(true);
         resetForm();
       }
@@ -196,55 +228,64 @@ const UpdateAqar = () => {
         }
       />
 
-      {propertyData && (
+      {isLoading ? (
+        <ContainerMedia>
+          <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '400px' }}>
+            <div className="text-center">
+              <Loader />
+              <p className="mt-3 b-12">جاري تحميل البيانات...</p>
+            </div>
+          </div>
+        </ContainerMedia>
+      ) : propertyData && (
         <FormField initialValues={initialValues} onSubmit={handleSubmit}>
-        {({ values, setFieldValue }) => (
-          <ContainerMedia>
-            <div className="form-container finishing align-items-center px-0">
-              <div className="w-100">
-                <div className="pb-4">
-                  <BreadcrumbsPage
-                    newClassBreadHeader={"biography-bread breadcrumb-page-2"}
-                    mainTitle={"أعلن عن  عقارك"}
-                    routeTitleTwoBread={false}
-                    titleTwoBread={false}
-                    secondArrow={false}
-                  />
-                </div>
-
-                <p className="b-1 mb-2 pb-3 ">أعلن عن عقارك</p>
-                <label className="b-12 mb-2">
-                  القسم
-                  <span className="required-asterisk"> *</span>
-                </label>
-                <div className="select-type join tabs-home justify-content-center mb-4">
-                  <SearchToggle
-                    toggleState={toggle}
-                    setToggleState={setToggle}
-                    tabs={tabs}
-                  />
-                </div>
-                {/* Type */}
-                <Row className=" gx-4 mb-4">
-                  <Col xs={12} md={12}>
-                    <label className="b-12 mb-2">
-                      نوع العقار
-                      <span className="required-asterisk"> *</span>
-                    </label>
-                    <Dropdown
-                      value={selectType}
-                      onChange={(e) => {
-                        setSelectType(e.value); // القيمة الانجليزية
-                        setFieldValue("type", e.value); // القيمة الانجليزية
-                      }}
-                      options={translations[currentLanguage].aqarType}
-                      optionLabel="label" // هيعرض اللي في label
-                      optionValue="value" // هيخزن value (انجليزي)
-                      name="type"
-                      placeholder={translations[currentLanguage].aqar}
+          {({ values, setFieldValue }) => (
+            <ContainerMedia>
+              <div className="form-container finishing align-items-center px-0">
+                <div className="w-100">
+                  <div className="pb-4">
+                    <BreadcrumbsPage
+                      newClassBreadHeader={"biography-bread breadcrumb-page-2"}
+                      mainTitle={"أعلن عن  عقارك"}
+                      routeTitleTwoBread={false}
+                      titleTwoBread={false}
+                      secondArrow={false}
                     />
-                  </Col>
-                  {/* <Col xs={12} md={4}>
+                  </div>
+
+                  <p className="b-1 mb-2 pb-3 ">أعلن عن عقارك</p>
+                  <label className="b-12 mb-2">
+                    القسم
+                    <span className="required-asterisk"> *</span>
+                  </label>
+                  <div className="select-type join tabs-home justify-content-center mb-4">
+                    <SearchToggle
+                      toggleState={toggle}
+                      setToggleState={setToggle}
+                      tabs={tabs}
+                    />
+                  </div>
+                  {/* Type */}
+                  <Row className=" gx-4 mb-4">
+                    <Col xs={12} md={12}>
+                      <label className="b-12 mb-2">
+                        نوع العقار
+                        <span className="required-asterisk"> *</span>
+                      </label>
+                      <Dropdown
+                        value={selectType}
+                        onChange={(e) => {
+                          setSelectType(e.value);
+                          setFieldValue("propertyType", e.value);
+                        }}
+                        options={translations[currentLanguage].aqarType}
+                        optionLabel="label"
+                        optionValue="value"
+                        name="propertyType"
+                        placeholder={translations[currentLanguage].aqar}
+                      />
+                    </Col>
+                    {/* <Col xs={12} md={4}>
                     <label className="b-12 mb-2">
                       نوع العقار في السوق
                       <span className="required-asterisk"> *</span>
@@ -264,36 +305,36 @@ const UpdateAqar = () => {
                       </div>
                     </div>
                   </Col> */}
-                </Row>
-                {/* <NestedDropdownAccordion data={nestedLocationData} title="عنوان العقار" placeholder="اختر المكان" /> */}
+                  </Row>
+                  {/* <NestedDropdownAccordion data={nestedLocationData} title="عنوان العقار" placeholder="اختر المكان" /> */}
 
-                {/* Details */}
-                <SectionHeader text={"تفاصيل العقار"} />
-                {/* location */}
+                  {/* Details */}
+                  <SectionHeader text={"تفاصيل العقار"} />
+                  {/* location */}
 
-                <div className="mb-4 ">
-                  <label className="b-12 mb-2">
-                    عنوان الاعلان <span className="required-asterisk">*</span>
-                  </label>
-                  <InputFiled name="titleAr" placeholder={"عنوان الاعلان"} />
-                </div>
+                  <div className="mb-4 ">
+                    <label className="b-12 mb-2">
+                      عنوان الاعلان <span className="required-asterisk">*</span>
+                    </label>
+                    <InputFiled name="titleAr" placeholder={"عنوان الاعلان"} />
+                  </div>
 
-                {/* announcment details*/}
+                  {/* announcment details*/}
 
-                <div className="mb-4 flex-wrap d-flex align-items-center justify-content-between ">
-                  <label className="b-12 ">
-                    تفاصيل الاعلان <span className="required-asterisk">*</span>
-                  </label>
-                  <TextArea
-                    name="descriptionAr"
-                    maxLength="700"
-                    placeholder={"تفاصيل الاعلان"}
-                  />
-                </div>
+                  <div className="mb-4 flex-wrap d-flex align-items-center justify-content-between ">
+                    <label className="b-12 ">
+                      تفاصيل الاعلان <span className="required-asterisk">*</span>
+                    </label>
+                    <TextArea
+                      name="descriptionAr"
+                      maxLength="700"
+                      placeholder={"تفاصيل الاعلان"}
+                    />
+                  </div>
 
-                {/* location in English*/}
+                  {/* location in English*/}
 
-                {/* <div className="mb-4 ">
+                  {/* <div className="mb-4 ">
                   <label className="b-12 mb-2">
                     عنوان الاعلان بالانجليزي{" "}
                     <span className="required-asterisk">*</span>
@@ -304,9 +345,9 @@ const UpdateAqar = () => {
                   />
                 </div> */}
 
-                {/* announcment details in English*/}
+                  {/* announcment details in English*/}
 
-                {/* <div className="mb-4 flex-wrap d-flex align-items-center justify-content-between ">
+                  {/* <div className="mb-4 flex-wrap d-flex align-items-center justify-content-between ">
                   <label className="b-12 ">
                     تفاصيل الاعلان بالانجليزي{" "}
                     <span className="required-asterisk">*</span>
@@ -318,308 +359,313 @@ const UpdateAqar = () => {
                   />
                 </div> */}
 
-                {/* announcmenter infomation*/}
-                <SectionHeader text={"بيانات المعلن"} />
+                  {/* announcmenter infomation*/}
+                  <SectionHeader text={"بيانات المعلن"} />
 
-                {/* mobile */}
+                  {/* mobile */}
 
-                <div className="mb-4 lg-w-30">
-                  <label className="b-12 mb-2" style={{ minWidth: "150px" }}>
-                    رقم الموبايل
-                    <span className="required-asterisk">*</span>
-                  </label>
-                  {/* <PhoneNumber
+                  <div className="mb-4 lg-w-30">
+                    <label className="b-12 mb-2" style={{ minWidth: "150px" }}>
+                      رقم الموبايل
+                      <span className="required-asterisk">*</span>
+                    </label>
+                    {/* <PhoneNumber
                     name="phone"
                     type="text"
                     placeholder={"اكتب رقمك"}
                   /> */}
-                  <Field name="phone" component={PhoneNumberValidation} />
-                </div>
-
-                <div className="b-15 mb-4 d-flex justify-content-between align-items-center lg-w-30">
-                  <div className="d-flex flex-row space-1">
-                    <WhatsIcon />
-                    يوجد واتساب علي هذا الرقم
+                    <Field name="phone" component={PhoneNumberValidation} />
                   </div>
-                  <Switch name="whatsapp" />
-                </div>
 
-                <div className="mb-4 b-15 d-flex align-items-center space-2">
-                  <input
-                    className={`form-check-input ${
-                      currentLanguage === "en" && "mx-0"
-                    }`}
-                    type="checkbox"
-                    id="flexCheckChecked"
-                    defaultChecked
-                    style={{ width: "20px", height: "20px" }}
-                  />
-                  تواصل معي عن طريق الايميل
-                </div>
+                  <div className="b-15 mb-4 d-flex justify-content-between align-items-center lg-w-30">
+                    <div className="d-flex flex-row space-1">
+                      <WhatsIcon />
+                      يوجد واتساب علي هذا الرقم
+                    </div>
+                    <Switch name="whatsapp" />
+                  </div>
 
-                {/* Aqar description */}
-                <SectionHeader text={" وصف العقار"} />
+                  <div className="mb-4 b-15 d-flex align-items-center space-2">
+                    <input
+                      className={`form-check-input ${currentLanguage === "en" && "mx-0"
+                        }`}
+                      type="checkbox"
+                      id="flexCheckChecked"
+                      defaultChecked
+                      style={{ width: "20px", height: "20px" }}
+                    />
+                    تواصل معي عن طريق الايميل
+                  </div>
 
-                {/* Row 1 */}
-                {/* size */}
-                <Row className="g-3 mb-4">
-                  <Col xs={12} md={4}>
-                    <label className="b-12 mb-2">
-                      المساحة (بالمتر){" "}
-                      <span className="required-asterisk"> *</span>
-                    </label>
-                    <InputFiled name="space" placeholder={"2م"} />
-                  </Col>
-                  {/* front of house */}
-                  <Col xs={12} md={4}>
-                    <label className="b-12 mb-2">
-                      تطل على<span className="required-asterisk"> *</span>
-                    </label>
-                    <Dropdown
-                      value={selectVeiw}
-                      onChange={(e) => {
-                        setSelectView(e.value);
-                        setFieldValue("view", e.value);
-                      }}
-                      options={translations[currentLanguage].view}
-                      placeholder={translations[currentLanguage].chooseView}
-                      name="view"
-                      className="hide-scrollbar"
-                      optionValue="value" // هيخزن value (انجليزي)
-                      optionLabel="label" // هيعرض اللي في label
-                    ></Dropdown>
-                  </Col>
+                  {/* Aqar description */}
+                  <SectionHeader text={" وصف العقار"} />
 
-                  {/* Finishing */}
-                  <Col xs={12} md={4}>
-                    <label className="b-12 mb-2">
-                      نوع التطشيب <span className="required-asterisk"> *</span>
-                    </label>
-                    <Dropdown
-                      value={finishing}
-                      onChange={(e) => {
-                        setFinishing(e.value);
-                        setFieldValue("finishing", e.value);
-                      }}
-                      options={translations[currentLanguage].finishingDetails}
-                      placeholder={translations[currentLanguage].finishing}
-                      name="finishing"
-                    >
-                      optionValue="value" // هيخزن value (انجليزي)
-                      optionLabel="label" // هيعرض اللي في label
-                    </Dropdown>
-                  </Col>
+                  {/* Row 1 */}
+                  {/* size */}
+                  <Row className="g-3 mb-4">
+                    <Col xs={12} md={4}>
+                      <label className="b-12 mb-2">
+                        المساحة (بالمتر){" "}
+                        <span className="required-asterisk"> *</span>
+                      </label>
+                      <InputFiled name="space" placeholder={"2م"} />
+                    </Col>
+                    {/* front of house */}
+                    <Col xs={12} md={4}>
+                      <label className="b-12 mb-2">
+                        تطل على<span className="required-asterisk"> *</span>
+                      </label>
+                      <Dropdown
+                        value={selectVeiw}
+                        onChange={(e) => {
+                          setSelectView(e.value);
+                          setFieldValue("view", e.value);
+                        }}
+                        options={translations[currentLanguage].view}
+                        placeholder={translations[currentLanguage].chooseView}
+                        name="view"
+                        className="hide-scrollbar"
+                        optionValue="value" // هيخزن value (انجليزي)
+                        optionLabel="label" // هيعرض اللي في label
+                      ></Dropdown>
+                    </Col>
 
-                  {/* payment */}
-                  <Col xs={12} md={4}>
-                    <label className="b-12 mb-2">
-                      طريقة الدفع<span className="required-asterisk"> *</span>
-                    </label>
-                    <Dropdown
-                      value={paymentWay}
-                      onChange={(e) => {
-                        setPaymentWay(e.value);
-                        setFieldValue("paymentMethod", e.value);
-                      }}
-                      options={translations[currentLanguage].paymentWayDetails}
-                      placeholder={translations[currentLanguage].paymentWay}
-                      name="paymentMethod"
-                      className="hide-scrollbar"
-                      optionValue="value" // هيخزن value (انجليزي)
-                      optionLabel="label" // هيعرض اللي في label
-                    ></Dropdown>
-                  </Col>
+                    {/* Finishing */}
+                    <Col xs={12} md={4}>
+                      <label className="b-12 mb-2">
+                        نوع التطشيب <span className="required-asterisk"> *</span>
+                      </label>
+                      <Dropdown
+                        value={finishing}
+                        onChange={(e) => {
+                          setFinishing(e.value);
+                          setFieldValue("finishing", e.value);
+                        }}
+                        options={translations[currentLanguage].finishingDetails}
+                        placeholder={translations[currentLanguage].finishing}
+                        name="finishing"
+                      >
+                        optionValue="value" // هيخزن value (انجليزي)
+                        optionLabel="label" // هيعرض اللي في label
+                      </Dropdown>
+                    </Col>
 
-                  {/* aqar souq */}
-                  <Col xs={12} md={4}>
-                    <label className="b-12 mb-2">
-                      نوع العقار ف السوق{" "}
-                      <span className="required-asterisk"> *</span>
-                    </label>
-                    <Dropdown
-                      value={aqarSouq}
-                      onChange={(e) => {
-                        setAqarSouq(e.value);
-                        setFieldValue("propertyType", e.value);
-                      }}
-                      options={translations[currentLanguage].aqarSouqDetails}
-                      placeholder={translations[currentLanguage].aqarSouq}
-                      name="propertyType"
-                      optionValue="value" // هيخزن value (انجليزي)
-                      optionLabel="label" // هيعرض اللي في label
-                    ></Dropdown>
-                  </Col>
+                    {/* payment */}
+                    <Col xs={12} md={4}>
+                      <label className="b-12 mb-2">
+                        طريقة الدفع<span className="required-asterisk"> *</span>
+                      </label>
+                      <Dropdown
+                        value={paymentWay}
+                        onChange={(e) => {
+                          setPaymentWay(e.value);
+                          setFieldValue("paymentMethod", e.value);
+                        }}
+                        options={translations[currentLanguage].paymentWayDetails}
+                        placeholder={translations[currentLanguage].paymentWay}
+                        name="paymentMethod"
+                        className="hide-scrollbar"
+                        optionValue="value" // هيخزن value (انجليزي)
+                        optionLabel="label" // هيعرض اللي في label
+                      ></Dropdown>
+                    </Col>
+
+                    {/* aqar souq */}
+                    <Col xs={12} md={4}>
+                      <label className="b-12 mb-2">
+                        نوع العقار ف السوق{" "}
+                        <span className="required-asterisk"> *</span>
+                      </label>
+                      <Dropdown
+                        value={aqarSouq}
+                        onChange={(e) => {
+                          setAqarSouq(e.value);
+                          setFieldValue("propertyType", e.value);
+                        }}
+                        options={translations[currentLanguage].aqarSouqDetails}
+                        placeholder={translations[currentLanguage].aqarSouq}
+                        name="propertyType"
+                        optionValue="value" // هيخزن value (انجليزي)
+                        optionLabel="label" // هيعرض اللي في label
+                      ></Dropdown>
+                    </Col>
 
                     {!isHouse && (
-                    <>
-                      {/* rooms number */}
-                      <Col xs={12} md={4}>
-                        <label className="b-12 mb-2">
-                          عدد الغرف{" "}
-                          <span className="required-asterisk"> *</span>
-                        </label>
-                        <InputFiled name="rooms" placeholder={"عدد الغرف"} />
-                      </Col>
+                      <>
+                        {/* rooms number */}
+                        <Col xs={12} md={4}>
+                          <label className="b-12 mb-2">
+                            عدد الغرف{" "}
+                            <span className="required-asterisk"> *</span>
+                          </label>
+                          <InputFiled name="rooms" placeholder={"عدد الغرف"} />
+                        </Col>
 
-                      {/* no.floor */}
-                      <Col xs={12} md={4}>
-                        <label className="b-12 mb-2">
-                          الدور <span className="required-asterisk"> *</span>
-                        </label>
-                        <InputFiled name="floor" placeholder={" رقم الدور "} />
-                      </Col>
+                        {/* no.floor */}
+                        <Col xs={12} md={4}>
+                          <label className="b-12 mb-2">
+                            الدور <span className="required-asterisk"> *</span>
+                          </label>
+                          <InputFiled name="floor" placeholder={" رقم الدور "} />
+                        </Col>
 
-                      {/* no.Bathroom */}
-                      <Col xs={12} md={4}>
-                        <label className="b-12 mb-2">
-                          الحمامات <span className="required-asterisk"> *</span>
-                        </label>
-                        <InputFiled
-                          name="bathrooms"
-                          placeholder={" عدد الحمامات "}
-                        />
-                      </Col>
-                    </>
-                  )}
+                        {/* no.Bathroom */}
+                        <Col xs={12} md={4}>
+                          <label className="b-12 mb-2">
+                            الحمامات <span className="required-asterisk"> *</span>
+                          </label>
+                          <InputFiled
+                            name="bathrooms"
+                            placeholder={" عدد الحمامات "}
+                          />
+                        </Col>
+                      </>
+                    )}
 
-                {/* Row 2 */}
-                
-                  {/* no.build */}
-                  <Col xs={12} md={4}>
-                    <label className="b-12 mb-2">
-                      سنة البناء<span className="required-asterisk"> *</span>
-                    </label>
-                    <InputFiled
-                      name="buildingYear"
-                      placeholder={"حدد سنة البناء"}
-                    />
-                  </Col>
+                    {/* Row 2 */}
 
-                  {/* no.Year */}
-                  <Col xs={12} md={4}>
-                    <label className="b-12 mb-2">
-                      سنة التسليم <span className="required-asterisk"> *</span>
-                    </label>
-                    <InputFiled
-                      name="handoverYear"
-                      placeholder={"حدد سنة التسليم "}
-                    />
-                  </Col>
-                  {/* price */}
-                  <Col xs={12} md={4}>
-                    <label className="b-12 mb-2">
-                      السعر <span className="required-asterisk"> *</span>
-                    </label>
-                    <InputFiled name="price" placeholder={"السعر"} />
-                  </Col>
-                </Row>
+                    {/* no.build */}
+                    <Col xs={12} md={4}>
+                      <label className="b-12 mb-2">
+                        سنة البناء<span className="required-asterisk"> *</span>
+                      </label>
+                      <InputFiled
+                        name="buildingYear"
+                        placeholder={"حدد سنة البناء"}
+                      />
+                    </Col>
 
-                {/* Location of the property */}
-                <SectionHeader text={"عنوان العقار"} />
+                    {/* no.Year */}
+                    <Col xs={12} md={4}>
+                      <label className="b-12 mb-2">
+                        سنة التسليم <span className="required-asterisk"> *</span>
+                      </label>
+                      <InputFiled
+                        name="handoverDate"
+                        placeholder={"حدد سنة التسليم "}
+                      />
+                    </Col>
+                    {/* price */}
+                    <Col xs={12} md={4}>
+                      <label className="b-12 mb-2">
+                        السعر <span className="required-asterisk"> *</span>
+                      </label>
+                      <InputFiled name="price" placeholder={"السعر"} />
+                    </Col>
+                  </Row>
 
-                {/* location */}
+                  {/* Location of the property */}
+                  <SectionHeader text={"عنوان العقار"} />
 
-                <div className="mb-4">
+                  {/* location */}
+
                   <div className="mb-4">
+                    <div className="mb-4">
+                      <label className="b-12 mb-2">
+                        عنوان العقار <span className="required-asterisk"> *</span>
+                      </label>
+                      <Dropdown
+                        value={city}
+                        onChange={(e) => {
+                          setCity(e.value);
+                          setFieldValue("city", e.value);
+                        }}
+                        editable
+                        options={data.map((item) => ({
+                          value: item.city_name_en,
+                          label:
+                            currentLanguage === "ar"
+                              ? item.city_name_ar
+                              : item.city_name_en,
+                        }))}
+                        placeholder={translations[currentLanguage].city}
+                        name="city"
+                        className="hide-scrollbar"
+                        optionValue="value" // هيخزن value (انجليزي)
+                        optionLabel="label" // هيعرض اللي في label
+                      ></Dropdown>
+                    </div>
                     <label className="b-12 mb-2">
-                      عنوان العقار <span className="required-asterisk"> *</span>
+                      عنوان العقار <span className="required-asterisk">*</span>
                     </label>
-                    <Dropdown
-                      value={city}
-                      onChange={(e) => {
-                        setCity(e.value);
-                        setFieldValue("city", e.value);
-                      }}
-                      editable
-                      options={data.map((item) => ({
-                        value: item.city_name_en,
-                        label:
-                          currentLanguage === "ar"
-                            ? item.city_name_ar
-                            : item.city_name_en,
-                      }))}
-                      placeholder={translations[currentLanguage].city}
-                      name="city"
-                      className="hide-scrollbar"
-                      optionValue="value" // هيخزن value (انجليزي)
-                      optionLabel="label" // هيعرض اللي في label
-                    ></Dropdown>
-                  </div>
-                  <label className="b-12 mb-2">
-                    عنوان العقار <span className="required-asterisk">*</span>
-                  </label>
 
-                  <div className="mb-5">
-                    <GoogleSearchBoxWithMap
-                      setLatitude={setLatitude}
-                      setLongitude={setLongitude}
-                      isItemLoading={isItemLoading}
-                      longitude={longitude}
-                      latitude={latitude}
-                      setLocationDetails={setLocationDetails}
-                      locationDetails={locationDetails}
+                    <div className="mb-5">
+                      <GoogleSearchBoxWithMap
+                        setLatitude={setLatitude}
+                        setLongitude={setLongitude}
+                        isItemLoading={isItemLoading}
+                        longitude={longitude}
+                        latitude={latitude}
+                        setLocationDetails={setLocationDetails}
+                        locationDetails={locationDetails}
+                      />
+                    </div>
+                  </div>
+
+                  {/* photos */}
+                  <SectionHeader text={"صور المشروع"} />
+
+                  <div className="mb-4">
+                    <ImageUploadGrid
+                      name="images"
+                      onRemove={(imageName) => {
+                        setRemovedImages((prev) => [...prev, imageName]);
+                      }}
                     />
                   </div>
-                </div>
 
-                {/* photos */}
-                <SectionHeader text={"صور المشروع"} />
-
-                <div className="mb-4">
-                  <ImageUploadGrid name="images" />
-                </div>
-
-                <div className="d-flex justify-content-center mt-5 pt-3">
-                  <button
-                    type="submit"
-                    className="btn-main btn-submit b-11"
-                    disabled={isItemLoading}
-                  >
-                    {isItemLoading ? "جاري الإرسال..." : "ابعت للموافقة"}
-                  </button>
-                </div>
-
-                <CustomModal
-                  showModal={showModal}
-                  onHide={() => setShowModal(false)}
-                  setShowModal={setShowModal}
-                  newClass={"success-modal images-modal join"}
-                >
-                  <div className="d-flex text-center flex-column align-items-center justify-content-center w-100 space-4 p-5">
-                    <div className="position-relative">
-                      <DotLottieReact
-                        src="/animation/success.lottie"
-                        loop
-                        autoplay
-                      />
-                    </div>
-                    <div className="position-absolute top-1000">
-                      <DotLottieReact
-                        src="./animation/successpapers.lottie"
-                        loop
-                        autoplay
-                      />
-                    </div>
-                    <h6>💡 طلبك وصل!</h6>
-                    <p className="b-15" style={{ color: "var(--netural-700)" }}>
-                      تمام،تم إنشاء الاعلان بنجاح، في انتظار الموافقة! ✨ هنراجع
-                      بياناتك وهنكلمك قريب عشان نكمل باقي الخطوات. خليك متابع
-                      تنبيهاتك لأي جديد! 🚀
-                    </p>
-                    <Link
-                      to={"/"}
-                      className="btn-main btn-submit mt-3 b-11 py-3 px-2"
+                  <div className="d-flex justify-content-center mt-5 pt-3">
+                    <button
+                      type="submit"
+                      className="btn-main btn-submit b-11"
+                      disabled={isItemLoading}
                     >
-                      ارجع للرئيسية
-                    </Link>
+                      {isItemLoading ? "جاري الإرسال..." : "ابعت للموافقة"}
+                    </button>
                   </div>
-                </CustomModal>
+
+                  <CustomModal
+                    showModal={showModal}
+                    onHide={() => setShowModal(false)}
+                    setShowModal={setShowModal}
+                    newClass={"success-modal images-modal join"}
+                  >
+                    <div className="d-flex text-center flex-column align-items-center justify-content-center w-100 space-4 p-5">
+                      <div className="position-relative">
+                        <DotLottieReact
+                          src="/animation/success.lottie"
+                          loop
+                          autoplay
+                        />
+                      </div>
+                      <div className="position-absolute top-1000">
+                        <DotLottieReact
+                          src="./animation/successpapers.lottie"
+                          loop
+                          autoplay
+                        />
+                      </div>
+                      <h6>💡 طلبك وصل!</h6>
+                      <p className="b-15" style={{ color: "var(--netural-700)" }}>
+                        تمام،تم إنشاء الاعلان بنجاح، في انتظار الموافقة! ✨ هنراجع
+                        بياناتك وهنكلمك قريب عشان نكمل باقي الخطوات. خليك متابع
+                        تنبيهاتك لأي جديد! 🚀
+                      </p>
+                      <Link
+                        to={"/"}
+                        className="btn-main btn-submit mt-3 b-11 py-3 px-2"
+                      >
+                        ارجع للرئيسية
+                      </Link>
+                    </div>
+                  </CustomModal>
+                </div>
               </div>
-            </div>
-          </ContainerMedia>
-        )}
-      </FormField>
-      )}
+            </ContainerMedia>
+          )}
+        </FormField>
+      )
+      }
     </>
   );
 };

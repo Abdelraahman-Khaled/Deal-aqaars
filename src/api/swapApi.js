@@ -4,7 +4,7 @@ const SwapAPI = {
   // Get user's swaps
   getMySwaps: async (status) => {
     try {
-      const url = status ? `/swap/me?status=${status}` : "/swap/me";
+      const url = status ? `/swap/my?status=${status}` : "/swap/my";
       const response = await axiosInstance.get(url);
       return response.data;
     } catch (error) {
@@ -48,6 +48,21 @@ const SwapAPI = {
       return response.data;
     } catch (error) {
       console.error("Error creating swap:", error.response || error.message);
+      throw error;
+    }
+  },
+
+  // Update swap by ID
+  updateSwap: async (id, formData) => {
+    try {
+      const response = await axiosInstance.put(`/swap/${id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error(`Error updating swap with ID ${id}:`, error.response || error.message);
       throw error;
     }
   },

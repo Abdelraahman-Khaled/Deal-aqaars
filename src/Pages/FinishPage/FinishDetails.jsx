@@ -180,7 +180,7 @@ const FinishDetails = () => {
                     <main>
 
 
-                        <SliderDetailsContent />
+                        <SliderDetailsContent images={finishingData.images} />
                         <div className="row gy-4">
                             <div className="col-12 col-xl-9 d-flex flex-column space-8">
                                 <DescriptionGuide
@@ -208,7 +208,7 @@ const FinishDetails = () => {
                                         <div key={index} className="slider-card-wrapper w-100">
                                             <FininshCard
                                                 id={item._id || index}
-                                                img={item.images && item.images.length > 0 ? item.images[0] : item.img || "./home.jpg"}
+                                                img={item.images && item.images.length > 0 ? item.images : item.img || "./home.jpg"}
                                                 subtitles={item.servicesOffered ?
                                                     item.servicesOffered.map(service => service.ar || service) :
                                                     item.services || item.subtitles}

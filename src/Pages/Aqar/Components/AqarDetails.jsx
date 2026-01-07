@@ -55,23 +55,9 @@ const AqarDetails = () => {
         { id: 1, name: "منزل / بيت" },
         { id: 2, name: "شقة" },
         { id: 3, name: "شقة بحديقة" },
-        { id: 4, name: "استوديو" },
-        { id: 5, name: "استوديو فندقي" },
-        { id: 6, name: "استوديو بحديقة" },
-        { id: 7, name: "لوفت" },
-        { id: 8, name: "دوبلكس" },
-        { id: 9, name: "دوبلكس بحديقة" },
-        { id: 10, name: "بنتهاوس" },
-        { id: 11, name: "روف" },
-        { id: 12, name: "توين دوبلكس" },
-        { id: 13, name: "هاف دوبلكس" },
-        { id: 14, name: "شاليه بحديقة" },
-        { id: 15, name: "ساحلي فيلا" },
-        { id: 16, name: "توين شاليه" },
-        { id: 17, name: "شاليه كابينة" },
-        { id: 18, name: "فيلا منفصلة" },
-        { id: 19, name: "فيلا جاردن" },
-        { id: 20, name: "توين فيلا" },
+        { id: 4, name: "روف" },
+        { id: 5, name: "فيلا منفصلة" },
+        { id: 6, name: "فيلا جاردن" },
       ],
     },
     {
@@ -158,7 +144,7 @@ const AqarDetails = () => {
         <div className="d-flex flex-column space-6">
           <p className="b-11">{translations[currentLanguage].rooms} </p>
           <div className="d-flex flex-wrap flex-row gap-2">
-            {["استوديو", "1", "2", "3", "4", "5", "6", "7", "8+"].map(
+            {["1", "2", "3", "4", "5", "6", "7", "8+"].map(
               (item, index) => (
                 <p
                   key={index}
@@ -297,9 +283,8 @@ const AqarDetails = () => {
             >
               {rooms === "" && baths === ""
                 ? `${translations[currentLanguage].rooms} & ${translations[currentLanguage].baths}`
-                : rooms === "استوديو"
-                  ? rooms + " / " + baths + " حمام"
-                  : `${translations[currentLanguage].rooms} ${rooms} / ${baths} ${translations[currentLanguage].actualBath}`}
+                :
+                `${translations[currentLanguage].rooms} ${rooms} / ${baths} ${translations[currentLanguage].actualBath}`}
               <MenuArrow rotate={rotate} />
             </Dropdown.Toggle>
             <Dropdown.Menu className="w-100">

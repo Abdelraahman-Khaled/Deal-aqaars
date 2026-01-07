@@ -385,22 +385,22 @@ const UpdateBuilding = () => {
                                         {/* building year */}
                                         <Col xs={12} md={4}>
                                             <label className="b-12 mb-2">
-                                                سنة البناء<span className="required-asterisk"> *</span>
+                                                سنة البناء<span className=""> *</span>
                                             </label>
                                             <InputFiled
                                                 name="buildingYear"
-                                                placeholder={"حدد سنة البناء"}
+                                                placeholder={"حدد سنة البناء (اختياري)"}
                                             />
                                         </Col>
 
                                         {/* handover year */}
                                         <Col xs={12} md={4}>
                                             <label className="b-12 mb-2">
-                                                سنة التسليم <span className="required-asterisk"> *</span>
+                                                سنة التسليم <span className=""> *</span>
                                             </label>
                                             <InputFiled
                                                 name="handoverDate"
-                                                placeholder={"حدد سنة التسليم "}
+                                                placeholder={"حدد سنة التسليم (اختياري)"}
                                             />
                                         </Col>
 

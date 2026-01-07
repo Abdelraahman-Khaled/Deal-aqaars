@@ -7,9 +7,6 @@ export const translations = {
     type: "Choose your type",
     aqarType: [
       { label: "villa", value: "villa" },
-      { label: "chalet", value: "chalet" },
-      { label: "twin house", value: "twin_house" },
-      { label: "penthouse", value: "penthouse" },
       { label: "commercial office", value: "commercial_office" },
       { label: "apartment", value: "apartment" },
       { label: "house", value: "house" },
@@ -87,9 +84,6 @@ export const translations = {
     city: "اختر المدينة",
     aqarType: [
       { label: "فلل", value: "villa" },
-      { label: "شاليهات", value: "chalet" },
-      { label: "توين هاوس", value: "twin_house" },
-      { label: "بنت هاوس", value: "penthouse" },
       { label: "مكتب تجاري", value: "commercial_office" },
       { label: "شقة", value: "apartment" },
       { label: "عمارة", value: "house" },
@@ -102,7 +96,7 @@ export const translations = {
       { label: " أرض زراعية", value: "agricultural" },
       { label: "أرض صناعية", value: "industrial" },
     ],
-     administrativeType: [
+    administrativeType: [
       { label: "متجر", value: "shop" },
       { label: "إداري", value: "unit" },
     ],

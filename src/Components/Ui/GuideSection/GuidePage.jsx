@@ -89,7 +89,6 @@ const GuidePage = ({ title, compound = true }) => {
       const response = await CompoundAPI.getAllCompounds(filters);
       if (response && response.data) {
         setCompounds(response.data);
-        console.log("compoundsdata", response.data);
       }
     } catch (error) {
       console.error("Error fetching compounds:", error);

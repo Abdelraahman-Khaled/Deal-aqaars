@@ -2,13 +2,15 @@ import React, { useState } from 'react'
 import { Col, Dropdown } from "react-bootstrap";
 import { useLanguage } from '../../../../Components/Languages/LanguageContext';
 import SearchToggle from '../../../../Components/Ui/SearchComponents/SearchToggle ';
-import MultiSelect from '../../../../Components/Forms/MultiSelect';
 import TabsContent from '../../../../Components/Ui/TabsContent/TabsContent';
 import MenuArrow from '../../../../assets/Icons/MenuArrow';
 import { translations } from './translations';
 import "./compound.css"
 import BudgetDropdown from '../../../../Components/Ui/SearchComponents/BudgetDropdown';
 import PlaceTypeDropdown from '../../../../Components/Ui/SearchComponents/PlaceTypeDropdown';
+import data from "../../../../data/cities.json";
+import { MultiSelect } from "primereact/multiselect";
+
 
 const CompoundList = () => {
     const { currentLanguage } = useLanguage(); // Get the current language
@@ -22,6 +24,7 @@ const CompoundList = () => {
     const [rotatePlace, setRotatePlace] = useState(false);
     const [placeType, setPlaceType] = useState("نوع المكان");
     const [placeTypeDetails, setPlaceTypeDetails] = useState("");
+    const [selectedCities, setSelectedCities] = useState([]);
 
 
     const tabs = [
@@ -204,6 +207,13 @@ const CompoundList = () => {
         },
     ];
 
+    const cities = data.map((item) => ({
+        name: item.city_name_ar,
+        value: item.city_name_en,
+    }));
+
+    console.log("cities", cities)
+
 
     return (
         <div className="advanced-search  compound  d-flex space-3 flex-column p-0">
@@ -228,9 +238,16 @@ const CompoundList = () => {
                 <Col className="d-flex flex-row space-3">
                     <div className="position-relative w-100">
                         <MultiSelect
-                            options={multiOptions}
-                            defaultSelected={[]}
-                            onChange={(values) => setSelectedValues(values)}
+                            value={selectedCities}
+                            onChange={(e) => setSelectedCities(e.value)}
+                            options={cities}
+                            optionLabel="name"
+                            optionValue="value"
+                            display="chip"
+                            placeholder="جميع المحافظات"
+                            maxSelectedLabels={3}
+                            filter
+                            className="h-100 form-control w-100  search-input d-flex align-items-center p-1"
                         />
                     </div>
                 </Col>
@@ -273,9 +290,9 @@ const CompoundList = () => {
                 </Col>
 
                 {/* type */}
-                <Col onClick={() => setRotatePlace(!rotatePlace)}>
+                {/* <Col onClick={() => setRotatePlace(!rotatePlace)}>
                     <PlaceTypeDropdown placeType={placeType} placeTypeDetails={placeTypeDetails} tabsKind={tabsKind} rotate={rotatePlace} />
-                </Col>
+                </Col> */}
             </div>
         </div>
     )

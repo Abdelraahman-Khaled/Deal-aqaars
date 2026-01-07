@@ -40,7 +40,6 @@ const CompoundGuidePage = ({ title }) => {
             // }
 
             const response = await CompoundAPI.getAllCompounds(); // Fetch all compounds for now
-            console.log("compoundsdata", response);
             if (response && response.data) {
                 setCompounds(response.data);
             }

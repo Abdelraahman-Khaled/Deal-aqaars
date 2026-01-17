@@ -96,8 +96,6 @@ const UpdateAdministrative = () => {
             setIsLoading(true);
             try {
                 const response = await PropertyAPI.getAdministrativeById(id);
-                console.log("Fetched Administrative Data:", response.data);
-                console.log("Location Data:", response.data.location);
 
                 setPropertyData(response.data);
                 setToggle(response.data.division);
@@ -186,15 +184,8 @@ const UpdateAdministrative = () => {
 
         setIsItemLoading(true);
 
-        console.log("--- Submitting Update Administrative Data ---");
-        for (let [key, value] of formData.entries()) {
-            console.log(`${key}:`, value);
-        }
-        console.log("----------------------------------------");
-
         try {
             const response = await PropertyAPI.updateAdministrative(id, formData);
-            console.log("Update Response:", response);
             setShowModal(true);
             resetForm();
         } catch (err) {

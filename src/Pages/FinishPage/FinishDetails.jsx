@@ -111,7 +111,6 @@ const FinishDetails = () => {
             try {
                 setLoading(true);
                 const response = await FinishingAPI.getFinishingById(finishingId);
-                console.log(response.data);
 
                 setFinishingData(response.data);
                 setError(null);

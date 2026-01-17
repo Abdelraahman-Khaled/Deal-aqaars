@@ -18,7 +18,6 @@ const FinishCardContainer = ({ finishingServices, loading, error }) => {
     const pageCount = Math.ceil(cardData?.length / perPage) || 0;
     const offset = currentPage * perPage;
     const currentPageData = cardData?.slice(offset, offset + perPage) || [];
-    console.log(finishingServices);
 
 
     const handlePageChange = ({ selected }) => {

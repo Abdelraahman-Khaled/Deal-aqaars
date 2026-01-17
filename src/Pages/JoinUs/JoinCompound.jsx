@@ -117,9 +117,7 @@ const JoinCompound = () => {
   };
 
 
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
+
   return (
     <>
       <HelmetInfo

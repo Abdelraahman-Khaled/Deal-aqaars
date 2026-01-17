@@ -15,7 +15,6 @@ const UpdateFinishingModal = ({ showModal, setShowModal, finishingServiceData })
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        console.log("finishingServiceData:", finishingServiceData);
     }, [finishingServiceData]);
 
      const [type, setType] = useState(finishingServiceData?.jobType?.en === "Fit-out & Renovation" ? "finishing" : "furnishing");

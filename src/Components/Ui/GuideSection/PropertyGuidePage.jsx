@@ -68,7 +68,6 @@ const PropertyGuidePage = ({ title }) => {
         fetchProperties();
     }, [params]);
 
-    console.log("properties", properties);
 
     return (
         <div className="guide compound d-flex flex-wrap flex-md-row justify-content-between">

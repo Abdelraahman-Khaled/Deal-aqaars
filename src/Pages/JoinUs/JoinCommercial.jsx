@@ -139,12 +139,9 @@ const JoinCommercial = () => {
     }
 
     setIsItemLoading(true);
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
+ 
     try {
       const response = await AdministrativeAPI.createAdministrative(formData);
-      console.log(response);
       setShowModal(true);
       resetForm();
     } catch (err) {

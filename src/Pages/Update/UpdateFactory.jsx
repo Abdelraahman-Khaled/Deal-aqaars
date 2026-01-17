@@ -160,15 +160,8 @@ const UpdateFactory = () => {
 
         setIsItemLoading(true);
 
-        console.log("--- Submitting Update Factory Data ---");
-        for (let [key, value] of formData.entries()) {
-            console.log(`${key}:`, value);
-        }
-        console.log("----------------------------------------");
-
         try {
             const response = await PropertyAPI.updateFactory(id, formData);
-            console.log("Update Response:", response);
             setShowModal(true);
             resetForm();
         } catch (err) {

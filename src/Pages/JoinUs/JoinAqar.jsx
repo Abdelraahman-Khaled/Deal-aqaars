@@ -139,18 +139,14 @@ const JoinAqar = () => {
     }
 
     setIsItemLoading(true);
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
+ 
     try {
       if (isHouse) {
         const response = await PropertyAPI.createBuilding(formData);
-        console.log(response);
         setShowModal(true);
         resetForm();
       } else {
         const response = await PropertyAPI.createProperty(formData);
-        console.log(response);
         setShowModal(true);
         resetForm();
       }

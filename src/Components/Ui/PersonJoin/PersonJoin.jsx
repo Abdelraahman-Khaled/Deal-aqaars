@@ -105,9 +105,7 @@ export const PersonJoin = ({ setShowPerson, setShowProgress }) => {
     const handleSubmit = async (values, { setSubmitting, resetForm }) => {
         try {
             setIsLoading(true);
-            console.log('Form data to submit:', values);
             const response = await CompanyAPI.beingVendor(values);
-            console.log('API Response:', response);
 
             // Show success and proceed to next step
             setShowProgress(true);

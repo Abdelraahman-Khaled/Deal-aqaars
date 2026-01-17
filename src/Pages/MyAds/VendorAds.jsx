@@ -106,7 +106,6 @@ const VendorAds = () => {
     try {
       setCompoundsLoading(true);
       const response = await CompoundAPI.getMyCompounds(status);
-      console.log("my-c", response.data);
 
       setCompounds(response.data);
       setCompoundsError(null);
@@ -126,7 +125,6 @@ const VendorAds = () => {
       setLoading(true);
       const response = await SwapAPI.getMySwaps(status);
       setSwaps(response.swaps);
-      console.log("My Swaps:", response.swaps);
       setError(null);
     } catch (err) {
       console.error("Error fetching swaps:", err);
@@ -289,7 +287,6 @@ const VendorAds = () => {
     { label: "محذوف", value: "deleted", active: false },
   ];
 
-  console.log(myBuildings);
 
   return (
     <>

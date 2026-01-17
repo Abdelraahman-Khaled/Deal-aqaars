@@ -11,7 +11,6 @@ const SliderDetailsContent = ({ images }) => {
   const [thumbs, setThumbs] = useState(null);
   const mapImages = images
 
-  console.log("imgs", images);
 
 
   return (

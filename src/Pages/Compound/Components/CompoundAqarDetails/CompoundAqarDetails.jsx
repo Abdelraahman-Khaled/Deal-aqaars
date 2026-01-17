@@ -24,7 +24,6 @@ const CompoundAqarDetails = () => {
   const { compound, loading, error, fetchCompound, clearCompound } =
     useCompound();
   const selectedUnit = compound?.units?.find((unit) => unit._id === index);
-  console.log(selectedUnit);
 
   useEffect(() => {
     if (id) {

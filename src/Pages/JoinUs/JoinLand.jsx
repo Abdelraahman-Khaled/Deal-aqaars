@@ -131,12 +131,10 @@ const JoinLand = () => {
       console.log("No images to send");
     }
 
-    console.log("Data sent to backend:", Object.fromEntries(formData.entries()));
 
     setIsItemLoading(true);
     try {
       const response = await LandAPI.createLand(formData);
-      console.log(response);
       setShowModal(true);
       resetForm();
     } catch (err) {

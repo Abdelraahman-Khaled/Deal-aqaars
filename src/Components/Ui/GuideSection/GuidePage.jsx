@@ -110,10 +110,7 @@ const GuidePage = ({ title, compound = true }) => {
     }
   }, [compound, toggle]);
 
-  console.log("properties", properties);
-  console.log("compounds", compounds);
-  console.log("compound prop", compound);
-  console.log("toggle state", toggle);
+
 
   return (
     <div className=" guide compound d-flex flex-wrap  flex-md-row  justify-content-between">

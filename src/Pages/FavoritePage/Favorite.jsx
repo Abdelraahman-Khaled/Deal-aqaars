@@ -265,7 +265,6 @@ const Favorite = () => {
             try {
                 const response = await FavoriteAPI.getFavorites()
                 setFavData(response.items)
-                console.log(response);
             } catch (error) {
                 console.error('Error fetching favorites:', error);
             } finally {

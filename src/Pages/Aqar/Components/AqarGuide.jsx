@@ -25,7 +25,6 @@ const AqarGuide = () => {
     const { id } = useParams();
     const { property, loading, error, fetchProperty, clearProperty } = useProperty();
     const [relatedProperties, setRelatedProperties] = useState([]);
-    console.log(relatedProperties, "relatedProperties");
 
     // Fetch property when component mounts or id changes
     useEffect(() => {
@@ -65,7 +64,6 @@ const AqarGuide = () => {
         fetchRelated();
     }, [property]);
 
-    console.log("property:", property);
 
     const unitDetails = [
         {

@@ -7,7 +7,8 @@ const HomePoster = () => {
     const { ads, loading } = useAds();
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-    const images = loading ? [] : ads[2].images.map((img) => img.url);
+    const homeAd = !loading && ads ? ads.find(ad => ad.name === 'home') : null;
+    const images = homeAd ? homeAd.images.map((img) => img.url) : [];
 
 
     useEffect(() => {
@@ -20,7 +21,7 @@ const HomePoster = () => {
 
     if (loading) {
         return <Skeleton width="100%" height="15.625rem" borderRadius="16px"></Skeleton>
-        ;
+            ;
     }
 
     return (

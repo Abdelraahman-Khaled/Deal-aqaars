@@ -58,7 +58,6 @@ const UpdateSwap = () => {
                     swapData = swapData.swap;
                 }
 
-                console.log("Processed Swap Data:", swapData);
 
                 const newInitialValues = {
                     havePropertyType: swapData.whatIHave?.propertyType || "",
@@ -70,7 +69,6 @@ const UpdateSwap = () => {
                     locationLabel: swapData.location?.detailedLocation || "",
                     images: swapData.images || [],
                 };
-                console.log("Setting Initial Values:", newInitialValues);
                 setInitialValues(newInitialValues);
 
                 setCity(swapData.location?.city || "");
@@ -144,7 +142,6 @@ const UpdateSwap = () => {
             setIsSubmitting(true);
 
             const response = await SwapAPI.updateSwap(id, formData);
-            console.log("✅ Success:", response);
             setShowModal(true);
         } catch (error) {
             console.error("❌ Error updating swap:", error);

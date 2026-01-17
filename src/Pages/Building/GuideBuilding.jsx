@@ -56,7 +56,6 @@ const GuideBuilding = ({ title }) => {
     fetchProperties();
   }, []);
 
-  console.log(building);
 
   return (
     <div className=" guide compound d-flex flex-wrap  flex-md-row  justify-content-between">

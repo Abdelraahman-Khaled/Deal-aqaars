@@ -165,15 +165,9 @@ const UpdateBuilding = () => {
 
         setIsItemLoading(true);
 
-        console.log("--- Submitting Update Building Data ---");
-        for (let [key, value] of formData.entries()) {
-            console.log(`${key}:`, value);
-        }
-        console.log("---------------------------------------");
 
         try {
             const response = await PropertyAPI.updateBuilding(id, formData);
-            console.log("Update Response:", response);
             setShowModal(true);
             resetForm();
         } catch (err) {

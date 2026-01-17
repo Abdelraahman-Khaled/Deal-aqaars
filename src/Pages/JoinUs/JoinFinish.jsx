@@ -114,9 +114,7 @@ const JoinFinish = () => {
     }
 
     setIsItemLoading(true);
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
+
     try {
       const response = await FinishingAPI.createFinishingService(formData);
       console.log(response);

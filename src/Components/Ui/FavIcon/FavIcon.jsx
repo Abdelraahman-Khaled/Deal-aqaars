@@ -27,7 +27,6 @@ const FavIcon = ({ isFav = false, id, type }) => {
         try {
             setIsLoading(true);
             const response = await FavoriteAPI.toggleFavorite(id, type);
-            console.log(response);
 
             // Update state based on API response status
             if (response.status === "added") {

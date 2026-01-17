@@ -87,7 +87,6 @@ const AccountInformationContent = () => {
 
   const handleChangePassword = async (values) => {
     setIsLoading(true);
-    console.log(values);
 
     try {
       const response = await AuthAPI.changePassword(values);

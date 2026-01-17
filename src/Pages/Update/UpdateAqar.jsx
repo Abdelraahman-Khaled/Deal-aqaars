@@ -188,21 +188,13 @@ const UpdateAqar = () => {
 
     setIsItemLoading(true);
 
-    console.log("--- Submitting Update Form Data ---");
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}:`, value);
-    }
-    console.log("-----------------------------------");
-
     try {
       if (isHouse) {
         const response = await PropertyAPI.updateBuilding(id, formData);
-        console.log("Update Response:", response);
         setShowModal(true);
         resetForm();
       } else {
         const response = await PropertyAPI.updateProperty(id, formData);
-        console.log("Update Response:", response);
         setShowModal(true);
         resetForm();
       }

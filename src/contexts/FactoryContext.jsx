@@ -60,7 +60,6 @@ export const FactoryProvider = ({ children }) => {
     setMyFactoriesError(null);
     try {
       const response = await FactoryAPI.getMyFactory(status);
-      console.log(response.data);
 
       setMyFactories(response.data);
       setMyFactoriesLoaded(true);

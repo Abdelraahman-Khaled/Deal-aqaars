@@ -76,14 +76,11 @@ const JoinTrade = () => {
       console.log("No images to send");
     }
     setIsItemLoading(true);
-  for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
+  
     try {
       setIsSubmitting(true);
 
       const response = await SwapAPI.createSwap(formData);
-      console.log("✅ Success:", response);
       setShowModal(true);
       resetForm();
     } catch (error) {

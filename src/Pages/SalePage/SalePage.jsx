@@ -316,10 +316,6 @@ const SalePage = () => {
             currentPage: page
         }));
         window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top smoothly
-        
-        // Here you would typically make an API call with the new page
-        // Example: fetchProperties(page, pagination.limit)
-        console.log('Page changed to:', page, 'Pagination:', pagination);
     };
 
     return (

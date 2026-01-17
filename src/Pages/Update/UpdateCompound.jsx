@@ -56,7 +56,6 @@ const UpdateCompound = () => {
                     compoundData = compoundData.compound;
                 }
 
-                console.log("Fetched Compound Data:", compoundData);
 
                 // Set form data with fetched values
                 setFormData({

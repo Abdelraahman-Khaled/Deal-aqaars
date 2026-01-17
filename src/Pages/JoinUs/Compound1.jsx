@@ -68,7 +68,6 @@ const Compound1 = ({ formData, setFormData }) => {
       cursor: "pointer",
     }),
   };
-  console.log(formData);
 
   return (
     <>

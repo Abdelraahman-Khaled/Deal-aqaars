@@ -41,8 +41,6 @@ const CompoundsAds = ({ city, currentCompoundId }) => {
         fetchCompounds();
     }, [city, currentCompoundId]);
 
-    console.log(compounds);
-
     if (loading) {
         return (
             <>

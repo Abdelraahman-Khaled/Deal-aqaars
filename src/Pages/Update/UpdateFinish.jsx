@@ -74,8 +74,6 @@ const UpdateFinish = () => {
                 const response = await FinishingAPI.getFinishingById(id);
                 let finishingData = response.data || response;
 
-                console.log("Fetched Finishing Data:", finishingData);
-
                 // Set job type
                 if (finishingData.jobType) {
                     setType(finishingData.jobType);
@@ -169,7 +167,6 @@ const UpdateFinish = () => {
         setIsItemLoading(true);
         try {
             const response = await FinishingAPI.updateFinishingService(id, formData);
-            console.log(response);
             setShowModal(true);
         } catch (err) {
             console.error(err);

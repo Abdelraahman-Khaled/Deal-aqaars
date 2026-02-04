@@ -16,7 +16,7 @@ import Aqar from "./Pages/Aqar/Aqar";
 import CompoundDetailsPage from "./Pages/Compound/Components/CompoundDetails/CompoundDetailsPage";
 import CompoundAqarDetails from "./Pages/Compound/Components/CompoundAqarDetails/CompoundAqarDetails";
 import AqarGuide from "./Pages/Aqar/Components/AqarGuide";
-import SalePage from "./Pages/salePage/SalePage";
+import SalePage from "./Pages/SalePage/SalePage";
 import FinishPage from "./Pages/FinishPage/FinishPage";
 import FurnishDetails from "./Pages/Furnish/FurnishDetails";
 import FinishDetails from "./Pages/FinishPage/FinishDetails";

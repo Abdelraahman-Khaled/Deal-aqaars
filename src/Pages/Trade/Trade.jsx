@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react'
 import ContainerMedia from '../../Components/ContainerMedia/ContainerMedia';
 import { useLanguage } from '../../Components/Languages/LanguageContext';
 import HelmetInfo from '../../Components/Helmetinfo/HelmetInfo';
-import InputFiled from '../../Components/Forms/InputField';
-import FormField from '../../Components/Forms/FormField';
 import SearchIcon from '../../assets/Icons/SearchIcon';
 import AddIcon from '../../assets/Icons/AddIcon';
 import TradeCard from './TradeCard';

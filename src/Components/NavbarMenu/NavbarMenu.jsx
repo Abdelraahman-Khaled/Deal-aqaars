@@ -113,9 +113,11 @@ const NavbarMenu = () => {
                             <>
                                 <UserDropMenu />
                                 {userType === "vendor" || userType === "company" ?
-                                    <button onClick={() => setShowModal(true)} className="btn-main b-11" style={{ minWidth: "200px" }}>
-                                        {content.announce[currentLanguage]}
-                                    </button>
+                                    <>
+                                        <button onClick={() => setShowModal(true)} className="btn-main b-11" style={{ minWidth: "200px" }}>
+                                            {content.announce[currentLanguage]}
+                                        </button>
+                                    </>
                                     :
                                     <>
                                         <button onClick={() => setShowPerson(true)} className="btn-main b-11 " style={{ minWidth: "130px" }}>
@@ -180,12 +182,19 @@ const NavbarMenu = () => {
                             <div className="icon-lang icon-border d-lg-flex" >
                                 {/* <LanguageSwitcher /> */}
                             </div>
-                            <span className="break-span"></span>
+
+
                             {/* Bell */}
-                            <div className="icon-lang icon-border d-lg-flex">
-                                <Bell />
-                            </div>
+                            {/* {user && (
                             <span className="break-span"></span>
+                                <>
+                                    <div className="icon-lang icon-border d-lg-flex">
+                                        <Bell />
+                                    </div>
+                                    <span className="break-span"></span>
+                                </>
+                            )} */}
+
                             {/* if auth */}
                             {user ? (
                                 <>
@@ -210,6 +219,11 @@ const NavbarMenu = () => {
                                 </>
                             ) : (
                                 <>
+                                    <Link to="/login">
+                                        <button className="btn-main btn-second b-11">
+                                            {content.login[currentLanguage]}
+                                        </button>
+                                    </Link >
                                     {/* <button onClick={() => setShowModal(true)} className="btn-main b-11" style={{ minWidth: "200px" }}>
                                         {content.announce[currentLanguage]}
                                     </button> */}

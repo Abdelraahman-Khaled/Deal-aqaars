@@ -118,7 +118,12 @@ const LandDetails = () => {
 
     return (
         <>
-            <HelmetInfo titlePage={currentLanguage === "ar" ? "تفاصيل الارض" : "Land Details"} />
+            <HelmetInfo
+                title={land?.title?.[currentLanguage] || (currentLanguage === "ar" ? "تفاصيل الارض" : "Land Details")}
+                description={land?.description?.[currentLanguage]?.substring(0, 160)}
+                image={land?.images?.[0]?.url}
+                keywords={`deal, land, ${land?.location?.city}, ${land?.details?.type}`}
+            />
             <div className="py-4">
                 <ContainerMedia>
                     <header className='pb-4'>

@@ -19,7 +19,12 @@ const Home = () => {
     return (
         <>
 
-            <HelmetInfo titlePage={currentLanguage === "ar" ? "الصفحة الرئيسية" : "Home"} />
+            <HelmetInfo
+                title={currentLanguage === "ar" ? "الصفحة الرئيسية" : "Home"}
+                description={currentLanguage === "ar"
+                    ? "أفضل منصة عقارات في مصر. بيع وشراء وتأجير العقارات بسهولة مع ديل."
+                    : "The best real estate platform in Egypt. Buy, sell, and rent properties easily with Deal."}
+            />
             <ContainerMedia>
 
                 <HeroSection />

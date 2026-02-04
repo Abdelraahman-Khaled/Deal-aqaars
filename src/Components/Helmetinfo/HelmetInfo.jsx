@@ -1,48 +1,51 @@
 
 import { Helmet } from "react-helmet-async";
 
-const HelmetInfo = ({ titlePage }) => {
+const HelmetInfo = ({
+    title,
+    titlePage, // Backward compatibility
+    description,
+    keywords,
+    image,
+    url,
+    type = "website"
+}) => {
+    const defaultTitle = "Deal | ديل - Real Estate";
+    const defaultDescription = "Find your dream home with Deal (ديل). The best real estate platform in Egypt.";
+    const defaultKeywords = "Deal, ديل, real estate, homes, apartments, rent, sale, egypt";
+    const defaultImage = "/icon/ico.svg"; // Adjust path if needed, maybe a full URL is better for OG
+    const defaultUrl = "https://www.dealaqar.com"; // Replace with actual domain
+
+    const siteTitle = (title || titlePage) ? `${title || titlePage} | Deal` : defaultTitle;
+    const siteDescription = description || defaultDescription;
+    const siteKeywords = keywords || defaultKeywords;
+    const siteImage = image || defaultImage;
+    const siteUrl = url || defaultUrl;
+
     return (
         <Helmet>
-            <title>{titlePage}</title>
+            <title>{siteTitle}</title>
             <link rel="shortcut icon" type="image/png" href="/icon/ico.svg" />
+            <link rel="canonical" href={siteUrl} />
 
-            {/* description */}
-            <meta
-                name="description"
-                content="deal Discription Content info deal  Discription Content info deal Discription Content info"
-            />
+            {/* Standard Metadata */}
+            <meta name="description" content={siteDescription} />
+            <meta name="keywords" content={siteKeywords} />
+            <meta name="author" content="Deal Real Estate" />
 
-            {/* keywords */}
-            <meta
-                name="keywords"
-                content="deal  KeyWords deal  KeyWords deal  KeyWords"
-            />
-            {/*  <!-- #author --> */}
-            <meta name="author" content="deal Website" />
-            {/* <!-- Facebook Meta Tags --> */}
-            <meta property="og:url" content="deal Link Url" />
-            <meta property="og:type" content="deal website" />
-            <meta property="og:title" content="deal Services" />
-            <meta
-                property="og:description"
-                content="deal A concise description of your page content"
-            />
-            <meta property="og:image" content="deal Image" />
+            {/* Open Graph / Facebook */}
+            <meta property="og:type" content={type} />
+            <meta property="og:url" content={siteUrl} />
+            <meta property="og:title" content={siteTitle} />
+            <meta property="og:description" content={siteDescription} />
+            <meta property="og:image" content={siteImage} />
 
-            {/* Twitter Meta Tags */}
+            {/* Twitter */}
             <meta name="twitter:card" content="summary_large_image" />
-            <meta property="twitter:domain" content="deal Domain Link Url" />
-            <meta property="twitter:url" content="deal Url" />
-            <meta name="twitter:title" content="deal" />
-            <meta
-                name="twitter:description"
-                content="deal description of your page content"
-            />
-            <meta name="twitter:image" content="deal  Image" />
-
-            {/* LINK URL WEBSITE deal */}
-            <link rel="canonical" href="https://www.example.com/your-page" />
+            <meta property="twitter:url" content={siteUrl} />
+            <meta name="twitter:title" content={siteTitle} />
+            <meta name="twitter:description" content={siteDescription} />
+            <meta name="twitter:image" content={siteImage} />
         </Helmet>
     );
 };

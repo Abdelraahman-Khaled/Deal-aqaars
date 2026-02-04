@@ -266,7 +266,7 @@ const AdvancedSearch = () => {
           </Col>
 
           {/* Second Column - Search Inputs */}
-          <Col className="d-flex">
+          <Col className="d-flex justify-content-center">
             <div className="d-flex flex-column gap-4 h-100 ">
               <div className="w-100 ">
                 <MultiSelect

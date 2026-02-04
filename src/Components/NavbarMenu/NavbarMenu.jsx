@@ -134,9 +134,6 @@ const NavbarMenu = () => {
                                         {content.login[currentLanguage]}
                                     </button>
                                 </Link >
-                                <button onClick={() => setShowModal(true)} className="btn-main b-11" style={{ minWidth: "200px" }}>
-                                    {content.announce[currentLanguage]}
-                                </button>
                             </>
                         )}
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -213,11 +210,6 @@ const NavbarMenu = () => {
                                 </>
                             ) : (
                                 <>
-                                    <Link to="/login">
-                                        <button className="btn-main btn-second b-11">
-                                            {content.login[currentLanguage]}
-                                        </button>
-                                    </Link >
                                     {/* <button onClick={() => setShowModal(true)} className="btn-main b-11" style={{ minWidth: "200px" }}>
                                         {content.announce[currentLanguage]}
                                     </button> */}
@@ -274,7 +266,7 @@ const NavbarMenu = () => {
                 setShowModal={setShowPerson}
                 title={"انضم كمالك"}
                 subtitle={"انضم لديل واعلن عن عقار أو تبديل  – كله في مكان واحد!"}
-                newClass={"w-600"}
+                newClass={"w-600 person-join-modal"}
             >
                 <PersonJoin setShowPerson={setShowPerson} setShowProgress={setShowProgress} />
             </CustomModal>
@@ -286,7 +278,7 @@ const NavbarMenu = () => {
                 setShowModal={setShowCompany}
                 title={"انضم كشركة"}
                 subtitle={"انضم لديل واعلن عن مشروع عقاري أو خدمات تطشيب  – كله في مكان واحد!"}
-                newClass={"w-600"}
+                newClass={"w-600 person-join-modal"}
             >
                 <CompanyJoin setShowCompany={setShowCompany} setShowProgress={setShowProgress} />
             </CustomModal>

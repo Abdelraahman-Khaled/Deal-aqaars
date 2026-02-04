@@ -1,5 +1,5 @@
 import React from 'react'
-import "./Trade.css"
+import "./trade.css"
 import Bed from '../../assets/Icons/Bed'
 import BathIcon from '../../assets/Icons/BathIcon'
 import AreaIcon from '../../assets/Icons/AreaIcon'

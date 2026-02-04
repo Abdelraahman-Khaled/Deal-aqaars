@@ -6,8 +6,8 @@ import FormField from '../Forms/FormField';
 import InputFiled from '../Forms/InputField';
 import ExclamationMark from '../../assets/Icons/ExclamationMark';
 import logo from "../../assets/images/logo/logo.svg";
-import googleApp from "../../assets/images/footer/googlePlay.png"
-import appStore from "../../assets/images/footer/appStore.png"
+import googleApp from "../../assets/images/footer/googleplay.png"
+import appStore from "../../assets/images/footer/appstore.png"
 import "./Footer.css"
 
 const content = {
@@ -53,7 +53,7 @@ const content = {
     rights: { ar: "كل الحقوق محفوظة DEAL", en: "All rights reserved DEAL" },
     property: { ar: "عقارات", en: "Properties" },
     compounds: { ar: "كمبوندات", en: "Compounds" },
-    furnishing:{ar:"فرش",en:"Furnishing"}
+    furnishing: { ar: "فرش", en: "Furnishing" }
 };
 
 const Footer = () => {

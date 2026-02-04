@@ -2,8 +2,8 @@ import React from "react";
 import imageBannerHome from "../../../../assets/images/bannerHome/phoneBanner.png";
 import "./BannerHome.css";
 import { useLanguage } from "../../../../Components/Languages/LanguageContext";
-import appGoogle from "../../../../assets/images/footer/googlePlay.png"
-import appStore from "../../../../assets/images/footer/appStore.png"
+import appGoogle from "../../../../assets/images/footer/googleplay.png"
+import appStore from "../../../../assets/images/footer/appstore.png"
 import rectangles from "../../../../assets/images/bannerHome/Shape.png";
 import eclipse from "../../../../assets/images/bannerHome/Ellipse.png";
 

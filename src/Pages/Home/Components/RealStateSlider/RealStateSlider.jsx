@@ -28,6 +28,10 @@ const RealStateSlider = () => {
     );
   }
 
+  if (!allProperties || allProperties.length === 0) {
+    return null;
+  }
+
   return (
     <Slidercontainer>
       {allProperties.map((card, index) => (

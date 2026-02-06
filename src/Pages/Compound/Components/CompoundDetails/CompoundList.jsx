@@ -212,8 +212,6 @@ const CompoundList = () => {
         value: item.city_name_en,
     }));
 
-    console.log("cities", cities)
-
 
     return (
         <div className="advanced-search  compound  d-flex space-3 flex-column p-0">

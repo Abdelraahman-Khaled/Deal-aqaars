@@ -3,7 +3,7 @@ import ContainerMedia from '../../Components/ContainerMedia/ContainerMedia'
 import HelmetInfo from '../../Components/Helmetinfo/HelmetInfo'
 import AqarDetails from './Components/AqarDetails'
 import Places from '../../Components/Ui/Places/Places'
-import GuidePage from '../../Components/Ui/GuideSection/GuidePage'
+import PropertyGuidePage from '../../Components/Ui/GuideSection/PropertyGuidePage'
 import { useLanguage } from '../../Components/Languages/LanguageContext'
 
 const Aqar = () => {
@@ -17,7 +17,7 @@ const Aqar = () => {
 
                     <AqarDetails />
                     <Places />
-                    <GuidePage title={"عقارات للبيع في مصر"} compound={false} />
+                    <PropertyGuidePage title={"عقارات للبيع في مصر"} />
 
                 </ContainerMedia>
 

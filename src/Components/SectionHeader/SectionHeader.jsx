@@ -1,4 +1,4 @@
-import './SectionHeader.css'
+import './sectionHeader.css'
 const SectionHeader = ({ text }) => {
     return (
         <div className='section-header'>

@@ -2,7 +2,6 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-// const API_BASE_URL = "https://deal-two.vercel.app/api/";
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
@@ -21,6 +20,8 @@ axiosInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
+  } else {
+    config.headers.actor = "guest";
   }
 
   // If sending FormData, let the browser set the correct Content-Type with boundary

@@ -13,9 +13,11 @@ export const useProperty = () => {
 
 export const PropertyProvider = ({ children }) => {
   const [property, setProperty] = useState(null);
+  const [allProperties, setAllProperties] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  
   const fetchProperty = useCallback(async (id) => {
     if (!id) {
       setError('Property ID is required');
@@ -38,6 +40,22 @@ export const PropertyProvider = ({ children }) => {
     }
   }, []);
 
+  const fetchAllProperty = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const allPropertyData = await PropertyAPI.getAllProperties();
+      setAllProperties(allPropertyData?.data);
+      return allPropertyData;
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to fetch all properties');
+      setAllProperties([]);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   const clearProperty = useCallback(() => {
     setProperty(null);
     setError(null);
@@ -52,9 +70,11 @@ export const PropertyProvider = ({ children }) => {
 
   const value = {
     property,
+    allProperties,
     loading,
     error,
     fetchProperty,
+    fetchAllProperty,
     clearProperty,
     refreshProperty,
   };

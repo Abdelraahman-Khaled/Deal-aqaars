@@ -12,11 +12,12 @@ import RealStateCard from "../RealStateCard/RealStateCard";
 import CompoundAPI from "../../../api/compoundApi";
 import PaginationPage from "../../Pagenation/Pagination";
 import Loader from "../../Loader/Loader";
+import CompoundSkeleton from "../CompoundCard/CompoundSkeleton";
 import { useSearchParams } from "react-router-dom";
 
 const GuidePage = ({ title, compound = true }) => {
   const { currentLanguage } = useLanguage(); // Get the current language
-  const [toggle, setToggle] = useState("inprogress");
+  const [toggle, setToggle] = useState("all");
   const [toggle1, setToggle1] = useState("nest");
   const [rotate, setRotate] = useState(false);
   const [properties, setProperties] = useState([]);
@@ -44,9 +45,9 @@ const GuidePage = ({ title, compound = true }) => {
   const organizing = ["الاكثر مشاهدة", "الاجدد", "الاقل سعر", "اعلي سعر"];
 
   const [params] = useSearchParams();
-  
+
   const filters = {
-    type:params.get("type")|| "",
+    type: params.get("type") || "",
     division: params.get("division") || "",
     city: params.get("city") || "",
     minPrice: params.get("minPrice") || "",
@@ -55,9 +56,9 @@ const GuidePage = ({ title, compound = true }) => {
   };
 
   useEffect(() => {
-  fetchProperties()
+    fetchProperties()
   }, [params]);
-  
+
 
   // Fetch properties from API
   const fetchProperties = async (page = 1) => {
@@ -78,13 +79,19 @@ const GuidePage = ({ title, compound = true }) => {
   const fetchCompounds = async () => {
     try {
       setLoading(true);
-      const response = await CompoundAPI.getAllCompounds();
+      const filters = {};
+
+      // Add status filter based on toggle state
+      if (toggle !== "all") {
+        filters.status = toggle;
+      }
+
+      const response = await CompoundAPI.getAllCompounds(filters);
       if (response && response.data) {
         setCompounds(response.data);
-        console.log("compoundsdata", response.data);
       }
     } catch (error) {
-      console.error("Error fetching properties:", error);
+      console.error("Error fetching compounds:", error);
     } finally {
       setLoading(false);
     }
@@ -101,7 +108,9 @@ const GuidePage = ({ title, compound = true }) => {
     } else {
       fetchCompounds();
     }
-  }, [compound]);
+  }, [compound, toggle]);
+
+
 
   return (
     <div className=" guide compound d-flex flex-wrap  flex-md-row  justify-content-between">
@@ -143,13 +152,12 @@ const GuidePage = ({ title, compound = true }) => {
         </div>
         <div className="d-flex flex-wrap  flex-row justify-content-between">
           {compound && loading && (
-            <div className="loading-container">
-              <p>
-                {currentLanguage === "ar"
-                  ? "جاري تحميل كموندات..."
-                  : "Loading compounds..."}
-              </p>
-              <Loader />
+            <div className="loading-container w-100">
+              <div className="d-flex flex-wrap justify-content-between w-100">
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <CompoundSkeleton key={index} wrapperClass={toggle1 === "nest" ? "flex-wrap" : ""} />
+                ))}
+              </div>
             </div>
           )}
           {compound && !loading && compounds.length === 0 && (
@@ -164,16 +172,14 @@ const GuidePage = ({ title, compound = true }) => {
           {compound &&
             !loading &&
             compounds.map((compound, index) => {
-              const locationCoords = formatLocation(compound.detailedLocation);
               return (
                 <CompoundCard
                   id={compound._id}
                   key={index}
-                  title={compound.title[currentLanguage]}
-                  lat={compound.announcementLocation?.coordinates[1]}
-                  lon={compound.announcementLocation?.coordinates[0]}
-                  details={compound.details}
-                  price={compound.unitData.prices[0]}
+                  title={compound.name}
+                  details={compound.details.ar}
+                  location={compound.announcementLocation}
+                  price={compound.units[0]?.aqarDetails?.price}
                   img={compound.compoundImages}
                   company={true}
                   connections={true}
@@ -183,13 +189,12 @@ const GuidePage = ({ title, compound = true }) => {
               );
             })}
           {!compound && loading && (
-            <div className="loading-container">
-              <p>
-                {currentLanguage === "ar"
-                  ? "جاري تحميل العقارات..."
-                  : "Loading properties..."}
-              </p>
-              <Loader />
+            <div className="loading-container w-100">
+              <div className="d-flex flex-wrap justify-content-between w-100">
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <CompoundSkeleton key={index} wrapperClass={toggle1 === "nest" ? "flex-wrap" : ""} />
+                ))}
+              </div>
             </div>
           )}
           {!compound && !loading && properties.length === 0 && (
@@ -229,11 +234,12 @@ const GuidePage = ({ title, compound = true }) => {
                 bath={property.details?.bathrooms || 0}
                 space={property.details?.space || 0}
                 offer={formatPrice(property.details?.price)}
-                type={property.division}
+                division={property.division}
                 category={property.category}
                 phone={property.advertiserPhoneNumber}
                 haveWhatsapp={property.haveWhatsapp}
                 location={property.location.detailedLocation}
+                isFav={property.isFavorite}
               />
             ))}
         </div>

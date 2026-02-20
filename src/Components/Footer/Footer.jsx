@@ -6,8 +6,8 @@ import FormField from '../Forms/FormField';
 import InputFiled from '../Forms/InputField';
 import ExclamationMark from '../../assets/Icons/ExclamationMark';
 import logo from "../../assets/images/logo/logo.svg";
-import googleApp from "../../assets/images/footer/googlePlay.png"
-import appStore from "../../assets/images/footer/appStore.png"
+import googleApp from "../../assets/images/footer/googleplay.png"
+import appStore from "../../assets/images/footer/appstore.png"
 import "./Footer.css"
 
 const content = {
@@ -51,7 +51,9 @@ const content = {
     contact: { ar: "تواصل معنا", en: "Contact us" },
     download: { ar: "نزّل التطبيق دلوقتي", en: "Download App" },
     rights: { ar: "كل الحقوق محفوظة DEAL", en: "All rights reserved DEAL" },
-
+    property: { ar: "عقارات", en: "Properties" },
+    compounds: { ar: "كمبوندات", en: "Compounds" },
+    furnishing: { ar: "فرش", en: "Furnishing" }
 };
 
 const Footer = () => {
@@ -121,15 +123,19 @@ const Footer = () => {
                             </Link>
                             <div className='d-flex flex-wrap' style={{ gap: "32px" }}>
                                 {/* sale */}
-                                <NavLink className="nav-link b-11" to="/rent">
-                                    {content.sale[currentLanguage]}
+                                <NavLink className="nav-link b-11" to="/realestate">
+                                    {content.property[currentLanguage]}
                                 </NavLink>
                                 {/* rent */}
-                                <NavLink className="nav-link b-11" to="/rent">
-                                    {content.rent[currentLanguage]}
+                                <NavLink className="nav-link b-11" to="/compounds">
+                                    {content.compounds[currentLanguage]}
                                 </NavLink>
                                 {/* finishing */}
-                                <NavLink className="nav-link b-11" to="/rent">
+                                <NavLink className="nav-link b-11" to="/finish">
+                                    {content.furnishing[currentLanguage]}
+                                </NavLink>
+                                {/* finishing */}
+                                <NavLink className="nav-link b-11" to="/finish?division=finishing">
                                     {content.finishing[currentLanguage]}
                                 </NavLink>
                                 {/* about */}

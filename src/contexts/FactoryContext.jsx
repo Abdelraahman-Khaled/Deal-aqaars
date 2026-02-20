@@ -55,11 +55,12 @@ export const FactoryProvider = ({ children }) => {
     }
   }, [fetchFactory]);
 
-  const fetchMyFactories = useCallback(async () => {
+  const fetchMyFactories = useCallback(async (status) => {
     setMyFactoriesLoading(true);
     setMyFactoriesError(null);
     try {
-      const response = await FactoryAPI.getMyFactory();
+      const response = await FactoryAPI.getMyFactory(status);
+
       setMyFactories(response.data);
       setMyFactoriesLoaded(true);
     } catch (err) {

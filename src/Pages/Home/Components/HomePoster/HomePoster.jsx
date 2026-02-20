@@ -5,20 +5,14 @@ import { Skeleton } from 'primereact/skeleton';
 
 const HomePoster = () => {
     const { ads, loading } = useAds();
-
-    if (loading) {
-        return <Skeleton width="100%" height="15.625rem" borderRadius="16px"></Skeleton>
-            ;
-    }
-    if (!ads) return null;
-    if (ads.length === 0) return null;
-
-
-    const images = loading ? [] : ads[2].images.map((img) => img.url);
-
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+    const homeAd = !loading && ads ? ads.find(ad => ad.name === 'home') : null;
+    const images = homeAd ? homeAd.images.map((img) => img.url) : [];
+
+
     useEffect(() => {
+        if (images.length === 0) return;
         const interval = setInterval(() => {
             setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
         }, 2000);
@@ -26,6 +20,12 @@ const HomePoster = () => {
         return () => clearInterval(interval);
     }, [images.length]);
 
+    if (loading) {
+        return <Skeleton width="100%" height="15.625rem" borderRadius="16px"></Skeleton>
+            ;
+    }
+
+    if (!homeAd || images.length === 0) return null;
 
     return (
         <div className='home-poster'>

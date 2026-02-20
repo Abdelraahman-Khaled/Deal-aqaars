@@ -3,7 +3,7 @@ import BellIcon from '../../../assets/Icons/BellIcon'
 import "./Ads.css"
 import { Link } from 'react-router-dom'
 const Ads = () => {
-    const links = ["عقارات استوديو للبيع", "عقارات 2 غرفة نوم للبيع", "عقارات 1 غرفة نوم للبيع", "عقارات 3 غرفة نوم للبيع", "عقارات 4 غرفة نوم للبيع"]
+    const links = [ "عقارات 2 غرفة نوم للبيع", "عقارات 1 غرفة نوم للبيع", "عقارات 3 غرفة نوم للبيع", "عقارات 4 غرفة نوم للبيع"]
 
     return (
         <div className='ads col-lg-3 col-12 d-flex flex-column  lg-align-items-center space-6 mb-5'>

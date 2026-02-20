@@ -17,21 +17,14 @@ const AqarDetails = () => {
   const [params, setSearchParams] = useSearchParams();
   const { currentLanguage } = useLanguage();
 
-  const [toggle1, setToggle1] = useState(params.get("division") || "sale");
-  const [selectedCities, setSelectedCities] = useState(
-    params.get("city") ? params.get("city").split(",") : []
-  );
-  const [toggle2, setToggle2] = useState(params.get("progress") || "all");
-  const [budget, setBudget] = useState([
-    params.get("minPrice") || 1000000,
-    params.get("maxPrice") || 50000000,
-  ]);
-  const [placeType, setPlaceType] = useState(params.get("type") || "نوع المكان");
-  const [placeTypeDetails, setPlaceTypeDetails] = useState(
-    params.get("typeDetails") || ""
-  );
-  const [rooms, setRooms] = useState(params.get("bedrooms") || "");
-  const [baths, setBaths] = useState(params.get("baths") || "");
+  const [toggle1, setToggle1] = useState("sale");
+  const [selectedCities, setSelectedCities] = useState([]);
+  const [toggle2, setToggle2] = useState("all");
+  const [budget, setBudget] = useState([100000, 100000000]);
+  const [placeType, setPlaceType] = useState("نوع المكان");
+  const [placeTypeDetails, setPlaceTypeDetails] = useState("");
+  const [rooms, setRooms] = useState("");
+  const [baths, setBaths] = useState("");
 
   const [rotate, setRotate] = useState(false);
   const [rotateBudget, setRotateBudget] = useState(false);
@@ -62,23 +55,9 @@ const AqarDetails = () => {
         { id: 1, name: "منزل / بيت" },
         { id: 2, name: "شقة" },
         { id: 3, name: "شقة بحديقة" },
-        { id: 4, name: "استوديو" },
-        { id: 5, name: "استوديو فندقي" },
-        { id: 6, name: "استوديو بحديقة" },
-        { id: 7, name: "لوفت" },
-        { id: 8, name: "دوبلكس" },
-        { id: 9, name: "دوبلكس بحديقة" },
-        { id: 10, name: "بنتهاوس" },
-        { id: 11, name: "روف" },
-        { id: 12, name: "توين دوبلكس" },
-        { id: 13, name: "هاف دوبلكس" },
-        { id: 14, name: "شاليه بحديقة" },
-        { id: 15, name: "ساحلي فيلا" },
-        { id: 16, name: "توين شاليه" },
-        { id: 17, name: "شاليه كابينة" },
-        { id: 18, name: "فيلا منفصلة" },
-        { id: 19, name: "فيلا جاردن" },
-        { id: 20, name: "توين فيلا" },
+        { id: 4, name: "روف" },
+        { id: 5, name: "فيلا منفصلة" },
+        { id: 6, name: "فيلا جاردن" },
       ],
     },
     {
@@ -118,6 +97,7 @@ const AqarDetails = () => {
     eventKey: tab.key,
     title: (
       <div
+        className="p-2"
         onClick={() => setPlaceType(currentLanguage === "ar" ? tab.ar : tab.en)}
       >
         {currentLanguage === "ar" ? tab.ar : tab.en}
@@ -131,7 +111,10 @@ const AqarDetails = () => {
               key={item.id}
               className="b-12 pick bg-light-gray"
               style={{ width: "45%" }}
-              onClick={() => setPlaceTypeDetails(item.name)}
+              onClick={() => {
+                setPlaceTypeDetails(item.name);
+                setPlaceType(tab.ar);
+              }}
             >
               {item.name}
             </p>
@@ -161,7 +144,7 @@ const AqarDetails = () => {
         <div className="d-flex flex-column space-6">
           <p className="b-11">{translations[currentLanguage].rooms} </p>
           <div className="d-flex flex-wrap flex-row gap-2">
-            {["استوديو", "1", "2", "3", "4", "5", "6", "7", "8+"].map(
+            {["1", "2", "3", "4", "5", "6", "7", "8+"].map(
               (item, index) => (
                 <p
                   key={index}
@@ -212,16 +195,21 @@ const AqarDetails = () => {
   // 🌟 حدث الـ URL params كل مرة تتغير الفلاتر
   useEffect(() => {
     const newParams = {};
-    if (toggle1) newParams.division = toggle1;
+
+    // Only add params if they differ from default values
+    if (toggle1 && toggle1 !== "sale") newParams.division = toggle1;
     if (selectedCities && selectedCities.length > 0)
       newParams.city = selectedCities.join(",");
-    if (toggle2) newParams.progress = toggle2;
-    if (budget) {
+    if (toggle2 && toggle2 !== "all") newParams.progress = toggle2;
+
+    // Only add budget if it's different from default
+    if (budget && (budget[0] !== 100000 || budget[1] !== 100000000)) {
       newParams.minPrice = budget[0];
       newParams.maxPrice = budget[1];
     }
+
     if (placeType && placeType !== "نوع المكان") newParams.type = placeType;
-    if (placeTypeDetails) newParams.typeDetails = placeTypeDetails;
+    if (placeTypeDetails) newParams.type = placeTypeDetails;
     if (rooms) newParams.bedrooms = rooms;
     if (baths) newParams.baths = baths;
 
@@ -295,9 +283,8 @@ const AqarDetails = () => {
             >
               {rooms === "" && baths === ""
                 ? `${translations[currentLanguage].rooms} & ${translations[currentLanguage].baths}`
-                : rooms === "استوديو"
-                  ? rooms + " / " + baths + " حمام"
-                  : `${translations[currentLanguage].rooms} ${rooms} / ${baths} ${translations[currentLanguage].actualBath}`}
+                :
+                `${translations[currentLanguage].rooms} ${rooms} / ${baths} ${translations[currentLanguage].actualBath}`}
               <MenuArrow rotate={rotate} />
             </Dropdown.Toggle>
             <Dropdown.Menu className="w-100">

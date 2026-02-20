@@ -76,7 +76,6 @@ const JoinTrade = () => {
 
         try {
             const response = await SwapAPI.createSwap(formData)
-            console.log("✅ Success:", response);
             setShowModal(true);
             resetForm()
         } catch (error) {

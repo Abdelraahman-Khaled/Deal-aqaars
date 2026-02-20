@@ -10,3 +10,39 @@
 .btn-cancel:hover{
     color: var(--netural-100);
 }
+
+/* Modal Responsiveness */
+.person-join-modal .modal-content{
+    height: fit-content !important;
+    min-height: unset !important;
+}
+
+.person-join-modal .modal-content .modal-body{
+    height: fit-content;
+}
+
+/* Large screens: Add top padding/margin */
+@media (min-width: 992px) {
+    .person-join-modal {
+        padding-top: 100px;
+    }
+}
+
+/* Mobile & Tablet Overrides */
+@media (max-width: 991px) {
+    .person-join-modal {
+        padding-top: 20px;
+    }
+    
+    /* Override the global .w-600 .modal-content { min-width: 650px !important } */
+    .person-join-modal.w-600 .modal-content,
+    .person-join-modal .modal-content {
+        min-width: unset !important; /* Reset the fixed width */
+        width: 100% !important;
+        height: auto !important; /* Ensure content fits */
+    }
+    
+    .person-join-modal .modal-dialog {
+        margin: 10px; /* Ensure some spacing */
+    }
+}

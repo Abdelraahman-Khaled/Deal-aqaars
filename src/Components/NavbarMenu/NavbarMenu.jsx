@@ -16,7 +16,6 @@ import BuildingIcon from "../../assets/Icons/BuildingIcon";
 import HouseSimpleIcon from "../../assets/Icons/HouseSimpleIcon";
 import PaintBrushIcon from "../../assets/Icons/PaintBrushIcon";
 import SwapModalIcon from "../../assets/Icons/SwapModalIcon";
-
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { setUserType } from "../../store/userTypeSlice";
@@ -51,7 +50,7 @@ const announcementPerson = [
 ];
 const announcementCompany = [
     { id: 1, text: "اعلن عن عقار", icon: <HouseSimpleIcon />, link: "join-aqar" },
-    { id: 2, text: "اعلن عن مشروع عقاري", icon: <BuildingIcon />, link: "join-company" },
+    { id: 2, text: "اعلن عن مشروع عقاري", icon: <BuildingIcon />, link: "join-compound" },
     { id: 3, text: "اعلن عن خدمات التشطيب", icon: <PaintBrushIcon />, link: "join-finish" },
 ];
 
@@ -78,13 +77,14 @@ const NavbarMenu = () => {
 
     if (user?.role === "user") {
         dispatch(setUserType("user"));
-    } else if (user?.role === "vendor") {
-        dispatch(setUserType("vendor"));
     } else if (user?.companyId !== null) {
         dispatch(setUserType("company"));
+    } else if (user?.role === "vendor") {
+        dispatch(setUserType("vendor"));
     } else {
         dispatch(setUserType("user"));
     }
+
 
 
     return (
@@ -100,7 +100,7 @@ const NavbarMenu = () => {
                     {/* Language */}
                     <div className="main-info-left d-flex align-items-center gap-3 d-lg-none">
                         <div className="icon-lang icon-border d-none">
-                            <LanguageSwitcher />
+                            {/* <LanguageSwitcher /> */}
                         </div>
                         <span className="break-span"></span>
                         {/* Bell */}
@@ -112,20 +112,22 @@ const NavbarMenu = () => {
                         {user ? (
                             <>
                                 <UserDropMenu />
-                                {/* {userType === "vendor" || userType === "company" ?
-                                    <button onClick={() => setShowModal(true)} className="btn-main b-11" style={{ minWidth: "200px" }}>
-                                        {content.announce[currentLanguage]}
-                                    </button>
-                                    : 
-                                    <>*/}
-                                <button onClick={() => setShowPerson(true)} className="btn-main b-11 " style={{ minWidth: "130px" }}>
-                                    {content.personJoin[currentLanguage]}
-                                </button>
-                                <button onClick={() => setShowCompany(true)} className="btn-main b-11 btn-second border" style={{ minWidth: "130px", borderColor: "var(--primary) !important" }}>
-                                    {content.companyJoin[currentLanguage]}
-                                </button>
-                                {/* </> */}
-                                {/* } */}
+                                {userType === "vendor" || userType === "company" ?
+                                    <>
+                                        <button onClick={() => setShowModal(true)} className="btn-main b-11" style={{ minWidth: "200px" }}>
+                                            {content.announce[currentLanguage]}
+                                        </button>
+                                    </>
+                                    :
+                                    <>
+                                        <button onClick={() => setShowPerson(true)} className="btn-main b-11 " style={{ minWidth: "130px" }}>
+                                            {content.personJoin[currentLanguage]}
+                                        </button>
+                                        <button onClick={() => setShowCompany(true)} className="btn-main b-11 btn-second border" style={{ minWidth: "130px", borderColor: "var(--primary) !important" }}>
+                                            {content.companyJoin[currentLanguage]}
+                                        </button>
+                                    </>
+                                }
                             </>
                         ) : (
                             <>
@@ -134,9 +136,6 @@ const NavbarMenu = () => {
                                         {content.login[currentLanguage]}
                                     </button>
                                 </Link >
-                                <button onClick={() => setShowModal(true)} className="btn-main b-11" style={{ minWidth: "200px" }}>
-                                    {content.announce[currentLanguage]}
-                                </button>
                             </>
                         )}
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -181,21 +180,28 @@ const NavbarMenu = () => {
                         <div className="left-nav-menu d-flex align-items-center gap-3 ">
                             {/* Language */}
                             <div className="icon-lang icon-border d-lg-flex" >
-                                <LanguageSwitcher />
+                                {/* <LanguageSwitcher /> */}
                             </div>
-                            <span className="break-span"></span>
+
+
                             {/* Bell */}
-                            <div className="icon-lang icon-border d-lg-flex">
-                                <Bell />
-                            </div>
+                            {/* {user && (
                             <span className="break-span"></span>
+                                <>
+                                    <div className="icon-lang icon-border d-lg-flex">
+                                        <Bell />
+                                    </div>
+                                    <span className="break-span"></span>
+                                </>
+                            )} */}
+
                             {/* if auth */}
                             {user ? (
                                 <>
                                     <span className="d-none d-lg-flex">
                                         <UserDropMenu />
                                     </span>
-                                    {userType === "vendor" ?
+                                    {userType === "vendor" || userType === "company" ?
                                         <button onClick={() => setShowModal(true)} className="btn-main b-11" style={{ minWidth: "200px" }}>
                                             {content.announce[currentLanguage]}
                                         </button>
@@ -274,7 +280,7 @@ const NavbarMenu = () => {
                 setShowModal={setShowPerson}
                 title={"انضم كمالك"}
                 subtitle={"انضم لديل واعلن عن عقار أو تبديل  – كله في مكان واحد!"}
-                newClass={"w-600"}
+                newClass={"w-600 person-join-modal"}
             >
                 <PersonJoin setShowPerson={setShowPerson} setShowProgress={setShowProgress} />
             </CustomModal>
@@ -286,7 +292,7 @@ const NavbarMenu = () => {
                 setShowModal={setShowCompany}
                 title={"انضم كشركة"}
                 subtitle={"انضم لديل واعلن عن مشروع عقاري أو خدمات تطشيب  – كله في مكان واحد!"}
-                newClass={"w-600"}
+                newClass={"w-600 person-join-modal"}
             >
                 <CompanyJoin setShowCompany={setShowCompany} setShowProgress={setShowProgress} />
             </CustomModal>

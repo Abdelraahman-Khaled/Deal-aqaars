@@ -17,7 +17,7 @@ const getToastMessages = () => ({
     en: "Property deleted successfully",
   },
   favoriteAdded: {
-    ar: "تم إضافة الوحدة إلى المفضلة",   
+    ar: "تم إضافة الوحدة إلى المفضلة",
     en: "Property added to favorites",
   },
   favoriteRemoved: {
@@ -103,14 +103,15 @@ const FactoryAPI = {
     }
   },
 
-  // Get current user's properties
-  getMyFactory: async () => {
+  // Get current user's factories
+  getMyFactory: async (status) => {
     try {
-      const response = await axiosInstance.get("/factory/me");
+      const url = status ? `/factory/me?status=${status}` : "/factory/me";
+      const response = await axiosInstance.get(url);
       return response.data;
     } catch (error) {
       console.error(
-        "Error fetching user factory:",
+        "Error fetching user factories:",
         error.response || error.message
       );
       handleError(error);
@@ -261,7 +262,7 @@ const FactoryAPI = {
   removeFromFavorites: async (administrativeId) => {
     try {
       const response = await axiosInstance.delete(
-        `/administrative/${administrativeId}/favorite`      
+        `/administrative/${administrativeId}/favorite`
       );
       toast.success(getToastMessages().favoriteRemoved[getCurrentLanguage()]);
       return response.data;
@@ -278,7 +279,7 @@ const FactoryAPI = {
   // Get administrative statistics
   getAdministrativeStats: async () => {
     try {
-      const response = await axiosInstance.get("/administrative/stats");  
+      const response = await axiosInstance.get("/administrative/stats");
       return response.data;
     } catch (error) {
       console.error(

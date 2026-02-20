@@ -16,7 +16,7 @@ import Aqar from "./Pages/Aqar/Aqar";
 import CompoundDetailsPage from "./Pages/Compound/Components/CompoundDetails/CompoundDetailsPage";
 import CompoundAqarDetails from "./Pages/Compound/Components/CompoundAqarDetails/CompoundAqarDetails";
 import AqarGuide from "./Pages/Aqar/Components/AqarGuide";
-import SalePage from "./Pages/salePage/SalePage";
+import SalePage from "./Pages/SalePage/SalePage";
 import FinishPage from "./Pages/FinishPage/FinishPage";
 import FurnishDetails from "./Pages/Furnish/FurnishDetails";
 import FinishDetails from "./Pages/FinishPage/FinishDetails";
@@ -27,20 +27,24 @@ import Trade from "./Pages/Trade/Trade";
 import NotFound from "./Pages/NotFound/NotFound";
 import ScrollToTop from "./Components/ScrollToTop/ScrollToTop";
 import JoinAqar from "./Pages/JoinUs/JoinAqar";
-import JoinCompany from "./Pages/JoinUs/JoinCompany";
 import JoinTrade from "./Pages/JoinUs/JoinTrade";
 import JoinFinish from "./Pages/JoinUs/JoinFinish";
 import { Provider } from "react-redux";
 import { store } from "./store";
 import VendorAds from "./Pages/MyAds/VendorAds";
 // import { ToastContainer } from "react-toastify";
-import AiBot from "./Components/AiBot/AiBot";
 import { PrimeReactProvider } from "primereact/api";
 import { CompoundProvider } from "./contexts/CompoundContext";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import "./styles/PrimeReact.css";
 import UpdateAqar from "./Pages/Update/UpdateAqar";
+import UpdateBuilding from "./Pages/Update/UpdateBuilding";
+import UpdateLand from "./Pages/Update/UpdateLand";
+import UpdateFactory from "./Pages/Update/UpdateFactory";
+import UpdateAdministrative from "./Pages/Update/UpdateAdministrative";
 import UpdateFinish from "./Pages/Update/UpdateFinish";
+import UpdateSwap from "./Pages/Update/UpdateSwap";
+import UpdateCompound from "./Pages/Update/UpdateCompound";
 import JoinLand from "./Pages/JoinUs/JoinLand";
 import JoinCommercial from "./Pages/JoinUs/JoinCommercial";
 import JoinIndustrial from "./Pages/JoinUs/JoinIndustrial";
@@ -53,6 +57,7 @@ import Factory from "./Pages/Factory/Factory";
 import FactoryDetails from "./Pages/Factory/FactoryDetails";
 import Adminstrative from "./Pages/Adminstrative/Adminstrative";
 import AdminstrativeDetails from "./Pages/Adminstrative/AdminstrativeDetails";
+import JoinCompound from "./Pages/JoinUs/JoinCompound";
 
 const App = () => {
   return (
@@ -88,7 +93,7 @@ const App = () => {
                             element={<CompoundDetailsPage />}
                           />
                           <Route
-                            path="/compound-details/:id"
+                            path="/compound-details/:id/:index"
                             element={<CompoundAqarDetails />}
                           />
 
@@ -105,7 +110,7 @@ const App = () => {
                             path="/building-guide/:id"
                             element={<BuildingDetails />}
                           />
-                          
+
                           {/* اراضي */}
                           <Route path="/land" element={<Land />} />
                           <Route
@@ -163,8 +168,8 @@ const App = () => {
                             element={<JoinIndustrial />}
                           />
                           <Route
-                            path="/join-company"
-                            element={<JoinCompany />}
+                            path="/join-compound"
+                            element={<JoinCompound />}
                           />
                           <Route path="/join-trade" element={<JoinTrade />} />
                           <Route path="/join-finish" element={<JoinFinish />} />
@@ -174,8 +179,32 @@ const App = () => {
                             element={<UpdateAqar />}
                           />
                           <Route
+                            path="/update-building/:id"
+                            element={<UpdateBuilding />}
+                          />
+                          <Route
+                            path="/update-land/:id"
+                            element={<UpdateLand />}
+                          />
+                          <Route
+                            path="/update-factory/:id"
+                            element={<UpdateFactory />}
+                          />
+                          <Route
+                            path="/update-administrative/:id"
+                            element={<UpdateAdministrative />}
+                          />
+                          <Route
                             path="/update-finish/:id"
                             element={<UpdateFinish />}
+                          />
+                          <Route
+                            path="/update-swap/:id"
+                            element={<UpdateSwap />}
+                          />
+                          <Route
+                            path="/update-compound/:id"
+                            element={<UpdateCompound />}
                           />
 
                           {/* ads */}

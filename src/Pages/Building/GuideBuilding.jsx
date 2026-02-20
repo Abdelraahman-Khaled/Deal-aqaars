@@ -8,7 +8,7 @@ import Ads from "../../Components/Auth/Ads/Ads";
 import PropertyAPI from "../../api/propertyApi";
 import RealStateCard from "../../Components/Ui/RealStateCard/RealStateCard";
 import PaginationPage from "../../Components/Pagenation/Pagination";
-import Loader from "../../Components/Loader/Loader";
+import CompoundSkeleton from "../../Components/Ui/CompoundCard/CompoundSkeleton";
 import BuildingCard from "../../Components/Ui/Building/BuildingCard";
 
 const GuideBuilding = ({ title }) => {
@@ -18,6 +18,12 @@ const GuideBuilding = ({ title }) => {
   const [building, setBuilding] = useState([]);
   const [loading, setLoading] = useState(false);
   const [pagenation, setPagenation] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handlePageChange = ({ selected }) => {
+    setCurrentPage(selected + 1);
+    fetchProperties(selected + 1);
+  };
 
   const ShowType = [
     { value: "nest", label: translations[currentLanguage].nest },
@@ -50,11 +56,12 @@ const GuideBuilding = ({ title }) => {
     fetchProperties();
   }, []);
 
+
   return (
     <div className=" guide compound d-flex flex-wrap  flex-md-row  justify-content-between">
       <div className="d-flex space-6 flex-column col-12  col-lg-8 ">
         <div className="d-flex flex-wrap space-3 justify-content-between align-items-center">
-        <h6>{title}</h6>
+          <h6>{title}</h6>
           <div className="d-flex space-3 flex-wrap">
             {/* Drop Down */}
             <DropDown
@@ -75,13 +82,15 @@ const GuideBuilding = ({ title }) => {
         </div>
         <div className="d-flex flex-wrap  flex-row justify-content-between">
           {loading && (
-            <div className="loading-container">
-              <p>
-                {currentLanguage === "ar"
-                  ? "جاري تحميل المباني..."
-                  : "Loading building..."}
-              </p>
-              <Loader />
+            <div className="loading-container w-100">
+              <div className="d-flex flex-wrap justify-content-between w-100">
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <CompoundSkeleton
+                    key={index}
+                    wrapperClass={toggle1 === "nest" ? "flex-wrap" : ""}
+                  />
+                ))}
+              </div>
             </div>
           )}
           {!loading && building.length === 0 && (
@@ -122,7 +131,7 @@ const GuideBuilding = ({ title }) => {
                 offer={formatPrice(property.details?.price)}
                 type={property.division}
                 category={property.category}
-                phone={property.phoneNumber}
+                phone={property.advertiserPhoneNumber}
                 haveWhatsapp={property.haveWhatsapp}
                 location={property.location.detailedLocation}
               />

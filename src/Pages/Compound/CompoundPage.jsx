@@ -3,7 +3,7 @@ import ContainerMedia from '../../Components/ContainerMedia/ContainerMedia'
 import HelmetInfo from '../../Components/Helmetinfo/HelmetInfo'
 import { useLanguage } from '../../Components/Languages/LanguageContext'
 import Places from '../../Components/Ui/Places/Places'
-import GuidePage from '../../Components/Ui/GuideSection/GuidePage'
+import CompoundGuidePage from '../../Components/Ui/GuideSection/CompoundGuidePage'
 import CompoundList from './Components/CompoundDetails/CompoundList'
 
 const CompoundPage = () => {
@@ -18,7 +18,7 @@ const CompoundPage = () => {
 
                     <CompoundList />
                     <Places />
-                    <GuidePage title={"دليل الكمبوندات "} />
+                    <CompoundGuidePage title={"دليل الكمبوندات "} />
 
                 </ContainerMedia>
 

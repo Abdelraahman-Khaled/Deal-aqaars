@@ -5,11 +5,11 @@ import { Navigation, Thumbs } from "swiper/modules";
 import "swiper/css/navigation";
 import "swiper/css";
 import "./SliderDetailsContent.css";
-const SliderDetailsContent = () => {
+const SliderDetailsContent = ({ images }) => {
 
-  const backupImgs = ["./home.jpg","./hom2.jpg","./home1.jpg","./home.jpg","./hom2.jpg","./home1.jpg","./home.jpg","./hom2.jpg","./home1.jpg"]
+  const backupImgs = ["./home.jpg", "./hom2.jpg", "./home1.jpg", "./home.jpg", "./hom2.jpg", "./home1.jpg", "./home.jpg", "./hom2.jpg", "./home1.jpg"]
   const [thumbs, setThumbs] = useState(null);
-  const mapImages = backupImgs
+  const mapImages = images
 
 
 
@@ -29,12 +29,12 @@ const SliderDetailsContent = () => {
           {
             mapImages.length === 0 ? (backupImgs.map((mapImage, index) => (
               <SwiperSlide key={index}>
-                <img src={mapImage} alt={`Map ${index + 1}`} />
+                <img src={mapImage.url} alt={`Map ${index + 1}`} />
               </SwiperSlide>
             ))) : (
               mapImages.map((mapImage, index) => (
                 <SwiperSlide key={index}>
-                  <img src={mapImage} alt={`Map ${index + 1}`} />
+                  <img src={mapImage.url} alt={`Map ${index + 1}`} />
                 </SwiperSlide>
               ))
             )
@@ -63,7 +63,7 @@ const SliderDetailsContent = () => {
         >
           {mapImages.map((mapImage, index) => (
             <SwiperSlide key={index}>
-              <img src={mapImage} alt={`Map ${index + 1}`} />
+              <img src={mapImage.url} alt={`Map ${index + 1}`} />
             </SwiperSlide>
           ))}
         </Swiper>

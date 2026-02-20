@@ -35,13 +35,30 @@ const handleError = (error) => {
 
 const CompoundAPI = {
   // Get all companies
-  getAllCompounds: async () => {
+  // Get all compounds with optional filters
+  getAllCompounds: async (filters = {}) => {
     try {
-      const response = await axiosInstance.get("/compound");
+      const queryParams = new URLSearchParams();
+
+      // Add filters to query params
+      Object.keys(filters).forEach((key) => {
+        if (
+          filters[key] !== undefined &&
+          filters[key] !== null &&
+          filters[key] !== ""
+        ) {
+          queryParams.append(key, filters[key]);
+        }
+      });
+
+      const queryString = queryParams.toString();
+      const url = queryString ? `/compound?${queryString}` : "/compound";
+
+      const response = await axiosInstance.get(url);
       return response.data;
     } catch (error) {
       console.error(
-        "Error fetching companies:",
+        "Error fetching compounds:",
         error.response || error.message
       );
       handleError(error);
@@ -64,47 +81,73 @@ const CompoundAPI = {
     }
   },
 
-  // Create new compound
-  createCompound: async (data) => {
+  // Get current user's compounds
+  getMyCompounds: async (status) => {
     try {
-      // Check if data contains logo to determine content type
-      if (data.logo) {
-        const formData = new FormData();
+      const url = status ? `/compound/me?status=${status}` : "/compound/me";
+      const response = await axiosInstance.get(url);
+      return response.data;
+    } catch (error) {
+      console.error(
+        "Error fetching user compounds:",
+        error.response || error.message
+      );
+      handleError(error);
+      throw error;
+    }
+  },
 
-        // Append all data fields to formData
-        if (data.username) formData.append("username", data.username);
-        if (data.compoundName)
-          formData.append("compoundName", data.compoundName);
-        if (data.address) formData.append("address", data.address);
-        if (data.registrationNumber)
-          formData.append("registrationNumber", data.registrationNumber);
-        if (data.website) formData.append("website", data.website);
-        if (data.compoundType)
-          formData.append("compoundType", data.compoundType);
-        if (data.phoneNumber) formData.append("phoneNumber", data.phoneNumber);
-        if (data.hasWhatsapp !== undefined)
-          formData.append("hasWhatsapp", data.hasWhatsapp);
-
-        // Append logo file
-        formData.append("logo", data.logo);
-
-        const response = await axiosInstance.post("/compound", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-
-        toast.success(getToastMessages().createSuccess[getCurrentLanguage()]);
-        return response.data;
-      } else {
-        // If no logo, send as JSON
-        const response = await axiosInstance.post("/compound", data);
-        toast.success(getToastMessages().createSuccess[getCurrentLanguage()]);
-        return response.data;
+  // Create new compound
+  createCompound: async (formData) => {
+    for (const [key, value] of Object.entries(formData)) {
+      if (value instanceof File || (Array.isArray(value) && value.every(v => v instanceof File))) {
+        // Keep files as-is
+        continue;
+      } else if (typeof value === 'object' && value !== null && !(value instanceof File)) {
+        // Convert nested objects to JSON strings
+        formData.set(key, JSON.stringify(value));
       }
+    }
+    try {
+      const response = await axiosInstance.post("/compound", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      toast.success(getToastMessages().createSuccess[getCurrentLanguage()]);
+      return response.data;
     } catch (error) {
       console.error(
         "Error creating compound:",
+        error.response || error.message
+      );
+      handleError(error);
+      throw error;
+    }
+  },
+
+  // Update compound by ID
+  updateCompound: async (id, formData) => {
+    for (const [key, value] of Object.entries(formData)) {
+      if (value instanceof File || (Array.isArray(value) && value.every(v => v instanceof File))) {
+        // Keep files as-is
+        continue;
+      } else if (typeof value === 'object' && value !== null && !(value instanceof File)) {
+        // Convert nested objects to JSON strings
+        formData.set(key, JSON.stringify(value));
+      }
+    }
+    try {
+      const response = await axiosInstance.put(`/compound/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      toast.success(getToastMessages().updateSuccess[getCurrentLanguage()]);
+      return response.data;
+    } catch (error) {
+      console.error(
+        `Error updating compound with ID ${id}:`,
         error.response || error.message
       );
       handleError(error);

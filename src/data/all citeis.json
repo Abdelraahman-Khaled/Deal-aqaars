@@ -1,0 +1,462 @@
+[
+  {
+    "city_name_ar": "القاهرة",
+    "city_name_en": "Cairo"
+  },
+  {
+    "city_name_ar": "الإسكندرية",
+    "city_name_en": "Alexandria"
+  },
+  {
+    "city_name_ar": "الجيزة",
+    "city_name_en": "Giza"
+  },
+  {
+    "city_name_ar": "السويس",
+    "city_name_en": "Suez"
+  },
+  {
+    "city_name_ar": "بورسعيد",
+    "city_name_en": "Port Said"
+  },
+  {
+    "city_name_ar": "المنصورة",
+    "city_name_en": "Mansoura"
+  },
+  {
+    "city_name_ar": "طنطا",
+    "city_name_en": "Tanta"
+  },
+  {
+    "city_name_ar": "الزقازيق",
+    "city_name_en": "Zagazig"
+  },
+  {
+    "city_name_ar": "المنيا",
+    "city_name_en": "Minya"
+  },
+  {
+    "city_name_ar": "أسيوط",
+    "city_name_en": "Assiut"
+  },
+  {
+    "city_name_ar": "سوهاج",
+    "city_name_en": "Sohag"
+  },
+  {
+    "city_name_ar": "قنا",
+    "city_name_en": "Qena"
+  },
+  {
+    "city_name_ar": "الأقصر",
+    "city_name_en": "Luxor"
+  },
+  {
+    "city_name_ar": "أسوان",
+    "city_name_en": "Aswan"
+  },
+  {
+    "city_name_ar": "دمياط",
+    "city_name_en": "Damietta"
+  },
+  {
+    "city_name_ar": "الإسماعيلية",
+    "city_name_en": "Ismailia"
+  },
+  {
+    "city_name_ar": "بني سويف",
+    "city_name_en": "Beni Suef"
+  },
+  {
+    "city_name_ar": "الفيوم",
+    "city_name_en": "Faiyum"
+  },
+  {
+    "city_name_ar": "كفر الشيخ",
+    "city_name_en": "Kafr El Sheikh"
+  },
+  {
+    "city_name_ar": "دمنهور",
+    "city_name_en": "Damanhur"
+  },
+  {
+    "city_name_ar": "العريش",
+    "city_name_en": "Arish"
+  },
+  {
+    "city_name_ar": "مرسى مطروح",
+    "city_name_en": "Mersa Matruh"
+  },
+  {
+    "city_name_ar": "شرم الشيخ",
+    "city_name_en": "Sharm El Sheikh"
+  },
+  {
+    "city_name_ar": "الغردقة",
+    "city_name_en": "Hurghada"
+  },
+  {
+    "city_name_ar": "رأس غارب",
+    "city_name_en": "Ras Gharib"
+  },
+  {
+    "city_name_ar": "مرسى علم",
+    "city_name_en": "Marsa Alam"
+  },
+  {
+    "city_name_ar": "دهب",
+    "city_name_en": "Dahab"
+  },
+  {
+    "city_name_ar": "نويبع",
+    "city_name_en": "Nuweiba"
+  },
+  {
+    "city_name_ar": "طابا",
+    "city_name_en": "Taba"
+  },
+  {
+    "city_name_ar": "الطور",
+    "city_name_en": "El Tor"
+  },
+  {
+    "city_name_ar": "شرم الشيخ",
+    "city_name_en": "Sharm El Sheikh"
+  },
+  {
+    "city_name_ar": "حلايب",
+    "city_name_en": "Halayeb"
+  },
+  {
+    "city_name_ar": "دهشور",
+    "city_name_en": "Dahshur"
+  },
+  {
+    "city_name_ar": "6 أكتوبر",
+    "city_name_en": "6th of October"
+  },
+  {
+    "city_name_ar": "الشيخ زايد",
+    "city_name_en": "Sheikh Zayed"
+  },
+  {
+    "city_name_ar": "العاشر من رمضان",
+    "city_name_en": "10th of Ramadan"
+  },
+  {
+    "city_name_ar": "العبور",
+    "city_name_en": "Obour"
+  },
+  {
+    "city_name_ar": "بدر",
+    "city_name_en": "Badr"
+  },
+  {
+    "city_name_ar": "النوبارية",
+    "city_name_en": "Nubariya"
+  },
+  {
+    "city_name_ar": "الواحات البحرية",
+    "city_name_en": "Bahariya Oasis"
+  },
+  {
+    "city_name_ar": "الخارجة",
+    "city_name_en": "Kharga"
+  },
+  {
+    "city_name_ar": "الداخلة",
+    "city_name_en": "Dakhla"
+  },
+  {
+    "city_name_ar": "الأقصر",
+    "city_name_en": "Luxor"
+  },
+  {
+    "city_name_ar": "الطور",
+    "city_name_en": "El Tor"
+  },
+  {
+    "city_name_ar": "بورفؤاد",
+    "city_name_en": "Port Fuad"
+  },
+  {
+    "city_name_ar": "القليوبية",
+    "city_name_en": "Qalyubia"
+  },
+  {
+    "city_name_ar": "بنها",
+    "city_name_en": "Banha"
+  },
+  {
+    "city_name_ar": "شبرا الخيمة",
+    "city_name_en": "Shubra El Kheima"
+  },
+  {
+    "city_name_ar": "القناطر الخيرية",
+    "city_name_en": "El Qanater El Khayreya"
+  },
+  {
+    "city_name_ar": "المنوفية",
+    "city_name_en": "Menouf"
+  },
+  {
+    "city_name_ar": "شبين الكوم",
+    "city_name_en": "Shibin El Kom"
+  },
+  {
+    "city_name_ar": "كفر الزيات",
+    "city_name_en": "Kafr El Zayat"
+  },
+  {
+    "city_name_ar": "دمنهور",
+    "city_name_en": "Damanhur"
+  },
+  {
+    "city_name_ar": "المحلة الكبرى",
+    "city_name_en": "El Mahalla El Kubra"
+  },
+  {
+    "city_name_ar": "المحمودية",
+    "city_name_en": "Mahmoudiyah"
+  },
+  {
+    "city_name_ar": "مرسى مطروح",
+    "city_name_en": "Marsa Matruh"
+  },
+  {
+    "city_name_ar": "الإسكندرية",
+    "city_name_en": "Alexandria"
+  },
+  {
+    "city_name_ar": "راس البر",
+    "city_name_en": "Ras El Bar"
+  },
+  {
+    "city_name_ar": "بورسعيد",
+    "city_name_en": "Port Said"
+  },
+  {
+    "city_name_ar": "السلوم",
+    "city_name_en": "Sallum"
+  },
+  {
+    "city_name_ar": "سيوة",
+    "city_name_en": "Siwa Oasis"
+  },
+  {
+    "city_name_ar": "الإسماعيلية",
+    "city_name_en": "Ismailia"
+  },
+  {
+    "city_name_ar": "السويس",
+    "city_name_en": "Suez"
+  },
+  {
+    "city_name_ar": "الفيوم",
+    "city_name_en": "Faiyum"
+  },
+  {
+    "city_name_ar": "القصر",
+    "city_name_en": "El Quseir"
+  },
+  {
+    "city_name_ar": "الغردقة",
+    "city_name_en": "Hurghada"
+  },
+  {
+    "city_name_ar": "سوهاج",
+    "city_name_en": "Sohag"
+  },
+  {
+    "city_name_ar": "المنيا",
+    "city_name_en": "Minya"
+  },
+  {
+    "city_name_ar": "بني مزار",
+    "city_name_en": "Beni Mazar"
+  },
+  {
+    "city_name_ar": "ملوي",
+    "city_name_en": "Mallawi"
+  },
+  {
+    "city_name_ar": "مغاغة",
+    "city_name_en": "Maghagha"
+  },
+  {
+    "city_name_ar": "المنيا الجديدة",
+    "city_name_en": "New Minya"
+  },
+  {
+    "city_name_ar": "أسيوط الجديدة",
+    "city_name_en": "New Assiut"
+  },
+  {
+    "city_name_ar": "سوهاج الجديدة",
+    "city_name_en": "New Sohag"
+  },
+  {
+    "city_name_ar": "قنا الجديدة",
+    "city_name_en": "New Qena"
+  },
+  {
+    "city_name_ar": "الزقازيق",
+    "city_name_en": "Zagazig"
+  },
+  {
+    "city_name_ar": "منيا القمح",
+    "city_name_en": "Minya al-Qamh"
+  },
+  {
+    "city_name_ar": "دقهلية",
+    "city_name_en": "Dakahlia"
+  },
+  {
+    "city_name_ar": "دمياط الجديدة",
+    "city_name_en": "New Damietta"
+  },
+  {
+    "city_name_ar": "إسنا",
+    "city_name_en": "Esna"
+  },
+  {
+    "city_name_ar": "إدفو",
+    "city_name_en": "Edfu"
+  },
+  {
+    "city_name_ar": "أبو قرقاص",
+    "city_name_en": "Abu Qirqas"
+  },
+  {
+    "city_name_ar": "المنصورة",
+    "city_name_en": "Mansoura"
+  },
+  {
+    "city_name_ar": "طلخا",
+    "city_name_en": "Talkha"
+  },
+  {
+    "city_name_ar": "أجا",
+    "city_name_en": "Aga"
+  },
+  {
+    "city_name_ar": "ميت غمر",
+    "city_name_en": "Mit Ghamr"
+  },
+  {
+    "city_name_ar": "ديرب نجم",
+    "city_name_en": "Dairut Najm"
+  },
+  {
+    "city_name_ar": "الشرقية",
+    "city_name_en": "Sharqia (region)"
+  },
+  {
+    "city_name_ar": "المنوفية",
+    "city_name_en": "Al Minufiyah"
+  },
+  {
+    "city_name_ar": "كفر الشيخ",
+    "city_name_en": "Kafr El Sheikh"
+  },
+  {
+    "city_name_ar": "دسوق",
+    "city_name_en": "Desouk"
+  },
+  {
+    "city_name_ar": "محافظة البحيرة",
+    "city_name_en": "Beheira Governorate"
+  },
+  {
+    "city_name_ar": "بلطيم",
+    "city_name_en": "Baltim"
+  },
+  {
+    "city_name_ar": "دمنهور",
+    "city_name_en": "Damanhur"
+  },
+  {
+    "city_name_ar": "كفرالدوار",
+    "city_name_en": "Kafr El Dawwar"
+  },
+  {
+    "city_name_ar": "إيتاى البارود",
+    "city_name_en": "Itay El Barud"
+  },
+  {
+    "city_name_ar": "سمنود",
+    "city_name_en": "Samannud"
+  },
+  {
+    "city_name_ar": "سخا",
+    "city_name_en": "Sakha"
+  },
+  {
+    "city_name_ar": "طنطا",
+    "city_name_en": "Tanta"
+  },
+  {
+    "city_name_ar": "كفر شكر",
+    "city_name_en": "Kafr Shukr"
+  },
+  {
+    "city_name_ar": "شبين الكوم",
+    "city_name_en": "Shibin El Kom"
+  },
+  {
+    "city_name_ar": "مطرية",
+    "city_name_en": "Mitriyah"
+  },
+  {
+    "city_name_ar": "الفيوم الجديدة",
+    "city_name_en": "New Faiyum"
+  },
+  {
+    "city_name_ar": "السويس الجديدة",
+    "city_name_en": "New Suez"
+  },
+  {
+    "city_name_ar": "الطور",
+    "city_name_en": "El Tor"
+  },
+  {
+    "city_name_ar": "القصير",
+    "city_name_en": "Quseir"
+  },
+  {
+    "city_name_ar": "القنطرة شرق",
+    "city_name_en": "El Qantara Sharq"
+  },
+  {
+    "city_name_ar": "القنطرة غرب",
+    "city_name_en": "El Qantara Gharb"
+  },
+  {
+    "city_name_ar": "الطور",
+    "city_name_en": "El Tor"
+  },
+  {
+    "city_name_ar": "رأس سدر",
+    "city_name_en": "Ras Sedr"
+  },
+  {
+    "city_name_ar": "راس غارب",
+    "city_name_en": "Ras Gharib"
+  },
+  {
+    "city_name_ar": "القصير",
+    "city_name_en": "El Qusair"
+  },
+  {
+    "city_name_ar": "بيلا",
+    "city_name_en": "Bela"
+  },
+  {
+    "city_name_ar": "سفنكس",
+    "city_name_en": "Sphinx (Giza area)"
+  },
+  {
+    "city_name_ar": "اليوسفية",
+    "city_name_en": "Yusufiya"
+  }
+]

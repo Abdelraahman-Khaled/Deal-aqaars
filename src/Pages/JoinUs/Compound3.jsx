@@ -1,582 +1,457 @@
-import React, { useState } from 'react'
-import ContainerMedia from '../../Components/ContainerMedia/ContainerMedia'
-import { translations } from './translations';
-import { useLanguage } from '../../Components/Languages/LanguageContext';
-import InputFiled from '../../Components/Forms/InputField';
-import FormField from '../../Components/Forms/FormField';
-import PhoneNumber from '../../Components/Forms/PhoneNumber';
-import HelmetInfo from '../../Components/Helmetinfo/HelmetInfo';
-import WhatsIcon from '../../assets/Icons/WhatsIcon';
-import Switch from '../../Components/Forms/Switch';
-import Map from '../../Components/Ui/Map/Map';
-import CustomModal from '../../Components/CustomModal/CustomModal';
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-import { Link } from 'react-router-dom';
-import { Col, Dropdown, Row } from 'react-bootstrap';
-import TabsContent from '../../Components/Ui/TabsContent/TabsContent';
-import MenuArrow from '../../assets/Icons/MenuArrow';
-import BreadcrumbsPage from '../../Components/Ui/BreadcrumbsPage/BreadcrumbsPage';
-import SectionHeader from '../../Components/SectionHeader/SectionHeader';
-import Select from "react-select";
-import TextArea from '../../Components/Forms/TextArea';
-import NestedDropdownAccordion from '../../Components/NestedDropdownAccordion/NestedDropdownAccordion';
-import { nestedLocationData } from '../../Components/NestedDropdownAccordion/nestedLocationData';
-import PlaceTypeDropdown from '../../Components/Ui/SearchComponents/PlaceTypeDropdown';
-import ImageUploadGrid from '../../Components/ImageUploadGrid/ImageUploadGrid';
+import React, { useState } from "react";
+import { translations } from "./translations";
+import { useLanguage } from "../../Components/Languages/LanguageContext";
+import InputFiled from "../../Components/Forms/InputField";
+import { Col, Row } from "react-bootstrap";
+import SectionHeader from "../../Components/SectionHeader/SectionHeader";
+import ImageUploadGrid from "../../Components/ImageUploadGrid/ImageUploadGrid";
+import SearchToggle from "../../Components/Ui/SearchComponents/SearchToggle ";
+import { Dropdown } from "primereact/dropdown";
+import RealStateCard from "../../Components/Ui/RealStateCard/RealStateCard";
+import CloseIcon from "../../assets/Icons/CloseIcon";
+import ImageUploadCompound from "../../Components/ImageUploadGrid/ImageUploadCompound";
+import TextArea from "../../Components/Forms/TextArea";
 
 const Compound3 = ({ formData, setFormData }) => {
-    const { currentLanguage } = useLanguage(); // Get the current language
-    const [selectAqar, setSelectAqar] = useState(translations[currentLanguage].aqar);
-    const [placeType, setPlaceType] = useState("نوع المكان");
-    const [placeTypeDetails, setPlaceTypeDetails] = useState("");
-    const [selectType, setSelectPart] = useState(translations[currentLanguage].type);
-    const [selectVeiw, setSelectView] = useState(translations[currentLanguage].chooseView);
-    const [paymentWay, setPaymentWay] = useState(translations[currentLanguage].paymentWay);
-    const [aqarSouq, setAqarSouq] = useState(translations[currentLanguage].aqarSouq);
-    const [finishing, setFinishing] = useState(translations[currentLanguage].finishing);
+  const { currentLanguage } = useLanguage();
 
-    const [rotate, setRotate] = useState(false);
-    const [rotate2, setRotate2] = useState(false);
-    const [rotatePlace, setRotatePlace] = useState(false);
+  const [currentUnit, setCurrentUnit] = useState({
+    unitDetails: {
+      unitType: "",
+      aqarType: "",
+      announcementTitle: { ar: "" },
+      announcementDetails: { ar: "" },
+    },
+    aqarDetails: {
+      space: "",
+      price: "",
+      view: "",
+      paymentType: "",
+      type: "",
+      rooms: "",
+      floor: "",
+      bathrooms: "",
+      handingYear: "",
+      finishingType: "",
+    },
+    aqarImages: [],
+  });
 
-    const [showModal, setShowModal] = useState(false);
-    const [selectCompany, setSelectCompany] = useState(translations[currentLanguage].company);
+  const [toggle, setToggle] = useState("sale"); // sale/rent
+  const [selectVeiw, setSelectView] = useState("");
+  const [paymentWay, setPaymentWay] = useState("");
+  const [aqarSouq, setAqarSouq] = useState("");
+  const [finishing, setFinishing] = useState("");
 
+  const readFileAsDataURL = (file) =>
+    new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target.result);
+      reader.readAsDataURL(file);
+    });
 
+  // ------------------------------
+  // Add Unit
+  // ------------------------------
+  // inside Compound3 component
+  const handleAddUnit = async () => {
+    // Normalize images: keep File and preview string for each entry
+    const normalizedImages = await Promise.all(
+      currentUnit.aqarImages.map(async (image) => {
+        // If already an object { file, preview } return as-is
+        if (image && image.file instanceof File) return image;
 
+        // If it's a File, create a preview URL (do not convert to base64 to send)
+        if (image instanceof File) {
+          return {
+            file: image,
+            preview: URL.createObjectURL(image),
+          };
+        }
 
-    const options = [
-        { value: "compunds", label: "سكني" },
-        { value: "buldings", label: "تجاري" },
-    ];
-    const customStyles = {
-        control: (base) => ({
-            ...base,
-            borderRadius: "8px",
-            padding: "2px",
-        }),
-        menu: (base) => ({
-            ...base,
-            borderRadius: "8px",
-            marginTop: "4px",
-            zIndex: 100,
-        }),
-        option: (base, state) => ({
-            ...base,
-            padding: "10px 15px",
-            backgroundColor: state.isFocused ? "#e9ecef" : "white",
-            color: "#212529",
-            cursor: "pointer",
-        }),
+        // If it's a string (base64 or url), keep it as preview, file=null
+        if (typeof image === "string") {
+          return { file: null, preview: image };
+        }
+
+        // If it's an object with url (from previous code), preserve file if present
+        if (image && image.url) {
+          return { file: image.file || null, preview: image.url };
+        }
+
+        return { file: null, preview: "" };
+      })
+    );
+
+    const newUnit = {
+      unitDetails: {
+        unitType: toggle,
+        aqarType: currentUnit.unitDetails.unitType,
+        announcementTitle: { ar: currentUnit.unitDetails.announcementTitle.ar },
+        announcementDetails: { ar: currentUnit.unitDetails.announcementDetails.ar },
+      },
+      aqarDetails: {
+        space: currentUnit.aqarDetails.space,
+        price: currentUnit.aqarDetails.price,
+        view: selectVeiw,
+        paymentType: paymentWay,
+        type: aqarSouq,
+        rooms: currentUnit.aqarDetails.rooms,
+        floor: currentUnit.aqarDetails.floor,
+        bathrooms: currentUnit.aqarDetails.bathrooms,
+        handingYear: currentUnit.aqarDetails.handingYear,
+        finishingType: finishing,
+      },
+      // keep normalized objects so you can preview and upload
+      aqarImages: normalizedImages,
     };
-    const tabsKind = [
-        {
-            eventKey: "tab1",
-            title: (
-                <div onClick={() => setPlaceType(`${currentLanguage === "ar" ? "سكني" : "Housing"}`)}>
-                    {currentLanguage === "ar" ? "سكني" : "Housing"}
-                </div >
-            ),
-            content: (
-                <>
-                    <div className="d-flex space-4">
-                        <div className="d-flex flex-column space-3 w-100">
-                            <p className="b-12 pick bg-light-gray" onClick={() => setPlaceTypeDetails("ارض")}>
-                                ارض
-                            </p>
-                            <p className="b-12 pick bg-light-gray" onClick={() => setPlaceTypeDetails("شقة")}>
-                                شقة
-                            </p>
-                        </div>
-                        <div className="d-flex flex-column space-3 w-100">
-                            <p className="b-12 pick bg-light-gray" onClick={() => setPlaceTypeDetails("بيت")}>
-                                بيت
-                            </p>
-                            <p className="b-12 pick bg-light-gray" onClick={() => setPlaceTypeDetails("كمبوند")}>
-                                كمبوند
-                            </p>
-                        </div>
-                    </div>
-                    <div className="d-flex flex-row space-4 mt-3">
-                        <button className="btn-main submit-btn btn-reset btn-confirm w-100" onClick={() => { setPlaceType("نوع المكان"); setPlaceTypeDetails("") }}>رجّع كل حاجة</button>
-                        <button className="btn-main btn-confirm  w-100 border">تمام</button>
-                    </div>
-                </>
-            )
-        },
-        {
-            eventKey: "tab2",
-            title: (
-                <div onClick={() => setPlaceType(`${currentLanguage === "ar" ? "تجاري" : "Commercial"}`)}>
-                    {currentLanguage === "ar" ? "تجاري" : "Commercial"}
-                </div>
-            ),
-            content: (
-                <>
-                    <div className="d-flex space-4">
-                        <div className="d-flex flex-column space-3 w-100">
-                            <p className="b-12 pick bg-light-gray" onClick={() => setPlaceTypeDetails("مول")}>
-                                مول
-                            </p>
-                            <p className="b-12 pick bg-light-gray" onClick={() => setPlaceTypeDetails("شقة")}>
-                                شقة
-                            </p>
-                        </div>
-                        <div className="d-flex flex-column space-3 w-100">
-                            <p className="b-12 pick bg-light-gray" onClick={() => setPlaceTypeDetails("إداري")}>
-                                إداري
-                            </p>
-                        </div>
-                    </div>
-                    <div className="d-flex flex-row space-4 mt-3">
-                        <button className="btn-main submit-btn btn-reset btn-confirm w-100" onClick={() => { setPlaceType("نوع المكان"); setPlaceTypeDetails("") }}>رجّع كل حاجة</button>
-                        <button className="btn-main btn-confirm  w-100 border">تمام</button>
-                    </div>
-                </>
-            )
-        },
-        {
-            eventKey: "tab3",
-            title: (
-                <div onClick={() => setPlaceType(`${currentLanguage === "ar" ? "زراعي" : "Agricultural"}`)}>
-                    {currentLanguage === "ar" ? "زراعي" : "Agricultural"}
-                </div>
-            ),
-            content: (
-                <>
-                    <div className="d-flex space-4">
-                        <div className="d-flex  space-3 w-100">
-                            <p className="b-12 pick bg-light-gray" onClick={() => setPlaceTypeDetails("مول")}>
-                                مول
-                            </p>
-                            <p className="b-12 pick bg-light-gray" onClick={() => setPlaceTypeDetails("شقة")}>
-                                شقة
-                            </p>
-                        </div>
-                    </div>
-                    <div className="d-flex flex-row space-4 mt-3">
-                        <button className="btn-main submit-btn btn-reset btn-confirm w-100" onClick={() => { setPlaceType("نوع المكان"); setPlaceTypeDetails("") }}>رجّع كل حاجة</button>
-                        <button className="btn-main btn-confirm  w-100 border">تمام</button>
-                    </div>
-                </>
-            )
-        },
-        {
-            eventKey: "tab4",
-            title: (
-                <div onClick={() => setPlaceType(`${currentLanguage === "ar" ? "صناعي" : "Industrial"}`)}>
-                    {currentLanguage === "ar" ? "صناعي" : "Industrial"}
-                </div>
-            ),
-            content: (
-                <>
-                    <div className="d-flex space-4">
-                        <div className="d-flex  space-3 w-100">
-                            <p className="b-12 pick bg-light-gray" onClick={() => setPlaceTypeDetails("مول")}>
-                                مول
-                            </p>
-                            <p className="b-12 pick bg-light-gray" onClick={() => setPlaceTypeDetails("شقة")}>
-                                شقة
-                            </p>
-                        </div>
-                    </div>
-                    <div className="d-flex flex-row space-4 mt-3">
-                        <button className="btn-main submit-btn btn-reset btn-confirm w-100" onClick={() => { setPlaceType("نوع المكان"); setPlaceTypeDetails("") }}>رجّع كل حاجة</button>
-                        <button className="btn-main btn-confirm  w-100 border">تمام</button>
-                    </div>
-                </>
-            )
-        },
-    ];
-    const tabsAqar = [
-        {
-            eventKey: "tab1",
-            title: <></>,
-            content: (
-                <div className="d-flex flex-column space-6">
-                    <div className="d-flex space-4 flex-column justify-content-center">
-                        {
-                            translations[currentLanguage].aqarDetails.map((item, index) => (
-                                <p key={index} className={`b-12 pick rounded-3 bg-light-gray d-flex space-2`}
-                                    onClick={() => setHome(item)}>
-                                    {selectAqar === item}
-                                    {item}
-                                </p>
-                            ))
-                        }
-                    </div>
-                </div>
-            )
-        },
-    ];
 
-    const TabsAqar = [
-        {
-            eventKey: "tab1",
-            title: <></>,
-            content: (
-                <div className="d-flex flex-column space-6">
-                    <div className="d-flex space-4 flex-column justify-content-center">
-                        {
-                            translations[currentLanguage].aqarSouqDetails.map((item, index) => (
-                                <p key={index} className={`b-12 pick rounded-3 bg-light-gray d-flex space-2`}
-                                    onClick={() => setHome(item)}>
-                                    {aqarSouq === item}
-                                    {item}
-                                </p>
-                            ))
-                        }
-                    </div>
-                </div>
-            )
-        },
-    ];
+    setFormData((prev) => ({
+      ...prev,
+      units: [...prev.units, newUnit],
+    }));
 
-    const tabsType = [
-        {
-            eventKey: "tab1",
-            title: <></>,
-            content: (
-                <div className="d-flex flex-column space-6">
-                    <div className="d-flex space-4 flex-column justify-content-center">
-                        {
-                            translations[currentLanguage].aqarType.map((item, index) => (
-                                <p key={index} className={`b-12 pick rounded-3 bg-light-gray d-flex space-2`}
-                                    onClick={() => setHome(item)}>
-                                    {selectType === item}
-                                    {item}
-                                </p>
-                            ))
-                        }
-                    </div>
-                </div>
-            )
-        },
-    ];
+    // Reset and revoke previews from created object URLs
+    normalizedImages.forEach((img) => {
+      if (img && img.preview && img.file instanceof File) {
+        // Optional: revoke object URL later when not needed to avoid memory leaks:
+        // URL.revokeObjectURL(img.preview);
+      }
+    });
+
+    setCurrentUnit({
+      unitDetails: { unitType: "", aqarType: "", announcementTitle: { ar: "" }, announcementDetails: { ar: "" } },
+      aqarDetails: { space: "", price: "", view: "", paymentType: "", type: "", rooms: "", floor: "", bathrooms: "", handingYear: "", finishingType: "" },
+      aqarImages: [],
+    });
+    setSelectView("");
+    setPaymentWay("");
+    setAqarSouq("");
+    setFinishing("");
+  };
 
 
-    const TabsFinishing = [
-        {
-            eventKey: "tab1",
-            title: <></>,
-            content: (
-                <div className="d-flex flex-column space-6">
-                    <div className="d-flex space-4 flex-column justify-content-center">
-                        {
-                            translations[currentLanguage].finishingDetails.map((item, index) => (
-                                <p key={index} className={`b-12 pick rounded-3 bg-light-gray d-flex space-2`}
-                                    onClick={() => setHome(item)}>
-                                    {finishing === item}
-                                    {item}
-                                </p>
-                            ))
-                        }
-                    </div>
-                </div>
-            )
-        },
-    ];
+  // ------------------------------
+  // Remove Unit
+  // ------------------------------
+  const handleRemoveUnit = (indexToRemove) => {
+    setFormData((prev) => ({
+      ...prev,
+      units: prev.units.filter((_, index) => index !== indexToRemove),
+    }));
+  };
 
-    const tabsView = [
-        {
-            eventKey: "tab1",
-            title: <></>,
-            content: (
-                <div className="d-flex flex-column space-6">
-                    <div className="d-flex space-4 flex-column justify-content-center">
-                        {
-                            translations[currentLanguage].view.map((item, index) => (
-                                <p key={index} className={`b-12 pick rounded-3 bg-light-gray d-flex space-2`}
-                                    onClick={() => setHome(item)}>
-                                    {selectVeiw === item}
-                                    {item}
-                                </p>
-                            ))
-                        }
-                    </div>
-                </div>
-            )
-        },
-    ];
+  const tabs = [
+    { value: "sale", label: translations[currentLanguage].forSale },
+    { value: "rent", label: translations[currentLanguage].forRent },
+  ];
 
-    const TabsPaymentWay = [
-        {
-            eventKey: "tab1",
-            title: <></>,
-            content: (
-                <div className="d-flex flex-column space-6">
-                    <div className="d-flex space-4 flex-column justify-content-center">
-                        {
-                            translations[currentLanguage].paymentWayDetails.map((item, index) => (
-                                <p key={index} className={`b-12 pick rounded-3 bg-light-gray d-flex space-2`}
-                                    onClick={() => setHome(item)}>
-                                    {paymentWay === item}
-                                    {item}
-                                </p>
-                            ))
-                        }
-                    </div>
-                </div>
-            )
-        },
-    ];
+  return (
+    <div className="w-100">
+      <SectionHeader text={"وحدات المشروع"} />
 
+      {/* Render Added Units */}
+      {formData.units.length > 0 && (
+        <div className="mt-4">
+          <SectionHeader text={"الوحدات المضافة"} />
+          <Row className="d-flex flex-wrap ">
+            {formData.units.map((unit, index) => (
+              <div className="col-4 position-relative" key={index}>
+                <RealStateCard
+                  id={index}
+                  price={unit.aqarDetails.price}
+                  space={unit.aqarDetails.space}
+                  division={unit.unitDetails.unitType}
+                  img={unit.aqarImages.map((img) => img.preview || img.url || img)}
+                  bath={unit.aqarDetails.bathrooms}
+                  rooms={unit.aqarDetails.rooms}
+                  title={unit.unitDetails?.announcementTitle?.ar}
+                  details={unit.unitDetails?.announcementDetails?.ar}
+                  deleteItem={true}
+                  remove={handleRemoveUnit}
+                  wrapperClass="flex-wrap"
+                />
+              </div>
+            ))}
+          </Row>
+        </div>
+      )}
 
-    return (
-        <>
+      {/* ADD NEW UNIT */}
+      <div className="trade-card finishing">
+        <SectionHeader text={"تفاصيل الوحدة"} />
 
-            <FormField initialValues={formData}>
+        <label className="b-12 mb-2">
+          القسم <span className="required-asterisk">*</span>
+        </label>
+        <div className="select-type join tabs-home justify-content-center mb-4">
+          <SearchToggle
+            toggleState={toggle}
+            setToggleState={setToggle}
+            tabs={tabs}
+          />
+        </div>
 
-                <div className='w-100'>
+        {/* Property Type */}
+        <Row className=" gx-4 mb-4">
+          <Col xs={12} md={12}>
+            <label className="b-12 mb-2">
+              نوع الوحدة <span className="required-asterisk">*</span>
+            </label>
+            <Dropdown
+              value={currentUnit.unitDetails.unitType}
+              onChange={(e) =>
+                setCurrentUnit((prev) => ({
+                  ...prev,
+                  unitDetails: { ...prev.unitDetails, unitType: e.value },
+                }))
+              }
+              options={translations[currentLanguage].aqarType}
+              optionLabel="label"
+              optionValue="value"
+              placeholder={translations[currentLanguage].aqar}
+            />
+          </Col>
+        </Row>
 
-                    {/* company Details */}
-                    <SectionHeader text={"وحدات المشروع"} />
+        {/* location */}
+        <div className="mb-4 ">
+          <label className="b-12 mb-2">
+            عنوان الاعلان <span className="required-asterisk">*</span>
+          </label>
+          <input
+            name="announcementTitle"
+            className="form-control"
+            placeholder={"عنوان الاعلان"}
+            value={currentUnit.unitDetails.announcementTitle.ar}
+            onChange={(e) =>
+              setCurrentUnit((prev) => ({
+                ...prev,
+                unitDetails: {
+                  ...prev.unitDetails,
+                  announcementTitle: { ar: e.target.value },
+                },
+              }))
+            }
+          />
+        </div>
 
+        {/* Company */}
+        <div className="mb-4 ">
+          <label className="b-12 ">
+            تفاصيل الاعلان <span className="required-asterisk">*</span>
+          </label>
+          <TextArea
+            name="announcementDetails"
+            placeholder="تفاصيل الاعلان"
+            value={currentUnit.unitDetails.announcementDetails.ar}
+            onChange={(e) =>
+              setCurrentUnit((prev) => ({
+                ...prev,
+                unitDetails: {
+                  ...prev.unitDetails,
+                  announcementDetails: { ar: e.target.value },
+                },
+              }))
+            }
+          />
+        </div>
 
-                    <div className='trade-card finishing'>
-                        <SectionHeader text={"تفاصيل الوحدة"} />
+        {/* Aqar Description */}
+        <SectionHeader text={"وصف العقار"} />
+        <Row className="g-3 mb-4">
+          <Col xs={12} md={2}>
+            <label className="b-12 mb-2">
+              المساحة بالمتر
+              <span className="required-asterisk"> *</span>
+            </label>
+            <input
+              type="number"
+              name="space"
+              placeholder={"2م"}
+              value={currentUnit.aqarDetails.space}
+              onChange={(e) =>
+                setCurrentUnit((prev) => ({
+                  ...prev,
+                  aqarDetails: { ...prev.aqarDetails, space: e.target.value },
+                }))
+              }
+              className="input-field form-control"
+            />
+          </Col>
+          <Col xs={12} md={2}>
+            <label className="b-12 mb-2">
+              تطل على <span className="required-asterisk"> *</span>
+            </label>
+            <Dropdown
+              value={selectVeiw}
+              onChange={(e) => setSelectView(e.value)}
+              options={translations[currentLanguage].view}
+              placeholder={translations[currentLanguage].chooseView}
+              optionValue="value"
+              optionLabel="label"
+            />
+          </Col>
+          <Col xs={12} md={2}>
+            <label className="b-12 mb-2">
+              التشطيب <span className="required-asterisk"> *</span>
+            </label>
+            <Dropdown
+              value={finishing}
+              onChange={(e) => setFinishing(e.value)}
+              options={translations[currentLanguage].finishingDetails}
+              placeholder={translations[currentLanguage].finishing}
+              optionValue="value"
+              optionLabel="label"
+            />
+          </Col>
+          <Col xs={12} md={3}>
+            <label className="b-12 mb-2">
+              طريقة الدفع <span className="required-asterisk"> *</span>
+            </label>
+            <Dropdown
+              value={paymentWay}
+              onChange={(e) => setPaymentWay(e.value)}
+              options={translations[currentLanguage].paymentWayDetails}
+              placeholder={translations[currentLanguage].paymentWay}
+              optionValue="value"
+              optionLabel="label"
+            />
+          </Col>
+          <Col xs={12} md={3}>
+            <label className="b-12 mb-2">
+              نوع العقار في السوق <span className="required-asterisk"> *</span>
+            </label>
+            <Dropdown
+              value={aqarSouq}
+              onChange={(e) => setAqarSouq(e.value)}
+              options={translations[currentLanguage].aqarSouqDetails}
+              placeholder={translations[currentLanguage].aqarSouq}
+              optionValue="value"
+              optionLabel="label"
+            />
+          </Col>
+          {/*  Rooms, Floor, Bathrooms, Year, Price  */}
+          <Col xs={12} md={2}>
+            <label className="b-12 mb-2">
+              عدد الغرف <span className="required-asterisk"> *</span>
+            </label>
+            <input
+              type="number"
+              name="rooms"
+              placeholder={"عدد الغرف"}
+              value={currentUnit.aqarDetails.rooms}
+              onChange={(e) =>
+                setCurrentUnit((prev) => ({
+                  ...prev,
+                  aqarDetails: { ...prev.aqarDetails, rooms: e.target.value },
+                }))
+              }
+              className="input-field form-control"
+            />
+          </Col>
+          <Col xs={12} md={2}>
+            <label className="b-12 mb-2">
+              الدور <span className="required-asterisk"> *</span>
+            </label>
+            <input
+              type="number"
+              name="floor"
+              placeholder={"الدور"}
+              value={currentUnit.aqarDetails.floor}
+              onChange={(e) =>
+                setCurrentUnit((prev) => ({
+                  ...prev,
+                  aqarDetails: { ...prev.aqarDetails, floor: e.target.value },
+                }))
+              }
+              className="input-field form-control"
+            />
+          </Col>
+          <Col xs={12} md={2}>
+            <label className="b-12 mb-2">
+              عدد الحمامات <span className="required-asterisk"> *</span>
+            </label>
+            <input
+              type="number"
+              name="bathrooms"
+              placeholder={"عدد الحمامات"}
+              value={currentUnit.aqarDetails.bathrooms}
+              onChange={(e) =>
+                setCurrentUnit((prev) => ({
+                  ...prev,
+                  aqarDetails: {
+                    ...prev.aqarDetails,
+                    bathrooms: e.target.value,
+                  },
+                }))
+              }
+              className="input-field form-control"
+            />
+          </Col>
+          <Col xs={12} md={3}>
+            <label className="b-12 mb-2">
+              سنة التسليم <span className="required-asterisk"> *</span>
+            </label>
+            <input
+              type="number"
+              name="handingYear"
+              placeholder={"سنة التسليم"}
+              value={currentUnit.aqarDetails.handingYear}
+              onChange={(e) =>
+                setCurrentUnit((prev) => ({
+                  ...prev,
+                  aqarDetails: {
+                    ...prev.aqarDetails,
+                    handingYear: e.target.value,
+                  },
+                }))
+              }
+              className="input-field form-control"
+            />
+          </Col>
+          <Col xs={12} md={3}>
+            <label className="b-12 mb-2">
+              السعر <span className="required-asterisk"> *</span>
+            </label>
+            <input
+              type="number"
+              name="price"
+              placeholder={"السعر"}
+              value={currentUnit.aqarDetails.price}
+              onChange={(e) =>
+                setCurrentUnit((prev) => ({
+                  ...prev,
+                  aqarDetails: { ...prev.aqarDetails, price: e.target.value },
+                }))
+              }
+              className="input-field form-control"
+            />
+          </Col>
+        </Row>
 
-                        <Row className=" gx-4 mb-4">
-                            <Col xs={12} md={4}>
-                                <label className='b-12 mb-2' >
-                                    نوع الوحدة
-                                    <span> *</span>
-                                </label>
-                                <div onClick={() => setRotate(!rotate)}>
-                                    <Dropdown className="d-flex w-100">
-                                        <Dropdown.Toggle variant="light" className="w-100 text-end">
-                                            {selectAqar}
-                                        </Dropdown.Toggle>
-                                        <Dropdown.Menu>
-                                            <TabsContent
-                                                tabsData={tabsAqar}
-                                                newClassTabsContent="tabs-home rooms"
-                                            />
-                                        </Dropdown.Menu>
-                                        <MenuArrow rotate={rotate} />
-                                    </Dropdown>
-                                </div>
-                            </Col>
-                            <Col xs={12} md={4}>
-                                <label className='b-12 mb-2' >
-                                    نوع العقار
-                                    <span> *</span>
-                                </label>
-                                <div onClick={() => setRotate2(!rotate2)}>
-                                    <div onClick={() => setRotatePlace(!rotatePlace)}>
-                                        <PlaceTypeDropdown placeType={placeType} placeTypeDetails={placeTypeDetails} tabsKind={tabsKind} rotate={rotatePlace} />
-                                    </div>
-                                </div>
-                            </Col>
-                            <Col xs={12} md={4}>
-                                <label className='b-12 mb-2' >
-                                    القسم
-                                    <span> *</span>
-                                </label>
-                                <div onClick={() => setRotate2(!rotate2)}>
-                                    <Dropdown className="d-flex w-100">
-                                        <Dropdown.Toggle variant="light" className="w-100 text-end">
-                                            {selectType}
-                                        </Dropdown.Toggle>
-                                        <Dropdown.Menu>
-                                            <TabsContent
-                                                tabsData={tabsType}
-                                                newClassTabsContent="tabs-home rooms"
-                                            />
-                                        </Dropdown.Menu>
-                                        <MenuArrow rotate={rotate2} />
-                                    </Dropdown>
-                                </div>
-                            </Col>
-                        </Row>
-                        {/* location */}
-                        <div className='row'>
-                            <div className="mb-4 w-50">
-                                <label className="b-12 mb-2">
-                                    عنوان الاعلان  <span className="required-asterisk">*</span>
-                                </label>
-                                <InputFiled name="location" placeholder={"عنوان الاعلان"} />
-                            </div>
-                            <div className="mb-4 w-50 ">
-                                <label className="b-12 mb-2">
-                                    عنوان الاعلان بالانجليزي  <span className="required-asterisk">*</span>
-                                </label>
-                                <InputFiled name="location" placeholder={"عنوان الاعلان"} />
-                            </div>
-                        </div>
+        {/* IMAGES */}
+        <SectionHeader text={"صور الوحدة"} />
+        <div className="mb-4">
+          <ImageUploadCompound
+            value={currentUnit.aqarImages}
+            onChange={(imgs) =>
+              setCurrentUnit((prev) => ({ ...prev, aqarImages: imgs }))
+            }
+          />
+        </div>
 
-                        {/* Company */}
-                        <div className="mb-4 ">
-                            <label className="b-12 ">
-                                تفاصيل الاعلان <span className="required-asterisk">*</span>
-                            </label>
-                            <TextArea name="location" placeholder={"عنوان الاعلان"} />
-                        </div>
+        {/* Add Unit Button */}
+        <button
+          type="button"
+          className="btn-main btn-submit b-11"
+          onClick={handleAddUnit}
+        >
+          إضافة الوحدة
+        </button>
+      </div>
+    </div>
+  );
+};
 
-                        <div className="mb-4 ">
-                            <label className="b-12 ">
-                                تفاصيل الاعلان بالانجليزي<span className="required-asterisk">*</span>
-                            </label>
-                            <TextArea name="location" placeholder={"عنوان الاعلان بالانجليزي"} />
-                        </div>
-
-
-                        {/* Aqar description */}
-                        <SectionHeader text={" وصف العقار"} />
-
-                        {/* Row 1 */}
-                        {/* size */}
-                        <Row className="g-3 mb-4">
-                            <Col xs={12} md={2}>
-                                <label className="b-8 mb-2">
-                                    المساحة (بالمتر) <span> *</span>
-                                </label>
-                                <InputFiled name="space" placeholder={"2م"} />
-                            </Col>
-                            {/* front of house */}
-                            <Col xs={12} md={2}>
-                                <label className="b-8 mb-2">
-                                    تطل على<span> *</span>
-                                </label>
-                                <Dropdown className="d-flex w-100">
-                                    <Dropdown.Toggle variant="light" className="w-100 text-end">
-                                        {selectVeiw || "اختر الاطلالة"}
-                                    </Dropdown.Toggle>
-                                    <Dropdown.Menu className="w-100">
-                                        <TabsContent
-                                            tabsData={tabsView}
-                                            newClassTabsContent="tabs-home rooms"
-                                        />
-                                    </Dropdown.Menu>
-                                    <MenuArrow />
-                                </Dropdown>
-                            </Col>
-                            {/* price */}
-                            <Col xs={12} md={2}>
-                                <label className="b-8 mb-2">
-                                    السعر <span> *</span>
-                                </label>
-                                <InputFiled name="price" placeholder={"السعر"} />
-                            </Col>
-
-
-                            {/* payment */}
-                            <Col xs={12} md={3}>
-                                <label className="b-8 mb-2">
-                                    طريقة الدفع<span> *</span>
-                                </label>
-                                <Dropdown className="d-flex w-100">
-                                    <Dropdown.Toggle variant="light" className="w-100 text-end">
-                                        {paymentWay || "اختار طريقة الدفع"}
-                                    </Dropdown.Toggle>
-                                    <Dropdown.Menu className="w-100">
-                                        <TabsContent
-                                            tabsData={TabsPaymentWay}
-                                            newClassTabsContent="tabs-home rooms"
-                                        />
-                                    </Dropdown.Menu>
-                                    <MenuArrow />
-                                </Dropdown>
-                            </Col>
-
-
-                            {/* aqar souq */}
-                            <Col xs={12} md={3}>
-                                <label className="b-8 mb-2">
-                                    نوع العقار ف السوق <span> *</span>
-                                </label>
-                                <Dropdown className="d-flex w-100">
-                                    <Dropdown.Toggle variant="light" className="w-100 text-end">
-                                        {aqarSouq || "اختار نوع العقار ف السوق "}
-                                    </Dropdown.Toggle>
-                                    <Dropdown.Menu className="w-100">
-                                        <TabsContent
-                                            tabsData={TabsAqar}
-                                            newClassTabsContent="tabs-home rooms"
-                                        />
-                                    </Dropdown.Menu>
-                                    <MenuArrow />
-                                </Dropdown>
-                            </Col>
-                        </Row>
-
-
-                        {/* Row 2 */}
-
-                        <Row className="g-3 mb-4">
-
-                            {/* rooms number */}
-                            <Col xs={12} md={2}>
-                                <label className="b-8 mb-2">
-                                    عدد الغرف  <span> *</span>
-                                </label>
-                                <InputFiled name="rooms" placeholder={"عدد الغرف"} />
-                            </Col>
-
-                            {/* no.floor */}
-                            <Col xs={12} md={2}>
-                                <label className="b-8 mb-2">
-                                    الدور  <span> *</span>
-                                </label>
-                                <InputFiled name="floor" placeholder={" رقم الدور "} />
-                            </Col>
-
-
-                            {/* no.Bathroom */}
-                            <Col xs={12} md={2}>
-                                <label className="b-8 mb-2">
-                                    الحمامات  <span> *</span>
-                                </label>
-                                <InputFiled name="bathrooms" placeholder={" عدد الحمامات "} />
-                            </Col>
-
-                            {/* no.Year */}
-                            <Col xs={12} md={3}>
-                                <label className="b-8 mb-2">
-                                    سنة التسليم   <span> *</span>
-                                </label>
-                                <InputFiled name="year" placeholder={"حدد سنة التسليم "} />
-                            </Col>
-
-
-                            {/* Finishing */}
-                            <Col xs={12} md={3}>
-                                <label className="b-8 mb-2">
-                                    نوع التطشيب <span> *</span>
-                                </label>
-                                <Dropdown className="d-flex w-100">
-                                    <Dropdown.Toggle variant="light" className="w-100 text-end">
-                                        {finishing || "نوع التطشيب "}
-                                    </Dropdown.Toggle>
-                                    <Dropdown.Menu className="w-100">
-                                        <TabsContent
-                                            tabsData={TabsFinishing}
-                                            newClassTabsContent="tabs-home rooms"
-                                        />
-                                    </Dropdown.Menu>
-                                    <MenuArrow />
-                                </Dropdown>
-                            </Col>
-                        </Row>
-
-                        <SectionHeader text={"صور المشروع"} />
-                        <div className='mb-4'>
-                            <ImageUploadGrid />
-                        </div>
-
-
-                        <button type="submit" className="btn-main btn-submit b-11" onClick={() => setShowModal(true)}>
-                            إضافة الوحدة
-                        </button>
-                    </div>
-
-
-
-                </div >
-            </FormField>
-
-        </>
-    )
-}
-
-export default Compound3
+export default Compound3;

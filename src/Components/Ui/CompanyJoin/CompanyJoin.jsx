@@ -126,12 +126,8 @@ export const CompanyJoin = ({ setShowCompany, setShowProgress }) => {
                 logo: logo
             };
 
-            console.log('Form data to submit:', companyData);
 
             const response = await CompanyAPI.createCompany(companyData);
-            console.log('API Response:', response);
-
-            // Show success and proceed to next step
             setShowProgress(true);
             setShowCompany(false);
             resetForm();
@@ -144,7 +140,6 @@ export const CompanyJoin = ({ setShowCompany, setShowProgress }) => {
     };
 
     const handleInputChange = (name, file) => {
-        console.log(`${name} updated:`, file);
         setLogo(file);
     };
 

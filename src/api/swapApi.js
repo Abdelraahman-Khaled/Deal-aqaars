@@ -2,9 +2,10 @@ import axiosInstance from "./axiosInstance";
 
 const SwapAPI = {
   // Get user's swaps
-  getMySwaps: async () => {
+  getMySwaps: async (status) => {
     try {
-      const response = await axiosInstance.get("/swap/my");
+      const url = status ? `/swap/my?status=${status}` : "/swap/my";
+      const response = await axiosInstance.get(url);
       return response.data;
     } catch (error) {
       console.error("Error fetching user's swaps:", error.response || error.message);
@@ -13,9 +14,10 @@ const SwapAPI = {
   },
 
   // Get all swaps
-  getAllSwaps: async () => {
+  getAllSwaps: async (query = "") => {
     try {
-      const response = await axiosInstance.get("/swap");
+      const url = query ? `/swap/filter?q=${query}` : "/swap/filter";
+      const response = await axiosInstance.get(url);
       return response.data;
     } catch (error) {
       console.error("Error fetching swaps:", error.response || error.message);
@@ -46,6 +48,21 @@ const SwapAPI = {
       return response.data;
     } catch (error) {
       console.error("Error creating swap:", error.response || error.message);
+      throw error;
+    }
+  },
+
+  // Update swap by ID
+  updateSwap: async (id, formData) => {
+    try {
+      const response = await axiosInstance.put(`/swap/${id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error(`Error updating swap with ID ${id}:`, error.response || error.message);
       throw error;
     }
   },

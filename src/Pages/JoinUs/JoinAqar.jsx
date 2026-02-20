@@ -62,6 +62,7 @@ const JoinAqar = () => {
   const initialValues = {
     // type: "", // apartment
     division: toggle, // rent ,sale
+    type: "", // apartment
     titleAr: "",
     titleEn: "",
     descriptionAr: "",
@@ -82,7 +83,7 @@ const JoinAqar = () => {
   };
 
   useEffect(() => {
-    selectType === "house" ? setIsHouse(true) : setIsHouse(false);
+    selectType === "عمارة" ? setIsHouse(true) : setIsHouse(false);
   }, [selectType]);
 
   const handleSubmit = async (values, { resetForm }) => {
@@ -90,7 +91,7 @@ const JoinAqar = () => {
 
     // division
     formData.append("division", toggle);
-    formData.append("type", "apartment");
+    formData.append("type", selectType);
 
     // titles
     formData.append("title[ar]", values.titleAr);
@@ -117,13 +118,15 @@ const JoinAqar = () => {
     formData.append("details[paymentMethod]", values.paymentMethod);
     formData.append("details[propertyType]", values.propertyType);
     formData.append("details[price]", values.price);
-    formData.append("details[bathrooms]", values.bathrooms);
     formData.append("details[buildingYear]", values.buildingYear);
     formData.append("details[handoverDate]", values.handoverYear);
 
     {
-      !isHouse && formData.append("details[rooms]", values.rooms);
+      !isHouse &&
+        formData.append("details[rooms]", values.rooms);
       formData.append("details[floor]", values.floor);
+      formData.append("details[bathrooms]", values.bathrooms);
+
     }
 
     // images
@@ -136,18 +139,14 @@ const JoinAqar = () => {
     }
 
     setIsItemLoading(true);
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
+ 
     try {
       if (isHouse) {
         const response = await PropertyAPI.createBuilding(formData);
-        console.log(response);
         setShowModal(true);
         resetForm();
       } else {
         const response = await PropertyAPI.createProperty(formData);
-        console.log(response);
         setShowModal(true);
         resetForm();
       }
@@ -215,33 +214,13 @@ const JoinAqar = () => {
                       }}
                       options={translations[currentLanguage].aqarType}
                       optionLabel="label" // هيعرض اللي في label
-                      optionValue="value" // هيخزن value (انجليزي)
+                      optionValue="label" // هيخزن value (انجليزي)
                       name="type"
                       placeholder={translations[currentLanguage].aqar}
                     />
                   </Col>
-                  {/* <Col xs={12} md={4}>
-                    <label className="b-12 mb-2">
-                      نوع العقار في السوق
-                      <span className="required-asterisk"> *</span>
-                    </label>
-                    <div onClick={() => setRotate2(!rotate2)}>
-                      <div onClick={() => setRotatePlace(!rotatePlace)}>
-                        <PlaceTypeDropdown
-                          placeType={placeType}
-                          placeTypeDetails={placeTypeDetails}
-                          tabsKind={tabsKind}
-                          rotate={rotatePlace}
-                          onChange={(value) => {
-                            setSelectType(value);
-                            setFieldValue("propertyType", value);
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </Col> */}
+
                 </Row>
-                {/* <NestedDropdownAccordion data={nestedLocationData} title="عنوان العقار" placeholder="اختر المكان" /> */}
 
                 {/* Details */}
                 <SectionHeader text={"تفاصيل العقار"} />
@@ -322,9 +301,8 @@ const JoinAqar = () => {
 
                 <div className="mb-4 b-15 d-flex align-items-center space-2">
                   <input
-                    className={`form-check-input ${
-                      currentLanguage === "en" && "mx-0"
-                    }`}
+                    className={`form-check-input ${currentLanguage === "en" && "mx-0"
+                      }`}
                     type="checkbox"
                     id="flexCheckChecked"
                     defaultChecked
@@ -426,7 +404,7 @@ const JoinAqar = () => {
                     ></Dropdown>
                   </Col>
 
-                    {!isHouse && (
+                  {!isHouse && (
                     <>
                       {/* rooms number */}
                       <Col xs={12} md={4}>
@@ -458,27 +436,27 @@ const JoinAqar = () => {
                     </>
                   )}
 
-                {/* Row 2 */}
-                
+                  {/* Row 2 */}
+
                   {/* no.build */}
                   <Col xs={12} md={4}>
                     <label className="b-12 mb-2">
-                      سنة البناء<span className="required-asterisk"> *</span>
+                      سنة البناء<span className=""> *</span>
                     </label>
                     <InputFiled
                       name="buildingYear"
-                      placeholder={"حدد سنة البناء"}
+                      placeholder={"حدد سنة البناء (اختياري)"}
                     />
                   </Col>
 
                   {/* no.Year */}
                   <Col xs={12} md={4}>
                     <label className="b-12 mb-2">
-                      سنة التسليم <span className="required-asterisk"> *</span>
+                      سنة التسليم <span className=""> *</span>
                     </label>
                     <InputFiled
                       name="handoverYear"
-                      placeholder={"حدد سنة التسليم "}
+                      placeholder={"حدد سنة التسليم (اختياري)"}
                     />
                   </Col>
                   {/* price */}

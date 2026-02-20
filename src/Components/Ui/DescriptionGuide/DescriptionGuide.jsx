@@ -35,7 +35,8 @@ const DescriptionGuide = ({ title, location, price, description, aqar = false, r
                         description &&
                         <p className='b-11'>{description}</p>
                     }
-                    <p className='b-11'>
+                    <p className='b-11 d-flex'>
+                        <LocationIcon/>
                      {location}
                     </p>
                     {price && <p className='b-11'>تبدأ من {price} ج.م</p>}

@@ -89,25 +89,23 @@ export const PersonJoin = ({ setShowPerson, setShowProgress }) => {
     const initialValues = {
         role: "vendor",
         fullName: '',
-        nationalId: '',
-        detailedLocation: '',
+        // nationalId: '',
+        // detailedLocation: '',
         phoneNumber: '',
         hasWhatsApp: false,
     };
 
     const validationSchema = Yup.object({
         fullName: Yup.string().required('الاسم مطلوب'),
-        nationalId: Yup.string().required('رقم البطاقة مطلوب'),
-        detailedLocation: Yup.string().required('العنوان مطلوب'),
+        // nationalId: Yup.string().required('رقم البطاقة مطلوب'),
+        // detailedLocation: Yup.string().required('العنوان مطلوب'),
         phoneNumber: Yup.string().required('رقم الموبايل مطلوب'),
     });
 
     const handleSubmit = async (values, { setSubmitting, resetForm }) => {
         try {
             setIsLoading(true);
-            console.log('Form data to submit:', values);
             const response = await CompanyAPI.beingVendor(values);
-            console.log('API Response:', response);
 
             // Show success and proceed to next step
             setShowProgress(true);
@@ -136,20 +134,20 @@ export const PersonJoin = ({ setShowPerson, setShowProgress }) => {
                 </div>
 
                 {/* National ID */}
-                <div className="mb-4 ">
+                {/* <div className="mb-4 ">
                     <label className="b-15 mb-2">
                         رقم البطاقة <span className="required-asterisk">*</span>
                     </label>
                     <InputFiled name="nationalId" placeholder="الرقم القومي" />
-                </div>
+                </div> */}
 
                 {/* Address */}
-                <div className="mb-4 ">
+                {/* <div className="mb-4 ">
                     <label className="b-15 mb-2">
                         العنوان بالتفصيل <span className="required-asterisk">*</span>
                     </label>
                     <InputFiled name="detailedLocation" placeholder="العنوان" />
-                </div>
+                </div> */}
 
                 {/* Mobile */}
                 <div className="mb-4 ">

@@ -1,10 +1,11 @@
+
 import React, { useState, useEffect } from 'react';
 import { useField } from 'formik';
 import CloseIcon from '../../assets/Icons/CloseIcon';
 import PlusIcon from '../../assets/Icons/PlusIcon';
 import CameraUploadImg from '../../assets/Icons/CameraUploadImg';
 
-const ImageUploadGrid = ({ name }) => {
+const ImageUploadGrid = ({ name, onRemove }) => {
     const [field, , helpers] = useField(name); // formik field
     const [uploadedImages, setUploadedImages] = useState([]);
 
@@ -14,8 +15,11 @@ const ImageUploadGrid = ({ name }) => {
             for (const file of field.value || []) {
                 if (file instanceof File) {
                     newPreviews.push(await readFileAsDataURL(file));
+                } else if (typeof file === 'object' && file.url) {
+                    // Handle image object from backend
+                    newPreviews.push(file.url);
                 } else {
-                    // Assuming file is already a URL string if not a File object
+                    // Fallback for string URLs
                     newPreviews.push(file);
                 }
             }
@@ -49,7 +53,6 @@ const ImageUploadGrid = ({ name }) => {
                 if (!isNotTooBig) {
                     console.warn('File rejected: too large', file.name, file.size);
                 }
-
                 return isImage && isNotTooBig;
             });
 
@@ -60,6 +63,21 @@ const ImageUploadGrid = ({ name }) => {
     };
 
     const removeImage = (index) => {
+        const fileToRemove = (field.value || [])[index];
+
+        if (onRemove && fileToRemove) {
+            // Check if it's an existing image object with a name property
+            if (fileToRemove.name && !(fileToRemove instanceof File)) {
+                onRemove(fileToRemove.name);
+            }
+            // Fallback for string URLs (legacy support)
+            else if (typeof fileToRemove === 'string') {
+                const imageName = fileToRemove.split('/').pop();
+                if (imageName) {
+                    onRemove(imageName);
+                }
+            }
+        }
         // Remove from formik field
         const newFiles = (field.value || []).filter((_, i) => i !== index);
         helpers.setValue(newFiles);
@@ -76,7 +94,7 @@ const ImageUploadGrid = ({ name }) => {
                                     src={uploadedImages[index]}
                                     alt={`Upload ${index + 1}`}
                                     className="img-fluid rounded border"
-                                    style={{ height: '96px', objectFit: 'cover', width: '100%' }}
+                                    style={{ height: '130px', objectFit: 'cover', width: '100%' }}
                                 />
                                 <button
                                     onClick={() => removeImage(index)}
@@ -90,7 +108,7 @@ const ImageUploadGrid = ({ name }) => {
                         ) : index === uploadedImages.length && index < 9 ? (
                             <label
                                 className="d-flex align-items-center justify-content-center border rounded"
-                                style={{ height: '96px', cursor: 'pointer', background: 'rgba(23, 55, 148, 0.1)' }}
+                                style={{ height: '130px', cursor: 'pointer', background: 'rgba(23, 55, 148, 0.1)' }}
                             >
                                 <PlusIcon />
                                 <input
@@ -104,7 +122,7 @@ const ImageUploadGrid = ({ name }) => {
                         ) : (
                             <div
                                 className="d-flex align-items-center justify-content-center border rounded bg-white"
-                                style={{ height: '96px' }}
+                                style={{ height: '130px' }}
                             >
                                 <CameraUploadImg />
                             </div>

@@ -8,9 +8,9 @@ export default function Slidercontainer({ children }) {
     const settings = {
         infinite: true,
         speed: 500,
-        slidesToShow: 3.77,
+        slidesToShow: 3.20,
         slidesToScroll: 1,
-        rtl: true,
+        rtl: false,
         responsive: [
             {
                 breakpoint: 992, // tablets

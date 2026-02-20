@@ -1,14 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ContainerMedia from '../../Components/ContainerMedia/ContainerMedia'
-import { translations } from './translations';
+import { translations } from '../JoinUs/translations';
 import { useLanguage } from '../../Components/Languages/LanguageContext';
-import InputFiled from '../../Components/Forms/InputField';
 import FormField from '../../Components/Forms/FormField';
 import PhoneNumber from '../../Components/Forms/PhoneNumber';
 import HelmetInfo from '../../Components/Helmetinfo/HelmetInfo';
 import WhatsIcon from '../../assets/Icons/WhatsIcon';
 import Switch from '../../Components/Forms/Switch';
-import Map from '../../Components/Ui/Map/Map';
 import CustomModal from '../../Components/CustomModal/CustomModal';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { Link, useParams } from 'react-router-dom';
@@ -19,19 +17,27 @@ import SectionHeader from '../../Components/SectionHeader/SectionHeader';
 import Checkbox from '../../Components/Forms/Checkbox';
 import FinishingAPI from '../../api/finishingApi';
 import GoogleSearchBoxWithMap from '../../Components/GoogleMap/GoogleSearchBoxWithMap';
+import Loader from '../../Components/Loader/Loader';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
-import "./JoinUs.css"
+import "../JoinUs/JoinUs.css"
+import { Dropdown } from 'primereact/dropdown';
+import data from "../../data/cities.json"
+import { Field } from "formik";
+import PhoneNumberValidation from '../../Components/Forms/PhoneNumberInput';
 
 const UpdateFinish = () => {
     const { id } = useParams();
-    const { currentLanguage } = useLanguage(); // Get the current language
-    const [isItemLoading, setIsItemLoading] = useState(false)
-
+    const { currentLanguage } = useLanguage();
+    const [isItemLoading, setIsItemLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
-    const [selectCompany, setSelectCompany] = useState(translations[currentLanguage].company);
     const [type, setType] = useState({ ar: "فرش", en: "furnishing" });
-
-
+    const [removedImages, setRemovedImages] = useState([]);
+    const [locationDetails, setLocationDetails] = useState("");
+    const [latitude, setLatitude] = useState("");
+    const [longitude, setLongitude] = useState("");
+    const [city, setCity] = useState("");
 
     const checkboxs = [
         { ar: "حديقة", en: "Garden" },
@@ -43,8 +49,9 @@ const UpdateFinish = () => {
         { ar: "اوض ضيوف", en: "Guest rooms" },
         { ar: "اوض ألعاب", en: "Game rooms" },
         { ar: "شرفة", en: "Balcony" },
-    ]
-    const initialValues = {
+    ];
+
+    const [initialValues, setInitialValues] = useState({
         companyDescription: {
             ar: "",
             en: "",
@@ -57,15 +64,61 @@ const UpdateFinish = () => {
         phoneNumber: "",
         hasWhatsapp: false,
         allowEmailContact: false,
-        detailedAddress: {
-            ar: "",
-            en: "",
-        },
-        location: {
-            type: "Point",
-            coordinates: [],
-        },
-    };
+        images: [],
+    });
+
+    useEffect(() => {
+        const fetchFinishing = async () => {
+            try {
+                setIsLoading(true);
+                const response = await FinishingAPI.getFinishingById(id);
+                let finishingData = response.data || response;
+
+                // Set job type
+                if (finishingData.jobType) {
+                    setType(finishingData.jobType);
+                }
+
+                // Set location state
+                if (finishingData.location) {
+                    setCity(finishingData.location.city || "");
+                    setLocationDetails(finishingData.detailedAddress?.ar || "");
+
+                    // Handle coordinates
+                    const coords = finishingData.location.coordinates;
+                    if (coords) {
+                        if (coords.coordinates && Array.isArray(coords.coordinates)) {
+                            setLatitude(coords.coordinates[1]);
+                            setLongitude(coords.coordinates[0]);
+                        } else if (Array.isArray(coords)) {
+                            setLatitude(coords[1]);
+                            setLongitude(coords[0]);
+                        }
+                    }
+                }
+
+                // Set initial values
+                setInitialValues({
+                    companyDescription: finishingData.companyDescription || { ar: "", en: "" },
+                    jobType: finishingData.jobType || { ar: "", en: "" },
+                    servicesOffered: finishingData.servicesOffered || [],
+                    phoneNumber: finishingData.phoneNumber || "",
+                    hasWhatsapp: finishingData.hasWhatsapp || false,
+                    allowEmailContact: finishingData.allowEmailContact || false,
+                    images: finishingData.images || [],
+                });
+            } catch (error) {
+                console.error("Error fetching finishing service:", error);
+                toast.error("Failed to load finishing service details");
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        if (id) {
+            fetchFinishing();
+        }
+    }, [id]);
 
     const handleSubmit = async (values, { resetForm }) => {
         const formData = new FormData();
@@ -89,34 +142,32 @@ const UpdateFinish = () => {
         formData.append("hasWhatsapp", values.hasWhatsapp);
         formData.append("allowEmailContact", values.allowEmailContact);
 
-        // address
-        formData.append("detailedAddress[ar]", values.detailedAddress.ar);
-        formData.append("detailedAddress[en]", values.detailedAddress.en);
+        // address and location
+        formData.append("location[city]", city);
+        formData.append("detailedAddress[ar]", locationDetails);
+        formData.append("location[coordinates][0]", longitude);
+        formData.append("location[coordinates][1]", latitude);
 
-
-        // lat long
-        formData.append("location[type]", values.location.type);
-        formData.append("location[coordinates][]", values.location.coordinates[1]);
-        formData.append("location[coordinates][]", values.location.coordinates[0]);
-
-
+        // Removed images
+        if (removedImages.length > 0) {
+            removedImages.forEach((imgId) => {
+                formData.append("removedImages[]", imgId);
+            });
+        }
 
         // images
         if (values.images && values.images.length > 0) {
             values.images.forEach((file) => {
-                formData.append("images", file);
+                if (file instanceof File) {
+                    formData.append("images", file);
+                }
             });
-            console.log("Images being sent:", values.images.length, "files");
-        } else {
-            console.log("No images to send");
         }
 
-        setIsItemLoading(true)
+        setIsItemLoading(true);
         try {
             const response = await FinishingAPI.updateFinishingService(id, formData);
-            console.log(response);
             setShowModal(true);
-            resetForm();
         } catch (err) {
             console.error(err);
         } finally {
@@ -124,30 +175,22 @@ const UpdateFinish = () => {
         }
     };
 
-    const validationSchema = Yup.object().shape({
-        detailedAddress: Yup.object().shape({
-            en: Yup.string().required("Detailed address in English is required"),
-            ar: Yup.string().required("Detailed address in Arabic is required"),
-        }),
-        jobType: Yup.object().shape({
-            ar: Yup.string().required("Job type (Arabic) is required"),
-            en: Yup.string().required("Job type (English) is required"),
-        }),
-        phoneNumber: Yup.string()
-            .required("Phone number is required")
-            .matches(/^[0-9]+$/, "Phone number must be a string of digits"),
-        servicesOffered: Yup.array()
-            .min(1, "At least one service must be provided")
-            .required("At least one service must be provided"),
-    });
+    if (isLoading) {
+        return (
+            <div className="d-flex justify-content-center align-items-center min-vh-100">
+                <Loader />
+            </div>
+        );
+    }
 
     return (
         <>
-            <HelmetInfo titlePage={currentLanguage === "ar" ? "اعلن عن  خدمات التشطيب" : "Announce finishing services"} />
+            <HelmetInfo titlePage={currentLanguage === "ar" ? "تعديل خدمات التشطيب" : "Update finishing services"} />
 
             <FormField
                 initialValues={initialValues}
                 onSubmit={handleSubmit}
+                enableReinitialize={true}
             >
                 {({ values, setFieldValue }) => (
 
@@ -157,19 +200,16 @@ const UpdateFinish = () => {
                                 <div className='pb-4'>
                                     <BreadcrumbsPage
                                         newClassBreadHeader={"biography-bread breadcrumb-page-2"}
-                                        mainTitle={"اعلن عن التشطيب"}
+                                        mainTitle={"تعديل خدمات التشطيب"}
                                         routeTitleTwoBread={false}
                                         titleTwoBread={false}
                                         secondArrow={false}
                                     />
                                 </div>
-                                <p className='b-1 pb-3 mb-2'>انضم لينا واعلن عن خدمات التشطيب بتاعتك!</p>
+                                <p className='b-1 pb-3 mb-2'>عدل على بيانات خدمات التشطيب بتاعتك</p>
 
                                 {/* company Details */}
-
                                 <SectionHeader text={"بيانات الشركة"} />
-
-
 
                                 {/* full details */}
                                 <div className="mb-4 flex-wrap d-flex align-items-center justify-content-between ">
@@ -179,24 +219,14 @@ const UpdateFinish = () => {
                                     <TextArea name="companyDescription.ar" maxLength="700" placeholder={"قول للناس بتقدم إيه "} />
                                 </div>
 
-                                <div className="mb-4 flex-wrap d-flex align-items-center justify-content-between ">
-                                    <label className="b-12 ">
-                                        وصف الشركة بالانجليزي   <span className='required-asterisk'>*</span>
-                                    </label>
-                                    <TextArea name="companyDescription.en" maxLength="700" placeholder={"قول للناس بتقدم إيه "} />
-                                </div>
-
-
                                 {/* Company services */}
                                 <SectionHeader text={"خدمات الشركة"} />
 
-
-                                {/* finish or furnihsing */}
+                                {/* finish or furnishing */}
                                 <label className="b-12 mb-2">
                                     اختار نوع شغلك   <span className='required-asterisk'>*</span>
                                 </label>
                                 <div className="mb-4 d-flex flex-wrap gap-3 custom-responsive-buttons">
-
                                     <div
                                         className="py-2 px-2 border rounded-pill text-center option-finish-btn"
                                         style={{
@@ -218,7 +248,6 @@ const UpdateFinish = () => {
                                         تشطيب
                                     </div>
                                 </div>
-
 
                                 {/* offers */}
                                 <div className="mb-4 ">
@@ -252,18 +281,13 @@ const UpdateFinish = () => {
                                 {/* call */}
                                 <SectionHeader text={"بيانات التواصل"} />
 
-
-
-
                                 {/* mobile */}
-
                                 <div className="mb-4 lg-w-30">
                                     <label className="b-12 mb-2" style={{ minWidth: "150px" }}>
                                         رقم الموبايل
                                         <span className='required-asterisk'>*</span></label>
-                                    <PhoneNumber name="phoneNumber" type="text" placeholder={"اكتب رقمك"} />
+                                    <Field name="phoneNumber" component={PhoneNumberValidation} />
                                 </div>
-
 
                                 <div className='b-15 mb-4 d-flex justify-content-between align-items-center lg-w-30'>
                                     <div className='d-flex flex-row space-1'>
@@ -273,64 +297,68 @@ const UpdateFinish = () => {
                                     <Switch name="hasWhatsapp" />
                                 </div>
 
-
-                                <Checkbox text={"تواصل معي عن طريق الايميل"} newClass={"mb-4"} />
-
-
+                                <Checkbox name="allowEmailContact" text={"تواصل معي عن طريق الايميل"} newClass={"mb-4"} />
 
                                 {/* location description */}
                                 <SectionHeader text={"العنوان بالتفصيل"} />
 
-
-                                {/*  location Details */}
-                                <div className="mb-4 ">
+                                <div className="mb-4">
                                     <label className="b-12 mb-2">
-                                        العنوان بالتفصيل <span className='required-asterisk'>*</span>
+                                        عنوان العقار <span className="required-asterisk"> *</span>
                                     </label>
-                                    <InputFiled name="detailedAddress.ar" placeholder={"اكتب عنوانك بالتفصيل "} />
+                                    <Dropdown
+                                        value={city}
+                                        onChange={(e) => {
+                                            setCity(e.value);
+                                        }}
+                                        editable
+                                        options={data.map((item) => ({
+                                            value: item.city_name_en,
+                                            label:
+                                                currentLanguage === "ar"
+                                                    ? item.city_name_ar
+                                                    : item.city_name_en,
+                                        }))}
+                                        placeholder={translations[currentLanguage].city}
+                                        name="city"
+                                        className="hide-scrollbar"
+                                        optionValue="value"
+                                        optionLabel="label"
+                                    ></Dropdown>
                                 </div>
-
-                                <div className="mb-4 ">
-                                    <label className="b-12 mb-2">
-                                        العنوان بالتفصيل بالانجليزي <span className='required-asterisk'>*</span>
-                                    </label>
-                                    <InputFiled name="detailedAddress.en" placeholder={"اكتب عنوانك بالتفصيل بالانجليزي"} />
-                                </div>
-
-
 
                                 {/* map */}
                                 <div className="mb-5">
-                                    <label className="b-12 mb-2">
-                                        العنوان علي الخريطة<span className='required-asterisk'>*</span>
-                                    </label>
                                     <GoogleSearchBoxWithMap
-                                        setLatitude={(lat) => setFieldValue("location.coordinates[1]", lat)}
-                                        setLongitude={(lng) => setFieldValue("location.coordinates[0]", lng)}
+                                        setLatitude={setLatitude}
+                                        setLongitude={setLongitude}
                                         isItemLoading={isItemLoading}
-                                        longitude={values.location.coordinates[0]}
-                                        latitude={values.location.coordinates[1]}
+                                        longitude={longitude}
+                                        latitude={latitude}
+                                        setLocationDetails={setLocationDetails}
+                                        locationDetails={locationDetails}
                                     />
                                 </div>
 
-
                                 {/* pictures */}
-
                                 <div className='py-3 px-2 rounded-3 mb-4' style={{ backgroundColor: "rgba(23, 55, 148, 0.1)" }}>
                                     <p className="b-10">
                                         صور من شغلك قبل كده
                                     </p>
                                 </div>
 
-
                                 <div className='mb-4'>
-                                    <ImageUploadGrid name={"images"} />
+                                    <ImageUploadGrid
+                                        name={"images"}
+                                        onRemove={(imageName) => {
+                                            setRemovedImages((prev) => [...prev, imageName]);
+                                        }}
+                                    />
                                 </div>
-
 
                                 <div className="d-flex justify-content-center mt-5 pt-3">
                                     <button type="submit" className="btn-main btn-submit b-11" disabled={isItemLoading}>
-                                        {isItemLoading ? "جاري الارسال..." : "ابعت الطلب"}
+                                        {isItemLoading ? "جاري التحديث..." : "تحديث"}
                                     </button>
                                 </div>
 
@@ -355,13 +383,12 @@ const UpdateFinish = () => {
                                                 autoplay
                                             />
                                         </div>
-                                        <h6>💡 طلبك وصل!</h6>
-                                        <p className="b-15" style={{ color: "var(--netural-700)" }}>تمام، تسجيلك كتاجر في التشطيبات وصل بنجاح! ✨ هنراجع بياناتك وهنكلمك قريب عشان نكمل باقي الخطوات. خليك متابع تنبيهاتك لأي جديد! 🚀</p>
-                                        <Link to={"/"} className="btn-main btn-submit mt-3 b-11 py-3 px-2">
-                                            ارجع للرئيسية
+                                        <h6>💡 تم التحديث!</h6>
+                                        <p className="b-15" style={{ color: "var(--netural-700)" }}>تم تحديث بيانات خدمات التشطيب بنجاح.</p>
+                                        <Link to={"/my-ads"} className="btn-main btn-submit mt-3 b-11 py-3 px-2">
+                                            العودة لإعلاناتي
                                         </Link>
                                     </div>
-
                                 </CustomModal>
 
                             </div >

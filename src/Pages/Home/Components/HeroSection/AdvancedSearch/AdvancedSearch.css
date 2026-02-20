@@ -12,6 +12,7 @@
   gap: 8px;
   justify-content: space-evenly;
 }
+
 .advanced-search .select-type button {
   padding: 12px 32px;
   border-radius: var(--border-radius-2);
@@ -19,6 +20,7 @@
   transition: 0.3s ease-in-out;
   background-color: inherit;
 }
+
 .advanced-search.finishing .select-type button {
   padding: 12px 16px;
 }
@@ -30,6 +32,7 @@
 .advanced-search ul::before {
   display: none !important;
 }
+
 .advanced-search .form-control,
 .advanced-search .dropdown {
   padding: 16px 12px;
@@ -37,6 +40,7 @@
   border: 1px solid var(--netural-200);
   background-color: var(--netural-100);
 }
+
 .advanced-search .select-progress {
   border-radius: var(--border-radius-4);
   border: 1px solid var(--netural-200);
@@ -45,15 +49,18 @@
   gap: 8px;
   justify-content: space-around;
 }
+
 .advanced-search .select-progress button {
   padding: 12px 8px;
   color: var(--netural-1000);
 }
+
 .advanced-search .dropdown button {
   padding: 0;
   border: none;
   text-align: right !important;
 }
+
 [dir="ltr"] .advanced-search .dropdown button {
   text-align: left !important;
 }
@@ -61,11 +68,13 @@
 .advanced-search .dropdown button:hover {
   background-color: unset;
 }
+
 .advanced-search .dropdown button:active {
   border: none;
   background-color: unset;
   color: var(--netural-1000);
 }
+
 .advanced-search button.show {
   border: none;
   background-color: inherit;
@@ -76,6 +85,7 @@
   box-shadow: -1px 0px 0px 1px var(--primary);
   border: 1px solid var(--primary);
 }
+
 /* dropdown */
 .advanced-search .dropdown-menu.show {
   border-radius: var(--border-radius-4);
@@ -86,15 +96,18 @@
   inset: unset !important;
   transform: translate(12px, 30px) !important;
 }
+
 /* نوع المكان  place kind */
 .advanced-search .place-kind {
   gap: 24px;
 }
+
 .advanced-search .place-kind .nav-tabs .nav-link.active {
   background-color: white;
   border-bottom: 1px solid var(--primary) !important;
   border-radius: 0px;
 }
+
 .advanced-search .place-kind ul {
   border: none;
   justify-content: space-between;
@@ -105,8 +118,9 @@
 }
 
 .advanced-search .place-kind ul li button {
-  padding: 12px 24px;
+  padding: 0px !important;
 }
+
 /* pick */
 .advanced-search .pick {
   border-radius: var(--border-radius-full);
@@ -118,9 +132,11 @@
   cursor: pointer;
   width: auto;
 }
+
 .advanced-search .pick:hover {
   color: var(--netural-1000);
 }
+
 .advanced-search .picked {
   border-color: var(--green-200);
   background-color: rgba(31, 193, 107, 0.1);
@@ -132,12 +148,15 @@
   border-radius: var(--border-radius-4);
   padding: 12px 8px !important;
 }
+
 .btn-confirm:hover {
   background: var(--primary-300) !important;
 }
+
 .btn-reset:hover {
   color: var(--netural-100);
 }
+
 .btn-reset {
   background-color: var(--netural-100);
   color: var(--primary);
@@ -148,6 +167,7 @@
 .advanced-search .rooms ul {
   display: none;
 }
+
 /* range slider */
 .advanced-search .slider-handle {
   border-radius: 9999px;
@@ -162,12 +182,14 @@
   background-color: var(--netural-100);
   border: 1px solid var(--primary);
 }
+
 .advanced-search .slider-rail,
 .slider-tracks {
   cursor: pointer;
   height: 4px;
   position: absolute;
 }
+
 .slider-tracks {
   --tw-bg-opacity: 1;
   background-color: var(--primary);
@@ -183,6 +205,7 @@
 .slider-track.slider-track-0 {
   background-color: var(--netural-300);
 }
+
 .slider-track.slider-track-1 {
   background-color: var(--primary) !important;
 }
@@ -217,5 +240,3 @@
     width: 450px;
   }
 }
-
-

@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import FininshCard from './FinishCard';
 import './FinishCard.css'; // Make sure to import your CSS file
 import PaginationPage from '../../Pagenation/Pagination';
-import Loader from '../../Loader/Loader';
 import ErrorNotFoundSvg from '../../../assets/images/error-not-found.svg';
-import { useFinishing } from '../../../contexts/FinishingContext';
+import FinishSkeleton from './FinishSkeleton';
 import { useLanguage } from '../../Languages/LanguageContext';
 
-const FinishCardContainer = ({ finishingServices ,loading,error }) => {
+const FinishCardContainer = ({ finishingServices, loading, error }) => {
 
     const { currentLanguage } = useLanguage()
     // Use the API data directly without fallback to static data
@@ -28,8 +27,12 @@ const FinishCardContainer = ({ finishingServices ,loading,error }) => {
     return (
         <>
             {loading ? (
-                <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '300px' }}>
-                    <Loader />
+                <div className="card-container pt-4 w-100">
+                    {Array.from({ length: 6 }).map((_, index) => (
+                        <div key={index} className='card-item'>
+                            <FinishSkeleton />
+                        </div>
+                    ))}
                 </div>
             ) : error ? (
                 <div className="w-100 text-center py-5">
@@ -58,7 +61,7 @@ const FinishCardContainer = ({ finishingServices ,loading,error }) => {
                             <div key={index} className='card-item'>
                                 <FininshCard
                                     id={item._id || index} // Use item.id if available, otherwise use index as fallback
-                                    img={item.images && item.images.length > 0 ? item.images[0] : item.img || "./home.jpg"}
+                                    img={item.images && item.images.length > 0 ? item.images : ["./home.jpg"]}
                                     subtitles={item.servicesOffered ?
                                         item.servicesOffered.map(service => service.ar || service) :
                                         item.services || item.subtitles}

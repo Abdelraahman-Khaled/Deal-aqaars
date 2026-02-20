@@ -6,7 +6,6 @@ import TabsContent from "../TabsContent/TabsContent";
 const RoomsAndBathsDropdown = ({ rooms, baths, tabsrooms }) => {
     const displayText = () => {
         if (rooms === "" && baths === "") return "عدد الاوض & الحمامات";
-        if (rooms === "استوديو") return `${rooms} / ${baths} حمام`;
         return `عدد الاوض ${rooms} / ${baths} حمام`;
     };
 

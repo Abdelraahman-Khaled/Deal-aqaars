@@ -17,7 +17,7 @@ const getToastMessages = () => ({
     en: "Property deleted successfully",
   },
   favoriteAdded: {
-    ar: "تم إضافة الوحدة إلى المفضلة",   
+    ar: "تم إضافة الوحدة إلى المفضلة",
     en: "Property added to favorites",
   },
   favoriteRemoved: {
@@ -88,6 +88,16 @@ const AdministrativeAPI = {
     }
   },
 
+
+  getMyAdministrative: async (status) => {
+    try {
+      const url = status ? `/administrative/me?status=${status}` : "/administrative/me";
+      const response = await axiosInstance.get(url);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
   // Get properties by user ID
   getAdministrativeByUserId: async (userId) => {
     try {
@@ -96,21 +106,6 @@ const AdministrativeAPI = {
     } catch (error) {
       console.error(
         `Error fetching administrative for user ${userId}:`,
-        error.response || error.message
-      );
-      handleError(error);
-      throw error;
-    }
-  },
-
-  // Get current user's properties
-  getMyAdministrative: async () => {
-    try {
-      const response = await axiosInstance.get("/administrative/me");
-      return response.data;
-    } catch (error) {
-      console.error(
-        "Error fetching user administrative:",
         error.response || error.message
       );
       handleError(error);
@@ -261,7 +256,7 @@ const AdministrativeAPI = {
   removeFromFavorites: async (administrativeId) => {
     try {
       const response = await axiosInstance.delete(
-        `/administrative/${administrativeId}/favorite`      
+        `/administrative/${administrativeId}/favorite`
       );
       toast.success(getToastMessages().favoriteRemoved[getCurrentLanguage()]);
       return response.data;
@@ -278,7 +273,7 @@ const AdministrativeAPI = {
   // Get administrative statistics
   getAdministrativeStats: async () => {
     try {
-      const response = await axiosInstance.get("/administrative/stats");  
+      const response = await axiosInstance.get("/administrative/stats");
       return response.data;
     } catch (error) {
       console.error(

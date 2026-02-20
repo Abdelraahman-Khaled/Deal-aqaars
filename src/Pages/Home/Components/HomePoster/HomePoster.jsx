@@ -10,6 +10,9 @@ const HomePoster = () => {
         return <Skeleton width="100%" height="15.625rem" borderRadius="16px"></Skeleton>
             ;
     }
+    if (!ads) return null;
+    if (ads.length === 0) return null;
+
 
     const images = loading ? [] : ads[2].images.map((img) => img.url);
 
@@ -22,6 +25,7 @@ const HomePoster = () => {
 
         return () => clearInterval(interval);
     }, [images.length]);
+
 
     return (
         <div className='home-poster'>

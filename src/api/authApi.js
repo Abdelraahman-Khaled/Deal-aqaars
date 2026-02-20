@@ -109,6 +109,24 @@ const AuthAPI = {
     }
   },
 
+  // google login
+  googleLogin: async (idToken) => {
+    try {
+      const response = await axiosInstance.post("/user/social-login", {
+        token: idToken,
+      });
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+        toast.success(getToastMessages().loginSuccess[getCurrentLanguage()]);
+      }
+      return response.data;
+    } catch (error) {
+      handleError(error);
+      throw error;
+    }
+  },
+
   // register
   register: async (data) => {
     try {
@@ -162,7 +180,7 @@ const AuthAPI = {
     try {
       const response = await axiosInstance.post("/user/change-Password", data);
       toast.success(
-        getToastMessages().changePasswordSuccess[getCurrentLanguage()]
+        getToastMessages().changePasswordSuccess[getCurrentLanguage()],
       );
       return response.data;
     } catch (error) {
@@ -181,7 +199,7 @@ const AuthAPI = {
     try {
       const response = await axiosInstance.post("/reset", { username });
       toast.success(
-        getToastMessages().resetPasswordSuccess[getCurrentLanguage()]
+        getToastMessages().resetPasswordSuccess[getCurrentLanguage()],
       );
       return response.data;
     } catch (error) {
@@ -198,7 +216,7 @@ const AuthAPI = {
       });
       if (response.data.success === true) {
         toast.success(
-          getToastMessages().verifyCodeSuccess[getCurrentLanguage()]
+          getToastMessages().verifyCodeSuccess[getCurrentLanguage()],
         );
       }
       return response.data;
@@ -216,7 +234,7 @@ const AuthAPI = {
         password_confirmation: newPassword,
       });
       toast.success(
-        getToastMessages().confirmResetSuccess[getCurrentLanguage()]
+        getToastMessages().confirmResetSuccess[getCurrentLanguage()],
       );
       return response.data;
     } catch (error) {
@@ -234,7 +252,7 @@ const AuthAPI = {
 
       const response = await axiosInstance.post("/update-profile", formData);
       toast.success(
-        getToastMessages().updateProfileSuccess[getCurrentLanguage()]
+        getToastMessages().updateProfileSuccess[getCurrentLanguage()],
       );
       return response.data;
     } catch (error) {
@@ -260,7 +278,7 @@ const AuthAPI = {
       const response = await axiosInstance.post("/verify-otp", { email, code });
       if (response.data.success === true) {
         toast.success(
-          getToastMessages().verifyCodeSuccess[getCurrentLanguage()]
+          getToastMessages().verifyCodeSuccess[getCurrentLanguage()],
         );
       }
       return response.data;
@@ -277,7 +295,7 @@ const AuthAPI = {
         code,
       });
       toast.success(
-        getToastMessages().updateEmailSuccess[getCurrentLanguage()]
+        getToastMessages().updateEmailSuccess[getCurrentLanguage()],
       );
       return response.data;
     } catch (error) {
@@ -293,7 +311,7 @@ const AuthAPI = {
         code,
       });
       toast.success(
-        getToastMessages().updatePhoneSuccess[getCurrentLanguage()]
+        getToastMessages().updatePhoneSuccess[getCurrentLanguage()],
       );
       return response.data;
     } catch (error) {

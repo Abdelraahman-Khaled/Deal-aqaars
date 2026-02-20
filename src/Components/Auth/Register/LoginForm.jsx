@@ -13,6 +13,8 @@ import AuthAPI from "../../../api/authApi";
 import { useDispatch } from "react-redux";
 import { login } from "../../../store/authSlice";
 import { Password } from "primereact/password";
+import { auth, googleProvider } from "../../../store/firebase";
+import { signInWithPopup } from "firebase/auth";
 
 const content = {
     title: {
@@ -88,6 +90,7 @@ const content = {
 
 const LoginForm = ({ setFormType }) => {
     const [isLoading, setIsLoading] = useState(false);
+    const [isGoogleLoading, setIsGoogleLoading] = useState(false);
     const [value, setValue] = useState('');
 
     const navigate = useNavigate()
@@ -137,6 +140,24 @@ const LoginForm = ({ setFormType }) => {
             console.error("Login failed:", error);
         } finally {
             setIsLoading(false);
+        }
+    };
+
+    const handleGoogleLogin = async () => {
+        setIsGoogleLoading(true);
+        try {
+            const result = await signInWithPopup(auth, googleProvider);
+            const idToken = await result.user.getIdToken();
+            const response = await AuthAPI.googleLogin(idToken);
+            if (response.token) {
+                dispatch(login({ user: response.user, token: response.token }));
+            }
+            window.dispatchEvent(new Event("storage"));
+            navigate("/");
+        } catch (error) {
+            console.error("Google login failed:", error);
+        } finally {
+            setIsGoogleLoading(false);
         }
     };
 
@@ -204,13 +225,20 @@ const LoginForm = ({ setFormType }) => {
                 <div className="separator">
                     <p className="b-12">{content.or[currentLanguage]}</p>
                 </div>
-                <button className="btn-main bg-transparent btn-submit w-100 mt-3  ">
-                    <Google />
-                    <p>
-                        {content.google[currentLanguage]}
-                    </p>
+                <button
+                    type="button"
+                    className="btn-main bg-transparent btn-submit w-100 mt-3"
+                    onClick={handleGoogleLogin}
+                    disabled={isGoogleLoading}
+                >
+                    {isGoogleLoading ? (
+                        <span className="spinner-border spinner-border-sm me-2" role="status" />
+                    ) : (
+                        <Google />
+                    )}
+                    <p>{content.google[currentLanguage]}</p>
                 </button>
-                <button className="btn-main bg-transparent btn-submit w-100 mt-3  ">
+                {/* <button className="btn-main bg-transparent btn-submit w-100 mt-3  ">
                     <Facebook />
                     <p>
                         {content.facebook[currentLanguage]}
@@ -221,7 +249,7 @@ const LoginForm = ({ setFormType }) => {
                     <p>
                         {content.apple[currentLanguage]}
                     </p>
-                </button>
+                </button> */}
             </div>
         </div>
     );

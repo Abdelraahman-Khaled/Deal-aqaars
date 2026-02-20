@@ -20,6 +20,7 @@
     "axios": "^1.8.4",
     "bootstrap": "^5.3.3",
     "embla-carousel-react": "^8.6.0",
+    "firebase": "^12.9.0",
     "formik": "^2.4.6",
     "intl-tel-input": "^18.0.0",
     "libphonenumber-js": "^1.12.24",

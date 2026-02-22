@@ -149,10 +149,10 @@
     right: 0;
     left: unset;
   }
-  [dir='rtl'] :is(.icon-lang, .dropmenu-user) .dropdown-menu[data-bs-popper] {
+  /* [dir='rtl'] :is(.icon-lang, .dropmenu-user) .dropdown-menu[data-bs-popper] {
     right: unset ;
     left: 0 ;
-  }
+  } */
 
   
   

@@ -120,19 +120,7 @@ const NavbarMenu = () => {
                             {/* <LanguageSwitcher /> */}
                         </div>
                         <span className="break-span"></span>
-                        {/* Bell */}
-                        {!user ? (
-                            <div
-                                className="icon-lang icon-border d-none cursor-pointer"
-                                onClick={() => toast.error(currentLanguage === "ar" ? "يرجى تسجيل الدخول أولاً" : "Please login first")}
-                            >
-                                <Bell />
-                            </div>
-                        ) : (
-                            <div className="icon-lang icon-border d-none">
-                                <Bell />
-                            </div>
-                        )}
+                        
                         <span className="break-span"></span>
                         {/* if auth */}
                         {user ? (

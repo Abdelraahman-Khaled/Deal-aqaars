@@ -8,6 +8,7 @@ import { useLanguage } from "../../../Components/Languages/LanguageContext";  //
 const BudgetDropdown = ({ budget, setBudget, rotate, buttons = true, title }) => {
     const { currentLanguage } = useLanguage(); // Get the current language
     const [tempBudget, setTempBudget] = useState(budget);
+    const [isConfirmed, setIsConfirmed] = useState(false);
 
     // Update tempBudget when budget prop changes
     useEffect(() => {
@@ -42,6 +43,7 @@ const BudgetDropdown = ({ budget, setBudget, rotate, buttons = true, title }) =>
     // Confirm budget changes
     const handleConfirm = () => {
         setBudget(tempBudget);
+        setIsConfirmed(true);
     };
 
     // Reset budget
@@ -49,6 +51,7 @@ const BudgetDropdown = ({ budget, setBudget, rotate, buttons = true, title }) =>
         const defaultBudget = [100000, 100000000];
         setTempBudget(defaultBudget);
         setBudget(defaultBudget);
+        setIsConfirmed(false);
     };
 
     const budgetText = `${(budget[1]).toLocaleString()} : ${(budget[0]).toLocaleString()}`;
@@ -56,7 +59,7 @@ const BudgetDropdown = ({ budget, setBudget, rotate, buttons = true, title }) =>
     return (
         <Dropdown className="d-flex budget justify-content-between">
             <Dropdown.Toggle variant="light" className="w-100 text-end">
-                {budget[0] === 100000 && budget[1] === 100000000 ? title || text.budget : budgetText}
+                {!isConfirmed ? title || text.budget : budgetText}
             </Dropdown.Toggle>
             <Dropdown.Menu>
                 <div className="px-3 pt-4 pb-3">

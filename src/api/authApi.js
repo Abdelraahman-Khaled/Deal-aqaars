@@ -113,7 +113,7 @@ const AuthAPI = {
   googleLogin: async (idToken) => {
     try {
       const response = await axiosInstance.post("/user/social-login", {
-        token: idToken,
+        idToken: idToken,
       });
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);

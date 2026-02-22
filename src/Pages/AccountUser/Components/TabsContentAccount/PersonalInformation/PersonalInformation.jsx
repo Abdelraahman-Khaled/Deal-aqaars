@@ -75,7 +75,7 @@ const PersonalInformation = () => {
 
         <div className="align-self-center pb-5 p-3">
           <div className="profile-pic text-center">
-            <img src={user?.profileImage.url || "./home.jpg"} alt="Profile" className="w-100 h-100" />
+            <img src={user?.profileImage?.url || "./home.jpg"} alt="Profile" className="w-100 h-100" />
           </div>
         </div>
       </div>
@@ -128,7 +128,7 @@ const PersonalInformation = () => {
                     <label className="b-9 pb-2" style={{ minWidth: "150px" }}>
                       الموبايل <span className="required-asterisk">*</span>
                     </label>
-                <Field name="mobile" component={PhoneNumberValidation} />
+                    <Field name="mobile" component={PhoneNumberValidation} />
 
                   </div>
                 </Col>

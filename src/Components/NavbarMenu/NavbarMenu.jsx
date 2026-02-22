@@ -4,7 +4,6 @@ import logo from "../../assets/images/logo/logo.svg";
 import { Link, NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ContainerMedia from "../ContainerMedia/ContainerMedia";
-import LanguageSwitcher from "../Languages/LanguageSwitcher";
 import UserDropMenu from "../Ui/UserDropMenu/UserDropMenu";
 import { useLanguage } from "../Languages/LanguageContext";
 import { Dropdown } from "react-bootstrap";
@@ -25,6 +24,8 @@ import { CompanyJoin } from "../Ui/CompanyJoin/CompanyJoin";
 import Land from "../../assets/Icons/Land";
 import Commercial from "../../assets/Icons/Commercial";
 import Industrial from "../../assets/Icons/Industrial";
+import { toast } from "react-toastify";
+import BellIcon from "../../assets/Icons/BellIcon";
 
 
 const content = {
@@ -61,6 +62,22 @@ const NavbarMenu = () => {
     const [showPerson, setShowPerson] = useState(false);
     const [showCompany, setShowCompany] = useState(false);
     const [showProgress, setShowProgress] = useState(false);
+
+    const handleJoinPersonClick = () => {
+        if (!user) {
+            toast.error(currentLanguage === "ar" ? "يرجى تسجيل الدخول أولاً" : "Please login first");
+        } else {
+            setShowPerson(true);
+        }
+    };
+
+    const handleJoinCompanyClick = () => {
+        if (!user) {
+            toast.error(currentLanguage === "ar" ? "يرجى تسجيل الدخول أولاً" : "Please login first");
+        } else {
+            setShowCompany(true);
+        }
+    };
 
     useEffect(() => {
         const handleScroll = () => {
@@ -104,9 +121,18 @@ const NavbarMenu = () => {
                         </div>
                         <span className="break-span"></span>
                         {/* Bell */}
-                        <div className="icon-lang icon-border d-none">
-                            <Bell />
-                        </div>
+                        {!user ? (
+                            <div
+                                className="icon-lang icon-border d-none cursor-pointer"
+                                onClick={() => toast.error(currentLanguage === "ar" ? "يرجى تسجيل الدخول أولاً" : "Please login first")}
+                            >
+                                <Bell />
+                            </div>
+                        ) : (
+                            <div className="icon-lang icon-border d-none">
+                                <Bell />
+                            </div>
+                        )}
                         <span className="break-span"></span>
                         {/* if auth */}
                         {user ? (
@@ -120,10 +146,10 @@ const NavbarMenu = () => {
                                     </>
                                     :
                                     <>
-                                        <button onClick={() => setShowPerson(true)} className="btn-main b-11 " style={{ minWidth: "130px" }}>
+                                        <button onClick={handleJoinPersonClick} className="btn-main b-11 " style={{ minWidth: "130px" }}>
                                             {content.personJoin[currentLanguage]}
                                         </button>
-                                        <button onClick={() => setShowCompany(true)} className="btn-main b-11 btn-second border" style={{ minWidth: "130px", borderColor: "var(--primary) !important" }}>
+                                        <button onClick={handleJoinCompanyClick} className="btn-main b-11 btn-second border" style={{ minWidth: "130px", borderColor: "var(--primary) !important" }}>
                                             {content.companyJoin[currentLanguage]}
                                         </button>
                                     </>
@@ -185,15 +211,25 @@ const NavbarMenu = () => {
 
 
                             {/* Bell */}
-                            {/* {user && (
-                            <span className="break-span"></span>
+                            {user ? (
                                 <>
+                                    <span className="break-span"></span>
                                     <div className="icon-lang icon-border d-lg-flex">
                                         <Bell />
                                     </div>
                                     <span className="break-span"></span>
                                 </>
-                            )} */}
+                            ) : (
+                                <>
+                                    <div
+                                        className="icon-lang icon-border d-lg-flex cursor-pointer p-2"
+                                        onClick={() => toast.error(currentLanguage === "ar" ? "يرجى تسجيل الدخول أولاً" : "Please login first")}
+                                    >
+                                        <BellIcon />
+                                    </div>
+                                    <span className="break-span"></span>
+                                </>
+                            )}
 
                             {/* if auth */}
                             {user ? (
@@ -207,10 +243,10 @@ const NavbarMenu = () => {
                                         </button>
                                         :
                                         <>
-                                            <button onClick={() => setShowPerson(true)} className="btn-main b-11 " style={{ minWidth: "130px" }}>
+                                            <button onClick={handleJoinPersonClick} className="btn-main b-11 " style={{ minWidth: "130px" }}>
                                                 {content.personJoin[currentLanguage]}
                                             </button>
-                                            <button onClick={() => setShowCompany(true)} className="btn-main b-11 btn-second border" style={{ minWidth: "130px", borderColor: "var(--primary) !important" }}>
+                                            <button onClick={handleJoinCompanyClick} className="btn-main b-11 btn-second border" style={{ minWidth: "130px", borderColor: "var(--primary) !important" }}>
                                                 {content.companyJoin[currentLanguage]}
                                             </button>
                                         </>
@@ -227,10 +263,10 @@ const NavbarMenu = () => {
                                     {/* <button onClick={() => setShowModal(true)} className="btn-main b-11" style={{ minWidth: "200px" }}>
                                         {content.announce[currentLanguage]}
                                     </button> */}
-                                    <button onClick={() => setShowPerson(true)} className="btn-main b-11 " style={{ minWidth: "130px" }}>
+                                    <button onClick={handleJoinPersonClick} className="btn-main b-11 " style={{ minWidth: "130px" }}>
                                         {content.personJoin[currentLanguage]}
                                     </button>
-                                    <button onClick={() => setShowCompany(true)} className="btn-main b-11 btn-second border" style={{ minWidth: "130px", borderColor: "var(--primary) !important" }}>
+                                    <button onClick={handleJoinCompanyClick} className="btn-main b-11 btn-second border" style={{ minWidth: "130px", borderColor: "var(--primary) !important" }}>
                                         {content.companyJoin[currentLanguage]}
                                     </button>
                                 </>

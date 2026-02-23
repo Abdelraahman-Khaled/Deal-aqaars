@@ -324,8 +324,9 @@ const Favorite = () => {
                         {
                             currentPageData.length > 0 ? (
                                 toggle === "property" ? (
-                                    currentPageData.map((card, index) => {
-                                        card = card.target; // <-- assign here safely
+                                    currentPageData.map((cardItem, index) => {
+                                        const card = cardItem?.target;
+                                        if (!card) return null;
                                         return (
                                             <div key={index} className="card-item">
                                                 <RealStateCard
@@ -387,8 +388,9 @@ const Favorite = () => {
                     <Slidercontainer>
                         {
                             toggle === "property" ? (
-                                currentPageData.map((card, index) => {
-                                    card = card.target; // <-- assign here safely
+                                currentPageData.map((cardItem, index) => {
+                                    const card = cardItem?.target;
+                                    if (!card) return null;
                                     return (
                                         <RealStateCard
                                             id={card._id}

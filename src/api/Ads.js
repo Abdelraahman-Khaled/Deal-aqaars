@@ -12,5 +12,4 @@ const AdsAPI = {
     }
   },
 };
-
 export default AdsAPI;

@@ -1,5 +1,4 @@
 import axiosInstance from "./axiosInstance";
-import { toast } from "react-toastify";
 
 const AdsAPI = {
   // login

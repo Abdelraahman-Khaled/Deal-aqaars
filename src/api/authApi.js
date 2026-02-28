@@ -127,6 +127,24 @@ const AuthAPI = {
     }
   },
 
+  // apple login
+  appleLogin: async (idToken) => {
+    try {
+      const response = await axiosInstance.post("/user/social-login", {
+        idToken: idToken,
+      });
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+        toast.success(getToastMessages().loginSuccess[getCurrentLanguage()]);
+      }
+      return response.data;
+    } catch (error) {
+      handleError(error);
+      throw error;
+    }
+  },
+
   // register
   register: async (data) => {
     try {

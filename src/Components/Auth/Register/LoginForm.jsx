@@ -13,7 +13,7 @@ import AuthAPI from "../../../api/authApi";
 import { useDispatch } from "react-redux";
 import { login } from "../../../store/authSlice";
 import { Password } from "primereact/password";
-import { auth, googleProvider } from "../../../store/firebase";
+import { auth, googleProvider, appleProvider } from "../../../store/firebase";
 import { signInWithPopup } from "firebase/auth";
 
 const content = {
@@ -91,6 +91,7 @@ const content = {
 const LoginForm = ({ setFormType }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+    const [isAppleLoading, setIsAppleLoading] = useState(false);
     const [value, setValue] = useState('');
 
     const navigate = useNavigate()
@@ -158,6 +159,24 @@ const LoginForm = ({ setFormType }) => {
             console.error("Google login failed:", error);
         } finally {
             setIsGoogleLoading(false);
+        }
+    };
+
+    const handleAppleLogin = async () => {
+        setIsAppleLoading(true);
+        try {
+            const result = await signInWithPopup(auth, appleProvider);
+            const idToken = await result.user.getIdToken();
+            const response = await AuthAPI.appleLogin(idToken);
+            if (response.token) {
+                dispatch(login({ user: response.user, token: response.token }));
+            }
+            window.dispatchEvent(new Event("storage"));
+            navigate("/");
+        } catch (error) {
+            console.error("Apple login failed:", error);
+        } finally {
+            setIsAppleLoading(false);
         }
     };
 
@@ -238,18 +257,19 @@ const LoginForm = ({ setFormType }) => {
                     )}
                     <p>{content.google[currentLanguage]}</p>
                 </button>
-                {/* <button className="btn-main bg-transparent btn-submit w-100 mt-3  ">
-                    <Facebook />
-                    <p>
-                        {content.facebook[currentLanguage]}
-                    </p>
+                <button
+                    type="button"
+                    className="btn-main bg-transparent btn-submit w-100 mt-3"
+                    onClick={handleAppleLogin}
+                    disabled={isAppleLoading}
+                >
+                    {isAppleLoading ? (
+                        <span className="spinner-border spinner-border-sm me-2" role="status" />
+                    ) : (
+                        <Apple />
+                    )}
+                    <p>{content.apple[currentLanguage]}</p>
                 </button>
-                <button className="btn-main bg-transparent  btn-submit w-100 mt-3  ">
-                    <Apple />
-                    <p>
-                        {content.apple[currentLanguage]}
-                    </p>
-                </button> */}
             </div>
         </div>
     );

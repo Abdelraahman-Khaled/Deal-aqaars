@@ -1,8 +1,6 @@
 import LocationIcon from "../../../assets/Icons/LocationIcon";
 import { Link } from "react-router-dom";
 import FavIcon from "../FavIcon/FavIcon";
-import Bed from "../../../assets/Icons/Bed";
-import BathIcon from "../../../assets/Icons/BathIcon";
 import AreaIcon from "../../../assets/Icons/AreaIcon";
 import { useLanguage } from "../../Languages/LanguageContext";
 import WhatsIcon from "../../../assets/Icons/WhatsIcon";
@@ -46,7 +44,7 @@ const BuildingCard = ({
       dir={currentLanguage === "ar" ? "rtl" : "ltr"}
     >
       <Link
-        to={`/building-guide/${id}`}
+        to={`/land-guide/${id}`}
         className={`   ${wrapperClass ? "w-100" : "w-50"}`}
         onClick={handleClick}
       >
@@ -55,7 +53,7 @@ const BuildingCard = ({
           {/* favIcon */}
         </div>
       </Link>
-      <FavIcon isFav={isFav} id={id} type="property" />
+      <FavIcon isFav={isFav} id={id} type="Land" />
       {/* price */}
       <div className="d-flex flex-column space-4 w-100">
         <div className="d-flex justify-content-between w-100">

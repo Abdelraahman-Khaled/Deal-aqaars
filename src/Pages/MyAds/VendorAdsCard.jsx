@@ -36,7 +36,14 @@ const VendorAdsCard = ({ id, type, model, price, numAds, seen, title, tradeItem,
                 <div className='compound-img'>
                     <SimpleImageSlider images={img} alt="img" />
                     {/* favIcon */}
-                    <FavIcon isFav={isFav} />
+                    <FavIcon isFav={isFav} id={id} type={{
+                        property: "Property",
+                        building: "Building",
+                        land: "Land",
+                        factory: "Factory",
+                        administrative: "Administrative",
+                        swap: "SwapRequest",
+                    }[model] || "Property"} />
                 </div>
             </Link>
             {/* price */}

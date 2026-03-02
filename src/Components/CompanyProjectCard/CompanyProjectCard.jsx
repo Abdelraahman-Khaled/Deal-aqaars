@@ -33,7 +33,7 @@ const CompanyProjectCard = ({ id, lat, lon, calls, likes, seen, title, location,
                 <div className='compound-img'>
                     <SimpleImageSlider images={img} alt="img" />
                     {/* favIcon */}
-                    <FavIcon isFav={isFav} />
+                    <FavIcon isFav={isFav} id={id} type="Compound" />
                 </div>
             </Link>
             <div className='d-flex gap-3 w-100'>

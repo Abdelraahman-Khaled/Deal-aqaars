@@ -59,7 +59,7 @@ const AdminstrativeCard = ({
           {/* favIcon */}
         </div>
       </Link>
-      <FavIcon isFav={isFav} id={id} type="property" />
+      <FavIcon isFav={isFav} id={id} type="Administrative" />
       {/* price */}
       <div className="d-flex flex-column space-4 w-100">
         <div className="d-flex justify-content-between w-100">
@@ -69,7 +69,7 @@ const AdminstrativeCard = ({
               {type === "sale" ? "للبيع" : "للايجار"}
             </p>
             <p className="b-11 available">
-              {division ==="unit" ? "إداري":"محل"}
+              {division === "unit" ? "إداري" : "محل"}
             </p>
           </div>
         </div>

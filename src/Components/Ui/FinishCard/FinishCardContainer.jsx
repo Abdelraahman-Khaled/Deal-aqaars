@@ -60,7 +60,8 @@ const FinishCardContainer = ({ finishingServices, loading, error }) => {
                         {currentPageData.map((item, index) => (
                             <div key={index} className='card-item'>
                                 <FininshCard
-                                    id={item._id || index} // Use item.id if available, otherwise use index as fallback
+                                    id={item._id || index}
+                                    isFav={item.isFavorite || false}
                                     img={item.images && item.images.length > 0 ? item.images : ["./home.jpg"]}
                                     subtitles={item.servicesOffered ?
                                         item.servicesOffered.map(service => service.ar || service) :

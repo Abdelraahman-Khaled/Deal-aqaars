@@ -9,7 +9,7 @@ import WhatsIcon from '../../../assets/Icons/WhatsIcon'
 import CallIcon from '../../../assets/Icons/CallIcon'
 import SimpleImageSlider from '../SimpleImageSlider/SimpleImageSlider'
 
-const CompoundCard = ({ id, title, location, details, price, img, company = false, connections = false, slider = false, wrapperClass, status, isSwiping = false, advertiser }) => {
+const CompoundCard = ({ id, isFav, title, location, details, price, img, company = false, connections = false, slider = false, wrapperClass, status, isSwiping = false, advertiser }) => {
 
     const { currentLanguage } = useLanguage()
 
@@ -25,7 +25,7 @@ const CompoundCard = ({ id, title, location, details, price, img, company = fals
                 <div className='compound-img'>
                     <SimpleImageSlider images={img} alt="img" />
                     {/* favIcon */}
-                    <FavIcon />
+                    <FavIcon isFav={isFav} id={id} type="Compound" />
                 </div>
             </Link>
             {/* title */}

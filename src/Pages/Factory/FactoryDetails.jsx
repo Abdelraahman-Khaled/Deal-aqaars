@@ -175,6 +175,7 @@ const FactoryDetails = () => {
                                             <div key={factoryItem._id || index} className="slider-card-wrapper w-100">
                                                 <FactoryCard
                                                     id={factoryItem._id}
+                                                    isFav={factoryItem.isFavorite || false}
                                                     price={factoryItem.details?.price}
                                                     space={factoryItem.details?.space}
                                                     details={factoryItem.description?.[currentLanguage]}

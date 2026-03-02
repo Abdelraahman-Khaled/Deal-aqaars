@@ -107,6 +107,7 @@ const GuideAdminstrative = ({ title }) => {
               <AdminstrativeCard
                 key={property._id || index}
                 id={property._id}
+                isFav={property.isFavorite || false}
                 title={
                   property.title ? property.title[currentLanguage] : "Factory"
                 }

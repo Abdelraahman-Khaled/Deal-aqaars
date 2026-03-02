@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { translations } from "./translations";
-// images
 import SearchToggle from "../../Components/Ui/SearchComponents/SearchToggle ";
 import { useLanguage } from "../../Components/Languages/LanguageContext";
 import DropDown from "../../Components/DropDown/DropDown";
 import Ads from "../../Components/Auth/Ads/Ads";
 import PaginationPage from "../../Components/Pagenation/Pagination";
-import Loader from "../../Components/Loader/Loader";
 import LandAPI from "../../api/LandApi";
 import LandCard from "../../Components/Ui/Building/BuildingCard";
+import LandSkeleton from "../../Components/Ui/Land/LandSkeleton";
 
 const GuideLand = ({ title }) => {
-  const { currentLanguage } = useLanguage(); // Get the current language
+  const { currentLanguage } = useLanguage();
   const [toggle1, setToggle1] = useState("nest");
   const [rotate, setRotate] = useState(false);
   const [lands, setLands] = useState([]);
@@ -25,15 +24,13 @@ const GuideLand = ({ title }) => {
   ];
   const organizing = ["الاكثر مشاهدة", "الاجدد", "الاقل سعر", "اعلي سعر"];
 
-  // Fetch building from API
   const fetchProperties = async (page) => {
     try {
       setLoading(true);
       const response = await LandAPI.getAllLands(page);
-
       if (response && response.data) {
-        setLands(response.data); // only that page’s building
-        setPagenation(response.pagination); // use API pagination object
+        setLands(response.data);
+        setPagenation(response.pagination);
       }
     } catch (error) {
       console.error("Error fetching properties:", error);
@@ -47,7 +44,6 @@ const GuideLand = ({ title }) => {
     fetchProperties(pageNumber);
   };
 
-  // Format price
   const formatPrice = (price) => {
     return price ? price.toLocaleString() : "0";
   };
@@ -57,12 +53,11 @@ const GuideLand = ({ title }) => {
   }, [currentPage]);
 
   return (
-    <div className=" guide compound d-flex flex-wrap  flex-md-row  justify-content-between">
-      <div className="d-flex space-6 flex-column col-12  col-lg-8 ">
+    <div className="guide compound d-flex flex-wrap flex-md-row justify-content-between">
+      <div className="d-flex space-6 flex-column col-12 col-lg-8">
         <div className="d-flex flex-wrap space-3 justify-content-between align-items-center">
           <h6>{title}</h6>
           <div className="d-flex space-3 flex-wrap">
-            {/* Drop Down */}
             <DropDown
               title={"رتبها زي ما تحب"}
               details={organizing}
@@ -79,17 +74,21 @@ const GuideLand = ({ title }) => {
             </div>
           </div>
         </div>
-        <div className="d-flex flex-wrap  flex-row justify-content-between">
+
+        <div className="d-flex flex-wrap flex-row justify-content-between">
+          {/* Skeleton Loading */}
           {loading && (
-            <div className="loading-container">
-              <p>
-                {currentLanguage === "ar"
-                  ? "جاري تحميل الاراضي..."
-                  : "Loading lands..."}
-              </p>
-              <Loader />
+            <div className="d-flex flex-wrap justify-content-between w-100">
+              {Array.from({ length: 6 }).map((_, index) => (
+                <LandSkeleton
+                  key={index}
+                  wrapperClass={toggle1 === "nest" ? "flex-wrap" : "width-full"}
+                />
+              ))}
             </div>
           )}
+
+          {/* Empty State */}
           {!loading && lands.length === 0 && (
             <div className="no-properties">
               <p>
@@ -99,12 +98,15 @@ const GuideLand = ({ title }) => {
               </p>
             </div>
           )}
+
+          {/* Land Cards */}
           {!loading &&
             lands.length > 0 &&
             lands.map((property, index) => (
               <LandCard
                 key={property._id || index}
                 id={property._id}
+                isFav={property.isFavorite || false}
                 title={
                   property.title ? property.title[currentLanguage] : "Property"
                 }
@@ -134,6 +136,7 @@ const GuideLand = ({ title }) => {
               />
             ))}
         </div>
+
         {pagenation?.totalPages > 1 && (
           <PaginationPage
             currentPage={currentPage}

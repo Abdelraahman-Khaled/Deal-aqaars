@@ -164,6 +164,8 @@ const Trade = () => {
                                         <div key={card._id || card.id || index} className='card-item'>
                                             <TradeCard
                                                 key={card._id || card.id || index}
+                                                id={card._id || card.id}
+                                                isFav={card.isFavorite || false}
                                                 title={card.whatIHave?.propertyType}
                                                 details={card.whatIHave?.description}
                                                 rooms={card.rooms}
@@ -173,9 +175,9 @@ const Trade = () => {
                                                 trade={card.whatIWant?.propertyType}
                                                 tradeDetails={card.whatIWant?.description}
                                                 since={card.createdAt}
-                                                phoneNumber={currentPageData && card.contact ? card.contact.phoneNumber : null}
-                                                hasWhatsapp={currentPageData && card.contact ? card.contact.hasWhatsapp : undefined}
-                                                imageUrl={currentPageData && card.images && card.images.length > 0 ? card.images[0].url.trim() : null}
+                                                phoneNumber={card.contact ? card.contact.phoneNumber : null}
+                                                hasWhatsapp={card.contact ? card.contact.hasWhatsapp : undefined}
+                                                images={card.images || []}
                                             />
                                         </div>
                                     );

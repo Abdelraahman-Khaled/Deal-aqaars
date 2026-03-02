@@ -5,11 +5,11 @@ import { Navigation, Thumbs } from "swiper/modules";
 import "swiper/css/navigation";
 import "swiper/css";
 import "./SliderDetailsContent.css";
-const SliderDetailsContent = ({ images }) => {
+const SliderDetailsContent = ({ images = [] }) => {
 
   const backupImgs = ["./home.jpg", "./hom2.jpg", "./home1.jpg", "./home.jpg", "./hom2.jpg", "./home1.jpg", "./home.jpg", "./hom2.jpg", "./home1.jpg"]
   const [thumbs, setThumbs] = useState(null);
-  const mapImages = images
+  const mapImages = images || []
 
 
 

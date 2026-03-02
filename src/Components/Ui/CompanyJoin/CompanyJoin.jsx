@@ -87,20 +87,20 @@ const content = {
 
 export const CompanyJoin = ({ setShowCompany, setShowProgress }) => {
     const [isLoading, setIsLoading] = useState(false);
-    // const [companyType, setCompanyType] = useState(null);
-    // const [logo, setLogo] = useState(null);
+    const [companyType, setCompanyType] = useState(null);
+    const [logo, setLogo] = useState(null);
     const { currentLanguage } = useLanguage();
 
     const initialValues = {
         username: '',
         companyName: '',
         address: '',
-        // registrationNumber: '',
-        // website: '',
-        // companyType: "",
+        registrationNumber: '',
+        website: '',
+        companyType: "",
         phoneNumber: '',
         hasWhatsapp: false,
-        // logo: [],
+        logo: [],
     };
 
     const validationSchema = Yup.object({
@@ -122,8 +122,8 @@ export const CompanyJoin = ({ setShowCompany, setShowProgress }) => {
 
             const companyData = {
                 ...values,
-                // companyType: companyType.value,
-                // logo: logo
+                companyType: companyType.value,
+                logo: logo
             };
 
 
@@ -139,9 +139,9 @@ export const CompanyJoin = ({ setShowCompany, setShowProgress }) => {
         }
     };
 
-    // const handleInputChange = (name, file) => {
-    //     setLogo(file);
-    // };
+    const handleInputChange = (name, file) => {
+        setLogo(file);
+    };
 
     const options = [
         { value: "developer_compound", label: "مطور عقاري (كمبوند) - Developer (Compounds)" },
@@ -204,25 +204,25 @@ export const CompanyJoin = ({ setShowCompany, setShowProgress }) => {
                         </div>
 
                         {/* commercial register */}
-                        {/* <div className="mb-4 ">
+                        <div className="mb-4 ">
                             <label className="b-15 mb-2">
-                                رقم السجل التجاري  <span className="required-asterisk">*</span>
+                                رقم السجل التجاري (اختياري)
                             </label>
                             <InputFiled name="registrationNumber" placeholder="ادخل السجل التجاري" />
-                        </div> */}
+                        </div>
 
                         {/* website */}
-                        {/* <div className="mb-4 ">
+                        <div className="mb-4 ">
                             <label className="b-15 mb-2">
                                 رابط الموقع الخاص بالشركة (اختياري)
                             </label>
                             <InputFiled name="website" placeholder="ادخل  الموقع" />
-                        </div> */}
+                        </div>
 
                         {/* company type */}
-                        {/* <div className="mb-4 ">
+                        <div className="mb-4 ">
                             <label className="b-15 mb-2">
-                                نوع الشركة  <span className="required-asterisk">*</span>
+                                نوع الشركة  (اختياري)
                             </label>
                             <Select
                                 options={options}
@@ -231,7 +231,7 @@ export const CompanyJoin = ({ setShowCompany, setShowProgress }) => {
                                 onChange={setCompanyType}
                                 value={companyType}
                             />
-                        </div> */}
+                        </div>
 
 
                         {/* Mobile */}
@@ -254,12 +254,12 @@ export const CompanyJoin = ({ setShowCompany, setShowProgress }) => {
                         </div>
 
                         {/* logo */}
-                        {/* <div className="mb-4 ">
+                        <div className="mb-4 ">
                             <label className="b-15 mb-2 w-100">
-                                شعار الشركة  <span className="required-asterisk">*</span>
+                                شعار الشركة  (اختياري)
                             </label>
                             <ImageDropZone handleInputChange={handleInputChange} />
-                        </div> */}
+                        </div>
 
                         <div className="d-flex space-3">
                             <button

@@ -10,8 +10,9 @@ import LocationIcon from '../../assets/Icons/LocationIcon'
 import TradeIcon from '../../assets/Icons/TradeIcon'
 import SimpleImageSlider from '../../Components/Ui/SimpleImageSlider/SimpleImageSlider'
 import { useLanguage } from '../../Components/Languages/LanguageContext'
+import FavIcon from '../../Components/Ui/FavIcon/FavIcon'
 
-const TradeCard = ({ title, details, tradeDetails, rooms, bath, space, location, trade, since, phoneNumber, hasWhatsapp, images, lat, lon }) => {
+const TradeCard = ({ id, isFav, title, details, tradeDetails, rooms, bath, space, location, trade, since, phoneNumber, hasWhatsapp, images, lat, lon }) => {
     const { currentLanguage } = useLanguage()
 
 
@@ -55,8 +56,10 @@ const TradeCard = ({ title, details, tradeDetails, rooms, bath, space, location,
 
     return (
         <div className='trade-card d-flex flex-column space-4 '>
-            <div className='trade-card-image mb-3'>
+            <div className='trade-card-image mb-3' style={{ position: 'relative' }}>
                 <SimpleImageSlider images={images} alt="img" />
+                {/* favIcon */}
+                <FavIcon isFav={isFav} id={id} type="SwapRequest" />
             </div>
             <div className='d-flex flex-column space-4 w-100'>
                 <div className='d-flex justify-content-between w-100  pb-3'>

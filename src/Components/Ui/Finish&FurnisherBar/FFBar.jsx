@@ -50,16 +50,17 @@ const FFBar = () => {
         fetchFinishingServices(filterState);
     }, [filterState]);
 
-    // ---------------------------
-    // Local UI States
-    // ---------------------------
-    const [rotate, setRotate] = useState(false);
 
     // Convert comma-separated cities → array
     const cityArray = filterState.city ? filterState.city.split(",") : [];
 
     const [selectedCities, setSelectedCities] = useState(cityArray);
     const [toggle, setToggle] = useState(filterState.division);
+
+    // Sync toggle UI state when URL division param changes
+    useEffect(() => {
+        setToggle(filterState.division);
+    }, [filterState.division]);
     const [home, setHome] = useState(filterState.servicesOffered || translations[currentLanguage].Want);
 
     // Cities list
@@ -72,13 +73,19 @@ const FFBar = () => {
     // (3) Update URL (trigger fetch automatically)
     // ---------------------------
     const updateURL = (changes) => {
-        const newQuery = new URLSearchParams({
-            division: changes.division ?? toggle,
-            city: (changes.city ?? selectedCities)?.join(",") || "",
-            servicesOffered: changes.servicesOffered ?? home,
-        }).toString();
+        const currentServicesOffered = changes.servicesOffered ?? home;
+        const isPlaceholder =
+            !currentServicesOffered ||
+            currentServicesOffered === translations.ar.Want ||
+            currentServicesOffered === translations.en.Want;
 
-        navigate(`/finish?${newQuery}`);
+        const query = new URLSearchParams();
+        query.set("division", changes.division ?? toggle);
+        const cityVal = (changes.city ?? selectedCities)?.join(",") || "";
+        if (cityVal) query.set("city", cityVal);
+        if (!isPlaceholder) query.set("servicesOffered", currentServicesOffered);
+
+        navigate(`/finish?${query.toString()}`);
     };
 
     // ---------------------------
@@ -167,21 +174,19 @@ const FFBar = () => {
                 </Col>
 
                 {/* Services Offered */}
-                <Col xs={12} md={2} className="d-flex flex-row space-3">
-                    <Col onClick={() => setRotate(!rotate)} >
-                        <Dropdown className="d-flex">
-                            <Dropdown.Toggle variant="light" className="w-100 text-end">
-                                {home}
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                <TabsContent
-                                    tabsData={tabshome}
-                                    newClassTabsContent={"tabs-home rooms"}
-                                />
-                            </Dropdown.Menu>
-                            <MenuArrow rotate={rotate} />
-                        </Dropdown>
-                    </Col>
+                <Col xs={12} md={2}>
+                    <Dropdown className="services-dropdown">
+                        <Dropdown.Toggle variant="light" className="w-100 text-end d-flex align-items-center justify-content-between">
+                            <span>{home}</span>
+                            <MenuArrow />
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu>
+                            <TabsContent
+                                tabsData={tabshome}
+                                newClassTabsContent={"tabs-home rooms"}
+                            />
+                        </Dropdown.Menu>
+                    </Dropdown>
                 </Col>
 
             </div>

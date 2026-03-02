@@ -240,3 +240,10 @@
     width: 450px;
   }
 }
+
+/* SMALL SCREENS - full width */
+@media screen and (max-width: 575px) {
+.tabs-home .tab-content{
+    width:100%;
+}
+}

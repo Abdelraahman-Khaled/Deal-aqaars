@@ -10,7 +10,6 @@ const CompoundSlider = () => {
   useEffect(() => {
     fetchAllCompounds()
   }, [])
-  console.log("allCompounds", allCompounds)
   if (loading) {
     return (
       <Slidercontainer>

@@ -15,6 +15,7 @@ import BuildingIcon from "../../assets/Icons/BuildingIcon";
 import HouseSimpleIcon from "../../assets/Icons/HouseSimpleIcon";
 import PaintBrushIcon from "../../assets/Icons/PaintBrushIcon";
 import SwapModalIcon from "../../assets/Icons/SwapModalIcon";
+import UserIcon from "../../assets/images/AccountUser/UserIcon";
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { setUserType } from "../../store/userTypeSlice";
@@ -26,6 +27,9 @@ import Commercial from "../../assets/Icons/Commercial";
 import Industrial from "../../assets/Icons/Industrial";
 import { toast } from "react-toastify";
 import BellIcon from "../../assets/Icons/BellIcon";
+import AuthAPI from "../../api/authApi";
+import { logout } from "../../store/authSlice";
+import LogOutIcon from "../../assets/images/AccountUser/LogOutIcon";
 
 
 const content = {
@@ -91,14 +95,17 @@ const NavbarMenu = () => {
     const userType = useSelector((state) => state.userType.userType);
     const dispatch = useDispatch();
 
+    const handleAdminLogout = () => {
+        AuthAPI.logout();
+        dispatch(logout());
+    };
+
 
     if (user?.role === "user") {
         dispatch(setUserType("user"));
-    } else if (user?.companyId !== null) {
-        dispatch(setUserType("company"));
     } else if (user?.role === "vendor") {
         dispatch(setUserType("vendor"));
-    } else {
+    } else if (user?.role !== "admin") {
         dispatch(setUserType("user"));
     }
 
@@ -120,28 +127,55 @@ const NavbarMenu = () => {
                             {/* <LanguageSwitcher /> */}
                         </div>
                         <span className="break-span"></span>
-                        
+
                         <span className="break-span"></span>
                         {/* if auth */}
                         {user ? (
                             <>
-                                <UserDropMenu />
-                                {userType === "vendor" || userType === "company" ?
-                                    <>
-                                        <button onClick={() => setShowModal(true)} className="btn-main b-11" style={{ minWidth: "200px" }}>
-                                            {content.announce[currentLanguage]}
-                                        </button>
-                                    </>
-                                    :
-                                    <>
-                                        <button onClick={handleJoinPersonClick} className="btn-main b-11 " style={{ minWidth: "130px" }}>
-                                            {content.personJoin[currentLanguage]}
-                                        </button>
-                                        <button onClick={handleJoinCompanyClick} className="btn-main b-11 btn-second border" style={{ minWidth: "130px", borderColor: "var(--primary) !important" }}>
-                                            {content.companyJoin[currentLanguage]}
-                                        </button>
-                                    </>
-                                }
+                                {user.role === "admin" && (
+                                    <div className="dropmenu-user h-100">
+                                        <Dropdown>
+                                            <Dropdown.Toggle id="admin-drop-sm" className="drop-user">
+                                                <div className="image-user-login d-flex align-items-center justify-content-center space-2">
+
+                                                    <span className="d-xl-inline">
+                                                        {currentLanguage === "ar" ? "مدير" : "Admin"}
+                                                    </span>
+                                                    <div className="border">
+                                                        <UserIcon />
+                                                    </div>
+
+                                                </div>
+                                            </Dropdown.Toggle>
+                                            <Dropdown.Menu className="admin-logout-menu">
+                                                <Dropdown.Item onClick={handleAdminLogout} className="logout-drop">
+                                                    <span className="link-drop-item d-flex align-items-center gap-2">
+                                                        <LogOutIcon />
+                                                        {currentLanguage === "ar" ? "خروج من الحساب" : "Logout"}
+                                                    </span>
+                                                </Dropdown.Item>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                    </div>
+                                )}
+                                {user.role !== "admin" && <UserDropMenu />}
+                                {user.role !== "admin" && (
+                                    userType === "vendor" || userType === "user" && user.hasCompany ?
+                                        <>
+                                            <button onClick={() => setShowModal(true)} className="btn-main b-11" style={{ minWidth: "200px" }}>
+                                                {content.announce[currentLanguage]}
+                                            </button>
+                                        </>
+                                        :
+                                        <>
+                                            <button onClick={handleJoinPersonClick} className="btn-main b-11 " style={{ minWidth: "130px" }}>
+                                                {content.personJoin[currentLanguage]}
+                                            </button>
+                                            <button onClick={handleJoinCompanyClick} className="btn-main b-11 btn-second border" style={{ minWidth: "130px", borderColor: "var(--primary) !important" }}>
+                                                {content.companyJoin[currentLanguage]}
+                                            </button>
+                                        </>
+                                )}
                             </>
                         ) : (
                             <>
@@ -171,20 +205,20 @@ const NavbarMenu = () => {
                             {/* Drop Down */}
                             <Dropdown className="nav-drop-down" as={NavItem}>
                                 {/* finishing */}
-                                <Dropdown.Toggle className="nav-link b-11" as={NavLink}>
+                                <Dropdown.Toggle className="nav-link b-11" as="span" style={{ cursor: "pointer" }}>
                                     {content.finishing[currentLanguage]}
                                     <MenuArrow />
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu >
                                     <Dropdown.Item className="finishing">
                                         {/* finish */}
-                                        <NavLink className=" b-11" style={{ color: " var(--netural-1000)" }} to="/finish">
+                                        <NavLink className=" b-11" style={{ color: " var(--netural-1000)" }} to="/finish?division=finishing">
                                             {content.finishMenu.finish[currentLanguage]}
                                         </NavLink>
                                     </Dropdown.Item>
                                     <Dropdown.Item className="finishing">
                                         {/* furnish */}
-                                        <NavLink className="  b-11" style={{ color: " var(--netural-1000)" }} to="/finish">
+                                        <NavLink className="  b-11" style={{ color: " var(--netural-1000)" }} to="/finish?division=furnishing">
                                             {content.finishMenu.furnish[currentLanguage]}
                                         </NavLink>
                                     </Dropdown.Item>
@@ -199,47 +233,73 @@ const NavbarMenu = () => {
 
 
                             {/* Bell */}
-                            {user ? (
-                                <>
-                                    <span className="break-span"></span>
-                                    <div className="icon-lang icon-border d-lg-flex">
-                                        <Bell />
-                                    </div>
-                                    <span className="break-span"></span>
-                                </>
-                            ) : (
-                                <>
-                                    <div
-                                        className="icon-lang icon-border d-lg-flex cursor-pointer p-2"
-                                        onClick={() => toast.error(currentLanguage === "ar" ? "يرجى تسجيل الدخول أولاً" : "Please login first")}
-                                    >
-                                        <BellIcon />
-                                    </div>
-                                    <span className="break-span"></span>
-                                </>
+                            {user?.role !== "admin" && (
+                                user ? (
+                                    <>
+                                        <span className="break-span"></span>
+                                        <div className="icon-lang icon-border d-lg-flex">
+                                            <Bell />
+                                        </div>
+                                        <span className="break-span"></span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div
+                                            className="icon-lang icon-border d-lg-flex cursor-pointer p-2"
+                                            onClick={() => toast.error(currentLanguage === "ar" ? "يرجى تسجيل الدخول أولاً" : "Please login first")}
+                                        >
+                                            <BellIcon />
+                                        </div>
+                                        <span className="break-span"></span>
+                                    </>
+                                )
                             )}
 
                             {/* if auth */}
                             {user ? (
                                 <>
-                                    <span className="d-none d-lg-flex">
-                                        <UserDropMenu />
-                                    </span>
-                                    {userType === "vendor" || userType === "company" ?
-                                        <button onClick={() => setShowModal(true)} className="btn-main b-11" style={{ minWidth: "200px" }}>
-                                            {content.announce[currentLanguage]}
-                                        </button>
-                                        :
-                                        <>
-                                            <button onClick={handleJoinPersonClick} className="btn-main b-11 " style={{ minWidth: "130px" }}>
-                                                {content.personJoin[currentLanguage]}
+                                    {user.role === "admin" && (
+                                        <div className="dropmenu-user h-100 d-none d-lg-flex">
+                                            <Dropdown>
+                                                <Dropdown.Toggle id="admin-drop-lg" className="drop-user">
+                                                    <div className="image-user-login d-flex align-items-center justify-content-center space-2">
+                                                        <span className="d-xl-inline">
+                                                            {currentLanguage === "ar" ? "مدير" : "Admin"}
+                                                        </span>
+                                                        <div className="border">
+                                                            <UserIcon />
+                                                        </div>
+                                                    </div>
+                                                </Dropdown.Toggle>
+                                                <Dropdown.Menu className="admin-logout-menu">
+                                                    <Dropdown.Item onClick={handleAdminLogout} className="logout-drop">
+                                                        <LogOutIcon />
+                                                        {currentLanguage === "ar" ? "خروج من الحساب" : "Logout"}
+                                                    </Dropdown.Item>
+                                                </Dropdown.Menu>
+                                            </Dropdown>
+                                        </div>
+                                    )}
+                                    {user.role !== "admin" && (
+                                        <span className="d-none d-lg-flex">
+                                            <UserDropMenu />
+                                        </span>
+                                    )}
+                                    {user.role !== "admin" && (
+                                        userType === "vendor" || userType === "user" && user.hasCompany ?
+                                            <button onClick={() => setShowModal(true)} className="btn-main b-11" style={{ minWidth: "200px" }}>
+                                                {content.announce[currentLanguage]}
                                             </button>
-                                            <button onClick={handleJoinCompanyClick} className="btn-main b-11 btn-second border" style={{ minWidth: "130px", borderColor: "var(--primary) !important" }}>
-                                                {content.companyJoin[currentLanguage]}
-                                            </button>
-                                        </>
-                                    }
-
+                                            :
+                                            <>
+                                                <button onClick={handleJoinPersonClick} className="btn-main b-11 " style={{ minWidth: "130px" }}>
+                                                    {content.personJoin[currentLanguage]}
+                                                </button>
+                                                <button onClick={handleJoinCompanyClick} className="btn-main b-11 btn-second border" style={{ minWidth: "130px", borderColor: "var(--primary) !important" }}>
+                                                    {content.companyJoin[currentLanguage]}
+                                                </button>
+                                            </>
+                                    )}
                                 </>
                             ) : (
                                 <>
@@ -248,9 +308,6 @@ const NavbarMenu = () => {
                                             {content.login[currentLanguage]}
                                         </button>
                                     </Link >
-                                    {/* <button onClick={() => setShowModal(true)} className="btn-main b-11" style={{ minWidth: "200px" }}>
-                                        {content.announce[currentLanguage]}
-                                    </button> */}
                                     <button onClick={handleJoinPersonClick} className="btn-main b-11 " style={{ minWidth: "130px" }}>
                                         {content.personJoin[currentLanguage]}
                                     </button>

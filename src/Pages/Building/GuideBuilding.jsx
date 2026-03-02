@@ -108,6 +108,7 @@ const GuideBuilding = ({ title }) => {
               <BuildingCard
                 key={property._id || index}
                 id={property._id}
+                isFav={property.isFavorite || false}
                 title={
                   property.title ? property.title[currentLanguage] : "Property"
                 }

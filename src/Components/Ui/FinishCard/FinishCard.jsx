@@ -39,12 +39,9 @@ const FininshCard = ({ id, title, img, icon, exprince, subtitles, isFav, company
                 img &&
                 <Link to={`/finish-details/${id}`} state={{ id }} className='w-100'>
                     <div className='compound-img'>
-                        <div className='compound-img'>
-                            <SimpleImageSlider images={img} alt="img" />
-                            {/* favIcon */}
-                            <FavIcon isFav={isFav} />
-                        </div>                        {/* favIcon */}
-                        {!companyAds && <FavIcon isFav={isFav} />}
+                        <SimpleImageSlider images={img} alt="img" />
+                        {/* favIcon */}
+                        {!companyAds && <FavIcon isFav={isFav} id={id} type="FinishingService" />}
                     </div>
                 </Link>
             }

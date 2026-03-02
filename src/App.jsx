@@ -137,7 +137,7 @@ const App = () => {
 
 
 
-                          <Route path="/sale" element={<SalePage />} />
+                          {/* <Route path="/sale" element={<SalePage />} /> */}
 
                           {/* Furnish */}
                           <Route

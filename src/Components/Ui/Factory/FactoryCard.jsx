@@ -1,8 +1,6 @@
 import LocationIcon from "../../../assets/Icons/LocationIcon";
 import { Link } from "react-router-dom";
 import FavIcon from "../FavIcon/FavIcon";
-import Bed from "../../../assets/Icons/Bed";
-import BathIcon from "../../../assets/Icons/BathIcon";
 import AreaIcon from "../../../assets/Icons/AreaIcon";
 import { useLanguage } from "../../Languages/LanguageContext";
 import WhatsIcon from "../../../assets/Icons/WhatsIcon";
@@ -55,13 +53,13 @@ const FactoryCard = ({
           {/* favIcon */}
         </div>
       </Link>
-      <FavIcon isFav={isFav} id={id} type="property" />
+      <FavIcon isFav={isFav} id={id} type="Factory" />
       {/* price */}
       <div className="d-flex flex-column space-4 w-100">
         <div className="d-flex justify-content-between w-100">
           <p className="b-3 min-w-max">{price} ج.م</p>
           <div className="d-flex gap-2 flex-wrap justify-content-end">
-            <p className="b-11 available">{type === "sale" ? "للبيع":"للايجار"}</p>
+            <p className="b-11 available">{type === "sale" ? "للبيع" : "للايجار"}</p>
           </div>
         </div>
         {/* specifications */}
@@ -75,9 +73,9 @@ const FactoryCard = ({
         <p className="b-12">{sliceWords(details)}</p>
         {/* locations */}
         <div className="b-11 d-flex">
-          <LocationIcon/> 
-          {location 
-          ||
+          <LocationIcon />
+          {location
+            ||
             (currentLanguage === "ar"
               ? "موقع غير محدد"
               : "Location not specified")}

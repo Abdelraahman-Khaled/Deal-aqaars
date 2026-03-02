@@ -81,6 +81,20 @@
 .compound .budget .dropdown-menu.show {
   min-width: 350px;
 }
+
+/* services offered dropdown - fix off-screen overflow */
+.compound .services-dropdown .dropdown-menu.show {
+  min-width: 220px;
+  max-width: 90vw;
+  width: max-content;
+  right: 0 !important;
+  left: unset !important;
+  transform: translateY(30px) !important;
+}
+[dir="ltr"] .compound .services-dropdown .dropdown-menu.show {
+  right: unset !important;
+  left: 0 !important;
+}
 /* نوع المكان  place kind */
 .compound .place-kind {
   gap: 24px;

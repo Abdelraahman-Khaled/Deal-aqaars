@@ -56,10 +56,10 @@ axiosInstance.interceptors.response.use(
         // Show toast first
         toast.error(message);
         // Clear token and redirect after a delay
-        // localStorage.removeItem("token");
-        // setTimeout(() => {
-        //     window.location.href = "/";
-        // }, 2000); // Wait 2 seconds before redirecting
+        localStorage.removeItem("token");
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 2000); // Wait 2 seconds before redirecting
       }
     }
 

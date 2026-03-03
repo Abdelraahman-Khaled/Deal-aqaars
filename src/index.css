@@ -298,7 +298,9 @@ html {
   text-align: center;
   text-transform: none;
   transform: translateZ(0);
-  transition: all 0.2s, box-shadow 0.08s ease-in;
+  transition:
+    all 0.2s,
+    box-shadow 0.08s ease-in;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
@@ -336,13 +338,13 @@ html {
   background: var(--primary) !important;
   color: var(--netural-100);
 }
-.btn-delete{
+.btn-delete {
   background: inherit !important;
   border: 1px solid red;
   color: red;
   transition: 0.3s ease-in-out;
 }
-.btn-delete:hover{
+.btn-delete:hover {
   background-color: red !important;
   color: var(--netural-100) !important;
 }
@@ -450,37 +452,37 @@ html[dir="ltr"] .dropdown-item:hover {
   }
 }
 /* multi select */
-.p-multiselect-select-all{
-  opacity:0;
+.p-multiselect-select-all {
+  opacity: 0;
   z-index: -999;
 }
-.p-checkbox.p-highlight .p-checkbox-box{
+.p-checkbox.p-highlight .p-checkbox-box {
   border-color: var(--primary) !important;
   background: var(--primary) !important;
 }
-.p-checkbox:not(.p-disabled):has(.p-checkbox-input:hover) .p-checkbox-box{
+.p-checkbox:not(.p-disabled):has(.p-checkbox-input:hover) .p-checkbox-box {
   border-color: var(--primary);
 }
 
-.p-checkbox-box svg path{
+.p-checkbox-box svg path {
   fill: white;
 }
-.p-multiselect-token{
+.p-multiselect-token {
   background-color: rgba(23, 55, 148, 0.1);
   border-radius: var(--border-radius-2);
   padding: 4px;
-  gap:10px;
+  gap: 10px;
   font-weight: 400;
   font-size: 16px;
-  margin-left:4px;
+  margin-left: 4px;
 }
-.p-inputtext:enabled:focus{
+.p-inputtext:enabled:focus {
   box-shadow: var(--primary);
 }
-.p-multiselect-item{
+.p-multiselect-item {
   gap: 4px;
 }
-.p-multiselect-panel .p-multiselect-items .p-multiselect-item.p-highlight{
+.p-multiselect-panel .p-multiselect-items .p-multiselect-item.p-highlight {
   background: var(--white-03-color) !important;
 }
 /* end of mutli select */
@@ -565,8 +567,21 @@ span.required-asterisk {
     justify-content: center;
   }
 }
-.progress-modal .modal-dialog {
-  min-width: 680px !important;
+/* Desktop modal */
+@media (min-width: 768px) {
+  .progress-modal .modal-dialog {
+    min-width: 680px !important;
+  }
+}
+
+/* Mobile modal */
+@media (max-width: 767px) {
+  .progress-modal .modal-dialog {
+    min-width: unset !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 10px auto;
+  }
 }
 .progress-modal .modal-content {
   min-height: auto !important;
@@ -614,24 +629,24 @@ span.required-asterisk {
   opacity: 1;
 }
 
-.place-kind  .tab-content{
-    width: 100%;
+.place-kind .tab-content {
+  width: 100%;
 }
-.rooms .tab-content{
-    width: 100% !important; 
+.rooms .tab-content {
+  width: 100% !important;
 }
 /* joins */
-.select-type.join ul{
-width: 100%;
-justify-content: space-between;
+.select-type.join ul {
+  width: 100%;
+  justify-content: space-between;
 }
 .select-type.join ul .nav-item {
   width: 49%;
 }
-.select-type.join ul .nav-item button{
+.select-type.join ul .nav-item button {
   width: 100%;
   justify-content: center;
-   padding: 8px 10px;
+  padding: 8px 10px;
 }
 
 /* media  */
@@ -673,7 +688,7 @@ justify-content: space-between;
   }
 }
 @media screen and (max-width: 540px) {
-  .select-type.join ul .nav-item{
+  .select-type.join ul .nav-item {
     width: 100%;
   }
 }

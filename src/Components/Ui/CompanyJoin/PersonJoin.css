@@ -1,46 +1,69 @@
-.person-join span{
-    color: var(--red-200) !important;
-    font-size: 14px;
+.person-join span {
+  color: var(--red-200) !important;
+  font-size: 14px;
 }
-.btn-cancel{
-    border: 1px solid var(--netural-200);
-    background-color: var(--netural-200);
-    color: var(--netural-600);
+.btn-cancel {
+  border: 1px solid var(--netural-200);
+  background-color: var(--netural-200);
+  color: var(--netural-600);
 }
-.btn-cancel:hover{
-    color: var(--netural-100);
+.btn-cancel:hover {
+  color: var(--netural-100);
 }
 /* Large screens: Add top padding/margin */
 @media (min-width: 992px) {
-    .person-join-modal {
-        padding-top: 100px;
-    }
-    .person-join-modal .modal-content .modal-body {
-        max-height: 70vh; /* Allow scrolling on desktop too if needed */
-        overflow-y: auto;
-    }
+  .person-join-modal {
+    padding-top: 100px;
+  }
+  .person-join-modal .modal-content .modal-body {
+    max-height: 70vh; /* Allow scrolling on desktop too if needed */
+    overflow-y: auto;
+  }
 }
 
 /* Mobile & Tablet Overrides */
 @media (max-width: 991px) {
-    .person-join-modal {
-        padding-top: 20px;
-    }
-    
-    .person-join-modal.w-600 .modal-content,
-    .person-join-modal .modal-content {
-        min-width: unset !important; /* Reset the fixed width */
-        width: 100% !important;
-        height: auto !important; /* Ensure content fits */
-        max-height: 90vh; /* Limit height on mobile */
-    }
-    
-    .person-join-modal .modal-content .modal-body {
-        max-height: calc(90vh - 120px); /* Adjust for header/padding */
-        overflow-y: auto;
-    }
-    
-    .person-join-modal .modal-dialog {
-        margin: 10px; /* Ensure some spacing */
-    }
+  .person-join-modal {
+    padding-top: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .person-join-modal .modal-content .modal-body {
+    max-height: calc(90vh - 120px); /* Adjust for header/padding */
+    overflow-y: auto;
+  }
+
+  .person-join-modal.w-600 .modal-content,
+  .person-join-modal .modal-content {
+    max-width: 100% !important; /* Allow the content to shrink naturally */
+    width: 100% !important;
+    height: auto !important; /* Ensure content fits */
+    max-height: 90vh; /* Limit height on mobile */
+  }
+  .w-600 .modal-content {
+    min-width: unset !important;
+  }
+
+  .person-join-modal .modal-dialog {
+    margin: 10px auto; /* Ensure some spacing around edges */
+    max-width: 600px;
+  }
+}
+
+/* Mobile & Tablet Overrides */
+@media (max-width: 575px) {
+  .person-join-modal.w-600 .modal-content,
+  .person-join-modal .modal-content {
+    max-width: 100% !important; /* Reset the fixed width to fill mobile screen minus margin */
+    width: 100% !important;
+    height: auto !important; /* Ensure content fits */
+    max-height: 90vh; /* Limit height on mobile */
+  }
+  .person-join-modal .modal-dialog {
+    margin: 10px; /* Small margin on mobile screens */
+  }
+  .w-600 .modal-content {
+    min-width: unset !important;
+  }
 }

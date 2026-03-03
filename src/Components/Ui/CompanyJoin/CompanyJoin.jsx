@@ -122,7 +122,7 @@ export const CompanyJoin = ({ setShowCompany, setShowProgress }) => {
 
             const companyData = {
                 ...values,
-                companyType: companyType.value,
+                companyType: companyType ? companyType.value : null,
                 logo: logo
             };
 
@@ -133,6 +133,21 @@ export const CompanyJoin = ({ setShowCompany, setShowProgress }) => {
             resetForm();
         } catch (error) {
             console.error('Error submitting form:', error);
+            if (error.response && error.response.data) {
+                const data = error.response.data;
+                if (data.errors) {
+                    // Show each validation error message
+                    Object.values(data.errors).forEach(errMessage => {
+                        toast.error(errMessage);
+                    });
+                } else if (data.message) {
+                    toast.error(data.message);
+                } else {
+                    toast.error(currentLanguage === 'ar' ? 'حدث خطأ أثناء إرسال الطلب' : 'An error occurred while submitting');
+                }
+            } else {
+                toast.error(currentLanguage === 'ar' ? 'حدث خطأ غير متوقع' : 'An unexpected error occurred');
+            }
         } finally {
             setIsLoading(false);
             setSubmitting(false);
@@ -261,16 +276,17 @@ export const CompanyJoin = ({ setShowCompany, setShowProgress }) => {
                             <ImageDropZone handleInputChange={handleInputChange} />
                         </div>
 
-                        <div className="d-flex space-3">
+                        <div className="d-flex flex-column flex-md-row gap-3 mt-4">
                             <button
-                                className="btn-main w-50"
+                                className="btn-main w-100 d-flex justify-content-center align-items-center gap-2"
                                 type="submit"
                                 disabled={isLoading}>
+                                {isLoading && <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>}
                                 {isLoading ? (currentLanguage === 'ar' ? 'جاري الإرسال...' : 'Sending...') : (currentLanguage === 'ar' ? 'ابعت الطلب' : 'Send Request')}
                             </button>
                             <button
                                 onClick={() => { setShowCompany(false) }}
-                                className="btn-main w-50 btn-cancel"
+                                className="btn-main w-100 btn-cancel"
                                 type="reset"
                                 disabled={isLoading}>
                                 {currentLanguage === 'ar' ? 'إلغاء' : 'Cancel'}
